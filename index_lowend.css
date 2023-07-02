@@ -1,0 +1,6 @@
+* {
+    transition: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+    animation: none !important;
+}
