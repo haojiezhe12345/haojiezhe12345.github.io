@@ -113,7 +113,7 @@
                     意见反馈 3112611479@qq.com
                 </div>
 
-                <div class="time">QQ: 3112611479</div>
+                <div class="time" onclick="hideTopCommentElmnt.click()" style="text-decoration: underline;font-size: 16px;right: 0;left: unset;cursor: pointer;">不再显示</div>
 
             </div>
         </div>
@@ -138,6 +138,10 @@
                     <li>
                         <input type="checkbox" id="isMuted" name="isMuted" onchange="toggleBGM()">
                         <label for="isMuted">BGM静音</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="hideTopComment" name="hideTopComment" onchange="toggleTopComment()">
+                        <label for="hideTopComment">隐藏置顶公告</label>
                     </li>
                     <li>
                         <input type="checkbox" id="showHidden" name="showHidden">

@@ -341,6 +341,25 @@ function toggleBGM() {
     bgmElmnt.muted = isMutedElmnt.checked
 }
 
+function toggleTopComment() {
+    setCookie('hideTopComment', hideTopCommentElmnt.checked)
+    if (hideTopCommentElmnt.checked) {
+        topComment = `
+        <div class="commentBox" id="topComment" style="display: none;">
+            ${document.getElementById('topComment').innerHTML}
+        </div>
+        `
+        document.getElementById('topComment').style.display = 'none'
+    } else {
+        topComment = `
+        <div class="commentBox" id="topComment">
+            ${document.getElementById('topComment').innerHTML}
+        </div>
+        `
+        document.getElementById('topComment').style.display = ''
+    }
+}
+
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -383,6 +402,8 @@ var isMutedElmnt = document.getElementById('isMuted')
 
 var isLowendElmnt = document.getElementById('isLowend')
 
+var hideTopCommentElmnt = document.getElementById('hideTopComment')
+
 var topComment = `
 <div class="commentBox" id="topComment">
     ${document.getElementById('topComment').innerHTML}
@@ -403,6 +424,15 @@ if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
 if (getCookie('isLowend') == 'true') {
     isLowendElmnt.checked = true
     document.head.innerHTML += '<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'
+}
+if (getCookie('hideTopComment') == 'true') {
+    hideTopCommentElmnt.checked = true
+    document.getElementById('topComment').style.display = 'none'
+    topComment = `
+    <div class="commentBox" id="topComment" style="display: none;">
+        ${document.getElementById('topComment').innerHTML}
+    </div>
+    `
 }
 
 loadUserInfo()
