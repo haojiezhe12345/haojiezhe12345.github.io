@@ -3,12 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="viewport1" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>圆焰 - MadoHomu.love</title>
     <link rel="stylesheet" href="index.css" type="text/css">
+    <link rel="preload" href="index_fullscreen.css" as="style" />
+    <link rel="stylesheet" href="index_fullscreen.css" type="text/css" id="fullscreenCSS" disabled>
+    <link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS" disabled>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
     <meta name="baidu-site-verification" content="codeva-KUmCPXYF3w" />
     <meta name="sogou_site_verification" content="DipYziapu2" />
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="圆焰 - MadoHomu.love">
+    <meta name="apple-mobile-web-app-title" content="圆焰 - MadoHomu.love">
+    <meta name="theme-color" content="#ff9dce">
+    <meta name="msapplication-navbutton-color" content="#ff9dce">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="msapplication-starturl" content="/">
+
+    <link rel="icon" sizes="640x640" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="640x640" href="favicon.png">
+    <link rel="icon" sizes="192x192" href="favicon_192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="favicon_192.png">
 </head>
 
 <body onclick="if (!isMutedElmnt.checked) bgmElmnt.play()">
@@ -65,25 +84,50 @@
         <div class="tooltip">点击下方查看留言<div class="triangle"></div></div>
 
         <div id="comments">
+
+            <!--
+            <div class="commentBox" id="newCommentBox">
+                <div class="bgcover"></div>
+                <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/0.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+                <div class="sender" id="senderText">0</div>
+                <div class="id" onclick="showPopup('setNamePopup')">更改呢称/头像</div>
+                <div class="comment">
+                    <textarea id="msgText" placeholder="圆神保佑~"></textarea>
+                    <div id="uploadImgList">
+                        <h4>↓可以上传图片了哦</h4>
+                    </div>
+                </div>
+                <label>
+                    <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
+                    <span>+ 添加图片</span>
+                </label>            
+                <button id="sendBtn" onclick="sendMessage()">发送 ✔</button>
+            </div>
+            -->
+
             <div class="commentBox" id="topComment">
                 <img class="bg" src="bg/msgbg1.jpg">
                 <div class="bgcover"></div>
                 <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/浩劫者12345.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
                 <div class="sender">浩劫者12345</div>
                 <div class="id">#置顶</div>
-                <div class="comment">
+                <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
                     欢迎来到 MadoHomu.love!<br>
                     这是一个以圆焰为主题, 具有留言功能的网站
                     <br><br>
-                    网站的用法可以参照 kami.im , 大家可以在这里做祷告、拜圆神/焰魔、磕CP、分享生活趣事等
+                    点击"工具"可以保存站内背景图片
+                    <br>
+                    8/27更新, 可以发图片了! (鸽了一个月终于。。。)
                     <br><br>
-                    发早安/晚安都是可以接受的, 但请不要过度刷存在感
+                    网站的用法可以参照 kami.im , 大家可以在这里做祷告、拜圆神/焰魔、磕CP、分享生活趣事等。内容不限于圆焰。
                     <br><br>
-                    我们希望给圆焰厨/魔圆厨建设一个良好的交流环境。请保持网站的圣洁，不要发表玩烂梗、辱骂他人等玷污网站的内容。
+                    我们欢迎发早安/晚安打卡，但请不要发表毫无意义的留言 (圆神启动什么的还是别发了)。
+                    <br><br>
+                    我们希望给圆焰厨/魔圆厨建设一个良好的交流环境。请保持网站的圣洁，不要发表玩烂梗、拆CP、辱骂他人等玷污网站的内容。
                     <br><br>
                     登录系统暂时没有做, 请直接输入呢称即可, 呢称与头像是绑定的
                     <br><br>
-                    本站导入了kami.im的网站数据 (这部分ID为负数)<br>
+                    本站导入了kami.im的留言 (这部分留言ID小于0, 建议使用"工具"中的"跳转"功能查看)<br>
                     感谢Discord频友Yuudachi_Kai2备份的数据!
                     <br><br>
                     本站还使用了以下图片, 非常感谢这些画师!<br>
@@ -107,24 +151,34 @@
                     65489049, 63582832 by ChrisTy☆クリスティ<br>
                     (以上数字均为Pixiv ID)
                     <br><br>
-                    TODO: 增加登录功能, 允许发送图片<br>
-                    计划增加高级过滤选项
+                    网站使用的BGM: (作曲: オルゴール ミドリ)<br>
+                    <a href="https://music.163.com/song?id=1311466561&userid=310755433" target="_blank">君の銀の庭 (Originally Performed by Kalafina 「劇場版 魔法少女まどか☆マギカ[新編]叛逆の物語」より)</a>
+                    <br>
+                    <a href="https://music.163.com/song?id=1311433797&userid=310755433" target="_blank">Sagitta luminis 「女神まどかのテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
                     <br><br>
                     意见反馈 3112611479@qq.com
                 </div>
 
-                <div class="time" onclick="hideTopCommentElmnt.click()" style="text-decoration: underline;font-size: 16px;right: 0;left: unset;cursor: pointer;">不再显示</div>
+                <div class="time" onclick="hideTopCommentElmnt.click()" style="text-decoration: underline;font-size: 16px;right: 0;left: unset;cursor: pointer;">不再显示 ×</div>
 
             </div>
         </div>
 
-        <button id="newMsg" onclick="showMsgWindow()">➕ 发送留言</button>
+        <div class="backTransparent" style="top: -24px;left: 0;width: 155px;height: 57px;"></div>
+        <button id="newMsg" onclick="newComment()">➕ 发送留言</button>
 
+        <div class="backTransparent" style="top: -18px;right: 0;width: 200px;height: 50px;"></div>
         <div id="toolbar">
             <div id="menu" class="toolbarItem">
                 工具 🛠
                 <ul>
                     <li onclick="clearComments();loadComments()">🔄 刷新</li>
+                    <li onclick="showPopup('getImgPopup')">💾 保存背景图片</li>
+                    <li onclick="
+                        if (installPrompt != null) installPrompt.prompt()
+                        else if (isInStandaloneMode) window.alert('你已安装过App')
+                        else window.alert('你的浏览器不支持安装PWA App\n\n电脑端建议使用谷歌Chrome/微软Edge浏览器\n手机端只能使用Chrome\n\n你也可以从浏览器菜单手动添加到桌面\n（小米浏览器暂不支持，其他未知）')
+                        ">⬇️ 安装App到桌面</li>
                     <li>
                         <input type="checkbox" id="isLowend" name="isLowend" onchange="toggleLowend()">
                         <label for="isLowend">低性能模式(禁用特效)</label>
@@ -157,27 +211,63 @@
             <button class="toolbarItem" onclick="goFullscreen()">全屏 ↗</button>
         </div>
 
+        <div id="imgViewerBox" style="display: none"
+            onmousedown="
+                if (event.which == 1) {
+                    imgViewerMouseActive = true
+                    imgViewerMouseMoved = false
+                }
+            "
+            onmouseup="
+                if (event.which == 1) {
+                    imgViewerMouseActive = false
+                    if (!imgViewerMouseMoved) {
+                        history.back()
+                    }
+                }
+            "
+            onmousemove="
+                if (imgViewerMouseActive) {
+                    imgViewerOffsetX += event.movementX
+                    imgViewerOffsetY += event.movementY
+                    if (event.movementX != 0 || event.movementY != 0) {
+                        imgViewerMouseMoved = true
+                    }
+                    //console.log(imgViewerOffsetX, imgViewerOffsetY)
+                    this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
+                }
+            "
+            onwheel="
+                imgViewerScale *= (1000 - event.deltaY) / 1000
+                //if (imgViewerScale < 0.1) imgViewerScale = 0.1
+                //console.info(imgViewerScale)
+                this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
+            "
+        >
+            <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
+        </div>
+    
     </div>
 
     <div id="popupContainer">
 
         <div id="msgPopup" class="popupItem">
-            <h2>发送留言</h2>
+            <h2>发送留言(Deprecated)</h2>
             <span>
                 <label for="sender">呢称:</label>
-                <img id="msgPopupAvatar">
-                <input type="text" id="senderText" value="">
+                <img id="msgPopupAvatar_old">
+                <input type="text" id="senderText_old" value="">
                 <button onclick="closePopup();showPopup('setNamePopup')">更改</button>    
             </span>
             <br><br>
             <label for="comment">内容:</label>
             <br>
-            <textarea id="msgText"></textarea>
+            <textarea id="msgText_old"></textarea>
             <br>
             <p style="font-style: italic; color: red; font-size: 12px;">* 请不要发送<strong>烂梗</strong>或令人不适的<strong>抽象</strong>内容, 站长看见会删</p>
             <p style="font-style: italic; color: green; font-size: 12px;">✔ 发言时请尽量保持网站的圣洁</p>
             <br>
-            <button id="sendBtn" class="okBtn" onclick="sendMessage()">发送 ✔</button>
+            <button id="sendBtn_old" class="okBtn" onclick="sendMessage()">发送 ✔</button>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
@@ -196,8 +286,35 @@
             <form id="avatarForm" enctype="multipart/form-data">
                 <input id="setAvatarInput" type="file" onchange="uploadAvatar()"/>
             </form>
+            <br>
+            呢称包含 \ / : * ? &quot; &lt; &gt; | 将无法设置头像
             <br><br>
-            <button class="okBtn" onclick="closePopup();showPopup('msgPopup')">确定 ✔</button>
+            <button class="okBtn" onclick="closePopup();">确定 ✔</button>
+            <button class="closeBtn" onclick="closePopup()">×</button>
+        </div>
+
+        <div id="getImgPopup" class="popupItem" style="text-align: center; height: 90%; padding: 0;">
+            <div style="width: 100%; height: 100%; overflow: auto; padding: 20px 32px 32px; box-sizing: border-box;">
+                <h2>下载站内图片</h2>
+                <h4>长按/右键图片, 然后选"保存到手机/下载图片/图片另存为"</h4>
+                <img class="getImgList"><p>Pixiv: 61717580 by HISA</p><br>
+                <img class="getImgList"><p>Pixiv: 89897632 by Rumoon</p><br>
+                <img class="getImgList"><p>Pixiv: 82577782 by 南山tsd</p><br>
+                <img class="getImgList"><p>Pixiv: 21428206 by LIN+</p><br>
+                <img class="getImgList"><p>Pixiv: 104087822 by eps3rd</p><br>
+                <img class="getImgList"><p>Pixiv: 54804736 by 冰封死神</p><br>
+                <img class="getImgList"><p>Pixiv: 33932626 (官图You Are Not Alone)</p><br>
+                <img class="getImgList"><p>Pixiv: 57114653 by Nine</p><br>
+                <img class="getImgList"><p>Pixiv: 91471007 by 曼曼</p><br>
+                <img class="getImgList"><p>Pixiv: 99591809 by カラスBTK</p><br>
+                <img class="getImgList"><p>Pixiv: 18530512 by さんしょう</p><br>
+                <img class="getImgList"><p>Pixiv: 60649948 by STAR影法師</p><br>
+                <img class="getImgList"><p>Pixiv: 88198018 by Nardack</p><br>
+                <img class="getImgList"><p>Pixiv: 29076044 by Rella</p><br>
+                <img class="getImgList"><p>Pixiv: 57636925 by おれつ</p><br>
+                <img class="getImgList"><p>Pixiv: 65489049 by ChrisTy☆ク</p><br>
+                <img class="getImgList"><p>Pixiv: 63582832 by ChrisTy☆クリスティ</p><br>
+            </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 

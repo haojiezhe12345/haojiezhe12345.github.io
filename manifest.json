@@ -1,0 +1,17 @@
+{
+    "name": "圆焰 - MadoHomu.love",
+    "start_url": "/madohomu",
+    "lang": "zh-CN",
+    "theme_color": "#ff9dce",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "640x640"
+        },
+        {
+            "src": "favicon_192.png",
+            "sizes": "192x192"
+        }
+    ]
+}

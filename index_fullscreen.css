@@ -10,8 +10,26 @@
     width: 100%;
     padding: 0;
     transition: none;
-    animation: none;
+    animation-name: fullscreenAnim;
+    animation-duration: 0.7s;
     overflow: hidden;
+}
+
+@keyframes fullscreenAnim {
+    0% {
+        transform: scale(1.1);
+        opacity: 0;
+    }
+
+    30% {
+        transform: scale(1.1);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 #comments {
@@ -30,6 +48,7 @@
 #comments .commentBox {
     margin: 1.5vh 1vh;
     text-align: left;
+    max-height: 96vw;
 }
 
 #lowerPanel #newMsg {

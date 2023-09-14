@@ -52,8 +52,21 @@ function loadComments(from, count) {
                     lastBgImgs.splice(0, 1)
                 }
 
-                commentDiv.innerHTML += `
-                <div class="commentBox">
+                var imgsDOM = '<br><br>'
+                try {
+                    if (comment.image != '') {
+                        for (var i of comment.image.split(',')) {
+                            imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
+                        }
+                    }
+                } catch (error) {
+
+                }
+
+                /*
+                var newCommentElmnt = document.createElement('div')
+                newCommentElmnt.classList.add('commentBox')
+                newCommentElmnt.innerHTML = `
                     <img class="bg" src="bg/msgbg${randBG}.jpg">
                     <div class="bgcover"></div>
                     <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
@@ -61,10 +74,26 @@ function loadComments(from, count) {
                     <div class="id">#${comment.id}</div>
                     <div class="comment">
                         ${comment.comment.replace(/\n/g, "<br/>")}
+                        ${imgsDOM}
                     </div>
                     <div class="time">${date + ' ' + hour}</div>
-                </div>
                 `
+                */
+                commentDiv.appendChild(html2elmnt(`
+                    <div class="commentBox">
+                        <img class="bg" src="bg/msgbg${randBG}.jpg">
+                        <div class="bgcover"></div>
+                        <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+                        <div class="sender">${comment.sender}</div>
+                        <div class="id">#${comment.id}</div>
+                        <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
+                            ${comment.comment.replace(/\n/g, "<br/>")}
+                            ${imgsDOM}
+                        </div>
+                        <div class="time">${date + ' ' + hour}</div>
+                    </div>
+                `))
+
                 if (minCommentID == null) {
                     minCommentID = comment.id
                 }
@@ -87,8 +116,14 @@ function loadComments(from, count) {
 }
 
 function sendMessage() {
-    var sender = document.getElementById('senderText').value
+    var sender = getCookie('username')
     var msg = document.getElementById('msgText').value
+
+    var imgList = []
+    var uploadImgClass = document.getElementsByClassName('uploadImg')
+    for (var imgElmnt of uploadImgClass) {
+        imgList.push(imgElmnt.src.split(';base64,')[1])
+    }
 
     if (msg.replace(/\s/g, '') == '') {
         window.alert('请输入留言内容!')
@@ -99,6 +134,7 @@ function sendMessage() {
     }
 
     document.getElementById('sendBtn').disabled = true;
+    document.getElementById('sendBtn').innerHTML = '正在发送…'
 
     var xhr = new XMLHttpRequest();
     var url = "https://haojiezhe12345.top:82/madohomu/api/post";
@@ -107,12 +143,18 @@ function sendMessage() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             console.log(xhr.responseText);
+            document.getElementById('sendBtn').innerHTML = '发送成功!'
             setTimeout(() => {
-                location.reload();
-            }, 500);
+                clearComments()
+                loadComments()
+            }, 1000);
         }
     };
-    var data = JSON.stringify({ "sender": sender, "comment": msg });
+    var data = JSON.stringify({
+        "sender": sender,
+        "comment": msg,
+        'images': imgList
+    });
     xhr.send(data);
 }
 
@@ -125,6 +167,9 @@ function clearComments(clearTop) {
     }
     minCommentID = null
     maxCommentID = null
+
+    newCommentDisabled = false
+    commentHorizontalScrolled = 0
 }
 
 function commentScroll() {
@@ -133,6 +178,7 @@ function commentScroll() {
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
         //console.log(toRight)
+        //console.log(scrolled)
         if (toRight < 40 && minCommentID != null && maxCommentID != null) {
             loadComments(minCommentID - 1)
             commentDiv.removeEventListener("scroll", commentScroll)
@@ -154,6 +200,124 @@ function commentScroll() {
     }
 }
 
+function newComment() {
+    commentDiv.scrollLeft = 0
+    commentDiv.scrollTop = 0
+
+    if (newCommentDisabled) {
+        return
+    }
+
+    var newCommentBox = document.createElement('div')
+    newCommentBox.classList.add('commentBox')
+    newCommentBox.id = 'newCommentBox'
+    newCommentBox.innerHTML = `
+        <div class="bgcover"></div>
+        <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
+        <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getCookie('username')}</div>
+        <div class="id" onclick="showPopup('setNamePopup')">设置呢称/头像</div>
+        <div class="comment">
+            <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
+            <div id="uploadImgList" style="display: none"></div>
+        </div>
+        <label>
+            <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
+            <span>+ 添加图片</span>
+        </label>
+        <button id="sendBtn" onclick="sendMessage()">发送 ✔</button>
+    `
+
+    commentDiv.insertBefore(newCommentBox, commentDiv.firstChild)
+
+    newCommentDisabled = true
+}
+
+function previewLocalImgs() {
+    var imgUploadInput = document.getElementById('uploadImgPicker')
+
+    if (imgUploadInput.files.length === 0) {
+        console.log('No file chosen')
+        return;
+    }
+
+    for (let imgfile of imgUploadInput.files) {
+
+        //console.log(imgfile)
+        if (!imgfile.type.match(/image.*/)) {
+            console.log(`Invalid image file ${imgfile.name}`)
+            continue;
+        }
+
+        let fileReader = new FileReader();
+        fileReader.readAsDataURL(imgfile);
+        fileReader.onload = () => {
+
+            //console.log(fileReader.result)
+            let image = new Image();
+            image.src = fileReader.result;
+            image.onload = () => {
+
+                //console.log(image)
+                var MAX_WIDTH = 1200;
+                var MAX_HEIGHT = 1200;
+                var width = image.width;
+                var height = image.height;
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                var canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0, width, height);
+
+                imgDataURL = canvas.toDataURL("image/jpeg")
+
+                //uploadImgList.push(imgDataURL.split(';base64,')[1])
+
+                newUploadImgPreviewElmnt = document.createElement('div')
+                newUploadImgPreviewElmnt.innerHTML = `
+                    <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this)">
+                    <button onclick="this.parentNode.remove()">❌</button>
+                `
+                document.getElementById('uploadImgList').appendChild(newUploadImgPreviewElmnt)
+                document.getElementById('msgText').style = ''
+                document.getElementById('uploadImgList').style = ''
+            }
+        };
+    }
+
+    imgUploadInput.value = ''
+}
+
+function viewImg(elmnt) {
+    //window.open(elmnt.src, '_blank').focus()
+    document.getElementById('imgViewer').src = elmnt.src
+    document.getElementById('imgViewerBox').style.display = 'block'
+    document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0')
+    window.location.hash = 'view-img'
+
+    imgViewerMouseActive = false
+    imgViewerOffsetX = 0
+    imgViewerOffsetY = 0
+    imgViewerScale = 1
+    document.getElementById('imgViewer').style.transform = 'translateX(0px) translateY(0px) scale(1)'
+}
+
+function closeImgViewer() {
+    document.getElementById('imgViewerBox').style.display = 'none';
+    document.getElementById('viewport1').setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+}
+
 function showPopup(popupID) {
     var popupContainer = document.getElementById('popupContainer');
     popupContainer.style.display = 'flex';
@@ -161,13 +325,19 @@ function showPopup(popupID) {
     var popup = document.getElementById(popupID);
     popup.style.display = 'block';
 
-    document.getElementById('senderText').value = getCookie('username')
     document.getElementById('setNameInput').value = getCookie('username')
-    document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg`
-    document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
     avatarInput.value = ''
-    setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg`
+    setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
     setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
+
+    if (popupID == 'getImgPopup') {
+        for (let i = 0; i < bgCount; i++) {
+            document.getElementsByClassName('getImgList')[i].src = `bg/mainbg${i + 1}.jpg`
+        }
+        for (let i = 0; i < msgBgCount; i++) {
+            document.getElementsByClassName('getImgList')[i + bgCount].src = `bg/msgbg${i + 1}.jpg`
+        }
+    }
 }
 
 function closePopup() {
@@ -179,6 +349,14 @@ function closePopup() {
         elements[i].style.display = 'none';
     }
     loadUserInfo()
+
+    try {
+        document.getElementById('senderText').innerHTML = getCookie('username')
+        document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+        document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
+    } catch (error) {
+
+    }
 }
 
 function showMsgWindow() {
@@ -194,7 +372,7 @@ function setUserName() {
     setCookie('username', inputName)
     closePopup()
     if (getCookie('username') == '') {
-        showPopup('msgPopup')
+        //showPopup('msgPopup')
     } else {
         showPopup('setAvatarPopup')
     }
@@ -319,19 +497,29 @@ function nextCaption() {
 
 function goFullscreen() {
     if (!isFullscreen) {
-        document.head.innerHTML += '<link rel="stylesheet" href="index_fullscreen.css" type="text/css" id="fullscreenCSS">'
+        var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
+        //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_fullscreen.css" type="text/css" id="fullscreenCSS">'))
+        document.getElementById('fullscreenCSS').disabled = false
+        setTimeout(() => {
+            commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
+        }, 200);
         isFullscreen = true
     } else {
-        document.getElementById('fullscreenCSS').remove()
+        var scrollPercent = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
+        document.getElementById('fullscreenCSS').disabled = true
+        setTimeout(() => {
+            commentDiv.scrollLeft = (commentDiv.scrollWidth - commentDiv.clientWidth) * scrollPercent
+        }, 200);
         isFullscreen = false
     }
 }
 
 function toggleLowend() {
     if (isLowendElmnt.checked) {
-        document.head.innerHTML += '<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'
+        //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
+        document.getElementById('lowendCSS').disabled = false
     } else {
-        document.getElementById('lowendCSS').remove()
+        document.getElementById('lowendCSS').disabled = true
     }
     setCookie('isLowend', isLowendElmnt.checked)
 }
@@ -388,6 +576,12 @@ function getCookie(cname) {
     return "";
 }
 
+function html2elmnt(html) {
+    var t = document.createElement('template');
+    t.innerHTML = html;
+    return t.content;
+}
+
 var minCommentID = null
 var maxCommentID = null
 
@@ -410,6 +604,7 @@ var topComment = `
 </div>
 `
 
+
 if (Math.random() > 0.5) {
     bgmElmnt.src = 'bgm_16k.mp3'
 } else {
@@ -423,7 +618,8 @@ if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
 
 if (getCookie('isLowend') == 'true') {
     isLowendElmnt.checked = true
-    document.head.innerHTML += '<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'
+    //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
+    document.getElementById('lowendCSS').disabled = false
 }
 if (getCookie('hideTopComment') == 'true') {
     hideTopCommentElmnt.checked = true
@@ -443,9 +639,19 @@ setTimeout(() => {
 }, 500);
 setInterval(commentScroll, 1000)
 
+var commentHorizontalScrolled = 0
+
 commentDiv.addEventListener("wheel", (event) => {
     //console.info(event.deltaY)
+    //console.info(commentDiv.scrollLeft)
     commentDiv.scrollLeft += event.deltaY
+    /*
+    commentHorizontalScrolled += event.deltaY
+    if (commentHorizontalScrolled < 0) commentHorizontalScrolled = 0
+    if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth)) commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
+    console.log(commentHorizontalScrolled)
+    commentDiv.scrollLeft = commentHorizontalScrolled
+    */
 });
 
 var bgCount = 6
@@ -469,6 +675,49 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
         loadComments(document.getElementById('goto').value)
     }
 })
+
+newCommentDisabled = false
+
+var imgViewerMouseActive = false
+var imgViewerOffsetX = 0
+var imgViewerOffsetY = 0
+var imgViewerScale = 1
+var imgViewerMouseMoved = false
+
+document.onkeydown = function(e) {
+    //console.log(e.key)
+    if (e.key == 'Escape') {
+        imgvwr = document.getElementById('imgViewerBox')
+        if (imgvwr.style.display == 'block') {
+            history.back()
+        }
+    }
+}
+
+if (window.location.hash != '') {
+    window.location.hash = ''
+}
+
+window.onhashchange = function(e) {
+    //console.log(e.oldURL.split('#')[1], e.newURL.split('#')[1])
+    if (e.oldURL.split('#')[1] == 'view-img') {
+        closeImgViewer()
+    }
+}
+
+var installPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    installPrompt = event;
+    //console.log(`'beforeinstallprompt' event was fired.`);
+});
+
+var isInStandaloneMode = false
+isInStandaloneMode = (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
+
+
+//var uploadImgList = []
 
 /*
 var isBGMPlaying = false
