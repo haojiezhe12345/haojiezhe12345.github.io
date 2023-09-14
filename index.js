@@ -67,7 +67,7 @@ function loadComments(from, count) {
                 var newCommentElmnt = document.createElement('div')
                 newCommentElmnt.classList.add('commentBox')
                 newCommentElmnt.innerHTML = `
-                    <img class="bg" src="bg/msgbg${randBG}.jpg">
+                    <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
                     <div class="bgcover"></div>
                     <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
                     <div class="sender">${comment.sender}</div>
@@ -81,7 +81,7 @@ function loadComments(from, count) {
                 */
                 commentDiv.appendChild(html2elmnt(`
                     <div class="commentBox">
-                        <img class="bg" src="bg/msgbg${randBG}.jpg">
+                        <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
                         <div class="bgcover"></div>
                         <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
                         <div class="sender">${comment.sender}</div>
@@ -332,10 +332,10 @@ function showPopup(popupID) {
 
     if (popupID == 'getImgPopup') {
         for (let i = 0; i < bgCount; i++) {
-            document.getElementsByClassName('getImgList')[i].src = `bg/mainbg${i + 1}.jpg`
+            document.getElementsByClassName('getImgList')[i].src = `https://haojiezhe12345.top:82/madohomu/bg/mainbg${i + 1}.jpg`
         }
         for (let i = 0; i < msgBgCount; i++) {
-            document.getElementsByClassName('getImgList')[i + bgCount].src = `bg/msgbg${i + 1}.jpg`
+            document.getElementsByClassName('getImgList')[i + bgCount].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
         }
     }
 }
@@ -465,7 +465,7 @@ function nextImg() {
     bg1.style.opacity = 0
     bg2.style.opacity = 1
     setTimeout(() => {
-        bg1.style.backgroundImage = `url(bg/mainbg${currentBG}.jpg)`
+        bg1.style.backgroundImage = `url(https://haojiezhe12345.top:82/madohomu/bg/mainbg${currentBG}.jpg)`
         bg1.id = 'mainbg2'
         bg2.id = 'mainbg1'
     }, 2500);
