@@ -34,21 +34,21 @@
 
     <audio id="bgm" loop></audio>
 
-    <div id="mainbg1" class="mainbg bgzoom" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg); opacity: 1"></div>
-    <div id="mainbg2" class="mainbg" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg); opacity: 0"></div>
+    <!--
+    <div id="mainbg1" class="mainbg bgzoom" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg); opacity: 1; /*display: none*/"></div>
+    <div id="mainbg2" class="mainbg" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg); opacity: 0; animation-name: none; /*display: none*/"></div>
+    -->
 
-    <div id="mainTitle" class="topItems">
-        <a href="http://madohomu.love:80">
-            <span style="color: #ff9dce;">Mado</span>
-            <span style="color: #f00;">❤</span>
-            <span style="color: #c074ff;">Homu</span>
-        </a>
-    </div>
-
-    <div id="userInfo" class="topItems" onclick="showPopup('setNamePopup')">
-        <img id="userInfoAvatar">
-        <span id="userInfoName"></span>
-    </div>
+    <div class="mainbg defaultbg bgzoom "><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg);          background-position-x: 45%;"></div><span>Artwork by HISA</span></div>
+    <div class="mainbg defaultbg"        ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg);          background-position-x: 40%;"></div><span>Artwork by Rumoon</span></div>
+    <div class="mainbg defaultbg"        ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg3.jpg);          background-position-x: 50%;"></div><span>Artwork by 南山tsd</span></div>
+    <div class="mainbg defaultbg"        ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg4.jpg);          background-position-x: 75%;"></div><span>Artwork by LIN+</span></div>
+    <div class="mainbg defaultbg"        ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg5.jpg);          background-position-x: 45%;"></div><span>Artwork by eps3rd</span></div>
+    <div class="mainbg defaultbg"        ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg6.jpg);          background-position-x: 50%;"></div><span>Artwork by 冰封死神</span></div>
+    <div class="mainbg birthdaybg bgzoom"><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg1.jpg); background-position-x: 50%;"></div><span>Artwork by 八重ハルラ</span></div>
+    <div class="mainbg birthdaybg"       ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg2.jpg); background-position-x: 50%;"></div><span>Artwork by ほんわか紳士</span></div>
+    <div class="mainbg birthdaybg"       ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg3.jpg); background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
+    <div class="mainbg birthdaybg"       ><div style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg4.jpg); background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
 
     <div id="mainCaptions" style="display: block;">
         <div class="mainCaption">
@@ -77,6 +77,28 @@
             <p>在窗边婉转歌唱</p>
             <p>无论失去什么珍贵之物</p>
         </div>
+        <div id="birthdayCaption">
+            <p>Happy birthday, Madoka!</p>
+            <p id="birthdayDate">0/0/0000 - Madoka's 0th birthday</p>
+        </div>
+    </div>
+
+    <div id="videoBgBox" style="display: none;">
+        <video id="mainVideoBg" muted></video>
+        <video id="mainVideo"></video>
+    </div>
+
+    <div id="mainTitle" class="topItems">
+        <a href="http://madohomu.love:80">
+            <span style="color: #ff9dce;">Mado</span>
+            <span style="color: #f00;">❤</span>
+            <span style="color: #c074ff;">Homu</span>
+        </a>
+    </div>
+
+    <div id="userInfo" class="topItems" onclick="showPopup('setNamePopup')">
+        <img id="userInfoAvatar">
+        <span id="userInfoName"></span>
     </div>
 
     <div id="lowerPanel">
@@ -90,7 +112,7 @@
                 <div class="bgcover"></div>
                 <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/0.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
                 <div class="sender" id="senderText">0</div>
-                <div class="id" onclick="showPopup('setNamePopup')">更改呢称/头像</div>
+                <div class="id" onclick="showPopup('setNamePopup')">更改昵称/头像</div>
                 <div class="comment">
                     <textarea id="msgText" placeholder="圆神保佑~"></textarea>
                     <div id="uploadImgList">
@@ -119,13 +141,13 @@
                     <br>
                     8/27更新, 可以发图片了! (鸽了一个月终于。。。)
                     <br><br>
-                    网站的用法可以参照 kami.im , 大家可以在这里做祷告、拜圆神/焰魔、磕CP、分享生活趣事等。内容不限于圆焰。
+                    网站的用法可以参照 kami.im , 大家可以在这里许愿、祈祷、拜圆神/焰魔、磕CP、分享生活趣事等。内容不限于圆焰。
                     <br><br>
                     我们欢迎发早安/晚安打卡，但请不要发表毫无意义的留言 (圆神启动什么的还是别发了)。
                     <br><br>
                     我们希望给圆焰厨/魔圆厨建设一个良好的交流环境。请保持网站的圣洁，不要发表玩烂梗、拆CP、辱骂他人等玷污网站的内容。
                     <br><br>
-                    登录系统暂时没有做, 请直接输入呢称即可, 呢称与头像是绑定的
+                    登录系统暂时没有做, 请直接输入昵称即可, 昵称与头像是绑定的
                     <br><br>
                     本站导入了kami.im的留言 (这部分留言ID小于0, 建议使用"工具"中的"跳转"功能查看)<br>
                     感谢Discord频友Yuudachi_Kai2备份的数据!
@@ -164,10 +186,10 @@
             </div>
         </div>
 
-        <div class="backTransparent" style="top: -24px;left: 0;width: 155px;height: 57px;"></div>
+        <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>
         <button id="newMsg" onclick="newComment()">➕ 发送留言</button>
 
-        <div class="backTransparent" style="top: -18px;right: 0;width: 200px;height: 50px;"></div>
+        <div class="backTransparent" style="top: -24px;right: 0;width: 200px;height: 60px;"></div>
         <div id="toolbar">
             <div id="menu" class="toolbarItem">
                 工具 🛠
@@ -177,8 +199,9 @@
                     <li onclick="
                         if (installPrompt != null) installPrompt.prompt()
                         else if (isInStandaloneMode) window.alert('你已安装过App')
-                        else window.alert('你的浏览器不支持安装PWA App\n\n电脑端建议使用谷歌Chrome/微软Edge浏览器\n手机端只能使用Chrome\n\n你也可以从浏览器菜单手动添加到桌面\n（小米浏览器暂不支持，其他未知）')
+                        else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n（小米浏览器暂不支持，其他未知）')
                         ">⬇️ 安装App到桌面</li>
+                    <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
                     <li>
                         <input type="checkbox" id="isLowend" name="isLowend" onchange="toggleLowend()">
                         <label for="isLowend">低性能模式(禁用特效)</label>
@@ -254,7 +277,7 @@
         <div id="msgPopup" class="popupItem">
             <h2>发送留言(Deprecated)</h2>
             <span>
-                <label for="sender">呢称:</label>
+                <label for="sender">昵称:</label>
                 <img id="msgPopupAvatar_old">
                 <input type="text" id="senderText_old" value="">
                 <button onclick="closePopup();showPopup('setNamePopup')">更改</button>    
@@ -272,9 +295,13 @@
         </div>
 
         <div id="setNamePopup" class="popupItem">
-            <h2>设置呢称</h2>
-            <label for="sender">呢称:</label>
-            <input type="text" id="setNameInput" value="">
+            <h2>设置昵称</h2>
+            <label for="sender">昵称:</label>
+            <input type="text" id="setNameInput" value="" onkeypress="((event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    setUserName()
+                }})(event)">
             <br><br>
             <button class="okBtn" onclick="setUserName()">确定 ✔</button>
             <button class="closeBtn" onclick="closePopup()">×</button>
@@ -287,8 +314,10 @@
                 <input id="setAvatarInput" type="file" onchange="uploadAvatar()"/>
             </form>
             <br>
-            呢称包含 \ / : * ? &quot; &lt; &gt; | 将无法设置头像
+            <!--
+            <span style="font-size: 14px; font-weight: bold;">昵称包含 \ / : * ? &quot; &lt; &gt; | 将无法设置头像</span>
             <br><br>
+            -->
             <button class="okBtn" onclick="closePopup();">确定 ✔</button>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
@@ -312,7 +341,7 @@
                 <img class="getImgList"><p>Pixiv: 88198018 by Nardack</p><br>
                 <img class="getImgList"><p>Pixiv: 29076044 by Rella</p><br>
                 <img class="getImgList"><p>Pixiv: 57636925 by おれつ</p><br>
-                <img class="getImgList"><p>Pixiv: 65489049 by ChrisTy☆ク</p><br>
+                <img class="getImgList"><p>Pixiv: 65489049 by ChrisTy☆クリスティ</p><br>
                 <img class="getImgList"><p>Pixiv: 63582832 by ChrisTy☆クリスティ</p><br>
             </div>
             <button class="closeBtn" onclick="closePopup()">×</button>

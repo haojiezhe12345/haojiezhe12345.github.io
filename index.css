@@ -29,29 +29,149 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    transition: opacity 2s;
+}
+
+.mainbg div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     /*background-image: url(bg/mainbg.jpg);*/
     background-size: cover;
     background-position-x: center;
     background-position-y: center;
-    transition: opacity 2s;
+    animation-name: bgzoomNoOpacity;
+    animation-duration: 10s;
+    animation-timing-function: ease;
 }
 
-.bgzoom {
-    animation-name: bgzoom;
+.mainbg span {
+    position: fixed;
+    right: 20px;
+    bottom: 25%;
+    bottom: calc(21.5% + 28px);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    animation-name: fadein;
     animation-duration: 2s;
-    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
+}
+
+.bgzoom div {
+    animation-name: bgzoom, bgzoomNoOpacity;
+    animation-duration: 2s, 8s;
+    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1), linear;
+    animation-delay: 0s, 1.8s;
 }
 
 @keyframes bgzoom {
     from {
         opacity: 0;
-        transform: scale(1.5);
+        transform: scale(1.6);
     }
 
     to {
         opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes bgzoomNoOpacity {
+    from {
+        transform: scale(1.2);
+    }
+
+    to {
         transform: scale(1);
     }
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.defaultbg, .birthdaybg {
+    display: none;
+    opacity: 0;
+}
+
+#mainCaptions {
+    position: absolute;
+    top: 17%;
+    left: 7%;
+    right: 7%;
+    opacity: 0;
+    transition: opacity 1.5s;
+}
+
+#mainCaptions p {
+    font-size: 4vh;
+    font-size: min(6vw, 4vh);
+    white-space: nowrap;
+    text-shadow: 0 0 0.25em black, 0 0 0.25em black, 0 0 0.25em black;
+}
+
+#birthdayCaption {
+    display: none;
+}
+
+#birthdayCaption p {
+    color: #ff729c;
+    font-family: 'comic sans ms';
+    font-weight: bold;
+    font-style: italic;
+    font-size: 8vh;
+    font-size: min(6.5vw, 8vh);
+    text-align: center;
+    margin-top: 0;
+}
+
+#birthdayCaption p:last-child {
+    font-size: 5vh;
+    font-size: min(5vw, 5vh);
+    font-weight: normal;
+}
+
+#videoBgBox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+#videoBgBox #mainVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#videoBgBox #mainVideoBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(1vw);
 }
 
 #mainTitle {
@@ -97,22 +217,6 @@ body {
     object-fit: cover;
 }
 
-#mainCaptions {
-    position: absolute;
-    top: 17%;
-    left: 7%;
-    right: 7%;
-    opacity: 0;
-    transition: opacity 1.5s;
-}
-
-#mainCaptions p {
-    font-size: 4vh;
-    font-size: min(6vw, 4vh);
-    white-space: nowrap;
-    text-shadow: 0 0 0.25em black,0 0 0.25em black,0 0 0.25em black;
-}
-
 #lowerPanel {
     position: absolute;
     left: 0;
@@ -138,7 +242,7 @@ body {
     }
 }
 
-#lowerPanel:hover {
+#lowerPanel:hover, #lowerPanel.lowerPanelUp {
     bottom: 0;
 }
 
@@ -163,7 +267,7 @@ body {
     border-right: 8px solid transparent;
 }
 
-#lowerPanel:hover .tooltip {
+#lowerPanel:hover .tooltip, #lowerPanel.lowerPanelUp .tooltip {
     display: none;
 }
 
@@ -181,7 +285,7 @@ body {
     transition: all 0.5s;
 }
 
-#lowerPanel:hover #comments {
+#lowerPanel:hover #comments, #lowerPanel.lowerPanelUp #comments {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.5);
     backdrop-filter: drop-shadow(0 0) blur(1vh);
@@ -300,7 +404,7 @@ body {
     color: lightblue;
 }
 
-#comments .commentBox .comment > img {
+#comments .commentBox .comment>img {
     /*max-width: 100%;
     max-height: 80%;*/
     width: 48%;
@@ -312,11 +416,11 @@ body {
     transition: transform 0.2s;
 }
 
-#comments .commentBox .comment > img:hover {
+#comments .commentBox .comment>img:hover {
     transform: scale(1.05);
 }
 
-#comments .commentBox .time {    
+#comments .commentBox .time {
     box-sizing: border-box;
     padding-top: 24px;
     font-size: 12px;
@@ -326,7 +430,7 @@ body {
     bottom: 0;
     left: 0;
     padding: 16px;
-    
+
 }
 
 #comments #newCommentBox {
@@ -469,7 +573,12 @@ body {
 
 #lowerPanel .backTransparent {
     position: absolute;
+    display: none;
     /*background-color: black;*/
+}
+
+#lowerPanel:hover .backTransparent , #lowerPanel.lowerPanelUp .backTransparent {
+    display: block;
 }
 
 #lowerPanel #newMsg {
@@ -487,7 +596,7 @@ body {
     transition: all 0.2s;
 }
 
-#lowerPanel:hover #newMsg {
+#lowerPanel:hover #newMsg, #lowerPanel.lowerPanelUp #newMsg {
     left: 16px;
 }
 
@@ -516,7 +625,7 @@ body {
     transition: all 0.2s;
 }
 
-#lowerPanel:hover #toolbar {
+#lowerPanel:hover #toolbar, #lowerPanel.lowerPanelUp #toolbar {
     right: 16px;
 }
 
@@ -741,7 +850,8 @@ body {
     border-radius: 100%;
 }
 
-#setAvatarPopup, #getImgPopup {
+#setAvatarPopup,
+#getImgPopup {
     text-align: center;
 }
 

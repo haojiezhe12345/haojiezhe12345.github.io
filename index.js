@@ -1,4 +1,7 @@
 
+//var madohomu_root = ''
+//madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
+
 function loadComments(from, count) {
     const xhr = new XMLHttpRequest();
 
@@ -205,6 +208,7 @@ function newComment() {
     commentDiv.scrollTop = 0
 
     if (newCommentDisabled) {
+        document.getElementById('msgText').focus({preventScroll:true})
         return
     }
 
@@ -215,7 +219,7 @@ function newComment() {
         <div class="bgcover"></div>
         <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
         <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getCookie('username')}</div>
-        <div class="id" onclick="showPopup('setNamePopup')">设置呢称/头像</div>
+        <div class="id" onclick="showPopup('setNamePopup')">设置昵称/头像</div>
         <div class="comment">
             <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
             <div id="uploadImgList" style="display: none"></div>
@@ -228,6 +232,17 @@ function newComment() {
     `
 
     commentDiv.insertBefore(newCommentBox, commentDiv.firstChild)
+
+    document.getElementById('msgText').addEventListener('focusin', () => {
+        //console.log('msgText focused')
+        document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+    })
+    document.getElementById('msgText').addEventListener('focusout', () => {
+        //console.log('msgText lost focus')
+        document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
+    })
+    
+    document.getElementById('msgText').focus({preventScroll:true})
 
     newCommentDisabled = true
 }
@@ -315,7 +330,7 @@ function viewImg(elmnt) {
 
 function closeImgViewer() {
     document.getElementById('imgViewerBox').style.display = 'none';
-    document.getElementById('viewport1').setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
 }
 
 function showPopup(popupID) {
@@ -331,11 +346,11 @@ function showPopup(popupID) {
     setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
 
     if (popupID == 'getImgPopup') {
-        for (let i = 0; i < bgCount; i++) {
+        for (let i = 0; i < 6; i++) {
             document.getElementsByClassName('getImgList')[i].src = `https://haojiezhe12345.top:82/madohomu/bg/mainbg${i + 1}.jpg`
         }
         for (let i = 0; i < msgBgCount; i++) {
-            document.getElementsByClassName('getImgList')[i + bgCount].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
+            document.getElementsByClassName('getImgList')[i + 6].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
         }
     }
 }
@@ -369,10 +384,25 @@ function showMsgWindow() {
 
 function setUserName() {
     inputName = document.getElementById('setNameInput').value;
+
+    try {
+        var invalidFileChars = "\\/:*?\"<>|;";
+        var validFileChars = "＼／：＊？＂＜＞｜；";
+        for (i = 0; i < invalidFileChars.length; i++) {
+            //var re = new RegExp(invalidFileChars[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+            //inputName = inputName.replace(re, validFileChars[i]);
+            inputName = inputName.split(invalidFileChars[i]).join(validFileChars[i])
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
     setCookie('username', inputName)
     closePopup()
-    if (getCookie('username') == '') {
+    if (getCookie('username') == '' || getCookie('username') == '匿名用户') {
         //showPopup('msgPopup')
+    } else if (getCookie('username') == '10.3') {
+        location.reload()
     } else {
         showPopup('setAvatarPopup')
     }
@@ -453,25 +483,78 @@ function loadUserInfo() {
 }
 
 function nextImg() {
+    if (bgPaused) return
+
+    /*
     var bg1 = document.getElementById('mainbg1')
     var bg2 = document.getElementById('mainbg2')
 
-    if (currentBG < bgCount) {
-        currentBG += 1
+    if (currentBGOld < bgCount) {
+        currentBGOld += 1
     } else {
-        currentBG = 1
+        currentBGOld = 1
     }
 
     bg1.style.opacity = 0
     bg2.style.opacity = 1
+    bg2.style.removeProperty('animation-name')
     setTimeout(() => {
-        bg1.style.backgroundImage = `url(https://haojiezhe12345.top:82/madohomu/bg/mainbg${currentBG}.jpg)`
+        bg1.style.animationName = 'none'
+        if (isBirthday) {
+            bg1.style.backgroundImage = `url(https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg${currentBGOld}.jpg)`
+        } else {
+            bg1.style.backgroundImage = `url(https://haojiezhe12345.top:82/madohomu/bg/mainbg${currentBGOld}.jpg)`
+        }
         bg1.id = 'mainbg2'
         bg2.id = 'mainbg1'
     }, 2500);
+    */
+
+    var prevBG = currentBG
+    if (currentBG + 1 < bgCount) {
+        currentBG += 1
+    } else {
+        currentBG = 0
+    }
+    var nextBG
+    if (currentBG + 1 < bgCount) {
+        nextBG = currentBG + 1
+    } else {
+        nextBG = 0
+    }
+
+    if (isBirthday) {
+        bgs = document.getElementsByClassName('birthdaybg')
+    } else {
+        bgs = document.getElementsByClassName('defaultbg')
+    }
+
+    bgs[prevBG].style.opacity = 0
+    bgs[currentBG].style.display = 'block'
+    bgs[currentBG].style.opacity = 1
+    bgs[currentBG].firstChild.style.removeProperty('animation-name')
+    setTimeout(() => {
+        bgs[prevBG].firstChild.style.animationName = 'none'
+        bgs[nextBG].style.display = 'block'
+        bgs[nextBG].firstChild.style.animationName = 'none'
+    }, 2500);
+
 }
 
 function nextCaption() {
+    if (bgPaused) return
+
+    if (isBirthday) {
+        var elements = document.getElementsByClassName('mainCaption');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.display = 'none';
+        }
+
+        captionDiv.style.opacity = 1
+        document.getElementById('birthdayCaption').style.display = 'block'
+        return
+    }
+
     captionDiv.style.opacity = 0
     setTimeout(() => {
         var elements = document.getElementsByClassName('mainCaption');
@@ -493,6 +576,28 @@ function nextCaption() {
         }
         captionDiv.style.opacity = 1
     }, 1500);
+}
+
+function playWalpurgis() {
+    document.getElementById('videoBgBox').style.display = 'block'
+    document.getElementById('mainVideo').src = 'https://haojiezhe12345.top:82/madohomu/media/Walpurgis.mp4'
+    document.getElementById('mainVideoBg').src = 'https://haojiezhe12345.top:82/madohomu/media/Walpurgis.mp4'
+    document.getElementById('mainVideo').play()
+    document.getElementById('mainVideoBg').play()
+    setTimeout(() => {
+        document.getElementById('videoBgBox').style.display = 'none'
+    }, 28000);
+}
+
+function checkBirthday() {
+    var d = new Date()
+    if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || getCookie('username') == '10.3') {
+
+        var yearsOld = d.getFullYear() - 2011
+        document.getElementById('birthdayDate').innerHTML = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
+
+        isBirthday = true
+    }
 }
 
 function goFullscreen() {
@@ -605,11 +710,17 @@ var topComment = `
 `
 
 
-if (Math.random() > 0.5) {
-    bgmElmnt.src = 'bgm_16k.mp3'
+var isBirthday = false
+checkBirthday()
+
+if (isBirthday) {
+    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/mataashita.mp3'
+} else if (Math.random() > 0.5) {
+    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm_16k.mp3'
 } else {
-    bgmElmnt.src = 'bgm1_16k.mp3'
+    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm1_16k.mp3'
 }
+
 if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
     document.getElementById('bgm').play()
 } else {
@@ -654,17 +765,33 @@ commentDiv.addEventListener("wheel", (event) => {
     */
 });
 
-var bgCount = 6
-var currentBG = 2
-setInterval(nextImg, 5000)
 
-var msgBgCount = 11
-var lastBgImgs = []
+var bgCount
+if (isBirthday) {
+    bgCount = document.getElementsByClassName('birthdaybg').length
+} else {
+    bgCount = document.getElementsByClassName('defaultbg').length
+}
+
+//var currentBGOld = 2
+var currentBG = bgCount - 1
+nextImg()
+setInterval(nextImg, 8000)
+setTimeout(() => {
+    //document.getElementById('mainbg1').classList.remove('bgzoom')
+    document.getElementsByClassName('defaultbg')[0].classList.remove('bgzoom')
+    document.getElementsByClassName('birthdaybg')[0].classList.remove('bgzoom')
+}, 10000);
 
 var currentCaption = -1
 var captionCount = document.getElementsByClassName('mainCaption').length
 nextCaption()
-setInterval(nextCaption, 10000)
+setInterval(nextCaption, 8000)
+
+var bgPaused = false
+
+var msgBgCount = 11
+var lastBgImgs = []
 
 var isFullscreen = false
 
@@ -684,7 +811,7 @@ var imgViewerOffsetY = 0
 var imgViewerScale = 1
 var imgViewerMouseMoved = false
 
-document.onkeydown = function(e) {
+document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
         imgvwr = document.getElementById('imgViewerBox')
@@ -698,7 +825,7 @@ if (window.location.hash != '') {
     window.location.hash = ''
 }
 
-window.onhashchange = function(e) {
+window.onhashchange = function (e) {
     //console.log(e.oldURL.split('#')[1], e.newURL.split('#')[1])
     if (e.oldURL.split('#')[1] == 'view-img') {
         closeImgViewer()
