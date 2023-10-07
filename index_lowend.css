@@ -4,3 +4,15 @@
     filter: none !important;
     animation: none !important;
 }
+
+#lowerPanel:hover #comments .commentBox .comment a {
+    animation-name: enableClickDelayed !important;
+    animation-duration: 0.5s !important;
+    animation-fill-mode: forwards !important;
+}
+
+#lowerPanel:hover .time {
+    animation-name: enableClickDelayed !important;
+    animation-duration: 0.5s !important;
+    animation-fill-mode: forwards !important;
+}

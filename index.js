@@ -124,8 +124,10 @@ function sendMessage() {
 
     var imgList = []
     var uploadImgClass = document.getElementsByClassName('uploadImg')
-    for (var imgElmnt of uploadImgClass) {
-        imgList.push(imgElmnt.src.split(';base64,')[1])
+    if (uploadImgClass.length > 0) {
+        for (var imgElmnt of uploadImgClass) {
+            imgList.push(imgElmnt.src.split(';base64,')[1])
+        }
     }
 
     if (msg.replace(/\s/g, '') == '') {
@@ -208,7 +210,7 @@ function newComment() {
     commentDiv.scrollTop = 0
 
     if (newCommentDisabled) {
-        document.getElementById('msgText').focus({preventScroll:true})
+        document.getElementById('msgText').focus({ preventScroll: true })
         return
     }
 
@@ -231,7 +233,7 @@ function newComment() {
         <button id="sendBtn" onclick="sendMessage()">发送 ✔</button>
     `
 
-    commentDiv.insertBefore(newCommentBox, commentDiv.firstChild)
+    commentDiv.insertBefore(newCommentBox, commentDiv.firstElementChild)
 
     document.getElementById('msgText').addEventListener('focusin', () => {
         //console.log('msgText focused')
@@ -241,8 +243,8 @@ function newComment() {
         //console.log('msgText lost focus')
         document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
     })
-    
-    document.getElementById('msgText').focus({preventScroll:true})
+
+    document.getElementById('msgText').focus({ preventScroll: true })
 
     newCommentDisabled = true
 }
@@ -349,8 +351,14 @@ function showPopup(popupID) {
         for (let i = 0; i < 6; i++) {
             document.getElementsByClassName('getImgList')[i].src = `https://haojiezhe12345.top:82/madohomu/bg/mainbg${i + 1}.jpg`
         }
+        for (let i = 0; i < 4; i++) {
+            document.getElementsByClassName('getImgList')[i + 6].src = `https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg${i + 1}.jpg`
+        }
+        for (let i = 0; i < 1; i++) {
+            document.getElementsByClassName('getImgList')[i + 6 + 4].src = `https://haojiezhe12345.top:82/madohomu/bg/night/mainbg${i + 1}.jpg`
+        }
         for (let i = 0; i < msgBgCount; i++) {
-            document.getElementsByClassName('getImgList')[i + 6].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
+            document.getElementsByClassName('getImgList')[i + 6 + 4 + 1].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
         }
     }
 }
@@ -482,6 +490,8 @@ function loadUserInfo() {
     }
 }
 
+// themes
+//
 function nextImg() {
     if (bgPaused) return
 
@@ -524,19 +534,23 @@ function nextImg() {
     }
 
     if (isBirthday) {
-        bgs = document.getElementsByClassName('birthdaybg')
+        var bgs = document.getElementsByClassName('birthdaybg')
+        var bgurl = 'https://haojiezhe12345.top:82/madohomu/bg/birthday/'
     } else {
-        bgs = document.getElementsByClassName('defaultbg')
+        var bgs = document.getElementsByClassName('defaultbg')
+        var bgurl = 'https://haojiezhe12345.top:82/madohomu/bg/'
     }
 
     bgs[prevBG].style.opacity = 0
-    bgs[currentBG].style.display = 'block'
+    //bgs[currentBG].style.display = 'block'
     bgs[currentBG].style.opacity = 1
-    bgs[currentBG].firstChild.style.removeProperty('animation-name')
+    bgs[currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${currentBG + 1}.jpg?2")`
+    bgs[currentBG].firstElementChild.style.removeProperty('animation-name')
     setTimeout(() => {
-        bgs[prevBG].firstChild.style.animationName = 'none'
-        bgs[nextBG].style.display = 'block'
-        bgs[nextBG].firstChild.style.animationName = 'none'
+        bgs[prevBG].firstElementChild.style.animationName = 'none'
+        //bgs[nextBG].style.display = 'block'
+        bgs[nextBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${nextBG + 1}.jpg?2")`
+        bgs[nextBG].firstElementChild.style.animationName = 'none'
     }, 2500);
 
 }
@@ -580,8 +594,8 @@ function nextCaption() {
 
 function playWalpurgis() {
     document.getElementById('videoBgBox').style.display = 'block'
-    document.getElementById('mainVideo').src = 'https://haojiezhe12345.top:82/madohomu/media/Walpurgis.mp4'
-    document.getElementById('mainVideoBg').src = 'https://haojiezhe12345.top:82/madohomu/media/Walpurgis.mp4'
+    document.getElementById('mainVideo').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis.mp4'
+    document.getElementById('mainVideoBg').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis.mp4'
     document.getElementById('mainVideo').play()
     document.getElementById('mainVideoBg').play()
     setTimeout(() => {
@@ -589,17 +603,8 @@ function playWalpurgis() {
     }, 28000);
 }
 
-function checkBirthday() {
-    var d = new Date()
-    if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || getCookie('username') == '10.3') {
-
-        var yearsOld = d.getFullYear() - 2011
-        document.getElementById('birthdayDate').innerHTML = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
-
-        isBirthday = true
-    }
-}
-
+// toggles
+//
 function goFullscreen() {
     if (!isFullscreen) {
         var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
@@ -608,6 +613,7 @@ function goFullscreen() {
         setTimeout(() => {
             commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
         }, 200);
+        document.getElementById('fullscreenBtn').innerHTML = '退出全屏 ↙'
         isFullscreen = true
     } else {
         var scrollPercent = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
@@ -615,6 +621,7 @@ function goFullscreen() {
         setTimeout(() => {
             commentDiv.scrollLeft = (commentDiv.scrollWidth - commentDiv.clientWidth) * scrollPercent
         }, 200);
+        document.getElementById('fullscreenBtn').innerHTML = '全屏 ↗'
         isFullscreen = false
     }
 }
@@ -653,6 +660,8 @@ function toggleTopComment() {
     }
 }
 
+// functional funcs
+//
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -687,6 +696,8 @@ function html2elmnt(html) {
     return t.content;
 }
 
+// common vars
+//
 var minCommentID = null
 var maxCommentID = null
 
@@ -709,12 +720,43 @@ var topComment = `
 </div>
 `
 
+var bgPaused = false
+var isFullscreen = false
+var newCommentDisabled = false
 
+// time checks
+//
 var isBirthday = false
-checkBirthday()
+var isNight = false
+var d = new Date()
+if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || getCookie('username') == '10.3' || location.hash == '#birthday') {
 
+    var yearsOld = d.getFullYear() - 2011
+    document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
+
+    isBirthday = true
+}
+else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') && location.hash != '#day') {
+    document.getElementsByClassName('nightbg')[0].style.opacity = 1
+    document.getElementsByClassName('nightbg')[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/night/mainbg1.jpg")`
+
+    var elements = document.getElementsByClassName('mainCaption');
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
+    }
+    captionDiv.style.opacity = 1
+    document.getElementById('nightCaption').style.display = 'block'
+
+    isNight = true
+    bgPaused = true
+}
+
+// theme
+//
 if (isBirthday) {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/mataashita.mp3'
+} else if (isNight) {
+    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/night_16k.mp3'
 } else if (Math.random() > 0.5) {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm_16k.mp3'
 } else {
@@ -742,30 +784,6 @@ if (getCookie('hideTopComment') == 'true') {
     `
 }
 
-loadUserInfo()
-
-loadComments()
-setTimeout(() => {
-    commentDiv.addEventListener("scroll", commentScroll)
-}, 500);
-setInterval(commentScroll, 1000)
-
-var commentHorizontalScrolled = 0
-
-commentDiv.addEventListener("wheel", (event) => {
-    //console.info(event.deltaY)
-    //console.info(commentDiv.scrollLeft)
-    commentDiv.scrollLeft += event.deltaY
-    /*
-    commentHorizontalScrolled += event.deltaY
-    if (commentHorizontalScrolled < 0) commentHorizontalScrolled = 0
-    if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth)) commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
-    console.log(commentHorizontalScrolled)
-    commentDiv.scrollLeft = commentHorizontalScrolled
-    */
-});
-
-
 var bgCount
 if (isBirthday) {
     bgCount = document.getElementsByClassName('birthdaybg').length
@@ -788,12 +806,37 @@ var captionCount = document.getElementsByClassName('mainCaption').length
 nextCaption()
 setInterval(nextCaption, 8000)
 
-var bgPaused = false
+
+loadUserInfo()
+
+// comments
+//
+loadComments()
+setTimeout(() => {
+    commentDiv.addEventListener("scroll", commentScroll)
+}, 500);
+setInterval(commentScroll, 1000)
+
+var commentHorizontalScrolled = 0
+var altScrollmode = false
+
+commentDiv.addEventListener("wheel", (event) => {
+    if (altScrollmode) {
+        console.info(event.deltaY)
+        console.info(commentDiv.scrollLeft)
+        commentHorizontalScrolled += event.deltaY * 1
+        if (commentHorizontalScrolled < 0) commentHorizontalScrolled = 0
+        if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth)) commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
+        console.log(commentHorizontalScrolled)
+        commentDiv.scrollLeft = commentHorizontalScrolled
+    } else {
+        commentDiv.scrollLeft += event.deltaY
+    }
+});
 
 var msgBgCount = 11
 var lastBgImgs = []
 
-var isFullscreen = false
 
 document.getElementById('goto').addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
@@ -803,8 +846,8 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
     }
 })
 
-newCommentDisabled = false
-
+// image viewer
+//
 var imgViewerMouseActive = false
 var imgViewerOffsetX = 0
 var imgViewerOffsetY = 0
@@ -832,6 +875,8 @@ window.onhashchange = function (e) {
     }
 }
 
+// PWA init
+//
 var installPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (event) => {
