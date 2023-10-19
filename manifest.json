@@ -6,11 +6,11 @@
     "display": "standalone",
     "icons": [
         {
-            "src": "favicon.png",
+            "src": "https://haojiezhe12345.top:82/madohomu/favicon.png",
             "sizes": "640x640"
         },
         {
-            "src": "favicon_192.png",
+            "src": "https://haojiezhe12345.top:82/madohomu/favicon_192.png",
             "sizes": "192x192"
         }
     ]
