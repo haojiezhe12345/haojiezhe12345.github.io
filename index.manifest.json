@@ -1,6 +1,6 @@
 {
     "name": "圆焰 - MadoHomu.love",
-    "start_url": "/madohomu?no-redirect",
+    "start_url": "/?no-redirect",
     "lang": "zh-CN",
     "theme_color": "#ff9dce",
     "display": "standalone",
