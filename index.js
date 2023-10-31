@@ -82,7 +82,7 @@ function loadComments(from, count) {
                     <div class="time">${date + ' ' + hour}</div>
                 `
                 */
-                commentDiv.appendChild(html2elmnt(`
+                commentDiv.insertBefore(html2elmnt(`
                     <div class="commentBox">
                         <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
                         <div class="bgcover"></div>
@@ -95,7 +95,9 @@ function loadComments(from, count) {
                         </div>
                         <div class="time">${date + ' ' + hour}</div>
                     </div>
-                `))
+                `), document.getElementById('loadingIndicator'))
+
+                //commentDiv.appendChild()
 
                 if (minCommentID == null) {
                     minCommentID = comment.id
@@ -166,9 +168,9 @@ function sendMessage() {
 function clearComments(clearTop) {
     commentDiv.removeEventListener("scroll", commentScroll)
     if (clearTop == 1) {
-        commentDiv.innerHTML = ''
+        commentDiv.innerHTML = loadingIndicator
     } else {
-        commentDiv.innerHTML = topComment
+        commentDiv.innerHTML = topComment + loadingIndicator
     }
     minCommentID = null
     maxCommentID = null
@@ -734,6 +736,11 @@ var topComment = `
     ${document.getElementById('topComment').innerHTML}
 </div>
 `
+var loadingIndicator = `
+<div class="commentBox" id="loadingIndicator">
+    ${document.getElementById('loadingIndicator').innerHTML}
+</div>
+`
 
 var bgPaused = false
 var isFullscreen = false
@@ -859,7 +866,7 @@ if (location.hash == '#video') {
 
 loadUserInfo()
 
-if (navigator.language.slice(0,2) != 'zh' && navigator.language.slice(0,3) != 'yue') {
+if (navigator.language.slice(0, 2) != 'zh' && navigator.language.slice(0, 3) != 'yue') {
     document.getElementById('changeLangBtn').click()
 }
 
@@ -911,9 +918,13 @@ var imgViewerMouseMoved = false
 document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
-        imgvwr = document.getElementById('imgViewerBox')
-        if (imgvwr.style.display == 'block') {
-            history.back()
+        if (document.getElementById('popupContainer').style.display == 'flex') {
+            closePopup()
+        } else {
+            imgvwr = document.getElementById('imgViewerBox')
+            if (imgvwr.style.display == 'block') {
+                history.back()
+            }
         }
     }
 }

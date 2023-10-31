@@ -47,6 +47,14 @@
     max-height: 96vw;
 }
 
+#comments #loadingIndicator {
+    width: 100%;
+    height: auto;
+    line-height: normal;
+    margin: 0;
+    text-align: center;
+}
+
 #lowerPanel #newMsg {
     position: absolute;
     top: unset;
