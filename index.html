@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta id="viewport1" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>圆焰 - MadoHomu.love</title>
+
     <link rel="stylesheet" href="index.css" type="text/css">
     <link rel="preload" href="index_fullscreen.css" as="style" />
     <link rel="stylesheet" href="index_fullscreen.css" type="text/css" id="fullscreenCSS" disabled>
     <link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS" disabled>
+    <style id="langCSS"></style>
+
     <link rel="icon" type="image/x-icon" href="https://haojiezhe12345.top:82/madohomu/favicon.ico">
     
     <meta name="baidu-site-verification" content="codeva-KUmCPXYF3w" />
@@ -30,7 +33,7 @@
     <link rel="apple-touch-icon" sizes="192x192" href="https://haojiezhe12345.top:82/madohomu/favicon_192.png">
 </head>
 
-<body onclick="if (!isMutedElmnt.checked) bgmElmnt.play()">
+<body onclick="if (!isMutedElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
 
     <audio id="bgm" loop></audio>
 
@@ -49,48 +52,51 @@
     <div class="mainbg birthdaybg"       ><div style="background-position-x: 50%;"></div><span>Artwork by ほんわか紳士</span></div>
     <div class="mainbg birthdaybg"       ><div style="background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
     <div class="mainbg birthdaybg"       ><div style="background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
-    <div class="mainbg nightbg bgzoom"   ><div style="background-position-x: 60%;"></div><span>官图 (战斗五芒星CG)</span></div>
+    <div class="mainbg nightbg bgzoom"   ><div style="background-position-x: 60%;"></div><span><span class="ui zh">官图 (战斗五芒星CG)</span><span class="ui en">Official art (PMMM: The Battle Pentagram)</span></span></div>
 
     <div id="mainCaptions" style="opacity: 0;">
         <div class="mainCaption">
-            <p>如果有人说怀有希望是错误的话</p>
-            <p>「不是这样的」</p>
-            <p>无论多少次我都会这样回答</p>
-            <p>无论什么时候我都这样坚持</p>
+            <p><span class="ui zh">如果有人说怀有希望是错误的话，</span><span class="ui en">If you told me it was wrong to harbour hope,</span></p>
+            <p><span class="ui zh">「不是这样的。」</span><span class="ui en">I would tell you that it wasn't wrong.</span></p>
+            <p><span class="ui zh">无论多少次我都会这样回答，</span><span class="ui en">I'd say it as many times as necessary.</span></p>
+            <p><span class="ui zh">无论什么时候我都这样坚持。</span><span class="ui en">I'd keep saying it forever.</span></p>
         </div>
         <div class="mainCaption">
-            <p>重复 无论多少次我都将重复</p>
-            <p>小圆 我唯一的朋友</p>
-            <p>为了你 如果是为了你</p>
-            <p>即使我被困在永远的迷宫中</p>
-            <p>也在所不惜</p>
+            <p><span class="ui zh">重复 无论多少次我都将重复。</span><span class="ui en">I'll repeat it. I'll continue to repeat it over and over.</span></p>
+            <p><span class="ui zh">小圆 我唯一的朋友，</span><span class="ui en">Visiting the same time again and again, searching for the single way out.</span></p>
+            <p><span class="ui zh">为了你，如果是为了你，</span><span class="ui en">Madoka... my one and only friend.</span></p>
+            <p><span class="ui zh">即使我被困在永远的迷宫中，</span><span class="ui en">If it's... If it's for you,</span></p>
+            <p><span class="ui zh">也在所不惜。</span><span class="ui en">I have no problem being trapped eternally in this maze.</span></p>
         </div>
         <div class="mainCaption">
-            <p>连小焰都会为之哭泣的痛苦的事情</p>
-            <p>我怎么可能忍受得了呢</p>
-            <p>我啊, 和谁都不想分开呢</p>
-            <p>就算是到了别无选择的时候</p>
-            <p>我也没有那种勇气的</p>
+            <p><span class="ui zh">连小焰都会为之哭泣的痛苦的事情</span><span class="ui en">If it's hard to the point to make you cry, you, Homura,</span></p>
+            <p><span class="ui zh">我怎么可能忍受得了呢</span><span class="ui en">how can i bear it?</span></p>
+            <p><span class="ui zh">我啊, 和谁都不想分开呢</span><span class="ui en">I don't want to say goodbye to anyone.</span></p>
+            <p><span class="ui zh">就算是到了别无选择的时候</span><span class="ui en">Even if there was no other way,</span></p>
+            <p><span class="ui zh">我也没有那种勇气的</span><span class="ui en">I would not have this courage.</span></p>
         </div>
         <div class="mainCaption">
-            <p>静静偎依在我身旁</p>
-            <p>不要再往他方</p>
-            <p>在窗边婉转歌唱</p>
-            <p>无论失去什么珍贵之物</p>
+            <p><span class="ui zh">静静偎依在我身旁，</span><span class="ui en">Come closer quietly,</span></p>
+            <p><span class="ui zh">不要再往他方。</span><span class="ui en">don't go anywhere.</span></p>
+            <p><span class="ui zh">在窗边婉转歌唱，</span><span class="ui en">Chirp your song by the window,</span></p>
+            <p><span class="ui zh">无论失去什么珍贵之物。</span><span class="ui en">don't go anywhere.</span></p>
+            <p style="font-size: 2.5vh; font-size: min(3.75vw, 2.5vh);"><span class="ui zh">—— 梶浦由記《君の銀の庭》</span><span class="ui en">- <i>Your Silver Garden</i>, Yuki Kajiura -</span></p>
         </div>
         <div id="birthdayCaption">
             <p>Happy birthday, Madoka!</p>
-            <p id="birthdayDate">0/0/0000 - Madoka's 0th birthday</p>
+            <p id="birthdayDate">10/3/2011 - Madoka's 0th birthday</p>
         </div>
         <div id="nightCaption">
-            <p>晚安，小焰～</p>
-            <p>晚安，小圆。</p>
+            <p><span class="ui zh">晚安，小焰～</span><span class="ui en">Good night, Homura-chan ~</span></p>
+            <p><span class="ui zh">晚安，小圆。</span><span class="ui en">Good night, Madoka.</span></p>
         </div>
     </div>
 
+    <div class="mainbg walpurgisbg" style="display: none;"><div></div><span>回天宣传海报 1</span></div>
+
     <div id="videoBgBox" style="display: none;">
         <video id="mainVideoBg" muted></video>
-        <video id="mainVideo"></video>
+        <video id="mainVideo" muted></video>
     </div>
 
     <div id="mainTitle" class="topItems">
@@ -108,7 +114,7 @@
 
     <div id="lowerPanel">
 
-        <div class="tooltip">点击下方查看留言<div class="triangle"></div></div>
+        <div class="tooltip"><span class="ui zh">点击下方查看留言</span><span class="ui en">Tap below to view messages</span><div class="triangle"></div></div>
 
         <div id="comments">
 
@@ -136,68 +142,140 @@
                 <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg1.jpg">
                 <div class="bgcover"></div>
                 <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/浩劫者12345.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-                <div class="sender">浩劫者12345 (站长)</div>
-                <div class="id">#置顶</div>
+                <div class="sender"><span class="ui zh">浩劫者12345 (站长)</span><span class="ui en">haojiezhe12345</span></div>
+                <div class="id"><span class="ui zh">#置顶</span><span class="ui en">#Pinned</span></div>
                 <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
-                    欢迎来到 <strong>MadoHomu.love</strong>     !<br>
-                    这是一个以<strong><span style="color: #ffbbdd;">圆</span><span style="color: #d5a2ff;">焰</span><span style="color: #ffbbdd;">圆</span></strong>为主题的留言网站<br>
-                    友情链接: <a href="http://kami.im" target="_blank">kami.im (圆神站)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (焰魔站)</a>
-                    <br><br>
-                    10月3日打开本站会有<strong><span style="color: #ffbbdd;">小圆</span>生日</strong>主题哦! (也可以在"工具"菜单手动切换!)
-                    <!--<br>
-                    本站会长期运营的! 建议收藏到浏览器!-->
-                    <br><br>
-                    <strong>网站的用法包括但不限于: 许愿、祈祷、拜圆神/焰魔、磕CP、分享日常等。内容不限于圆焰。</strong>
-                    <br><br>
-                    我们欢迎发早安/晚安打卡，但请不要发表毫无意义的留言 (圆神启动什么的还是别发了)。
-                    <br><br>
-                    我们希望给圆焰厨/魔圆厨建设一个良好的交流环境。请保持网站的圣洁，不要发表玩烂梗、拆CP、辱骂他人等玷污网站的内容。
-                    <br><br>
-                    登录系统暂时没有做, 请直接输入昵称即可, 昵称与头像是绑定的
-                    <br><br>
-                    本站导入了kami.im的留言 (这部分留言ID小于0, 建议使用"工具"中的"跳转"功能查看)<br>
-                    感谢Discord频友Yuudachi_Kai2备份的数据!
-                    <br><br>
-                    本站还使用了以下图片, 非常感谢这些画师!<br>
-                    主背景:<br>
-                    61717580 by HISA<br>
-                    89897632 by Rumoon<br>
-                    82577782 by 南山tsd<br>
-                    21428206 by LIN+<br>
-                    104087822 by eps3rd<br>
-                    54804736 by 冰封死神<br>
-                    生日背景:<br>
-                    101655453 by 八重ハルラ<br>
-                    91842494 by ほんわか紳士<br>
-                    22161754 by mizuki<br>
-                    90502009 by ゆきねこ<br>
-                    晚安背景:<br>
-                    官方游戏 战斗五芒星 剧情CG<br>
-                    留言背景:<br>
-                    33932626 (官图You Are Not Alone)<br>
-                    57114653 by Nine<br>
-                    91471007 by 曼曼<br>
-                    99591809 by カラスBTK<br>
-                    18530512 by さんしょう<br>
-                    60649948 by STAR影法師<br>
-                    88198018 by Nardack<br>
-                    29076044 by Rella<br>
-                    57636925 by おれつ<br>
-                    65489049, 63582832 by ChrisTy☆クリスティ<br>
-                    (以上数字均为Pixiv ID)
-                    <br><br>
-                    网站使用的八音盒BGM: (作曲: オルゴール ミドリ)<br>
-                    <a href="https://music.163.com/song?id=1311466561&userid=310755433" target="_blank">君の銀の庭 (Originally Performed by Kalafina 「劇場版 魔法少女まどか☆マギカ[新編]叛逆の物語」より)</a>
-                    <br>
-                    <a href="https://music.163.com/song?id=1311433797&userid=310755433" target="_blank">Sagitta luminis 「女神まどかのテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
-                    <br>
-                    <a href="https://music.163.com/song?id=1311434463&userid=310755433" target="_blank">Scaena felix 「日常のテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
-                    <br><br>
-                    站长QQ: 3112611479<br>
-                    欢迎扩列。有什么建议可以直接发邮箱或者加Q
+                    <div class="ui zh">
+                        欢迎来到 <strong style="text-decoration: underline;">MadoHomu.love</strong> !<br>
+                        这是一个以<strong><span style="color: #ffbbdd;">圆</span><span style="color: #d5a2ff;">焰</span><span style="color: #ffbbdd;">圆</span></strong>为主题的留言网站<br>
+                        友情链接: <a href="http://kami.im" target="_blank">kami.im (圆神站)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (焰魔站)</a>
+                        <br><br>
+                        10月3日打开本站会有<strong><span style="color: #ffbbdd;">小圆</span>生日</strong>主题哦! (也可以在"工具"菜单手动切换!)
+                        <!--<br>
+                        本站会长期运营的! 建议收藏到浏览器!-->
+                        <br><br>
+                        <strong>网站的用法包括但不限于: 许愿、祈祷、拜圆神/焰魔、磕CP、分享日常等。内容不限于圆焰。</strong>
+                        <br><br>
+                        我们欢迎发早安/晚安打卡，但请不要发表毫无意义的留言 (圆神启动什么的还是别发了)。
+                        <br><br>
+                        我们希望给圆焰厨/魔圆厨建设一个良好的交流环境。请保持网站的圣洁，不要发表玩烂梗、拆CP、辱骂他人等玷污网站的内容。
+                        <br><br>
+                        登录系统暂时没有做, 请直接输入昵称即可, 昵称与头像是绑定的
+                        <br><br>
+                        本站导入了kami.im的留言 (这部分留言ID小于0, 建议使用"工具"中的"跳转"功能查看)<br>
+                        感谢Discord频友Yuudachi_Kai2备份的数据!
+                        <br><br>
+                        本站还使用了以下图片, 非常感谢这些画师!<br>
+                        主背景:<br>
+                        61717580 by HISA<br>
+                        89897632 by Rumoon<br>
+                        82577782 by 南山tsd<br>
+                        21428206 by LIN+<br>
+                        104087822 by eps3rd<br>
+                        54804736 by 冰封死神<br>
+                        生日背景:<br>
+                        101655453 by 八重ハルラ<br>
+                        91842494 by ほんわか紳士<br>
+                        22161754 by mizuki<br>
+                        90502009 by ゆきねこ<br>
+                        晚安背景:<br>
+                        官方游戏 战斗五芒星 剧情CG<br>
+                        留言背景:<br>
+                        33932626 (官图You Are Not Alone)<br>
+                        57114653 by Nine<br>
+                        91471007 by 曼曼<br>
+                        99591809 by カラスBTK<br>
+                        18530512 by さんしょう<br>
+                        60649948 by STAR影法師<br>
+                        88198018 by Nardack<br>
+                        29076044 by Rella<br>
+                        57636925 by おれつ<br>
+                        65489049, 63582832 by ChrisTy☆クリスティ<br>
+                        (以上数字均为Pixiv ID)
+                        <br><br>
+                        网站使用的八音盒BGM: (作曲: オルゴール ミドリ)<br>
+                        <a href="https://music.163.com/song?id=1311466561&userid=310755433" target="_blank">01. 君の銀の庭 (Originally Performed by Kalafina 「劇場版 魔法少女まどか☆マギカ[新編]叛逆の物語」より)</a>
+                        <br>
+                        <a href="https://music.163.com/song?id=1311433797&userid=310755433" target="_blank">02. Sagitta luminis 「女神まどかのテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
+                        <br>
+                        <a href="https://music.163.com/song?id=1311434463&userid=310755433" target="_blank">03. Scaena felix 「日常のテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
+                        <br><br>
+                        站长QQ: 3112611479<br>
+                        B站: <a href="https://space.bilibili.com/252913909" target="_blank">浩劫者12345</a><br>
+                        欢迎扩列。有什么建议可以直接发邮箱或者加Q
+                    </div>
+                    <div class="ui en">
+                        Welcome to <strong style="text-decoration: underline;">MadoHomu.love</strong> , a website made for <strong><span style="color: #ffbbdd;">Madoka</span> and <span style="color: #d5a2ff;">Homura</span></strong> !
+                        <br>
+                        Also try: <a href="http://kami.im" target="_blank">kami.im (for MadoKami)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (for Devil Homura)</a>
+                        <!--<br>
+                        本站会长期运营的! 建议收藏到浏览器!-->
+                        <br><br>
+                        <strong>What you can do here:</strong> Make wishes, pray, say morning to MadoKami / Homura, share feelings, and so on. Contents are not limited to Madoka.
+                        <br><br>
+                        No spams, harassing, or NSFW content.
+                        <br><br>
+                        This site also features <strong><span style="color: #ffbbdd;">Madoka</span>'s birthday theme</strong> upon visiting on October 3. You can manually switch it on in the Tools menu.
+                        <br><br>
+                        No login needed. Just enter your nickname and set an avatar. Note that the avatar is linked to the nickname.
+                        <br><br>
+                        We imported messages from kami.im. To view them, use the Tools menu to go to message #0.
+                        <br>
+                        Thanks Yuudachi_Kai2 (from Discord kami.im server) for backing up the messages!
+                        <br><br>
+                        Below are the sources of background images. Great thanks to these illustrators!<br>
+                        <br>
+                        Main backgrounds:<br>
+                        61717580 by HISA<br>
+                        89897632 by Rumoon<br>
+                        82577782 by 南山tsd<br>
+                        21428206 by LIN+<br>
+                        104087822 by eps3rd<br>
+                        54804736 by 冰封死神<br>
+                        Birthday backgrounds:<br>
+                        101655453 by 八重ハルラ<br>
+                        91842494 by ほんわか紳士<br>
+                        22161754 by mizuki<br>
+                        90502009 by ゆきねこ<br>
+                        <br>
+                        Night background:<br>
+                        Madohomu CG from <i>PMMM: The Battle Pentagram</i><br>
+                        <br>
+                        Message backgrounds:<br>
+                        33932626 (Official Guidebook You Are Not Alone)<br>
+                        57114653 by Nine<br>
+                        91471007 by 曼曼<br>
+                        99591809 by カラスBTK<br>
+                        18530512 by さんしょう<br>
+                        60649948 by STAR影法師<br>
+                        88198018 by Nardack<br>
+                        29076044 by Rella<br>
+                        57636925 by おれつ<br>
+                        65489049, 63582832 by ChrisTy☆クリスティ<br>
+                        <br>
+                        (all the numbers are Pixiv ID)
+                        <br><br>
+                        BGM used: (composer: オルゴール ミドリ)<br>
+                        <a href="https://music.163.com/song?id=1311466561&userid=310755433" target="_blank">01. 君の銀の庭 (Originally Performed by Kalafina 「劇場版 魔法少女まどか☆マギカ[新編]叛逆の物語」より)</a>
+                        <br>
+                        <a href="https://music.163.com/song?id=1311433797&userid=310755433" target="_blank">02. Sagitta luminis 「女神まどかのテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
+                        <br>
+                        <a href="https://music.163.com/song?id=1311434463&userid=310755433" target="_blank">03. Scaena felix 「日常のテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
+                        <br><br>
+                        My Mail: qq3112611479@gmail.com<br>
+                        X (Twitter): <a href="https://twitter.com/haojiezhe12345" target="_blank">@haojiezhe12345</a><br>
+                        Any suggestions and advices are welcome. Feel free to contact me.
+                    </div>
                 </div>
 
-                <div class="time" onclick="hideTopCommentElmnt.click()" style="text-decoration: underline;font-size: 16px;right: 0;left: unset;cursor: pointer;">不再显示 ×</div>
+                <div class="time" onclick="hideTopCommentElmnt.click()" style="
+                    text-decoration: underline;
+                    font-size: 16px;
+                    right: 0;
+                    left: unset;
+                    cursor: pointer;
+                "><span class="ui zh">不再显示 ×</span><span class="ui en">Hide ×</span></div>
+
                 <div class="time" style="font-size: 12px;">
                     <a href="https://icp.gov.moe/?keyword=20230631" target="_blank" style="color: white;">萌ICP备20230631号</a>
                 </div>
@@ -206,25 +284,34 @@
         </div>
 
         <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>
-        <button id="newMsg" onclick="newComment()">➕ 发送留言</button>
+        <button id="newMsg" onclick="newComment()"><span class="ui zh">➕ 发送留言</span><span class="ui en">➕ New message</span></button>
 
         <div class="backTransparent" style="top: -24px;right: 0;width: 200px;height: 60px;"></div>
         <div id="toolbar">
             <div id="menu" class="toolbarItem">
-                工具 🛠
+                <span class="ui zh">工具 🛠</span><span class="ui en">Tools 🛠</span>
                 <ul>
-                    <li onclick="clearComments();loadComments()">🔄 刷新</li>
-                    <li onclick="showPopup('getImgPopup')">💾 保存背景图片</li>
+                    <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
+                    <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
                     <li onclick="
                         if (installPrompt != null) installPrompt.prompt()
-                        else if (isInStandaloneMode) window.alert('你已安装过App')
-                        else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n（小米浏览器暂不支持，其他未知）')
-                        ">📲 安装App到桌面</li>
+                        else if (isInStandaloneMode) window.alert('你已安装过App\nApp already installed')
+                        else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n（小米浏览器暂不支持，其他未知）\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
+                        "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
                     <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
-                    <li onclick="location.hash='#birthday'; location.reload()">🎂 切换圆诞主题</li>
+                    <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>
+                    <li id="changeLangBtn" lang="zh" onclick="
+                        if (this.lang == 'zh') {
+                            changeLang('en')
+                            this.lang = 'en'
+                        } else {
+                            changeLang('zh')
+                            this.lang = 'zh'
+                        }
+                    "><span class="ui zh">🌎 Switch to English</span><span class="ui en">🌎 切换为中文 (Chinese)</span></li>
                     <li>
                         <input type="checkbox" id="isLowend" name="isLowend" onchange="toggleLowend()">
-                        <label for="isLowend">低性能模式(禁用特效)</label>
+                        <label for="isLowend"><span class="ui zh">低性能模式(禁用特效)</span><span class="ui en">Low performance mode</span></label>
                     </li>
                     <!--
                     <li style="text-decoration: line-through;">
@@ -234,24 +321,24 @@
                     -->
                     <li>
                         <input type="checkbox" id="isMuted" name="isMuted" onchange="toggleBGM()">
-                        <label for="isMuted">BGM静音</label>
+                        <label for="isMuted"><span class="ui zh">BGM静音</span><span class="ui en">Mute BGM</span></label>
                     </li>
                     <li>
                         <input type="checkbox" id="hideTopComment" name="hideTopComment" onchange="toggleTopComment()">
-                        <label for="hideTopComment">隐藏置顶公告</label>
+                        <label for="hideTopComment"><span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span></label>
                     </li>
                     <li>
                         <input type="checkbox" id="showHidden" name="showHidden">
-                        <label for="showHidden">显示被隐藏评论</label>
+                        <label for="showHidden"><span class="ui zh">显示被隐藏评论</span><span class="ui en">Show hidden messages</span></label>
                     </li>
                     <li title="大于0的值为本站内容&#10;小于0的值为kami.im站内容&#10;如填错导致不显示请刷新页面">
-                        跳转到留言(#ID)
+                        <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
                         <input id="goto" style="width: 64px;">
                         <button onclick="clearComments(1);loadComments(document.getElementById('goto').value)">Go</button>
                     </li>
                 </ul>
             </div>
-            <button id="fullscreenBtn" class="toolbarItem" onclick="goFullscreen()">全屏 ↗</button>
+            <button id="fullscreenBtn" class="toolbarItem" onclick="goFullscreen()"><span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span></button>
         </div>
 
         <div id="imgViewerBox" style="display: none"
@@ -333,8 +420,8 @@
         </div>
 
         <div id="setNamePopup" class="popupItem">
-            <h2>设置昵称</h2>
-            <label for="sender">昵称:</label>
+            <h2><span class="ui zh">设置昵称</span><span class="ui en">Set nickname</span></h2>
+            <label for="sender"><span class="ui zh">昵称:</span><span class="ui en">Nickname:</span></label>
             <input type="text" id="setNameInput" value="" onkeypress="((event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
@@ -343,12 +430,12 @@
             <!--<br><br>
             <span style="font-size: 12px; font-weight: normal;">PS：设置为“10.3”可触发圆诞主题</span>-->
             <br><br>
-            <button class="okBtn" onclick="setUserName()">确定 ✔</button>
+            <button class="okBtn" onclick="setUserName()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
         <div id="setAvatarPopup" class="popupItem">
-            <h2>设置头像</h2>
+            <h2><span class="ui zh">设置头像</span><span class="ui en">Set avatar</span></h2>
             <img id="setAvatarImg" src="" onerror="">
             <form id="avatarForm" enctype="multipart/form-data">
                 <input id="setAvatarInput" type="file" onchange="uploadAvatar()"/>
@@ -358,14 +445,14 @@
             <span style="font-size: 14px; font-weight: bold;">昵称包含 \ / : * ? &quot; &lt; &gt; | 将无法设置头像</span>
             <br><br>
             -->
-            <button class="okBtn" onclick="closePopup();">确定 ✔</button>
+            <button class="okBtn" onclick="closePopup();"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
         <div id="getImgPopup" class="popupItem" style="text-align: center; height: 90%; padding: 0;">
             <div style="width: 100%; height: 100%; overflow: auto; padding: 20px 32px 32px; box-sizing: border-box;">
-                <h2>下载站内图片</h2>
-                <h4>长按/右键图片, 然后选"保存到手机/下载图片/图片另存为"</h4>
+                <h2><span class="ui zh">下载站内图片</span><span class="ui en">Download backgrounds</span></h2>
+                <h4><span class="ui zh">长按/右键图片, 然后选"保存到手机/下载图片/图片另存为"</span><span class="ui en">Long press / right click,<br>then select Download image / Save image as...</span></h4>
                 <img class="getImgList"><p>Pixiv: 61717580 by HISA</p><br>
                 <img class="getImgList"><p>Pixiv: 89897632 by Rumoon</p><br>
                 <img class="getImgList"><p>Pixiv: 82577782 by 南山tsd</p><br>
@@ -374,9 +461,9 @@
                 <img class="getImgList"><p>Pixiv: 54804736 by 冰封死神</p><br>
                 <img class="getImgList"><p>Pixiv: 101655453 by 八重ハルラ</p><br>
                 <img class="getImgList"><p>Pixiv: 91842494 by ほんわか紳士</p><br>
-                <img class="getImgList"><p>Pixiv: 22161754 by mizuki (原画师已删除)</p><br>
+                <img class="getImgList"><p><span class="ui zh">Pixiv: 22161754 by mizuki (原画师已删除)</span><span class="ui en">Pixiv: 22161754 by mizuki (Deleted by illustrator)</span></p><br>
                 <img class="getImgList"><p>Pixiv: 90502009 by ゆきねこ</p><br>
-                <img class="getImgList"><p>官方游戏 战斗五芒星 剧情CG</p><br>
+                <img class="getImgList"><p><span class="ui zh">官方游戏 战斗五芒星 剧情CG</span><span class="ui en">Madohomu CG from <i>PMMM: The Battle Pentagram</i></span></p><br>
                 <img class="getImgList"><p>Pixiv: 33932626 (官图You Are Not Alone)</p><br>
                 <img class="getImgList"><p>Pixiv: 57114653 by Nine</p><br>
                 <img class="getImgList"><p>Pixiv: 91471007 by 曼曼</p><br>

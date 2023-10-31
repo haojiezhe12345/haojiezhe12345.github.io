@@ -39,8 +39,8 @@ function loadComments(from, count) {
                 }
 
                 var time = new Date(comment.time * 1000)
-                date = time.toLocaleDateString("zh-CN")
-                hour = time.toLocaleTimeString("zh-CN")
+                date = time.toLocaleDateString()
+                hour = time.toLocaleTimeString()
 
                 var randBG
                 while (true) {
@@ -87,7 +87,7 @@ function loadComments(from, count) {
                         <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
                         <div class="bgcover"></div>
                         <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-                        <div class="sender">${comment.sender}</div>
+                        <div class="sender">${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}</div>
                         <div class="id">#${comment.id}</div>
                         <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
                             ${comment.comment.replace(/\n/g, "<br/>")}
@@ -131,7 +131,7 @@ function sendMessage() {
     }
 
     if (msg.replace(/\s/g, '') == '') {
-        window.alert('请输入留言内容!')
+        window.alert('请输入留言内容!\nDo not leave the message empty!')
         return
     }
     if (sender.replace(/\s/g, '') == '') {
@@ -139,7 +139,7 @@ function sendMessage() {
     }
 
     document.getElementById('sendBtn').disabled = true;
-    document.getElementById('sendBtn').innerHTML = '正在发送…'
+    document.getElementById('sendBtn').innerHTML = '<span class="ui zh">正在发送…</span><span class="ui en">Sending…</span>'
 
     var xhr = new XMLHttpRequest();
     var url = "https://haojiezhe12345.top:82/madohomu/api/post";
@@ -148,7 +148,7 @@ function sendMessage() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             console.log(xhr.responseText);
-            document.getElementById('sendBtn').innerHTML = '发送成功!'
+            document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送成功!</span><span class="ui en">Sent!</span>'
             setTimeout(() => {
                 clearComments()
                 loadComments()
@@ -221,16 +221,16 @@ function newComment() {
         <div class="bgcover"></div>
         <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
         <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getCookie('username')}</div>
-        <div class="id" onclick="showPopup('setNamePopup')">设置昵称/头像</div>
+        <div class="id" onclick="showPopup('setNamePopup')"><span class="ui zh">设置昵称/头像</span><span class="ui en">Change profile</span></div>
         <div class="comment">
             <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
             <div id="uploadImgList" style="display: none"></div>
         </div>
         <label>
             <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
-            <span>+ 添加图片</span>
+            <span><span class="ui zh">+ 添加图片</span><span class="ui en">+ Add images</span></span>
         </label>
-        <button id="sendBtn" onclick="sendMessage()">发送 ✔</button>
+        <button id="sendBtn" onclick="sendMessage()"><span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span></button>
     `
 
     commentDiv.insertBefore(newCommentBox, commentDiv.firstElementChild)
@@ -423,7 +423,7 @@ function uploadAvatar() {
         return;
     }
     if (!avatarInput.files[0].type.match(/image.*/)) {
-        window.alert("图片无效");
+        window.alert("图片无效\nInvalid image");
         return;
     }
 
@@ -484,7 +484,7 @@ function loadUserInfo() {
     avatar.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
 
     if (getCookie('username') == '') {
-        name.innerText = '访客'
+        name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
     } else {
         name.innerText = getCookie('username')
     }
@@ -592,15 +592,30 @@ function nextCaption() {
     }, 1500);
 }
 
-function playWalpurgis() {
+function playWalpurgis(time_ms) {
+    document.getElementById('videoBgBox').style.opacity = 1
     document.getElementById('videoBgBox').style.display = 'block'
-    document.getElementById('mainVideo').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis.mp4'
-    document.getElementById('mainVideoBg').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis.mp4'
+    document.getElementById('mainVideo').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis1.1.mp4'
     document.getElementById('mainVideo').play()
-    document.getElementById('mainVideoBg').play()
+    //document.getElementById('mainVideoBg').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis1.1.mp4'
+    //document.getElementById('mainVideoBg').play()
     setTimeout(() => {
-        document.getElementById('videoBgBox').style.display = 'none'
-    }, 28000);
+        document.getElementById('videoBgBox').style.opacity = 0
+        setTimeout(() => {
+            document.getElementById('videoBgBox').style.display = 'none'
+        }, 1000);
+    }, time_ms);
+}
+
+function changeLang(lang) {
+    mainCSS = document.getElementById('langCSS').innerHTML = `
+    .ui {
+        display: none !important;
+    }
+    .ui.${lang} {
+        display: inline !important;
+    }
+    `
 }
 
 // toggles
@@ -613,7 +628,7 @@ function goFullscreen() {
         setTimeout(() => {
             commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
         }, 200);
-        document.getElementById('fullscreenBtn').innerHTML = '退出全屏 ↙'
+        document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">退出全屏 ↙</span><span class="ui en">Collapse ↙</span>'
         isFullscreen = true
     } else {
         var scrollPercent = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
@@ -621,7 +636,7 @@ function goFullscreen() {
         setTimeout(() => {
             commentDiv.scrollLeft = (commentDiv.scrollWidth - commentDiv.clientWidth) * scrollPercent
         }, 200);
-        document.getElementById('fullscreenBtn').innerHTML = '全屏 ↗'
+        document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
         isFullscreen = false
     }
 }
@@ -793,21 +808,60 @@ if (isBirthday) {
 
 //var currentBGOld = 2
 var currentBG = bgCount - 1
-nextImg()
-setInterval(nextImg, 8000)
-setTimeout(() => {
-    //document.getElementById('mainbg1').classList.remove('bgzoom')
-    document.getElementsByClassName('defaultbg')[0].classList.remove('bgzoom')
-    document.getElementsByClassName('birthdaybg')[0].classList.remove('bgzoom')
-}, 10000);
-
 var currentCaption = -1
 var captionCount = document.getElementsByClassName('mainCaption').length
-nextCaption()
-setInterval(nextCaption, 8000)
 
+function playBG() {
+    nextImg()
+    setInterval(nextImg, 8000)
+    setTimeout(() => {
+        //document.getElementById('mainbg1').classList.remove('bgzoom')
+        document.getElementsByClassName('defaultbg')[0].classList.remove('bgzoom')
+        document.getElementsByClassName('birthdaybg')[0].classList.remove('bgzoom')
+        document.getElementsByClassName('nightbg')[0].classList.remove('bgzoom')
+    }, 10000);
+
+    nextCaption()
+    setInterval(nextCaption, 8000)
+}
+if (location.hash == '#video') {
+    time_ms = 5000
+    playWalpurgis(time_ms)
+
+    document.getElementsByClassName('walpurgisbg')[0].style.opacity = 1
+    document.getElementsByClassName('walpurgisbg')[0].style.display = 'block'
+    document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/walpurgis/mainbg1.jpg")`
+    document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.animationName = 'bgzoom'
+    document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.animationDuration = '1.5s'
+
+    var unmuteBGM = false
+    if (bgmElmnt.muted == false) {
+        bgmElmnt.muted = true
+        unmuteBGM = true
+    }
+    setTimeout(() => {
+        document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.removeProperty('animation-name')
+        document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.removeProperty('animation-duration')
+        setTimeout(() => {
+            document.getElementsByClassName('walpurgisbg')[0].style.opacity = 0
+            playBG()
+            setTimeout(() => {
+                if (unmuteBGM) {
+                    bgmElmnt.muted = false
+                }
+            }, 2000);
+        }, 8000);
+    }, time_ms);
+
+} else {
+    playBG()
+}
 
 loadUserInfo()
+
+if (navigator.language.slice(0,2) != 'zh' && navigator.language.slice(0,3) != 'yue') {
+    document.getElementById('changeLangBtn').click()
+}
 
 // comments
 //
@@ -864,7 +918,7 @@ document.onkeydown = function (e) {
     }
 }
 
-if (window.location.hash != '') {
+if (window.location.hash == '#view-img') {
     window.location.hash = ''
 }
 
