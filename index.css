@@ -767,6 +767,9 @@ body {
     padding: 8px 12px;
     font-weight: normal;
     font-size: 14px;
+    animation-name: enableClickDelayed;
+    animation-duration: 0.1s;
+    animation-fill-mode: forwards;
 }
 
 .toolbarItem ul li label {
