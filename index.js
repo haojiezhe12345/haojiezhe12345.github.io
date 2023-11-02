@@ -243,7 +243,7 @@ function newComment() {
     })
     document.getElementById('msgText').addEventListener('focusout', () => {
         //console.log('msgText lost focus')
-        document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
+        //document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
     })
 
     document.getElementById('msgText').focus({ preventScroll: true })

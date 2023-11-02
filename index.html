@@ -11,12 +11,7 @@
     <link rel="stylesheet" href="index_fullscreen.css" type="text/css" id="fullscreenCSS" disabled>
     <link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS" disabled>
     <style id="langCSS"></style>
-
-    <link rel="icon" type="image/x-icon" href="https://haojiezhe12345.top:82/madohomu/favicon.ico">
     
-    <meta name="baidu-site-verification" content="codeva-KUmCPXYF3w" />
-    <meta name="sogou_site_verification" content="DipYziapu2" />
-
     <link rel="manifest" href="index.manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,76 +22,83 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="msapplication-starturl" content="/?no-redirect">
 
-    <link rel="icon" sizes="640x640" href="https://haojiezhe12345.top:82/madohomu/favicon.png">
-    <link rel="apple-touch-icon" sizes="640x640" href="https://haojiezhe12345.top:82/madohomu/favicon.png">
     <link rel="icon" sizes="192x192" href="https://haojiezhe12345.top:82/madohomu/favicon_192.png">
     <link rel="apple-touch-icon" sizes="192x192" href="https://haojiezhe12345.top:82/madohomu/favicon_192.png">
+    <link rel="icon" sizes="512x512" href="https://haojiezhe12345.top:82/madohomu/favicon.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="https://haojiezhe12345.top:82/madohomu/favicon.png">
+
+    <meta name="baidu-site-verification" content="codeva-KUmCPXYF3w" />
+    <meta name="sogou_site_verification" content="DipYziapu2" />
+
 </head>
 
 <body onclick="if (!isMutedElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
 
     <audio id="bgm" loop></audio>
 
-    <!--
-    <div id="mainbg1" class="mainbg bgzoom" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg); opacity: 1; /*display: none*/"></div>
-    <div id="mainbg2" class="mainbg" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg); opacity: 0; animation-name: none; /*display: none*/"></div>
-    -->
+    <div id="bgContainer" onclick="document.getElementById('lowerPanel').classList.remove('lowerPanelUp')">
+        <!--
+        <div id="mainbg1" class="mainbg bgzoom" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg); opacity: 1; /*display: none*/"></div>
+        <div id="mainbg2" class="mainbg" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg); opacity: 0; animation-name: none; /*display: none*/"></div>
+        -->
 
-    <div class="mainbg defaultbg bgzoom" ><div style="background-position-x: 45%;"></div><span>Artwork by HISA</span></div>
-    <div class="mainbg defaultbg"        ><div style="background-position-x: 40%;"></div><span>Artwork by Rumoon</span></div>
-    <div class="mainbg defaultbg"        ><div style="background-position-x: 50%;"></div><span>Artwork by 南山tsd</span></div>
-    <div class="mainbg defaultbg"        ><div style="background-position-x: 75%;"></div><span>Artwork by LIN+</span></div>
-    <div class="mainbg defaultbg"        ><div style="background-position-x: 45%;"></div><span>Artwork by eps3rd</span></div>
-    <div class="mainbg defaultbg"        ><div style="background-position-x: 50%;"></div><span>Artwork by 冰封死神</span></div>
-    <div class="mainbg birthdaybg bgzoom"><div style="background-position-x: 50%;"></div><span>Artwork by 八重ハルラ</span></div>
-    <div class="mainbg birthdaybg"       ><div style="background-position-x: 50%;"></div><span>Artwork by ほんわか紳士</span></div>
-    <div class="mainbg birthdaybg"       ><div style="background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
-    <div class="mainbg birthdaybg"       ><div style="background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
-    <div class="mainbg nightbg bgzoom"   ><div style="background-position-x: 60%;"></div><span><span class="ui zh">官图 (战斗五芒星CG)</span><span class="ui en">Official art (PMMM: The Battle Pentagram)</span></span></div>
+        <div class="mainbg defaultbg bgzoom" ><div style="background-position-x: 45%;"></div><span>Artwork by HISA</span></div>
+        <div class="mainbg defaultbg"        ><div style="background-position-x: 40%;"></div><span>Artwork by Rumoon</span></div>
+        <div class="mainbg defaultbg"        ><div style="background-position-x: 50%;"></div><span>Artwork by 南山tsd</span></div>
+        <div class="mainbg defaultbg"        ><div style="background-position-x: 75%;"></div><span>Artwork by LIN+</span></div>
+        <div class="mainbg defaultbg"        ><div style="background-position-x: 45%;"></div><span>Artwork by eps3rd</span></div>
+        <div class="mainbg defaultbg"        ><div style="background-position-x: 50%;"></div><span>Artwork by 冰封死神</span></div>
+        <div class="mainbg birthdaybg bgzoom"><div style="background-position-x: 50%;"></div><span>Artwork by 八重ハルラ</span></div>
+        <div class="mainbg birthdaybg"       ><div style="background-position-x: 50%;"></div><span>Artwork by ほんわか紳士</span></div>
+        <div class="mainbg birthdaybg"       ><div style="background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
+        <div class="mainbg birthdaybg"       ><div style="background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
+        <div class="mainbg nightbg bgzoom"   ><div style="background-position-x: 60%;"></div><span><span class="ui zh">官图 (战斗五芒星CG)</span><span class="ui en">Official art (PMMM: The Battle Pentagram)</span></span></div>
 
-    <div id="mainCaptions" style="opacity: 0;">
-        <div class="mainCaption">
-            <p><span class="ui zh">如果有人说怀有希望是错误的话，</span><span class="ui en">If you told me it was wrong to harbour hope,</span></p>
-            <p><span class="ui zh">「不是这样的。」</span><span class="ui en">I would tell you that it wasn't wrong.</span></p>
-            <p><span class="ui zh">无论多少次我都会这样回答，</span><span class="ui en">I'd say it as many times as necessary.</span></p>
-            <p><span class="ui zh">无论什么时候我都这样坚持。</span><span class="ui en">I'd keep saying it forever.</span></p>
+        <div id="mainCaptions" style="opacity: 0;">
+            <div class="mainCaption">
+                <p><span class="ui zh">如果有人说怀有希望是错误的话，</span><span class="ui en">If you told me it was wrong to harbour hope,</span></p>
+                <p><span class="ui zh">「不是这样的。」</span><span class="ui en">I would tell you that it wasn't wrong.</span></p>
+                <p><span class="ui zh">无论多少次我都会这样回答，</span><span class="ui en">I'd say it as many times as necessary.</span></p>
+                <p><span class="ui zh">无论什么时候我都这样坚持。</span><span class="ui en">I'd keep saying it forever.</span></p>
+            </div>
+            <div class="mainCaption">
+                <p><span class="ui zh">重复 无论多少次我都将重复。</span><span class="ui en">I'll repeat it. I'll continue to repeat it over and over.</span></p>
+                <p><span class="ui zh">小圆 我唯一的朋友，</span><span class="ui en">Visiting the same time again and again, searching for the single way out.</span></p>
+                <p><span class="ui zh">为了你，如果是为了你，</span><span class="ui en">Madoka... my one and only friend.</span></p>
+                <p><span class="ui zh">即使我被困在永远的迷宫中，</span><span class="ui en">If it's... If it's for you,</span></p>
+                <p><span class="ui zh">也在所不惜。</span><span class="ui en">I have no problem being trapped eternally in this maze.</span></p>
+            </div>
+            <div class="mainCaption">
+                <p><span class="ui zh">连小焰都会为之哭泣的痛苦的事情</span><span class="ui en">If it's hard to the point to make you cry, you, Homura,</span></p>
+                <p><span class="ui zh">我怎么可能忍受得了呢</span><span class="ui en">how can i bear it?</span></p>
+                <p><span class="ui zh">我啊, 和谁都不想分开呢</span><span class="ui en">I don't want to say goodbye to anyone.</span></p>
+                <p><span class="ui zh">就算是到了别无选择的时候</span><span class="ui en">Even if there was no other way,</span></p>
+                <p><span class="ui zh">我也没有那种勇气的</span><span class="ui en">I would not have this courage.</span></p>
+            </div>
+            <div class="mainCaption">
+                <p><span class="ui zh">静静偎依在我身旁，</span><span class="ui en">Come closer quietly,</span></p>
+                <p><span class="ui zh">不要再往他方。</span><span class="ui en">don't go anywhere.</span></p>
+                <p><span class="ui zh">在窗边婉转歌唱，</span><span class="ui en">Chirp your song by the window,</span></p>
+                <p><span class="ui zh">无论失去什么珍贵之物。</span><span class="ui en">don't go anywhere.</span></p>
+                <p style="font-size: 2.5vh; font-size: min(3.75vw, 2.5vh);"><span class="ui zh">—— 梶浦由記《君の銀の庭》　</span><span class="ui en">- <i>Your Silver Garden</i>, Yuki Kajiura -</span></p>
+            </div>
+            <div id="birthdayCaption">
+                <p>Happy birthday, Madoka!</p>
+                <p id="birthdayDate">10/3/2011 - Madoka's 0th birthday</p>
+            </div>
+            <div id="nightCaption">
+                <p><span class="ui zh">晚安，小焰～</span><span class="ui en">Good night, Homura-chan ~</span></p>
+                <p><span class="ui zh">晚安，小圆。</span><span class="ui en">Good night, Madoka.</span></p>
+            </div>
         </div>
-        <div class="mainCaption">
-            <p><span class="ui zh">重复 无论多少次我都将重复。</span><span class="ui en">I'll repeat it. I'll continue to repeat it over and over.</span></p>
-            <p><span class="ui zh">小圆 我唯一的朋友，</span><span class="ui en">Visiting the same time again and again, searching for the single way out.</span></p>
-            <p><span class="ui zh">为了你，如果是为了你，</span><span class="ui en">Madoka... my one and only friend.</span></p>
-            <p><span class="ui zh">即使我被困在永远的迷宫中，</span><span class="ui en">If it's... If it's for you,</span></p>
-            <p><span class="ui zh">也在所不惜。</span><span class="ui en">I have no problem being trapped eternally in this maze.</span></p>
-        </div>
-        <div class="mainCaption">
-            <p><span class="ui zh">连小焰都会为之哭泣的痛苦的事情</span><span class="ui en">If it's hard to the point to make you cry, you, Homura,</span></p>
-            <p><span class="ui zh">我怎么可能忍受得了呢</span><span class="ui en">how can i bear it?</span></p>
-            <p><span class="ui zh">我啊, 和谁都不想分开呢</span><span class="ui en">I don't want to say goodbye to anyone.</span></p>
-            <p><span class="ui zh">就算是到了别无选择的时候</span><span class="ui en">Even if there was no other way,</span></p>
-            <p><span class="ui zh">我也没有那种勇气的</span><span class="ui en">I would not have this courage.</span></p>
-        </div>
-        <div class="mainCaption">
-            <p><span class="ui zh">静静偎依在我身旁，</span><span class="ui en">Come closer quietly,</span></p>
-            <p><span class="ui zh">不要再往他方。</span><span class="ui en">don't go anywhere.</span></p>
-            <p><span class="ui zh">在窗边婉转歌唱，</span><span class="ui en">Chirp your song by the window,</span></p>
-            <p><span class="ui zh">无论失去什么珍贵之物。</span><span class="ui en">don't go anywhere.</span></p>
-            <p style="font-size: 2.5vh; font-size: min(3.75vw, 2.5vh);"><span class="ui zh">—— 梶浦由記《君の銀の庭》　</span><span class="ui en">- <i>Your Silver Garden</i>, Yuki Kajiura -</span></p>
-        </div>
-        <div id="birthdayCaption">
-            <p>Happy birthday, Madoka!</p>
-            <p id="birthdayDate">10/3/2011 - Madoka's 0th birthday</p>
-        </div>
-        <div id="nightCaption">
-            <p><span class="ui zh">晚安，小焰～</span><span class="ui en">Good night, Homura-chan ~</span></p>
-            <p><span class="ui zh">晚安，小圆。</span><span class="ui en">Good night, Madoka.</span></p>
-        </div>
-    </div>
 
-    <div class="mainbg walpurgisbg" style="display: none;"><div></div><span>回天宣传海报 1</span></div>
+        <div class="mainbg walpurgisbg" style="display: none;"><div></div><span>回天宣传海报 1</span></div>
 
-    <div id="videoBgBox" style="display: none;">
-        <video id="mainVideoBg" muted></video>
-        <video id="mainVideo" muted></video>
+        <div id="videoBgBox" style="display: none;">
+            <video id="mainVideoBg" muted></video>
+            <video id="mainVideo" muted></video>
+        </div>
+
     </div>
 
     <div id="mainTitle" class="topItems">
@@ -112,7 +114,7 @@
         <span id="userInfoName"></span>
     </div>
 
-    <div id="lowerPanel">
+    <div id="lowerPanel" ontouchstart="document.getElementById('lowerPanel').classList.add('lowerPanelUp')">
 
         <div class="tooltip"><span class="ui zh">点击下方查看留言</span><span class="ui en">Tap below to view messages</span><div class="triangle"></div></div>
 
@@ -300,7 +302,7 @@
                     <li onclick="
                         if (installPrompt != null) installPrompt.prompt()
                         else if (isInStandaloneMode) window.alert('你已安装过App\nApp already installed')
-                        else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n（小米浏览器暂不支持，其他未知）\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
+                        else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
                         "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
                     <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
                     <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>
