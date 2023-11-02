@@ -34,6 +34,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    background-image: linear-gradient(100deg, #ffd1e8, #b49ac9);
 }
 
 .mainbg {
