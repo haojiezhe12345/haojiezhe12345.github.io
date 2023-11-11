@@ -607,6 +607,7 @@ body {
 #comments #newCommentBox #uploadImgList div {
     position: relative;
     display: inline-block;
+    max-width: 15vh;
     height: 100%;
     aspect-ratio: 1 / 1;
     margin-right: 8px;
