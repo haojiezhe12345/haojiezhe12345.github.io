@@ -607,15 +607,14 @@ body {
 #comments #newCommentBox #uploadImgList div {
     position: relative;
     display: inline-block;
-    max-width: 15vh;
     height: 100%;
-    aspect-ratio: 1 / 1;
     margin-right: 8px;
 }
 
 #comments #newCommentBox #uploadImgList div img {
-    width: 100%;
+    min-width: 40px;
     height: 100%;
+    aspect-ratio: 1/1;
     object-fit: cover;
     cursor: pointer;
 }
