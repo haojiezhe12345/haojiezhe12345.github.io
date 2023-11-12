@@ -493,8 +493,8 @@ body {
 }
 
 #comments .commentBox .comment>img {
-    /*max-width: 100%;
-    max-height: 80%;*/
+    /*max-width: 100%;*/
+    max-height: 70%;
     width: 48%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
