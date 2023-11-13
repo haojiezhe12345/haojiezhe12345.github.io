@@ -392,6 +392,43 @@ body {
     }
 }
 
+.enableClickDelayed,
+#comments .commentBox a,
+#comments .commentBox .time,
+#comments #newCommentBox>* {
+    pointer-events: unset;
+}
+
+#lowerPanel:hover .enableClickDelayed,
+#lowerPanel.lowerPanelUp .enableClickDelayed,
+
+#lowerPanel:hover #comments .commentBox a,
+#lowerPanel.lowerPanelUp #comments .commentBox a,
+
+#lowerPanel:hover #comments .commentBox .time,
+#lowerPanel.lowerPanelUp #comments .commentBox .time,
+
+#lowerPanel:hover #comments #newCommentBox>*,
+#lowerPanel.lowerPanelUp #comments #newCommentBox>* {
+    animation-name: enableClickDelayed;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes enableClickDelayed {
+    0% {
+        pointer-events: none;
+    }
+
+    99% {
+        pointer-events: none;
+    }
+
+    100% {
+        pointer-events: all;
+    }
+}
+
 #comments .commentBox .bg {
     width: 100%;
     height: 100%;
@@ -469,27 +506,6 @@ body {
 
 #comments .commentBox .comment a {
     color: lightblue;
-    pointer-events: none;
-}
-
-#lowerPanel:hover #comments .commentBox .comment a {
-    animation-name: enableClickDelayed;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes enableClickDelayed {
-    0% {
-        pointer-events: none;
-    }
-
-    99% {
-        pointer-events: none;
-    }
-
-    100% {
-        pointer-events: all;
-    }
 }
 
 #comments .commentBox .comment>img {

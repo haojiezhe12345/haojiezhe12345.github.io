@@ -5,14 +5,24 @@
     animation: none !important;
 }
 
-#lowerPanel:hover #comments .commentBox .comment a {
+#lowerPanel:hover .enableClickDelayed,
+#lowerPanel.lowerPanelUp .enableClickDelayed,
+
+#lowerPanel:hover #comments .commentBox a,
+#lowerPanel.lowerPanelUp #comments .commentBox a,
+
+#lowerPanel:hover #comments .commentBox .time,
+#lowerPanel.lowerPanelUp #comments .commentBox .time,
+
+#lowerPanel:hover #comments #newCommentBox>*,
+#lowerPanel.lowerPanelUp #comments #newCommentBox>* {
     animation-name: enableClickDelayed !important;
-    animation-duration: 0.5s !important;
+    animation-duration: 0.2s !important;
     animation-fill-mode: forwards !important;
 }
 
-#lowerPanel:hover .time {
+.toolbarItem ul li {
     animation-name: enableClickDelayed !important;
-    animation-duration: 0.5s !important;
+    animation-duration: 0.1s !important;
     animation-fill-mode: forwards !important;
 }
