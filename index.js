@@ -66,22 +66,6 @@ function loadComments(from, count) {
 
                 }
 
-                /*
-                var newCommentElmnt = document.createElement('div')
-                newCommentElmnt.classList.add('commentBox')
-                newCommentElmnt.innerHTML = `
-                    <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
-                    <div class="bgcover"></div>
-                    <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-                    <div class="sender">${comment.sender}</div>
-                    <div class="id">#${comment.id}</div>
-                    <div class="comment">
-                        ${comment.comment.replace(/\n/g, "<br/>")}
-                        ${imgsDOM}
-                    </div>
-                    <div class="time">${date + ' ' + hour}</div>
-                `
-                */
                 commentDiv.insertBefore(html2elmnt(`
                     <div class="commentBox">
                         <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
@@ -216,26 +200,23 @@ function newComment() {
         return
     }
 
-    var newCommentBox = document.createElement('div')
-    newCommentBox.classList.add('commentBox')
-    newCommentBox.id = 'newCommentBox'
-    newCommentBox.innerHTML = `
-        <div class="bgcover"></div>
-        <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
-        <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getCookie('username')}</div>
-        <div class="id" onclick="showPopup('setNamePopup')"><span class="ui zh">设置昵称/头像</span><span class="ui en">Change profile</span></div>
-        <div class="comment">
-            <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
-            <div id="uploadImgList" style="display: none"></div>
+    commentDiv.insertBefore(html2elmnt(`
+        <div class="commentBox" id="newCommentBox">
+            <div class="bgcover"></div>
+            <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
+            <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getCookie('username')}</div>
+            <div class="id" onclick="showPopup('setNamePopup')"><span class="ui zh">设置昵称/头像</span><span class="ui en">Change profile</span></div>
+            <div class="comment">
+                <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
+                <div id="uploadImgList" style="display: none"></div>
+            </div>
+            <label>
+                <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
+                <span><span class="ui zh">+ 添加图片</span><span class="ui en">+ Add images</span></span>
+            </label>
+            <button id="sendBtn" onclick="sendMessage()"><span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span></button>
         </div>
-        <label>
-            <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
-            <span><span class="ui zh">+ 添加图片</span><span class="ui en">+ Add images</span></span>
-        </label>
-        <button id="sendBtn" onclick="sendMessage()"><span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span></button>
-    `
-
-    commentDiv.insertBefore(newCommentBox, commentDiv.firstElementChild)
+    `), commentDiv.firstElementChild)
 
     document.getElementById('msgText').addEventListener('focusin', () => {
         //console.log('msgText focused')
@@ -303,12 +284,12 @@ function previewLocalImgs() {
 
                 //uploadImgList.push(imgDataURL.split(';base64,')[1])
 
-                newUploadImgPreviewElmnt = document.createElement('div')
-                newUploadImgPreviewElmnt.innerHTML = `
-                    <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this)">
-                    <button onclick="this.parentNode.remove()">❌</button>
-                `
-                document.getElementById('uploadImgList').appendChild(newUploadImgPreviewElmnt)
+                document.getElementById('uploadImgList').appendChild(html2elmnt(`
+                    <div>
+                        <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this)">
+                        <button onclick="this.parentNode.remove()">❌</button>
+                    </div>
+                `))
                 document.getElementById('msgText').style = ''
                 document.getElementById('uploadImgList').style = ''
             }
@@ -882,7 +863,7 @@ var commentHorizontalScrolled = 0
 var altScrollmode = false
 
 commentDiv.addEventListener("wheel", (event) => {
-    if (altScrollmode) {
+    if (altScrollmode == 1) {
         console.info(event.deltaY)
         console.info(commentDiv.scrollLeft)
         commentHorizontalScrolled += event.deltaY * 1
@@ -890,6 +871,14 @@ commentDiv.addEventListener("wheel", (event) => {
         if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth)) commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
         console.log(commentHorizontalScrolled)
         commentDiv.scrollLeft = commentHorizontalScrolled
+    } else if (altScrollmode == 2 && event.deltaX == 0) {
+        console.info(event)
+        const e1 = new WheelEvent("wheel", {
+            deltaX: event.deltaY,
+            deltaMode: 0,
+        });
+        console.info(e1)
+        commentDiv.dispatchEvent(e1)
     } else {
         commentDiv.scrollLeft += event.deltaY
     }
