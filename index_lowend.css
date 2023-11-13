@@ -7,15 +7,8 @@
 
 #lowerPanel:hover .enableClickDelayed,
 #lowerPanel.lowerPanelUp .enableClickDelayed,
-
-#lowerPanel:hover #comments .commentBox a,
-#lowerPanel.lowerPanelUp #comments .commentBox a,
-
-#lowerPanel:hover #comments .commentBox .time,
-#lowerPanel.lowerPanelUp #comments .commentBox .time,
-
-#lowerPanel:hover #comments #newCommentBox>*,
-#lowerPanel.lowerPanelUp #comments #newCommentBox>* {
+#lowerPanel:hover #comments .commentBox>*:not(.loadingCircle),
+#lowerPanel.lowerPanelUp #comments .commentBox>*:not(.loadingCircle) {
     animation-name: enableClickDelayed !important;
     animation-duration: 0.2s !important;
     animation-fill-mode: forwards !important;

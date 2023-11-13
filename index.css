@@ -393,23 +393,14 @@ body {
 }
 
 .enableClickDelayed,
-#comments .commentBox a,
-#comments .commentBox .time,
-#comments #newCommentBox>* {
+#comments .commentBox>*:not(.loadingCircle) {
     pointer-events: unset;
 }
 
 #lowerPanel:hover .enableClickDelayed,
 #lowerPanel.lowerPanelUp .enableClickDelayed,
-
-#lowerPanel:hover #comments .commentBox a,
-#lowerPanel.lowerPanelUp #comments .commentBox a,
-
-#lowerPanel:hover #comments .commentBox .time,
-#lowerPanel.lowerPanelUp #comments .commentBox .time,
-
-#lowerPanel:hover #comments #newCommentBox>*,
-#lowerPanel.lowerPanelUp #comments #newCommentBox>* {
+#lowerPanel:hover #comments .commentBox>*:not(.loadingCircle),
+#lowerPanel.lowerPanelUp #comments .commentBox>*:not(.loadingCircle) {
     animation-name: enableClickDelayed;
     animation-duration: 0.2s;
     animation-fill-mode: forwards;
@@ -678,12 +669,17 @@ body {
 }
 
 #comments #loadingIndicator {
-    /*display: none;*/
     width: auto;
     border-radius: 0;
-    line-height: 60vh;
     margin-left: -1vh;
     margin-right: 0;
+    line-height: 1vh;
+    transition: line-height 0.5s;
+}
+
+#lowerPanel:hover #comments #loadingIndicator,
+#lowerPanel.lowerPanelUp #comments #loadingIndicator {
+    line-height: 60vh;
 }
 
 .loadingCircle {
