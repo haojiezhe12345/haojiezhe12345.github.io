@@ -118,6 +118,11 @@ function loadComments(from, count) {
                         document.getElementById('loadingIndicatorBefore').style.display = 'none'
                         return
                     }
+                    if (document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
+                        console.log('newCommentBox is active, skipping upper comments')
+                        document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                        return
+                    }
 
                     if (comment.id < minCommentID || minCommentID == null) {
                         appendComment(comment)
