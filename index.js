@@ -2,6 +2,8 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
+var newLoadCommentMode = true
+
 function loadComments(from, count) {
     const xhr = new XMLHttpRequest();
 
@@ -26,47 +28,55 @@ function loadComments(from, count) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             //console.log(xhr.response);
 
+            var xhrMaxCommentID = null
+            var xhrMinCommentID = null
+            //var prevLatestCommentEl = document.getElementById('topComment') ? document.getElementById('topComment').nextElementSibling : commentDiv.firstElementChild
+            var prevLatestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
+            var prevCommentTop = prevLatestCommentEl.getBoundingClientRect().top
+            var prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+
             for (var comment of xhr.response) {
-                //console.log(comment)
+                if (!newLoadCommentMode) {
+                    //console.log(comment)
 
-                if (comment.id >= minCommentID && minCommentID != null) {
-                    //console.log('skipping load of comment ID ' + comment.id)
-                    continue
-                }
-                if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
-                    console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
-                    continue
-                }
-
-                var time = new Date(comment.time * 1000)
-                date = time.toLocaleDateString()
-                hour = time.toLocaleTimeString()
-
-                var randBG
-                while (true) {
-                    randBG = getRandomIntInclusive(1, msgBgCount)
-                    //console.log(lastBgImgs)
-                    if (!lastBgImgs.includes(randBG)) {
-                        break
+                    if (comment.id >= minCommentID && minCommentID != null) {
+                        //console.log('skipping load of comment ID ' + comment.id)
+                        continue
                     }
-                }
-                lastBgImgs.push(randBG)
-                if (lastBgImgs.length > 5) {
-                    lastBgImgs.splice(0, 1)
-                }
+                    if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
+                        console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
+                        continue
+                    }
 
-                var imgsDOM = '<br><br>'
-                try {
-                    if (comment.image != '') {
-                        for (var i of comment.image.split(',')) {
-                            imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
+                    var time = new Date(comment.time * 1000)
+                    date = time.toLocaleDateString()
+                    hour = time.toLocaleTimeString()
+
+                    var randBG
+                    while (true) {
+                        randBG = getRandomIntInclusive(1, msgBgCount)
+                        //console.log(lastBgImgs)
+                        if (!lastBgImgs.includes(randBG)) {
+                            break
                         }
                     }
-                } catch (error) {
+                    lastBgImgs.push(randBG)
+                    if (lastBgImgs.length > 5) {
+                        lastBgImgs.splice(0, 1)
+                    }
 
-                }
+                    var imgsDOM = '<br><br>'
+                    try {
+                        if (comment.image != '') {
+                            for (var i of comment.image.split(',')) {
+                                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
+                            }
+                        }
+                    } catch (error) {
 
-                commentDiv.insertBefore(html2elmnt(`
+                    }
+
+                    commentDiv.insertBefore(html2elmnt(`
                     <div class="commentBox">
                         <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
                         <div class="bgcover"></div>
@@ -81,27 +91,133 @@ function loadComments(from, count) {
                     </div>
                 `), document.getElementById('loadingIndicator'))
 
-                //commentDiv.appendChild()
+                    //commentDiv.appendChild()
+
+                    if (minCommentID == null) {
+                        minCommentID = comment.id
+                    }
+                    if (maxCommentID == null) {
+                        maxCommentID = comment.id
+                    }
+                    if (comment.id < minCommentID) {
+                        minCommentID = comment.id
+                    }
+                    if (comment.id > maxCommentID) {
+                        maxCommentID = comment.id
+                    }
+                    //console.log('min: ' + minCommentID + '  max: ' + maxCommentID)
+
+                } else {
+
+                    if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
+                        console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
+                        continue
+                    }
+                    if (comment.id == -999999 && from > maxCommentID && maxCommentID) {
+                        console.log('comments are up to date')
+                        document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                        return
+                    }
+
+                    if (comment.id < minCommentID || minCommentID == null) {
+                        appendComment(comment)
+                    } else if (comment.id > maxCommentID && maxCommentID != null) {
+                        appendComment(comment, prevLatestCommentEl)
+                    } else {
+                        console.log('skipping exist comment ID ' + comment.id)
+                    }
+
+                    if (xhrMinCommentID == null) {
+                        xhrMinCommentID = comment.id
+                    }
+                    if (xhrMaxCommentID == null) {
+                        xhrMaxCommentID = comment.id
+                    }
+                    if (comment.id < xhrMinCommentID) {
+                        xhrMinCommentID = comment.id
+                    }
+                    if (comment.id > xhrMaxCommentID) {
+                        xhrMaxCommentID = comment.id
+                    }
+
+                }
+            }
+
+            if (newLoadCommentMode) {
+                if (from > maxCommentID && maxCommentID != null && document.getElementById('topComment') == null) {
+                    if (isFullscreen) {
+                        var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
+                        //console.log(prevCommentTop, newCommentTop)
+                        commentDiv.scrollTop += newCommentTop - prevCommentTop
+                    } else {
+                        var newCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+                        //console.log(prevCommentLeft, newCommentLeft)
+                        commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
+                    }
+                }
 
                 if (minCommentID == null) {
-                    minCommentID = comment.id
+                    minCommentID = xhrMinCommentID
                 }
                 if (maxCommentID == null) {
-                    maxCommentID = comment.id
+                    maxCommentID = xhrMaxCommentID
                 }
-                if (comment.id < minCommentID) {
-                    minCommentID = comment.id
+                if (xhrMinCommentID < minCommentID) {
+                    minCommentID = xhrMinCommentID
                 }
-                if (comment.id > maxCommentID) {
-                    maxCommentID = comment.id
+                if (xhrMaxCommentID > maxCommentID) {
+                    maxCommentID = xhrMaxCommentID
                 }
-                //console.log('min: ' + minCommentID + '  max: ' + maxCommentID)
+
+                //console.log(maxCommentID, minCommentID)
             }
 
         } else {
             console.log(`Error: ${xhr.status}`);
         }
     };
+}
+
+function appendComment(comment, insertBeforeEl = document.getElementById('loadingIndicator')) {
+    var time = new Date(comment.time * 1000)
+    date = time.toLocaleDateString()
+    hour = time.toLocaleTimeString()
+
+    var randBG
+    while (true) {
+        randBG = getRandomIntInclusive(1, msgBgCount)
+        if (!lastBgImgs.includes(randBG)) {
+            break
+        }
+    }
+    lastBgImgs.push(randBG)
+    if (lastBgImgs.length > 5) {
+        lastBgImgs.splice(0, 1)
+    }
+
+    var imgsDOM = '<br><br>'
+    try {
+        if (comment.image != '') {
+            for (var i of comment.image.split(',')) {
+                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
+            }
+        }
+    } catch { }
+
+    commentDiv.insertBefore(html2elmnt(`
+        <div class="commentBox" id="#${comment.id}">
+            <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
+            <div class="bgcover"></div>
+            <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+            <div class="sender">${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}</div>
+            <div class="id">#${comment.id}</div>
+            <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
+                ${comment.comment.replace(/\n/g, "<br>")}
+                ${imgsDOM}
+            </div>
+            <div class="time">${date + ' ' + hour}</div>
+        </div>
+    `), insertBeforeEl)
 }
 
 function sendMessage() {
@@ -150,11 +266,12 @@ function sendMessage() {
 }
 
 function clearComments(clearTop) {
-    commentDiv.removeEventListener("scroll", commentScroll)
+    //commentDiv.removeEventListener("scroll", commentScroll)
     if (clearTop == 1) {
-        commentDiv.innerHTML = loadingIndicator
+        commentDiv.innerHTML = loadingIndicatorBefore + loadingIndicator
     } else {
-        commentDiv.innerHTML = topComment + loadingIndicator
+        commentDiv.innerHTML = topComment + loadingIndicatorBefore + loadingIndicator
+        document.getElementById('loadingIndicatorBefore').style.display = 'none'
     }
     minCommentID = null
     maxCommentID = null
@@ -164,31 +281,34 @@ function clearComments(clearTop) {
 }
 
 function commentScroll() {
+    if (pauseCommentScroll || minCommentID == null || maxCommentID == null) return
     if (!isFullscreen) {
         //var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
-        //console.log(toRight)
+        //console.log(toLeft, toRight)
         //console.log(scrolled)
-        if (toRight < 40 && minCommentID != null && maxCommentID != null) {
+        if (toRight < 40) {
             loadComments(minCommentID - 1)
-            commentDiv.removeEventListener("scroll", commentScroll)
-            setTimeout(() => {
-                commentDiv.addEventListener("scroll", commentScroll)
-            }, 500);
-        }
+        } else if (toLeft < 40 && newLoadCommentMode) {
+            loadComments(maxCommentID + 10)
+        } else return
     } else {
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
-        //console.log(toBottom)
-        if (toBottom < 40 && minCommentID != null && maxCommentID != null) {
+        //console.log(toTop, toBottom)
+        if (toBottom < 40) {
             loadComments(minCommentID - 1)
-            commentDiv.removeEventListener("scroll", commentScroll)
-            setTimeout(() => {
-                commentDiv.addEventListener("scroll", commentScroll)
-            }, 500);
-        }
+        } else if (toTop < 40 && newLoadCommentMode) {
+            loadComments(maxCommentID + 10)
+        } else return
     }
+    //commentDiv.removeEventListener("scroll", commentScroll)
+    pauseCommentScroll = true
+    setTimeout(() => {
+        //commentDiv.addEventListener("scroll", commentScroll)
+        pauseCommentScroll = false
+    }, 500);
 }
 
 function newComment() {
@@ -606,7 +726,6 @@ function changeLang(lang) {
 function goFullscreen() {
     if (!isFullscreen) {
         var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
-        //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_fullscreen.css" type="text/css" id="fullscreenCSS">'))
         document.getElementById('fullscreenCSS').disabled = false
         setTimeout(() => {
             commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
@@ -622,6 +741,10 @@ function goFullscreen() {
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
         isFullscreen = false
     }
+    pauseCommentScroll = true
+    setTimeout(() => {
+        pauseCommentScroll = false
+    }, 500);
 }
 
 function toggleLowend() {
@@ -698,6 +821,7 @@ function html2elmnt(html) {
 //
 var minCommentID = null
 var maxCommentID = null
+var pauseCommentScroll = false
 
 var commentDiv = document.getElementById('comments')
 var captionDiv = document.getElementById('mainCaptions')
@@ -718,10 +842,16 @@ var topComment = `
 </div>
 `
 var loadingIndicator = `
-<div class="commentBox" id="loadingIndicator">
+<div class="commentBox loadingIndicator" id="loadingIndicator">
     ${document.getElementById('loadingIndicator').innerHTML}
 </div>
 `
+var loadingIndicatorBefore = `
+<div class="commentBox loadingIndicator" id="loadingIndicatorBefore">
+    ${document.getElementById('loadingIndicatorBefore').innerHTML}
+</div>
+`
+document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
 var bgPaused = false
 var isFullscreen = false

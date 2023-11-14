@@ -668,7 +668,7 @@ body {
     text-decoration: underline;
 }
 
-#comments #loadingIndicator {
+#comments .loadingIndicator {
     width: auto;
     border-radius: 0;
     margin-left: -1vh;
@@ -677,8 +677,8 @@ body {
     transition: line-height 0.5s;
 }
 
-#lowerPanel:hover #comments #loadingIndicator,
-#lowerPanel.lowerPanelUp #comments #loadingIndicator {
+#lowerPanel:hover #comments .loadingIndicator,
+#lowerPanel.lowerPanelUp #comments .loadingIndicator {
     line-height: 60vh;
 }
 
