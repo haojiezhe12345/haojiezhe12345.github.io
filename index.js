@@ -207,7 +207,9 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
                 imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
             }
         }
-    } catch { }
+    } catch (error) {
+
+    }
 
     commentDiv.insertBefore(html2elmnt(`
         <div class="commentBox" id="#${comment.id}">
