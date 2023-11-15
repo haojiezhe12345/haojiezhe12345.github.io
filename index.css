@@ -820,6 +820,10 @@ body {
     display: block;
 }
 
+.toolbarItem ul:has(input:focus) {
+    display: block;
+}
+
 .toolbarItem ul li {
     display: flex;
     padding: 8px 12px;
