@@ -152,11 +152,9 @@ function loadComments(from, count) {
                 if (from > maxCommentID && maxCommentID != null && document.getElementById('topComment') == null) {
                     if (isFullscreen) {
                         var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
-                        //console.log(prevCommentTop, newCommentTop)
                         commentDiv.scrollTop += newCommentTop - prevCommentTop
                     } else {
                         var newCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
-                        //console.log(prevCommentLeft, newCommentLeft)
                         commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
                     }
                 }
@@ -174,7 +172,7 @@ function loadComments(from, count) {
                     maxCommentID = xhrMaxCommentID
                 }
 
-                //console.log(maxCommentID, minCommentID)
+                if (debug) console.log('maxID:', maxCommentID, ' minID:', minCommentID)
             }
 
         } else {
@@ -287,6 +285,8 @@ function clearComments(clearTop) {
     commentHorizontalScrolled = 0
 }
 
+var beforeLoadThreshold = 40
+
 function commentScroll() {
     if (pauseCommentScroll || minCommentID == null || maxCommentID == null) return
     if (!isFullscreen) {
@@ -295,19 +295,24 @@ function commentScroll() {
         var toLeft = commentDiv.scrollLeft
         //console.log(toLeft, toRight)
         //console.log(scrolled)
-        if (toRight < 40) {
+        if (toRight <= 40) {
             loadComments(minCommentID - 1)
-        } else if (toLeft < 40 && newLoadCommentMode) {
-            loadComments(maxCommentID + 10)
+        } else if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
+            loadComments(maxCommentID + 10, 10)
         } else return
     } else {
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
-        if (toBottom < 40) {
+        if (toBottom <= 40) {
             loadComments(minCommentID - 1)
-        } else if (toTop < 40 && newLoadCommentMode) {
-            loadComments(maxCommentID + 10)
+        } else if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
+            var count = getFullscreenHorizonalCommentCount() * 2
+            while (count < 9) {
+                count += getFullscreenHorizonalCommentCount()
+            }
+            commentDiv.scrollTop = 0
+            loadComments(maxCommentID + count, count)
         } else return
     }
     //commentDiv.removeEventListener("scroll", commentScroll)
@@ -728,6 +733,19 @@ function changeLang(lang) {
     `
 }
 
+function getFullscreenHorizonalCommentCount() {
+    if (!isFullscreen) return null
+    var latestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
+    var top = latestCommentEl.getBoundingClientRect().top
+    latestCommentEl = latestCommentEl.nextElementSibling
+    var count = 1
+    while (top == latestCommentEl.getBoundingClientRect().top) {
+        count++
+        latestCommentEl = latestCommentEl.nextElementSibling
+    }
+    return count
+}
+
 // toggles
 //
 function goFullscreen() {
@@ -863,6 +881,9 @@ document.getElementById('loadingIndicatorBefore').style.display = 'none'
 var bgPaused = false
 var isFullscreen = false
 var newCommentDisabled = false
+
+var debug = false
+if (location.hash == '#debug') debug = true
 
 // time checks
 //
