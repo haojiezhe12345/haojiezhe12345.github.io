@@ -1065,7 +1065,7 @@ document.getElementById('timeline').addEventListener('click', (event) => {
     if (event.target.nodeName == 'STRONG') {
         var year = parseInt(event.target.innerHTML)
         if (year == 2022 || event.target == document.getElementById('timeline').firstElementChild.firstElementChild) {
-            clearComments(1)
+            clearComments((year == 2022) ? 1 : null)
             loadComments((year == 2022) ? 0 : null)
             return
         }
