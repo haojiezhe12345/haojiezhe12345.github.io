@@ -285,7 +285,7 @@ body {
     position: absolute;
     left: 0;
     width: 100%;
-    bottom: -40vh;
+    bottom: -35vh;
     padding-top: 24px;
     transition: bottom 0.5s;
     animation-name: commentsup;
@@ -302,7 +302,7 @@ body {
     }
 
     100% {
-        bottom: -40vh;
+        bottom: -35vh;
     }
 }
 
@@ -362,10 +362,10 @@ body {
 #comments .commentBox {
     position: relative;
     display: inline-block;
-    width: 50vh;
-    height: 60vh;
+    width: 45vh;
+    height: 55vh;
     max-width: 80vw;
-    margin-right: 3vh;
+    margin-right: 2vh;
     border-radius: 16px;
     color: white;
     white-space: normal;
@@ -542,19 +542,19 @@ body {
     }
 
     30% {
-        width: 50vh;
+        width: 45vh;
         opacity: 0;
         transform: scale(0.9);
     }
 
     40% {
-        width: 50vh;
+        width: 45vh;
         opacity: 0;
         transform: scale(0.9);
     }
 
     100% {
-        width: 50vh;
+        width: 45vh;
         opacity: 1;
         transform: scale(1);
     }
@@ -679,7 +679,7 @@ body {
 
 #lowerPanel:hover #comments .loadingIndicator,
 #lowerPanel.lowerPanelUp #comments .loadingIndicator {
-    line-height: 60vh;
+    line-height: 55vh;
 }
 
 .loadingCircle {
@@ -706,6 +706,89 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+
+#timelineContainer {
+    display: none;
+    width: 90%;
+    box-sizing: border-box;
+    margin: 2px 5% 4px;
+    padding: 2px;
+    border-radius: 100px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-align: center;
+    user-select: none;
+    color: white;
+    scrollbar-width: none;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: drop-shadow(0 0) blur(1vh);
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+}
+
+#timelineContainer:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#timelineContainer::-webkit-scrollbar {
+    display: none;
+}
+
+#timelineContainer #timeline {
+    display: inline-table;
+}
+
+#timelineContainer #timeline p {
+    display: inline-table;
+    margin: 0;
+    padding: 0 4px;
+    border-radius: 100px;
+    transition: background-color 0.2s;
+}
+
+#timelineContainer #timeline p:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#timelineContainer #timeline p>* {
+    transition: color 0.1s;
+}
+
+#timelineContainer #timeline p>*:hover {
+    color: #ffbbdd;
+}
+
+#timelineContainer #timeline p strong {
+    font-size: 20px;
+    padding: 0 6px 0 2px;
+}
+
+#timelineContainer #timeline p span {
+    padding: 0 5px;
+}
+
+#timelineContainer #timelineDragger {
+    display: flex;
+    align-items: center;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+}
+
+#timelineContainer #timelineDragger strong {
+    font-size: 20px;
+}
+
+#timelineContainer #timelineDragger div {
+    width: 100%;
+    height: 100%;
+    background-color: white;
 }
 
 #lowerPanel .backTransparent {

@@ -295,6 +295,75 @@
 
         </div>
 
+        <div id="timelineContainer">
+            <div id="timeline">
+                <p>
+                    <strong>2023</strong>
+                    <span>11</span>
+                    <span>10</span>
+                    <span>9</span>
+                    <span>8</span>
+                    <span>7</span>
+                    <span>6</span>
+                </p>
+                <p>
+                    <strong>2022</strong>
+                    <span>3</span>
+                    <span>2</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <strong>2021</strong>
+                    <span>12</span>
+                    <span>11</span>
+                    <span>10</span>
+                    <span>9</span>
+                    <span>8</span>
+                    <span>7</span>
+                    <span>6</span>
+                    <span>5</span>
+                    <span>4</span>
+                    <span>3</span>
+                    <span>2</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <strong>2020</strong>
+                    <span>12</span>
+                    <span>11</span>
+                    <span>10</span>
+                    <span>9</span>
+                    <span>8</span>
+                    <span>7</span>
+                    <span>6</span>
+                    <span>5</span>
+                    <span>4</span>
+                    <span>3</span>
+                    <span>2</span>
+                    <span>1</span>
+                </p>
+                <p>
+                    <strong>2019</strong>
+                    <span>12</span>
+                    <span>11</span>
+                    <span>10</span>
+                    <span>9</span>
+                    <span>8</span>
+                    <span>7</span>
+                    <span>6</span>
+                    <span>5</span>
+                    <span>4</span>
+                    <span>3</span>
+                    <span>2</span>
+                </p>
+            </div>
+
+            <div id="timelineDragger">
+                <strong>Nov 2023</strong>
+                <div></div>
+            </div>
+        </div>
+
         <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>
         <button id="newMsg" onclick="newComment()"><span class="ui zh">➕ 发送留言</span><span class="ui en">➕ New message</span></button>
 
@@ -312,6 +381,17 @@
                         "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
                     <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
                     <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>
+                    <li onclick='
+                        document.getElementById("timelineContainer").style.display = "block"
+                        commentDiv.style.paddingBottom = 0
+                        document.head.appendChild(html2elmnt(`
+                            <style id="hideCommentScrollbarCSS">
+                                #comments::-webkit-scrollbar {
+                                    display: none;
+                                }
+                            </style>
+                        `))
+                    '><span class="ui zh">🕒 显示时间轴 (Beta)</span><span class="ui en">🕒 Show timeline (beta)</span></li>
                     <li id="changeLangBtn" lang="zh" onclick="
                         if (this.lang == 'zh') {
                             changeLang('en')
@@ -403,7 +483,7 @@
                 //console.info(imgViewerScale)
                 this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
             "
-        >
+            >
             <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
         </div>
     

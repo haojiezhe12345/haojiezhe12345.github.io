@@ -4,22 +4,23 @@
 
 var newLoadCommentMode = true
 
-function loadComments(from, count) {
+function loadComments(from, count, time) {
     const xhr = new XMLHttpRequest();
 
-    if (from == null && count == null) {
+    if (from == null && count == null && time == null) {
         xhr.open("GET", "https://haojiezhe12345.top:82/madohomu/api/comments");
     }
     if (from != null && count == null) {
         xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?from=${from}`);
     }
-    /*
     if (from == null && count != null) {
         xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?count=${count}`);
     }
-    */
     if (from != null && count != null) {
         xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?from=${from}&count=${count}`);
+    }
+    if (from == null && count == null && time != null) {
+        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?time=${time}`);
     }
 
     xhr.send();
@@ -883,7 +884,19 @@ var isFullscreen = false
 var newCommentDisabled = false
 
 var debug = false
-if (location.hash == '#debug') debug = true
+if (location.hash == '#debug') {
+    debug = true
+    document.getElementById('timelineContainer').style.display = 'block'
+    document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+    commentDiv.style.paddingBottom = 0
+    document.head.appendChild(html2elmnt(`
+    <style id="hideCommentScrollbarCSS">
+        #comments::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    `))
+}
 
 // time checks
 //
@@ -1045,6 +1058,27 @@ commentDiv.addEventListener("wheel", (event) => {
 var msgBgCount = 11
 var lastBgImgs = []
 
+
+// timeline
+//
+document.getElementById('timeline').addEventListener('click', (event) => {
+    if (event.target.nodeName == 'STRONG') {
+        var year = event.target.innerHTML
+        var date = new Date(year)
+    } else if (event.target.nodeName == 'SPAN') {
+        var year = event.target.parentNode.firstElementChild.innerHTML
+        var month = event.target.innerHTML
+        var date = new Date(year, month - 1)
+    } else return
+    timestamp = date.getTime() / 1000
+    console.log(timestamp)
+    clearComments(1)
+    loadComments(null, null, timestamp)
+})
+
+document.getElementById('timelineContainer').addEventListener('wheel', (event) => {
+    document.getElementById('timelineContainer').scrollLeft += event.deltaY / 3
+})
 
 document.getElementById('goto').addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
