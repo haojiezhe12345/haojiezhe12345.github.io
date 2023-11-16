@@ -710,6 +710,7 @@ body {
 
 #timelineContainer {
     display: none;
+    position: relative;
     width: 90%;
     box-sizing: border-box;
     margin: 2px 5% 4px;
@@ -743,7 +744,7 @@ body {
 #timelineContainer #timeline p {
     display: inline-table;
     margin: 0;
-    padding: 0 4px;
+    padding: 1px 4px;
     border-radius: 100px;
     transition: background-color 0.2s;
 }
@@ -753,6 +754,7 @@ body {
 }
 
 #timelineContainer #timeline p>* {
+    cursor: pointer;
     transition: color 0.1s;
 }
 
@@ -761,7 +763,7 @@ body {
 }
 
 #timelineContainer #timeline p strong {
-    font-size: 20px;
+    font-size: 18px;
     padding: 0 6px 0 2px;
 }
 

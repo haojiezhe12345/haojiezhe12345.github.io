@@ -296,24 +296,24 @@ function commentScroll() {
         var toLeft = commentDiv.scrollLeft
         //console.log(toLeft, toRight)
         //console.log(scrolled)
-        if (toRight <= 40) {
-            loadComments(minCommentID - 1)
-        } else if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
+        if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
             loadComments(maxCommentID + 10, 10)
+        } else if (toRight <= 40) {
+            loadComments(minCommentID - 1)
         } else return
     } else {
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
-        if (toBottom <= 40) {
-            loadComments(minCommentID - 1)
-        } else if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
+        if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
             var count = getFullscreenHorizonalCommentCount() * 2
             while (count < 9) {
                 count += getFullscreenHorizonalCommentCount()
             }
             commentDiv.scrollTop = 0
             loadComments(maxCommentID + count, count)
+        } else if (toBottom <= 40) {
+            loadComments(minCommentID - 1)
         } else return
     }
     //commentDiv.removeEventListener("scroll", commentScroll)
@@ -1063,11 +1063,17 @@ var lastBgImgs = []
 //
 document.getElementById('timeline').addEventListener('click', (event) => {
     if (event.target.nodeName == 'STRONG') {
-        var year = event.target.innerHTML
-        var date = new Date(year)
+        var year = parseInt(event.target.innerHTML)
+        if (year == 2022 || event.target == document.getElementById('timeline').firstElementChild.firstElementChild) {
+            clearComments(1)
+            loadComments((year == 2022) ? 0 : null)
+            return
+        }
+        var date = new Date(year + 1, 0)
+        date.setDate(date.getDate() - 1)
     } else if (event.target.nodeName == 'SPAN') {
-        var year = event.target.parentNode.firstElementChild.innerHTML
-        var month = event.target.innerHTML
+        var year = parseInt(event.target.parentNode.firstElementChild.innerHTML)
+        var month = parseInt(event.target.innerHTML)
         var date = new Date(year, month - 1)
     } else return
     timestamp = date.getTime() / 1000
@@ -1077,7 +1083,8 @@ document.getElementById('timeline').addEventListener('click', (event) => {
 })
 
 document.getElementById('timelineContainer').addEventListener('wheel', (event) => {
-    document.getElementById('timelineContainer').scrollLeft += event.deltaY / 3
+    if (!isFullscreen)
+        document.getElementById('timelineContainer').scrollLeft += event.deltaY / 3
 })
 
 document.getElementById('goto').addEventListener("keypress", function (event) {
