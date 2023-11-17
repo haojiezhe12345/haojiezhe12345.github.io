@@ -66,8 +66,8 @@ body {
 .mainbg>span {
     position: fixed;
     right: 20px;
-    bottom: 25%;
-    bottom: calc(21.5% + 28px);
+    bottom: 28%;
+    bottom: calc(20vh + 60px);
     background-color: rgba(0, 0, 0, 0.4);
     color: white;
     font-size: 12px;
@@ -238,6 +238,41 @@ body {
     filter: blur(1vw);
 }
 
+#banner {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 4px 8%;
+    font-size: 14px;
+    white-space: nowrap;
+    background-color: wheat;
+    color: black;
+    border: 2px solid orange;
+    animation: fadein 1s;
+}
+
+#banner>span {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#banner>i {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    font-family: Arial;
+    font-size: 24px;
+    font-style: normal;
+    width: 28px;
+    text-align: center;
+    cursor: pointer;
+}
+
 #mainTitle {
     position: absolute;
     top: 16px;
@@ -349,6 +384,14 @@ body {
     backdrop-filter: drop-shadow(0 0) blur(0);
     box-shadow: none;
     transition: all 0.5s;
+}
+
+#comments.noscrollbar {
+    padding-bottom: 0;
+}
+
+#comments.noscrollbar::-webkit-scrollbar {
+    display: none;
 }
 
 #lowerPanel:hover #comments,
@@ -709,15 +752,13 @@ body {
 }
 
 #timelineContainer {
-    display: none;
+    /*display: none;*/
     position: relative;
     width: 90%;
     box-sizing: border-box;
     margin: 2px 5% 4px;
     padding: 2px;
     border-radius: 100px;
-    overflow-x: auto;
-    overflow-y: hidden;
     white-space: nowrap;
     text-align: center;
     user-select: none;
@@ -738,13 +779,22 @@ body {
 }
 
 #timelineContainer #timeline {
-    display: inline-table;
+    display: flex;
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    scrollbar-width: none;
+}
+
+#timelineContainer #timeline::-webkit-scrollbar {
+    display: none;
 }
 
 #timelineContainer #timeline p {
-    display: inline-table;
+    display: inline-flex;
+    align-items: flex-end;
     margin: 0;
-    padding: 1px 4px;
+    padding: 1px 0;
     border-radius: 100px;
     transition: background-color 0.2s;
 }
@@ -754,8 +804,9 @@ body {
 }
 
 #timelineContainer #timeline p>* {
+    display: inline-block;
     cursor: pointer;
-    transition: color 0.1s;
+    transition: all 0.1s;
 }
 
 #timelineContainer #timeline p>*:hover {
@@ -764,33 +815,74 @@ body {
 
 #timelineContainer #timeline p strong {
     font-size: 18px;
-    padding: 0 6px 0 2px;
+    padding: 0 8px;
 }
 
 #timelineContainer #timeline p span {
-    padding: 0 5px;
+    padding: 0 8px;
 }
 
-#timelineContainer #timelineDragger {
-    display: flex;
-    align-items: center;
+#timelineContainer #timeline p span:hover,
+#timelineContainer #timeline p span.month-active {
+    transform: translateY(-3.75%) scale(1.15);
+}
+
+#timelineContainer #hoverCalendar {
     display: none;
+    font-family: Consolas;
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    bottom: 30px;
+    margin: 0;
+    margin-left: -5vw;
+    transform: translateX(-50%);
+    width: 210px;
+    overflow: hidden;
+    white-space: normal;
     text-align: left;
+    padding: 6px 8px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    background-color: #222;
+    transition: all 0.2s;
+
+    animation: showHoverCalendar 0.2s;
 }
 
-#timelineContainer #timelineDragger strong {
-    font-size: 20px;
+@keyframes showHoverCalendar {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 10%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
-#timelineContainer #timelineDragger div {
-    width: 100%;
-    height: 100%;
-    background-color: white;
+#timelineContainer:hover #hoverCalendar {
+    display: block;
+}
+
+#timelineContainer:hover #hoverCalendar div {
+    display: inline-block;
+    width: 30px;
+    padding: 4px 0;
+    text-align: center;
+}
+
+#timelineContainer:hover #hoverCalendar div:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#timelineContainer:hover #hoverCalendar div:first-child {
+    display: block;
+    width: auto;
+}
+
+#timelineContainer:hover #hoverCalendar div:first-child:hover {
+    background: none;
 }
 
 #lowerPanel .backTransparent {
@@ -905,9 +997,11 @@ body {
     display: block;
 }
 
+/*
 .toolbarItem ul:has(input:focus) {
     display: block;
 }
+*/
 
 .toolbarItem ul li {
     display: flex;
@@ -937,7 +1031,7 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    cursor: pointer;
+    cursor: grab;
     user-select: none;
     animation-name: showImgView;
     animation-duration: 0.3s;

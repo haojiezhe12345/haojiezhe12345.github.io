@@ -101,6 +101,20 @@
             <video id="mainVideo" muted></video>
         </div>
 
+        <div id="banner" class="banner20231117">
+            <span onclick="
+                clearComments(1)
+                loadComments(1523)
+                setTimeout(() => {
+                    document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+                }, 100);
+                ">近期出现部分用户无法发送留言, 现已修复</span>
+            <i onclick="
+                this.parentNode.style.display = 'none'
+                setCookie('hiddenBanner', this.parentNode.classList[0])
+                ">×</i>
+        </div>
+
     </div>
 
     <div id="mainTitle" class="topItems">
@@ -120,7 +134,7 @@
 
         <div class="tooltip"><span class="ui zh">点击下方查看留言</span><span class="ui en">Tap below to view messages</span><div class="triangle"></div></div>
 
-        <div id="comments">
+        <div id="comments" class="noscrollbar">
 
             <!--
             <div class="commentBox" id="newCommentBox">
@@ -358,9 +372,8 @@
                 </p>
             </div>
 
-            <div id="timelineDragger">
-                <strong>Nov 2023</strong>
-                <div></div>
+            <div id="hoverCalendar" style="display: none;">
+
             </div>
         </div>
 
@@ -381,17 +394,6 @@
                         "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
                     <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
                     <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>
-                    <li onclick='
-                        document.getElementById("timelineContainer").style.display = "block"
-                        commentDiv.style.paddingBottom = 0
-                        document.head.appendChild(html2elmnt(`
-                            <style id="hideCommentScrollbarCSS">
-                                #comments::-webkit-scrollbar {
-                                    display: none;
-                                }
-                            </style>
-                        `))
-                    '><span class="ui zh">🕒 显示时间轴 (Beta)</span><span class="ui en">🕒 Show timeline (beta)</span></li>
                     <li id="changeLangBtn" lang="zh" onclick="
                         if (this.lang == 'zh') {
                             changeLang('en')
@@ -401,6 +403,10 @@
                             this.lang = 'zh'
                         }
                     "><span class="ui zh">🌎 Switch to English</span><span class="ui en">🌎 切换为中文 (Chinese)</span></li>
+                    <li>
+                        <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
+                        <label for="showTimeline"><span class="ui zh">显示底部/侧边时间轴</span><span class="ui en">Show timeline</span></label>
+                    </li>
                     <li>
                         <input type="checkbox" id="isLowend" name="isLowend" onchange="toggleLowend()">
                         <label for="isLowend"><span class="ui zh">低性能模式(禁用特效)</span><span class="ui en">Low performance mode</span></label>
@@ -545,7 +551,7 @@
 
         <div id="getImgPopup" class="popupItem" style="text-align: center; height: 90%; padding: 0;">
             <div style="width: 100%; height: 100%; overflow: auto; padding: 20px 32px 32px; box-sizing: border-box;">
-                <h2><span class="ui zh">下载站内图片</span><span class="ui en">Download backgrounds</span></h2>
+                <h2><span class="ui zh">保存背景图片</span><span class="ui en">Download backgrounds</span></h2>
                 <h4><span class="ui zh">长按/右键图片, 然后选"保存到手机/下载图片/图片另存为"</span><span class="ui en">Long press / right click,<br>then select Download image / Save image as...</span></h4>
                 <img class="getImgList"><p>Pixiv: 61717580 by HISA</p><br>
                 <img class="getImgList"><p>Pixiv: 89897632 by Rumoon</p><br>

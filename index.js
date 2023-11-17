@@ -119,6 +119,11 @@ function loadComments(from, count, time) {
                         document.getElementById('loadingIndicatorBefore').style.display = 'none'
                         return
                     }
+                    if (comment.id == -999999 && from < minCommentID && minCommentID) {
+                        console.log('reached the oldest comment')
+                        document.getElementById('loadingIndicator').style.display = 'none'
+                        return
+                    }
                     if (comment.id > maxCommentID && maxCommentID != null && document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
                         console.log('newCommentBox is active, skipping upper comments')
                         document.getElementById('loadingIndicatorBefore').style.display = 'none'
@@ -807,6 +812,17 @@ function toggleTopComment() {
     }
 }
 
+function toggleTimeline() {
+    setCookie('showTimeline', showTimelineElmnt.checked)
+    if (showTimelineElmnt.checked) {
+        document.getElementById('timelineContainer').style.display = 'block'
+        commentDiv.classList.add('noscrollbar')
+    } else {
+        document.getElementById('timelineContainer').style.display = 'none'
+        commentDiv.classList.remove('noscrollbar')
+    }
+}
+
 // functional funcs
 //
 function getRandomIntInclusive(min, max) {
@@ -856,11 +872,11 @@ var setAvatarImg = document.getElementById('setAvatarImg')
 var avatarInput = document.getElementById('setAvatarInput')
 
 var bgmElmnt = document.getElementById('bgm')
+
 var isMutedElmnt = document.getElementById('isMuted')
-
 var isLowendElmnt = document.getElementById('isLowend')
-
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
+var showTimelineElmnt = document.getElementById('showTimeline')
 
 var topComment = `
 <div class="commentBox" id="topComment">
@@ -886,16 +902,9 @@ var newCommentDisabled = false
 var debug = false
 if (location.hash == '#debug') {
     debug = true
-    document.getElementById('timelineContainer').style.display = 'block'
     document.getElementById('lowerPanel').classList.add('lowerPanelUp')
-    commentDiv.style.paddingBottom = 0
-    document.head.appendChild(html2elmnt(`
-    <style id="hideCommentScrollbarCSS">
-        #comments::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
-    `))
+    document.getElementById('timelineContainer').style.display = 'block'
+    commentDiv.classList.add('noscrollbar')
 }
 
 // time checks
@@ -948,6 +957,7 @@ if (getCookie('isLowend') == 'true') {
     //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
     document.getElementById('lowendCSS').disabled = false
 }
+
 if (getCookie('hideTopComment') == 'true') {
     hideTopCommentElmnt.checked = true
     document.getElementById('topComment').style.display = 'none'
@@ -956,6 +966,15 @@ if (getCookie('hideTopComment') == 'true') {
         ${document.getElementById('topComment').innerHTML}
     </div>
     `
+}
+
+if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0]) {
+    document.getElementById('banner').style.display = 'block'
+}
+
+if (getCookie('showTimeline') == 'false') {
+    showTimelineElmnt.checked = false
+    toggleTimeline()
 }
 
 var bgCount
@@ -1061,7 +1080,8 @@ var lastBgImgs = []
 
 // timeline
 //
-document.getElementById('timeline').addEventListener('click', (event) => {
+document.getElementById('timelineContainer').addEventListener('click', (event) => {
+    //if (debug) console.log(event.target)
     if (event.target.nodeName == 'STRONG') {
         var year = parseInt(event.target.innerHTML)
         if (year == 2022 || event.target == document.getElementById('timeline').firstElementChild.firstElementChild) {
@@ -1069,22 +1089,51 @@ document.getElementById('timeline').addEventListener('click', (event) => {
             loadComments((year == 2022) ? 0 : null)
             return
         }
-        var date = new Date(year + 1, 0)
-        date.setDate(date.getDate() - 1)
+        var date = new Date(year + 1, 0, 0)
     } else if (event.target.nodeName == 'SPAN') {
         var year = parseInt(event.target.parentNode.firstElementChild.innerHTML)
         var month = parseInt(event.target.innerHTML)
         var date = new Date(year, month - 1)
+    } else if (event.target.hasAttribute('data-time')) {
+        var date = new Date(event.target.dataset.time)
     } else return
     timestamp = date.getTime() / 1000
-    console.log(timestamp)
+    //console.log(timestamp)
     clearComments(1)
     loadComments(null, null, timestamp)
 })
 
 document.getElementById('timelineContainer').addEventListener('wheel', (event) => {
     if (!isFullscreen)
-        document.getElementById('timelineContainer').scrollLeft += event.deltaY / 3
+        document.getElementById('timeline').scrollLeft += event.deltaY / 2
+})
+
+document.getElementById('timelineContainer').addEventListener('mouseover', (event) => {
+    if (event.target.nodeName == 'SPAN') {
+        if (!isFullscreen) {
+            document.getElementById('hoverCalendar').style.left = event.target.getBoundingClientRect().left + event.target.getBoundingClientRect().width / 2 + 'px'
+            document.getElementById('hoverCalendar').style.bottom = document.getElementById('timelineContainer').getBoundingClientRect().height + 'px'
+            document.getElementById('hoverCalendar').style.removeProperty('top')
+            document.getElementById('hoverCalendar').style.removeProperty('right')
+        }
+        else {
+            document.getElementById('hoverCalendar').style.top = event.target.getBoundingClientRect().top + event.target.getBoundingClientRect().height / 2 + 'px'
+            document.getElementById('hoverCalendar').style.right = document.getElementById('timelineContainer').getBoundingClientRect().width + 'px'
+            document.getElementById('hoverCalendar').style.removeProperty('left')
+            document.getElementById('hoverCalendar').style.removeProperty('bottom')
+        }
+        document.getElementById('hoverCalendar').style.removeProperty('display')
+
+        document.getElementById('hoverCalendar').innerHTML = ''
+        var year = parseInt(event.target.parentNode.firstElementChild.innerHTML)
+        var month = parseInt(event.target.innerHTML)
+        document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div>${year}-${('0' + month).slice(-2)}${(year <= 2022) ? ' (kami.im)' : ''}</div>`))
+        for (let i = 1; i <= new Date(year, month, 0).getDate(); i++) {
+            document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
+        }
+    } else if (event.target.nodeName == 'STRONG') {
+        document.getElementById('hoverCalendar').style.display = 'none'
+    }
 })
 
 document.getElementById('goto').addEventListener("keypress", function (event) {
