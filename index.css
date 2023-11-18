@@ -388,6 +388,8 @@ body {
 
 #comments.noscrollbar {
     padding-bottom: 0;
+    /*-ms-overflow-style: none;*/
+    /*overflow: auto;*/
 }
 
 #comments.noscrollbar::-webkit-scrollbar {
@@ -779,11 +781,13 @@ body {
 }
 
 #timelineContainer #timeline {
-    display: flex;
-    width: 100%;
-    overflow: auto;
+    display: inline-flex;
+    /*width: 100%;*/
+    max-width: 100%;
     box-sizing: border-box;
     scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow: auto;
 }
 
 #timelineContainer #timeline::-webkit-scrollbar {
@@ -865,23 +869,23 @@ body {
     display: block;
 }
 
-#timelineContainer:hover #hoverCalendar div {
+#timelineContainer #hoverCalendar div {
     display: inline-block;
     width: 30px;
     padding: 4px 0;
     text-align: center;
 }
 
-#timelineContainer:hover #hoverCalendar div:hover {
+#timelineContainer #hoverCalendar div:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-#timelineContainer:hover #hoverCalendar div:first-child {
+#timelineContainer #hoverCalendar div:first-child {
     display: block;
     width: auto;
 }
 
-#timelineContainer:hover #hoverCalendar div:first-child:hover {
+#timelineContainer #hoverCalendar div:first-child:hover {
     background: none;
 }
 

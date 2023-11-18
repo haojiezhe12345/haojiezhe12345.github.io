@@ -728,15 +728,21 @@ function playWalpurgis(time_ms) {
     }, time_ms);
 }
 
-function changeLang(lang) {
+function changeLang(targetLang) {
+    if (targetLang != 'zh' && targetLang != 'en') {
+        console.log(`invalid lang "${targetLang}"`)
+        return
+    }
     mainCSS = document.getElementById('langCSS').innerHTML = `
     .ui {
         display: none !important;
     }
-    .ui.${lang} {
+    .ui.${targetLang} {
         display: inline !important;
     }
     `
+    currentLang = targetLang
+    console.log(`changed lang to ${targetLang}`)
 }
 
 function getFullscreenHorizonalCommentCount() {
@@ -899,6 +905,14 @@ var bgPaused = false
 var isFullscreen = false
 var newCommentDisabled = false
 
+var currentLang = 'zh'
+if (getCookie('lang') != '') {
+    currentLang = getCookie('lang')
+} else if (navigator.language.slice(0, 2) != 'zh' && navigator.language.slice(0, 3) != 'yue') {
+    currentLang = 'en'
+}
+if (currentLang == 'en') changeLang('en')
+
 var debug = false
 if (location.hash == '#debug') {
     debug = true
@@ -1036,10 +1050,6 @@ if (location.hash == '#video') {
 }
 
 loadUserInfo()
-
-if (navigator.language.slice(0, 2) != 'zh' && navigator.language.slice(0, 3) != 'yue') {
-    document.getElementById('changeLangBtn').click()
-}
 
 // comments
 //
