@@ -216,7 +216,7 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
     }
 
     commentDiv.insertBefore(html2elmnt(`
-        <div class="commentBox" id="#${comment.id}">
+        <div class="commentBox" id="#${comment.id}" data-timestamp="${comment.time}">
             <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
             <div class="bgcover"></div>
             <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
@@ -295,18 +295,26 @@ var beforeLoadThreshold = 40
 
 function commentScroll() {
     if (pauseCommentScroll || minCommentID == null || maxCommentID == null) return
+
     if (!isFullscreen) {
-        //var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
+        var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
+        //if (debug) console.log(scrolled)
+        setTimelineActiveMonthByPercent(scrolled)
+
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
         //console.log(toLeft, toRight)
-        //console.log(scrolled)
         if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
             loadComments(maxCommentID + 10, 10)
         } else if (toRight <= 40) {
             loadComments(minCommentID - 1)
         } else return
+
     } else {
+        var scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
+        //if (debug) console.log(scrolled)
+        setTimelineActiveMonthByPercent(scrolled)
+
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
@@ -756,6 +764,35 @@ function getFullscreenHorizonalCommentCount() {
         latestCommentEl = latestCommentEl.nextElementSibling
     }
     return count
+}
+
+function setTimelineActiveMonthByPercent(percent) {
+    var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - percent))
+    try {
+        var timeStamp = parseInt(document.getElementById(`#${id}`).dataset.timestamp) * 1000
+        var date = new Date(timeStamp)
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        if (debug) console.log(id, timeStamp, year, month)
+        for (var yearEl of document.getElementById('timeline').children) {
+            if (yearEl.firstElementChild.innerHTML == year) {
+                yearEl.firstElementChild.classList.add('month-active')
+            } else {
+                yearEl.firstElementChild.classList.remove('month-active')
+            }
+            for (var monthEl of yearEl.children) {
+                if (monthEl.nodeName == 'SPAN') {
+                    if (yearEl.firstElementChild.innerHTML == year && monthEl.innerHTML == month) {
+                        monthEl.classList.add('month-active')
+                    } else {
+                        monthEl.classList.remove('month-active')
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        if (debug) console.log(error)
+    }
 }
 
 // toggles

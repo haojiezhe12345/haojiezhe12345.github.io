@@ -796,7 +796,7 @@ body {
 
 #timelineContainer #timeline p {
     display: inline-flex;
-    align-items: flex-end;
+    align-items: baseline;
     margin: 0;
     padding: 1px 0;
     border-radius: 100px;
@@ -813,7 +813,8 @@ body {
     transition: all 0.1s;
 }
 
-#timelineContainer #timeline p>*:hover {
+#timelineContainer #timeline p>*:hover,
+#timelineContainer #timeline p>*.month-active {
     color: #ffbbdd;
 }
 
