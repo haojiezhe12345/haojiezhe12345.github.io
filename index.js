@@ -5,6 +5,8 @@
 var newLoadCommentMode = true
 
 function loadComments(from, count, time) {
+    if (minCommentID == null && maxCommentID == null) setTodayCommentCount()
+
     const xhr = new XMLHttpRequest();
 
     if (from == null && count == null && time == null) {
@@ -295,6 +297,11 @@ var beforeLoadThreshold = 40
 
 function commentScroll() {
     if (pauseCommentScroll || minCommentID == null || maxCommentID == null) return
+    if (minCommentID == -999999 && maxCommentID == -999999) {
+        document.getElementById('loadingIndicatorBefore').style.display = 'none'
+        document.getElementById('loadingIndicator').style.display = 'none'
+        return
+    }
 
     if (!isFullscreen) {
         var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
@@ -304,10 +311,11 @@ function commentScroll() {
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
         //console.log(toLeft, toRight)
-        if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
-            loadComments(maxCommentID + 10, 10)
-        } else if (toRight <= 40) {
+        if (toRight <= 40) {
             loadComments(minCommentID - 1)
+        }
+        else if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
+            loadComments(maxCommentID + 10, 10)
         } else return
 
     } else {
@@ -318,15 +326,16 @@ function commentScroll() {
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
-        if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
+        if (toBottom <= 40) {
+            loadComments(minCommentID - 1)
+        }
+        else if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
             var count = getFullscreenHorizonalCommentCount() * 2
             while (count < 9) {
                 count += getFullscreenHorizonalCommentCount()
             }
             commentDiv.scrollTop = 0
             loadComments(maxCommentID + count, count)
-        } else if (toBottom <= 40) {
-            loadComments(minCommentID - 1)
         } else return
     }
     //commentDiv.removeEventListener("scroll", commentScroll)
@@ -773,7 +782,7 @@ function setTimelineActiveMonthByPercent(percent) {
         var date = new Date(timeStamp)
         var year = date.getFullYear()
         var month = date.getMonth() + 1
-        if (debug) console.log(id, timeStamp, year, month)
+        //if (debug) console.log(id, timeStamp, year, month)
         for (var yearEl of document.getElementById('timeline').children) {
             if (yearEl.firstElementChild.innerHTML == year) {
                 yearEl.firstElementChild.classList.add('month-active')
@@ -793,6 +802,18 @@ function setTimelineActiveMonthByPercent(percent) {
     } catch (error) {
         if (debug) console.log(error)
     }
+}
+
+function setTodayCommentCount() {
+    var utc = parseInt(0 - new Date().getTimezoneOffset() / 60)
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments/count?utc=${utc}`);
+    xhr.onload = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById('todayCommentCount').innerHTML = xhr.responseText
+        }
+    }
+    xhr.send();
 }
 
 // toggles
@@ -954,8 +975,6 @@ var debug = false
 if (location.hash == '#debug') {
     debug = true
     document.getElementById('lowerPanel').classList.add('lowerPanelUp')
-    document.getElementById('timelineContainer').style.display = 'block'
-    commentDiv.classList.add('noscrollbar')
 }
 
 // time checks
@@ -1087,6 +1106,7 @@ if (location.hash == '#video') {
 }
 
 loadUserInfo()
+
 
 // comments
 //
