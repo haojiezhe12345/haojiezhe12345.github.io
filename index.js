@@ -5,7 +5,7 @@
 var newLoadCommentMode = true
 
 function loadComments(from, count, time) {
-    if (minCommentID == null && maxCommentID == null) setTodayCommentCount()
+    //if (from == null && time == null) setTodayCommentCount()
 
     const xhr = new XMLHttpRequest();
 
@@ -31,6 +31,12 @@ function loadComments(from, count, time) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             //console.log(xhr.response);
 
+            if (xhr.response[0].time > maxCommentTime) {
+                maxCommentTime = xhr.response[0].time
+                loadTimeline(maxCommentTime)
+                setTodayCommentCount()
+            }
+
             var xhrMaxCommentID = null
             var xhrMinCommentID = null
             //var prevLatestCommentEl = document.getElementById('topComment') ? document.getElementById('topComment').nextElementSibling : commentDiv.firstElementChild
@@ -39,7 +45,7 @@ function loadComments(from, count, time) {
             var prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
 
             for (var comment of xhr.response) {
-                if (!newLoadCommentMode) {
+                if (!newLoadCommentMode && false) {
                     //console.log(comment)
 
                     if (comment.id >= minCommentID && minCommentID != null) {
@@ -775,6 +781,40 @@ function getFullscreenHorizonalCommentCount() {
     return count
 }
 
+function loadTimeline(timeStamp) {
+    console.log('loading timeline from', timeStamp)
+
+    var timelineEl = document.getElementById('timeline')
+    timelineEl.innerHTML = ''
+    var date = new Date(timeStamp * 1000)
+
+    while (date.getFullYear() >= 2019) {
+
+        var yearEl = document.createElement('p')
+        yearEl.appendChild(html2elmnt(`<strong>${date.getFullYear()}</strong>`))
+
+        while (true) {
+            yearEl.appendChild(html2elmnt(`<span>${date.getMonth() + 1}</span>`))
+
+            if (date.getFullYear() == 2023 && date.getMonth() + 1 == 6) {
+                date.setFullYear(2022)
+                date.setMonth(3)
+                break
+            } else if (date.getFullYear() == 2019 && date.getMonth() + 1 == 2) {
+                date.setFullYear(2011)
+                break
+            } else if (date.getMonth() == 0) {
+                break
+            } else {
+                date.setMonth(date.getMonth() - 1)
+            }
+        }
+        timelineEl.appendChild(yearEl)
+
+        date.setMonth(date.getMonth() - 1)
+    }
+}
+
 function setTimelineActiveMonthByPercent(percent) {
     var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - percent))
     try {
@@ -811,6 +851,7 @@ function setTodayCommentCount() {
     xhr.onload = () => {
         if (xhr.readyState == 4 && xhr.status == 200) {
             document.getElementById('todayCommentCount').innerHTML = xhr.responseText
+            console.log('today comment count:', xhr.responseText)
         }
     }
     xhr.send();
@@ -928,6 +969,7 @@ function html2elmnt(html) {
 var minCommentID = null
 var maxCommentID = null
 var pauseCommentScroll = false
+var maxCommentTime = 0
 
 var commentDiv = document.getElementById('comments')
 var captionDiv = document.getElementById('mainCaptions')
@@ -1196,7 +1238,8 @@ document.getElementById('timelineContainer').addEventListener('mouseover', (even
         var month = parseInt(event.target.innerHTML)
         document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div>${year}-${('0' + month).slice(-2)}${(year <= 2022) ? ' (kami.im)' : ''}</div>`))
         for (let i = 1; i <= new Date(year, month, 0).getDate(); i++) {
-            document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
+            if (new Date(year, month - 1, i).getTime() / 1000 < maxCommentTime)
+                document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
         }
     } else if (event.target.nodeName == 'STRONG') {
         document.getElementById('hoverCalendar').style.display = 'none'
