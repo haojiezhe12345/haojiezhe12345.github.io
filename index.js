@@ -391,6 +391,10 @@ function newComment() {
     document.getElementById('msgText').focus({ preventScroll: true })
 
     newCommentDisabled = true
+
+    if (location.hostname != 'haojiezhe12345.top') {
+        document.getElementById('banner').style.display = 'block'
+    }    
 }
 
 function previewLocalImgs() {
@@ -1080,7 +1084,7 @@ if (getCookie('hideTopComment') == 'true') {
     `
 }
 
-if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0]) {
+if (debug || (getCookie('hiddenBanner') != document.getElementById('banner').classList[0] && location.hostname != 'haojiezhe12345.top')) {
     document.getElementById('banner').style.display = 'block'
 }
 

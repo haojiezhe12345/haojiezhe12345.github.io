@@ -34,6 +34,11 @@
 
 <body onclick="if (!isMutedElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
 
+    <p id="backupSiteNotice">
+        <span class="ui zh">如网页显示不全或无法发送留言, 请访问<a href="https://haojiezhe12345.top:82/madohomu/">备用链接</a></span><br>
+        <span class="ui en">If the website doesn't function normally, please <a href="https://haojiezhe12345.top:82/madohomu/">visit backup site</a></span>
+    </p>
+
     <audio id="bgm" loop></audio>
 
     <div id="bgContainer" 
@@ -101,14 +106,11 @@
             <video id="mainVideo" muted></video>
         </div>
 
-        <div id="banner" class="banner20231117">
-            <span onclick="
-                clearComments(1)
-                loadComments(1523)
-                setTimeout(() => {
-                    document.getElementById('lowerPanel').classList.add('lowerPanelUp')
-                }, 100);
-                ">近期出现部分用户无法发送留言, 现已修复</span>
+        <div id="banner" class="banner20231121">
+            <span>
+                <span class="ui zh">如网页显示不全或无法发送留言, 请访问<a href="https://haojiezhe12345.top:82/madohomu/">备用链接</a></span>
+                <span class="ui en">If the website doesn't function normally, please <a href="https://haojiezhe12345.top:82/madohomu/">visit backup site</a></span>
+            </span>
             <i onclick="
                 this.parentNode.style.display = 'none'
                 setCookie('hiddenBanner', this.parentNode.classList[0])

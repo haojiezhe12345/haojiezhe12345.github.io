@@ -243,22 +243,20 @@ body {
     position: absolute;
     top: 70px;
     left: 50%;
+    margin-right: -50%;
     transform: translateX(-50%);
     box-sizing: border-box;
     max-width: 100%;
     padding: 4px 8%;
     font-size: 14px;
-    white-space: nowrap;
+    user-select: none;
+    /*white-space: nowrap;*/
     background-color: wheat;
     color: black;
     border: 2px solid orange;
     animation: fadein 1s;
 }
 
-#banner>span {
-    text-decoration: underline;
-    cursor: pointer;
-}
 
 #banner>i {
     position: absolute;
