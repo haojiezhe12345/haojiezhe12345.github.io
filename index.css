@@ -147,6 +147,10 @@ body {
     transition: opacity 1.5s;
 }
 
+#mainCaptions>* {
+    display: none;
+}
+
 #mainCaptions p {
     font-size: 4vh;
     font-size: min(6vw, 4vh);
@@ -156,10 +160,6 @@ body {
 
 #mainCaptions .ui.en {
     white-space: normal;
-}
-
-#birthdayCaption {
-    display: none;
 }
 
 #birthdayCaption p {
@@ -179,10 +179,6 @@ body {
     font-weight: normal;
 }
 
-#nightCaption {
-    display: none;
-}
-
 #nightCaption p:first-child {
     text-align: left;
     color: #ffb5da;
@@ -193,6 +189,13 @@ body {
     text-align: right;
     color: #c074ff;
     margin: 0;
+}
+
+#kamiCaption p {
+    color: white;
+    text-shadow: none;
+    text-shadow: 0.05em 0.05em 0.15em rgba(0, 0, 0, 0.8);
+    font-size: min(5vw, 4vh);
 }
 
 #videoBgBox {

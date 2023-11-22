@@ -276,6 +276,11 @@ function sendMessage() {
             }, 1000);
         }
     };
+    xhr.onerror = () => {
+        window.alert('发送留言失败\n如果问题持续, 请发邮件到3112611479@qq.com (或加QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
+        document.getElementById('sendBtn').disabled = false;
+        document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
+    }
     var data = JSON.stringify({
         "sender": sender,
         "comment": msg,
@@ -394,7 +399,7 @@ function newComment() {
 
     if (location.hostname != 'haojiezhe12345.top') {
         document.getElementById('banner').style.display = 'block'
-    }    
+    }
 }
 
 function previewLocalImgs() {
@@ -643,31 +648,6 @@ function loadUserInfo() {
 function nextImg() {
     if (bgPaused) return
 
-    /*
-    var bg1 = document.getElementById('mainbg1')
-    var bg2 = document.getElementById('mainbg2')
-
-    if (currentBGOld < bgCount) {
-        currentBGOld += 1
-    } else {
-        currentBGOld = 1
-    }
-
-    bg1.style.opacity = 0
-    bg2.style.opacity = 1
-    bg2.style.removeProperty('animation-name')
-    setTimeout(() => {
-        bg1.style.animationName = 'none'
-        if (isBirthday) {
-            bg1.style.backgroundImage = `url(https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg${currentBGOld}.jpg)`
-        } else {
-            bg1.style.backgroundImage = `url(https://haojiezhe12345.top:82/madohomu/bg/mainbg${currentBGOld}.jpg)`
-        }
-        bg1.id = 'mainbg2'
-        bg2.id = 'mainbg1'
-    }, 2500);
-    */
-
     var prevBG = currentBG
     if (currentBG + 1 < bgCount) {
         currentBG += 1
@@ -681,9 +661,10 @@ function nextImg() {
         nextBG = 0
     }
 
-    if (isBirthday) {
-        var bgs = document.getElementsByClassName('birthdaybg')
-        var bgurl = 'https://haojiezhe12345.top:82/madohomu/bg/birthday/'
+    //if (isBirthday) {
+    if (theme != 'default') {
+        var bgs = document.getElementsByClassName(`${theme}bg`)
+        var bgurl = `https://haojiezhe12345.top:82/madohomu/bg/${theme}/`
     } else {
         var bgs = document.getElementsByClassName('defaultbg')
         var bgurl = 'https://haojiezhe12345.top:82/madohomu/bg/'
@@ -706,24 +687,21 @@ function nextImg() {
 function nextCaption() {
     if (bgPaused) return
 
-    if (isBirthday) {
-        var elements = document.getElementsByClassName('mainCaption');
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].style.display = 'none';
-        }
-
-        captionDiv.style.opacity = 1
+    if (theme == 'birthday') {
         document.getElementById('birthdayCaption').style.display = 'block'
+        setTimeout(() => {
+            captionDiv.style.opacity = 1
+        }, 500);
         return
     }
 
     captionDiv.style.opacity = 0
     setTimeout(() => {
-        var elements = document.getElementsByClassName('mainCaption');
+        var elements = document.getElementsByClassName(`${theme}Caption`);
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.display = 'none';
         }
-        if (currentCaption < captionCount - 1) {
+        if (currentCaption < elements.length - 1) {
             currentCaption++
         } else {
             currentCaption = 0
@@ -968,6 +946,7 @@ function html2elmnt(html) {
     return t.content;
 }
 
+
 // common vars
 //
 var minCommentID = null
@@ -1023,38 +1002,49 @@ if (location.hash == '#debug') {
     document.getElementById('lowerPanel').classList.add('lowerPanelUp')
 }
 
-// time checks
+
+// theme
 //
-var isBirthday = false
-var isNight = false
+var theme = 'default'
+
+//var isBirthday = false
+//var isNight = false
 var d = new Date()
 if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || getCookie('username') == '10.3' || location.hash == '#birthday') {
 
     var yearsOld = d.getFullYear() - 2011
     document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
 
-    isBirthday = true
+    //isBirthday = true
+    theme = 'birthday'
+}
+else if (getCookie('theme') == 'kami' || location.hash == '#kami' || location.hash != '#default-theme') {
+    theme = 'kami'
+    try {
+        printParaCharOneByOne('kamiCaption', 750)
+    } catch (error) {
+        console.log(error)
+    }
 }
 else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') && location.hash != '#day') {
-    document.getElementsByClassName('nightbg')[0].style.opacity = 1
-    document.getElementsByClassName('nightbg')[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/night/mainbg1.jpg")`
+    theme = 'night'
+}
 
-    var elements = document.getElementsByClassName('mainCaption');
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].style.display = 'none';
-    }
-    captionDiv.style.opacity = 1
-    document.getElementById('nightCaption').style.display = 'block'
+if (theme == 'kami' || theme == 'night') {
+    document.getElementsByClassName(`${theme}bg`)[0].style.opacity = 1
+    document.getElementsByClassName(`${theme}bg`)[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/${theme}/mainbg1.jpg")`
 
-    isNight = true
+    document.getElementById(`${theme}Caption`).style.display = 'block'
+    setTimeout(() => {
+        captionDiv.style.opacity = 1
+    }, 500);
+
     bgPaused = true
 }
 
-// theme
-//
-if (isBirthday) {
+if (theme == 'birthday') {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/mataashita.mp3'
-} else if (isNight) {
+} else if (theme == 'night') {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/night_16k.mp3'
 } else if (Math.random() > 0.5) {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm_16k.mp3'
@@ -1062,6 +1052,8 @@ if (isBirthday) {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm1_16k.mp3'
 }
 
+// cookies toggles
+//
 if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
     document.getElementById('bgm').play()
 } else {
@@ -1084,7 +1076,8 @@ if (getCookie('hideTopComment') == 'true') {
     `
 }
 
-if (debug || (getCookie('hiddenBanner') != document.getElementById('banner').classList[0] && location.hostname != 'haojiezhe12345.top')) {
+//if (debug || (getCookie('hiddenBanner') != document.getElementById('banner').classList[0] && location.hostname != 'haojiezhe12345.top')) {
+if (location.hash != '#default-theme') {
     document.getElementById('banner').style.display = 'block'
 }
 
@@ -1093,17 +1086,20 @@ if (getCookie('showTimeline') == 'false') {
     toggleTimeline()
 }
 
+// background images
+//
 var bgCount
+bgCount = document.getElementsByClassName(`${theme}bg`).length
+/*
 if (isBirthday) {
     bgCount = document.getElementsByClassName('birthdaybg').length
 } else {
     bgCount = document.getElementsByClassName('defaultbg').length
 }
+*/
 
-//var currentBGOld = 2
 var currentBG = bgCount - 1
 var currentCaption = -1
-var captionCount = document.getElementsByClassName('mainCaption').length
 
 function playBG() {
     nextImg()

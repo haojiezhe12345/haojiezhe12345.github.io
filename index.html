@@ -60,29 +60,30 @@
         <div class="mainbg birthdaybg"       ><div style="background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
         <div class="mainbg birthdaybg"       ><div style="background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
         <div class="mainbg nightbg bgzoom"   ><div style="background-position-x: 60%;"></div><span><span class="ui zh">官图 (战斗五芒星CG)</span><span class="ui en">Official art (PMMM: The Battle Pentagram)</span></span></div>
+        <div class="mainbg kamibg bgzoom"    ><div style="background-position-x: 45%; filter: brightness(0.85);"></div><span>Artwork by lyiet</span></div>
 
         <div id="mainCaptions" style="opacity: 0;">
-            <div class="mainCaption">
+            <div class="defaultCaption">
                 <p><span class="ui zh">如果有人说怀有希望是错误的话，</span><span class="ui en">If you told me it was wrong to harbour hope,</span></p>
                 <p><span class="ui zh">「不是这样的。」</span><span class="ui en">I would tell you that it wasn't wrong.</span></p>
                 <p><span class="ui zh">无论多少次我都会这样回答，</span><span class="ui en">I'd say it as many times as necessary.</span></p>
                 <p><span class="ui zh">无论什么时候我都这样坚持。</span><span class="ui en">I'd keep saying it forever.</span></p>
             </div>
-            <div class="mainCaption">
+            <div class="defaultCaption">
                 <p><span class="ui zh">重复 无论多少次我都将重复。</span><span class="ui en">I'll repeat it. I'll continue to repeat it over and over.</span></p>
                 <p><span class="ui zh">小圆 我唯一的朋友，</span><span class="ui en">Visiting the same time again and again, searching for the single way out.</span></p>
                 <p><span class="ui zh">为了你，如果是为了你，</span><span class="ui en">Madoka... my one and only friend.</span></p>
                 <p><span class="ui zh">即使我被困在永远的迷宫中，</span><span class="ui en">If it's... If it's for you,</span></p>
                 <p><span class="ui zh">也在所不惜。</span><span class="ui en">I have no problem being trapped eternally in this maze.</span></p>
             </div>
-            <div class="mainCaption">
+            <div class="defaultCaption">
                 <p><span class="ui zh">连小焰都会为之哭泣的痛苦的事情</span><span class="ui en">If it's hard to the point to make you cry, you, Homura,</span></p>
                 <p><span class="ui zh">我怎么可能忍受得了呢</span><span class="ui en">how can i bear it?</span></p>
                 <p><span class="ui zh">我啊, 和谁都不想分开呢</span><span class="ui en">I don't want to say goodbye to anyone.</span></p>
                 <p><span class="ui zh">就算是到了别无选择的时候</span><span class="ui en">Even if there was no other way,</span></p>
                 <p><span class="ui zh">我也没有那种勇气的</span><span class="ui en">I would not have this courage.</span></p>
             </div>
-            <div class="mainCaption">
+            <div class="defaultCaption">
                 <p><span class="ui zh">静静偎依在我身旁，</span><span class="ui en">Come closer quietly,</span></p>
                 <p><span class="ui zh">不要再往他方。</span><span class="ui en">don't go anywhere.</span></p>
                 <p><span class="ui zh">在窗边婉转歌唱，</span><span class="ui en">Chirp your song by the window,</span></p>
@@ -97,6 +98,13 @@
                 <p><span class="ui zh">晚安，小焰～</span><span class="ui en">Good night, Homura-chan ~</span></p>
                 <p><span class="ui zh">晚安，小圆。</span><span class="ui en">Good night, Madoka.</span></p>
             </div>
+            <div id="kamiCaption">
+                <p>Darkness cannot drive out darkness,</p>
+                <p>only light can do that.</p>
+                <p>Hate cannot drive out hate,</p>
+                <p>only love can do that.</p>
+                <p style="font-weight: bold;">Your sin, I bear.</p>
+            </div>
         </div>
 
         <div class="mainbg walpurgisbg" style="display: none;"><div></div><span>回天宣传海报 1</span></div>
@@ -108,12 +116,15 @@
 
         <div id="banner" class="banner20231121">
             <span>
+                <!--
                 <span class="ui zh">如网页显示不全或无法发送留言, 请访问<a href="https://haojiezhe12345.top:82/madohomu/">备用链接</a></span>
                 <span class="ui en">If the website doesn't function normally, please <a href="https://haojiezhe12345.top:82/madohomu/">visit backup site</a></span>
+                -->
+                本站正在测试kami.im主题, <a href="#default-theme" onclick="location.hash = '#default-theme'; location.reload()">点击恢复默认</a>
             </span>
             <i onclick="
                 this.parentNode.style.display = 'none'
-                setCookie('hiddenBanner', this.parentNode.classList[0])
+                //setCookie('hiddenBanner', this.parentNode.classList[0])
                 ">×</i>
         </div>
 
@@ -547,6 +558,27 @@
 
     </div>
 
+    <script>
+        async function printParaCharOneByOne(divID, delay = 0) {
+            divEl = document.getElementById(divID)
+            var para = []
+            for (var paraEl of divEl.children) {
+                para.push(paraEl.innerHTML)
+                paraEl.innerHTML = ''
+            }
+            await new Promise(r => setTimeout(r, delay))
+            for (var i = 0; i < para.length; i++) {
+                for (char of para[i]) {
+                    divEl.children[i].innerHTML += char
+                    if (char == ',' || char == '.') {
+                        await new Promise(r => setTimeout(r, 400))
+                    } else {
+                        await new Promise(r => setTimeout(r, 50))
+                    }
+                }
+            }
+        }
+    </script>
     <script src="index.js"></script>
 </body>
 
