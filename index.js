@@ -277,7 +277,7 @@ function sendMessage() {
         }
     };
     xhr.onerror = () => {
-        window.alert('发送留言失败\n如果问题持续, 请发邮件到3112611479@qq.com (或加QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
+        window.alert('发送留言失败\n如果问题持续, 请发邮件到3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
         document.getElementById('sendBtn').disabled = false;
         document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
     }
@@ -501,17 +501,21 @@ function showPopup(popupID) {
     setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
 
     if (popupID == 'getImgPopup') {
-        for (let i = 0; i < 6; i++) {
-            document.getElementsByClassName('getImgList')[i].src = `https://haojiezhe12345.top:82/madohomu/bg/mainbg${i + 1}.jpg`
+        let j = 0
+        for (let i = 0; i < 6; i++, j++) {
+            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/mainbg${i + 1}.jpg`
         }
-        for (let i = 0; i < 4; i++) {
-            document.getElementsByClassName('getImgList')[i + 6].src = `https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg${i + 1}.jpg`
+        for (let i = 0; i < 4; i++, j++) {
+            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg${i + 1}.jpg`
         }
-        for (let i = 0; i < 1; i++) {
-            document.getElementsByClassName('getImgList')[i + 6 + 4].src = `https://haojiezhe12345.top:82/madohomu/bg/night/mainbg${i + 1}.jpg`
+        for (let i = 0; i < 1; i++, j++) {
+            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/night/mainbg${i + 1}.jpg`
         }
-        for (let i = 0; i < msgBgCount; i++) {
-            document.getElementsByClassName('getImgList')[i + 6 + 4 + 1].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
+        for (let i = 0; i < 1; i++, j++) {
+            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg${i + 1}.jpg`
+        }
+        for (let i = 0; i < msgBgCount; i++, j++) {
+            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
         }
     }
 }
@@ -1007,18 +1011,13 @@ if (location.hash == '#debug') {
 //
 var theme = 'default'
 
-//var isBirthday = false
-//var isNight = false
 var d = new Date()
-if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || getCookie('username') == '10.3' || location.hash == '#birthday') {
-
+if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday') {
+    theme = 'birthday'
     var yearsOld = d.getFullYear() - 2011
     document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
-
-    //isBirthday = true
-    theme = 'birthday'
 }
-else if (getCookie('theme') == 'kami' || location.hash == '#kami' || location.hash != '#default-theme') {
+else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.hash != '#default-theme') {
     theme = 'kami'
     try {
         printParaCharOneByOne('kamiCaption', 750)
@@ -1026,7 +1025,7 @@ else if (getCookie('theme') == 'kami' || location.hash == '#kami' || location.ha
         console.log(error)
     }
 }
-else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') && location.hash != '#day') {
+else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') && location.hash != '#default-theme') {
     theme = 'night'
 }
 
@@ -1076,8 +1075,7 @@ if (getCookie('hideTopComment') == 'true') {
     `
 }
 
-//if (debug || (getCookie('hiddenBanner') != document.getElementById('banner').classList[0] && location.hostname != 'haojiezhe12345.top')) {
-if (location.hash != '#default-theme') {
+if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0]) {
     document.getElementById('banner').style.display = 'block'
 }
 

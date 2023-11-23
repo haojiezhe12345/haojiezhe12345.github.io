@@ -114,17 +114,14 @@
             <video id="mainVideo" muted></video>
         </div>
 
-        <div id="banner" class="banner20231121">
+        <div id="banner" class="banner20231123 banner-info">
             <span>
-                <!--
-                <span class="ui zh">如网页显示不全或无法发送留言, 请访问<a href="https://haojiezhe12345.top:82/madohomu/">备用链接</a></span>
-                <span class="ui en">If the website doesn't function normally, please <a href="https://haojiezhe12345.top:82/madohomu/">visit backup site</a></span>
-                -->
-                本站正在测试kami.im主题, <a href="#default-theme" onclick="location.hash = '#default-theme'; location.reload()">点击恢复默认</a>
+                <span class="ui zh">11/23更新: 可以在评论区顶部的"工具"手动切换主题了</span>
+                <span class="ui en">Nov 23 update: Added "Change theme" option in Tools menu</span>
             </span>
             <i onclick="
                 this.parentNode.style.display = 'none'
-                //setCookie('hiddenBanner', this.parentNode.classList[0])
+                setCookie('hiddenBanner', this.parentNode.classList[0])
                 ">×</i>
         </div>
 
@@ -213,6 +210,8 @@
                         90502009 by ゆきねこ<br>
                         晚安背景:<br>
                         官方游戏 战斗五芒星 剧情CG<br>
+                        圆神背景:<br>
+                        48824021 by lyiet<br>
                         留言背景:<br>
                         33932626 (官图You Are Not Alone)<br>
                         57114653 by Nine<br>
@@ -280,6 +279,9 @@
                         <br>
                         Night background:<br>
                         Madohomu CG from <i>PMMM: The Battle Pentagram</i><br>
+                        <br>
+                        Madokami background:<br>
+                        48824021 by lyiet<br>
                         <br>
                         Message backgrounds:<br>
                         33932626 (Official Guidebook You Are Not Alone)<br>
@@ -363,6 +365,16 @@
                 <span class="ui zh">工具 🛠</span><span class="ui en">Tools 🛠</span>
                 <ul>
                     <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
+                    <li>
+                        <span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span>
+                        <span style="position: absolute; right: 8px;">▶</span>
+                        <ul>
+                            <li onclick="location.hash='#default-theme'; location.reload()"><span class="ui zh">默认</span><span class="ui en">Default</span></li>
+                            <li onclick="location.hash='#night'; location.reload()"><span class="ui zh">晚安</span><span class="ui en">Night</span></li>
+                            <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></li>
+                            <li onclick="location.hash='#kami'; location.reload()"><span>kami.im</span></li>
+                        </ul>
+                    </li>
                     <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
                     <li onclick="
                         if (installPrompt != null) installPrompt.prompt()
@@ -370,16 +382,16 @@
                         else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
                         "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
                     <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
-                    <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>
-                    <li id="changeLangBtn" onclick="
-                        if (currentLang == 'zh') {
-                            changeLang('en')
-                            setCookie('lang', 'en')
-                        } else {
-                            changeLang('zh')
-                            setCookie('lang', 'zh')
-                        }
-                        "><span class="ui zh">🌎 Switch to English</span><span class="ui en">🌎 切换为中文 (Chinese)</span></li>
+                    <!--<li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>-->
+                    <li>
+                        <span>🌎 Language (语言)</span>
+                        <span style="position: absolute; right: 8px;">▶</span>
+                        <ul>
+                            <li onclick="setCookie('lang', ''); location.reload()"><span class="ui zh">跟随系统</span><span class="ui en">System default</span></li>
+                            <li onclick="changeLang('en'); setCookie('lang', 'en')"><span>English</span></li>
+                            <li onclick="changeLang('zh'); setCookie('lang', 'zh')"><span>中文</span></li>
+                        </ul>
+                    </li>
                     <li>
                         <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
                         <label for="showTimeline"><span class="ui zh">显示底部/侧边时间轴</span><span class="ui en">Show timeline</span></label>
@@ -388,12 +400,6 @@
                         <input type="checkbox" id="isLowend" name="isLowend" onchange="toggleLowend()">
                         <label for="isLowend"><span class="ui zh">低性能模式(禁用特效)</span><span class="ui en">Low performance mode</span></label>
                     </li>
-                    <!--
-                    <li style="text-decoration: line-through;">
-                        <input type="checkbox" id="filterGoodNight" name="filterGoodNight">
-                        <label for="filterGoodNight">过滤早安/晚安</label>
-                    </li>
-                    -->
                     <li>
                         <input type="checkbox" id="isMuted" name="isMuted" onchange="toggleBGM()">
                         <label for="isMuted"><span class="ui zh">BGM静音</span><span class="ui en">Mute BGM</span></label>
@@ -408,8 +414,10 @@
                     </li>
                     <li title="大于0的值为本站内容&#10;小于0的值为kami.im站内容&#10;如填错导致不显示请刷新页面">
                         <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
-                        <input id="goto" style="width: 64px;">
-                        <button onclick="clearComments(1);loadComments(document.getElementById('goto').value)">Go</button>
+                        <span style="display: inline-flex; align-items: center; padding: 0;">
+                            <input id="goto" style="width: 64px;">
+                            <button onclick="clearComments(1);loadComments(document.getElementById('goto').value)">Go</button>
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -541,6 +549,7 @@
                 <img class="getImgList"><p><span class="ui zh">Pixiv: 22161754 by mizuki (原画师已删除)</span><span class="ui en">Pixiv: 22161754 by mizuki (Deleted by illustrator)</span></p><br>
                 <img class="getImgList"><p>Pixiv: 90502009 by ゆきねこ</p><br>
                 <img class="getImgList"><p><span class="ui zh">官方游戏 战斗五芒星 剧情CG</span><span class="ui en">Madohomu CG from <i>PMMM: The Battle Pentagram</i></span></p><br>
+                <img class="getImgList"><p>Pixiv: 48824021 by lyiet</p><br>
                 <img class="getImgList"><p>Pixiv: 33932626 (官图You Are Not Alone)</p><br>
                 <img class="getImgList"><p>Pixiv: 57114653 by Nine</p><br>
                 <img class="getImgList"><p>Pixiv: 91471007 by 曼曼</p><br>
