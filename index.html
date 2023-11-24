@@ -367,9 +367,10 @@
                     <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
                     <li>
                         <span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span>
-                        <span style="position: absolute; right: 8px;">▶</span>
+                        <i>▶</i>
                         <ul>
-                            <li onclick="location.hash='#default-theme'; location.reload()"><span class="ui zh">默认</span><span class="ui en">Default</span></li>
+                            <li onclick="location.hash=''; location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
+                            <li onclick="location.hash='#default-theme'; location.reload()"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></li>
                             <li onclick="location.hash='#night'; location.reload()"><span class="ui zh">晚安</span><span class="ui en">Night</span></li>
                             <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></li>
                             <li onclick="location.hash='#kami'; location.reload()"><span>kami.im</span></li>
@@ -385,21 +386,32 @@
                     <!--<li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">🎂 切换圆诞主题</span><span class="ui en">🎂 MadoBirthday theme</span></li>-->
                     <li>
                         <span>🌎 Language (语言)</span>
-                        <span style="position: absolute; right: 8px;">▶</span>
+                        <i>▶</i>
                         <ul>
-                            <li onclick="setCookie('lang', ''); location.reload()"><span class="ui zh">跟随系统</span><span class="ui en">System default</span></li>
+                            <li onclick="setCookie('lang', ''); location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
                             <li onclick="changeLang('en'); setCookie('lang', 'en')"><span>English</span></li>
                             <li onclick="changeLang('zh'); setCookie('lang', 'zh')"><span>中文</span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span class="ui zh">🖥️ 画质</span><span class="ui en">🖥️ Graphics</span>
+                        <i>▶</i>
+                        <ul>
+                            <li onclick="changeGraphicsMode('high')"><span class="ui zh">高</span><span class="ui en">Fancy</span></li>
+                            <li onclick="changeGraphicsMode('mid')"><span class="ui zh">中</span><span class="ui en">Balanced</span></li>
+                            <li onclick="changeGraphicsMode('low')"><span class="ui zh">低</span><span class="ui en">Fast</span></li>
                         </ul>
                     </li>
                     <li>
                         <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
                         <label for="showTimeline"><span class="ui zh">显示底部/侧边时间轴</span><span class="ui en">Show timeline</span></label>
                     </li>
+                    <!--
                     <li>
                         <input type="checkbox" id="isLowend" name="isLowend" onchange="toggleLowend()">
                         <label for="isLowend"><span class="ui zh">低性能模式(禁用特效)</span><span class="ui en">Low performance mode</span></label>
                     </li>
+                    -->
                     <li>
                         <input type="checkbox" id="isMuted" name="isMuted" onchange="toggleBGM()">
                         <label for="isMuted"><span class="ui zh">BGM静音</span><span class="ui en">Mute BGM</span></label>

@@ -234,7 +234,7 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
                 ${comment.comment.replace(/\n/g, "<br>")}
                 ${imgsDOM}
             </div>
-            <div class="time">${date + ' ' + hour}</div>
+            <div class="time">${date + ' ' + hour}${(comment.hidden == 1) ? ' (hidden)' : ''}</div>
         </div>
     `), insertBeforeEl)
 }
@@ -754,6 +754,19 @@ function changeLang(targetLang) {
     console.log(`changed lang to ${targetLang}`)
 }
 
+function changeGraphicsMode(mode) {
+    if (mode == 'high') {
+        document.getElementById('lowendCSS').disabled = true
+    } else if (mode == 'mid') {
+        document.getElementById('lowendCSS').href = 'index_midend.css'
+        document.getElementById('lowendCSS').disabled = false
+    } else if (mode == 'low') {
+        document.getElementById('lowendCSS').href = 'index_lowend.css'
+        document.getElementById('lowendCSS').disabled = false
+    } else return
+    setCookie('graphicsMode', mode)
+}
+
 function getFullscreenHorizonalCommentCount() {
     if (!isFullscreen) return null
     var latestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
@@ -869,6 +882,7 @@ function goFullscreen() {
     }, 500);
 }
 
+/*
 function toggleLowend() {
     if (isLowendElmnt.checked) {
         //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
@@ -878,6 +892,7 @@ function toggleLowend() {
     }
     setCookie('isLowend', isLowendElmnt.checked)
 }
+*/
 
 function toggleBGM() {
     setCookie('mutebgm', isMutedElmnt.checked)
@@ -967,7 +982,7 @@ var avatarInput = document.getElementById('setAvatarInput')
 var bgmElmnt = document.getElementById('bgm')
 
 var isMutedElmnt = document.getElementById('isMuted')
-var isLowendElmnt = document.getElementById('isLowend')
+//var isLowendElmnt = document.getElementById('isLowend')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
 
@@ -1059,10 +1074,15 @@ if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
     isMutedElmnt.checked = true
 }
 
+/*
 if (getCookie('isLowend') == 'true') {
     isLowendElmnt.checked = true
     //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
     document.getElementById('lowendCSS').disabled = false
+}
+*/
+if (getCookie('graphicsMode') != '') {
+    changeGraphicsMode(getCookie('graphicsMode'))
 }
 
 if (getCookie('hideTopComment') == 'true') {
@@ -1198,6 +1218,7 @@ document.getElementById('timelineContainer').addEventListener('click', (event) =
         }
         var date = new Date(year + 1, 0, 0)
     } else if (event.target.nodeName == 'SPAN') {
+        if (event.target.classList[0] == 'month-active') return
         var year = parseInt(event.target.parentNode.firstElementChild.innerHTML)
         var month = parseInt(event.target.innerHTML)
         var date = new Date(year, month - 1)
