@@ -786,6 +786,7 @@ function loadTimeline(timeStamp) {
     var timelineEl = document.getElementById('timeline')
     timelineEl.innerHTML = ''
     var date = new Date(timeStamp * 1000)
+    date.setDate(1)
 
     while (date.getFullYear() >= 2019) {
 
