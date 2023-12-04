@@ -1198,7 +1198,7 @@ commentDiv.addEventListener("wheel", (event) => {
         console.info(e1)
         commentDiv.dispatchEvent(e1)
     } else {
-        commentDiv.scrollLeft += event.deltaY
+        if (!isFullscreen) commentDiv.scrollLeft += event.deltaY
     }
 });
 
