@@ -140,7 +140,10 @@
         <span id="userInfoName"></span>
     </div>
 
-    <div id="lowerPanel" ontouchstart="document.getElementById('lowerPanel').classList.add('lowerPanelUp')">
+    <div id="lowerPanel" ontouchstart="
+        document.getElementById('lowerPanel').classList.add('lowerPanelUp');
+        document.getElementById('commentRightArrow').style.display = 'none';
+        ">
 
         <div class="tooltip"><span class="ui zh">今日留言: </span><span class="ui en">Messages today: </span><span id="todayCommentCount"></span><div class="triangle"></div></div>
 
@@ -354,6 +357,13 @@
             <div id="hoverCalendar" style="display: none;">
 
             </div>
+        </div>
+
+        <div id="commentRightArrow" onclick="commentDiv.scrollLeft += 200">
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="6,0 14,8 6,16 3,13 8,8 3,3"/>
+            </svg>
+            <div class="tooltip"><span class="ui zh">用鼠标滚轮即可滚动</span><span class="ui en">Scrollable with wheel</span><span id="todayCommentCount"></span><div class="triangle"></div></div>
         </div>
 
         <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>

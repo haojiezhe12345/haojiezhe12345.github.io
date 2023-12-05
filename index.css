@@ -355,7 +355,7 @@ body {
     bottom: 0;
 }
 
-#lowerPanel .tooltip {
+#lowerPanel>.tooltip {
     position: absolute;
     top: -8px;
     left: 16px;
@@ -365,7 +365,7 @@ body {
     font-weight: bold;
 }
 
-#lowerPanel .tooltip .triangle {
+.tooltip .triangle {
     position: absolute;
     bottom: -10px;
     left: 24px;
@@ -376,8 +376,8 @@ body {
     border-right: 8px solid transparent;
 }
 
-#lowerPanel:hover .tooltip,
-#lowerPanel.lowerPanelUp .tooltip {
+#lowerPanel:hover>.tooltip,
+#lowerPanel.lowerPanelUp>.tooltip {
     display: none;
 }
 
@@ -897,6 +897,70 @@ body {
 
 #timelineContainer #hoverCalendar div:first-child:hover {
     background: none;
+}
+
+#commentRightArrow {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 100px;
+    background-color: rgba(255, 255, 255, 0.8);
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+#commentRightArrow:hover {
+    background-color: white;
+}
+
+#commentRightArrow:active {
+    background-color: #ccc;
+    transition: none;
+}
+
+#commentRightArrow svg {
+    width: 16px;
+    transform: scale(1);
+    transition: transform 0.2s;
+}
+
+#commentRightArrow:hover svg {
+    transform: scale(1.2);
+}
+
+#commentRightArrow:active svg {
+    transition: none;
+    transform: scale(1);
+}
+
+#commentRightArrow>.tooltip {
+    display: none;
+    position: absolute;
+    bottom: 60px;
+    right: -10px;
+    white-space: nowrap;
+    background-color: white;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-weight: bold;
+    animation: fadein 0.4s;
+    animation-delay: -0.2s;
+}
+
+#commentRightArrow>.tooltip .triangle {
+    left: auto;
+    right: 26px;
+    border-top: 10px solid white;
+}
+
+#commentRightArrow:hover>.tooltip {
+    display: block;
 }
 
 #lowerPanel .backTransparent {
