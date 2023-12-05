@@ -58,6 +58,10 @@
     text-align: center;
 }
 
+#commentRightArrow {
+    display: none;
+}
+
 #timelineContainer {
     position: absolute;
     top: 80px;
