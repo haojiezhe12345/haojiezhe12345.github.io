@@ -900,11 +900,11 @@ body {
 }
 
 #commentRightArrow {
+    display: none;
     position: absolute;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
-    display: flex;
     align-items: center;
     justify-content: center;
     width: 48px;
@@ -913,6 +913,11 @@ body {
     background-color: rgba(255, 255, 255, 0.8);
     user-select: none;
     transition: background-color 0.2s;
+}
+
+#lowerPanel:hover #commentRightArrow,
+#lowerPanel.lowerPanelUp #commentRightArrow {
+    display: flex;
 }
 
 #commentRightArrow:hover {

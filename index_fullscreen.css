@@ -59,7 +59,7 @@
 }
 
 #commentRightArrow {
-    display: none;
+    display: none !important;
 }
 
 #timelineContainer {
