@@ -43,7 +43,7 @@
 }
 
 #comments .commentBox {
-    margin: 1.2vh 1vh;
+    margin: 1vh 1vh;
     height: 50vh;
     text-align: left;
     max-height: 96vw;
@@ -58,7 +58,7 @@
     text-align: center;
 }
 
-#commentRightArrow {
+.commentSeekArrow {
     display: none !important;
 }
 

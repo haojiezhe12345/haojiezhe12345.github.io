@@ -216,7 +216,7 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
     try {
         if (comment.image != '') {
             for (var i of comment.image.split(',')) {
-                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
+                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
             }
         }
     } catch (error) {
@@ -322,10 +322,14 @@ function commentScroll() {
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
         //console.log(toLeft, toRight)
+        if (toLeft < 40) {
+            document.getElementsByClassName('commentSeekArrow')[0].style.display = 'none'
+        } else {
+            document.getElementsByClassName('commentSeekArrow')[0].style.removeProperty('display')
+        }
         if (toRight <= 40) {
             loadComments(minCommentID - 1)
-        }
-        else if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
+        } else if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
             loadComments(maxCommentID + 10, 10)
         } else return
 
@@ -339,8 +343,7 @@ function commentScroll() {
         //console.log(toTop, toBottom)
         if (toBottom <= 40) {
             loadComments(minCommentID - 1)
-        }
-        else if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
+        } else if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
             var count = getFullscreenHorizonalCommentCount() * 2
             while (count < 9) {
                 count += getFullscreenHorizonalCommentCount()
@@ -456,7 +459,7 @@ function previewLocalImgs() {
 
                 document.getElementById('uploadImgList').appendChild(html2elmnt(`
                     <div>
-                        <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this)">
+                        <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this.src)">
                         <button onclick="this.parentNode.remove()">❌</button>
                     </div>
                 `))
@@ -469,9 +472,9 @@ function previewLocalImgs() {
     imgUploadInput.value = ''
 }
 
-function viewImg(elmnt) {
+function viewImg(src) {
     //window.open(elmnt.src, '_blank').focus()
-    document.getElementById('imgViewer').src = elmnt.src
+    document.getElementById('imgViewer').src = src
     document.getElementById('imgViewerBox').style.display = 'block'
     document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0')
     window.location.hash = 'view-img'
@@ -857,6 +860,20 @@ function setTodayCommentCount() {
     xhr.send();
 }
 
+function seekComment(seekCount) {
+    commentDiv.style.scrollBehavior = 'smooth'
+    var scrollpx = 200
+    try {
+        scrollpx = document.getElementById(`#${maxCommentID}`).getBoundingClientRect().width + 20
+    } catch (err) {
+        if (debug) console.log(err)
+    }
+    commentDiv.scrollLeft = (Math.round((commentDiv.scrollLeft) / scrollpx) + seekCount) * scrollpx
+    setTimeout(() => {
+        commentDiv.style.removeProperty('scroll-behavior')
+    }, 500);
+}
+
 // toggles
 //
 function goFullscreen() {
@@ -961,6 +978,7 @@ function getCookie(cname) {
 }
 
 function html2elmnt(html) {
+    html = html.trim()
     var t = document.createElement('template');
     t.innerHTML = html;
     return t.content;
@@ -1181,24 +1199,30 @@ var commentHorizontalScrolled = 0
 var altScrollmode = false
 
 commentDiv.addEventListener("wheel", (event) => {
-    if (altScrollmode == 1) {
-        console.info(event.deltaY)
-        console.info(commentDiv.scrollLeft)
-        commentHorizontalScrolled += event.deltaY * 1
-        if (commentHorizontalScrolled < 0) commentHorizontalScrolled = 0
-        if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth)) commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
-        console.log(commentHorizontalScrolled)
-        commentDiv.scrollLeft = commentHorizontalScrolled
-    } else if (altScrollmode == 2 && event.deltaX == 0) {
-        console.info(event)
-        const e1 = new WheelEvent("wheel", {
-            deltaX: event.deltaY,
-            deltaMode: 0,
-        });
-        console.info(e1)
-        commentDiv.dispatchEvent(e1)
-    } else {
-        if (!isFullscreen) commentDiv.scrollLeft += event.deltaY
+    if (!isFullscreen) {
+        if (altScrollmode == 1) {
+            console.info(event.deltaY)
+            console.info(commentDiv.scrollLeft)
+            commentHorizontalScrolled += event.deltaY * 1
+            if (commentHorizontalScrolled < 0)
+                commentHorizontalScrolled = 0
+            if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth))
+                commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
+            console.log(commentHorizontalScrolled)
+            commentDiv.scrollLeft = commentHorizontalScrolled
+        } else if (altScrollmode == 2 && event.deltaX == 0) {
+            console.info(event)
+            const e1 = new WheelEvent("wheel", {
+                deltaX: event.deltaY,
+                deltaMode: 0,
+            });
+            console.info(e1)
+            commentDiv.dispatchEvent(e1)
+        } else if (altScrollmode == 3) {
+            (event.deltaY > 0) ? seekComment(1) : seekComment(-1)
+        } else {
+            commentDiv.scrollLeft += event.deltaY
+        }
     }
 });
 

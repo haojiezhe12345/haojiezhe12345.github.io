@@ -142,7 +142,7 @@
 
     <div id="lowerPanel" ontouchstart="
         document.getElementById('lowerPanel').classList.add('lowerPanelUp');
-        document.getElementById('commentRightArrow').style.display = 'none';
+        document.getElementById('mouseScrollTooltip').style.display = 'none';
         ">
 
         <div class="tooltip"><span class="ui zh">今日留言: </span><span class="ui en">Messages today: </span><span id="todayCommentCount"></span><div class="triangle"></div></div>
@@ -328,13 +328,13 @@
                 <div class="time" style="font-size: 12px;">
                     <a href="https://icp.gov.moe/?keyword=20230631" target="_blank" style="color: white;">萌ICP备20230631号</a>
                 </div>
-            </div>
+            </div><!--
 
-            <div class="commentBox loadingIndicator" id="loadingIndicatorBefore">
+         --><div class="commentBox loadingIndicator" id="loadingIndicatorBefore">
                 <div class="loadingCircle"></div>
-            </div>
+            </div><!--
 
-            <div class="commentBox loadingIndicator" id="loadingIndicator">
+         --><div class="commentBox loadingIndicator" id="loadingIndicator">
                 <div class="loadingCircle"></div>
             </div>
 
@@ -359,11 +359,16 @@
             </div>
         </div>
 
-        <div id="commentRightArrow" onclick="commentDiv.scrollLeft += 200">
+        <div class="commentSeekArrow" onclick="seekComment(-1)" style="left: 2vw; display: none;">
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="10,0 2,8 10,16 13,13 8,8 13,3"/>
+            </svg>
+        </div>
+        <div class="commentSeekArrow" onclick="seekComment(1)" style="right: 2vw;">
             <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                 <polygon points="6,0 14,8 6,16 3,13 8,8 3,3"/>
             </svg>
-            <div class="tooltip"><span class="ui zh">用鼠标滚轮即可滚动</span><span class="ui en">Scrollable with wheel</span><span id="todayCommentCount"></span><div class="triangle"></div></div>
+            <div id="mouseScrollTooltip" class="tooltip"><span class="ui zh">用鼠标滚轮也可滚动</span><span class="ui en">Scrollable with wheel</span><span id="todayCommentCount"></span><div class="triangle"></div></div>
         </div>
 
         <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>

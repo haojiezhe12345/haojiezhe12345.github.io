@@ -419,7 +419,7 @@ body {
     width: 45vh;
     height: 55vh;
     max-width: 80vw;
-    margin-right: 2vh;
+    margin-right: 20px;
     border-radius: 16px;
     color: white;
     white-space: normal;
@@ -899,52 +899,53 @@ body {
     background: none;
 }
 
-#commentRightArrow {
+.commentSeekArrow {
     display: none;
     position: absolute;
     top: 50%;
-    right: 20px;
     transform: translateY(-50%);
     align-items: center;
     justify-content: center;
     width: 48px;
     height: 48px;
     border-radius: 100px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: white;
+    opacity: 0.7;
     user-select: none;
     transition: background-color 0.2s;
 }
 
-#lowerPanel:hover #commentRightArrow,
-#lowerPanel.lowerPanelUp #commentRightArrow {
+#lowerPanel:hover .commentSeekArrow,
+#lowerPanel.lowerPanelUp .commentSeekArrow {
     display: flex;
 }
 
-#commentRightArrow:hover {
+.commentSeekArrow:hover {
     background-color: white;
+    opacity: 1;
 }
 
-#commentRightArrow:active {
+.commentSeekArrow:active {
     background-color: #ccc;
     transition: none;
 }
 
-#commentRightArrow svg {
+.commentSeekArrow svg {
     width: 16px;
     transform: scale(1);
     transition: transform 0.2s;
 }
 
-#commentRightArrow:hover svg {
+.commentSeekArrow:hover svg {
     transform: scale(1.2);
 }
 
-#commentRightArrow:active svg {
+.commentSeekArrow:active svg {
     transition: none;
     transform: scale(1);
 }
 
-#commentRightArrow>.tooltip {
+.commentSeekArrow>.tooltip {
     display: none;
     position: absolute;
     bottom: 60px;
@@ -958,13 +959,13 @@ body {
     animation-delay: -0.2s;
 }
 
-#commentRightArrow>.tooltip .triangle {
+.commentSeekArrow>.tooltip .triangle {
     left: auto;
     right: 26px;
     border-top: 10px solid white;
 }
 
-#commentRightArrow:hover>.tooltip {
+.commentSeekArrow:hover>.tooltip {
     display: block;
 }
 
