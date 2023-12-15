@@ -920,19 +920,11 @@ function toggleBGM() {
 function toggleTopComment() {
     setCookie('hideTopComment', hideTopCommentElmnt.checked)
     if (hideTopCommentElmnt.checked) {
-        topComment = `
-        <div class="commentBox" id="topComment" style="display: none;">
-            ${document.getElementById('topComment').innerHTML}
-        </div>
-        `
         document.getElementById('topComment').style.display = 'none'
+        topComment = document.getElementById('topComment').outerHTML
     } else {
-        topComment = `
-        <div class="commentBox" id="topComment">
-            ${document.getElementById('topComment').innerHTML}
-        </div>
-        `
-        document.getElementById('topComment').style.display = ''
+        document.getElementById('topComment').style.removeProperty('display')
+        topComment = document.getElementById('topComment').outerHTML
     }
 }
 
@@ -1005,21 +997,9 @@ var isMutedElmnt = document.getElementById('isMuted')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
 
-var topComment = `
-<div class="commentBox" id="topComment">
-    ${document.getElementById('topComment').innerHTML}
-</div>
-`
-var loadingIndicator = `
-<div class="commentBox loadingIndicator" id="loadingIndicator">
-    ${document.getElementById('loadingIndicator').innerHTML}
-</div>
-`
-var loadingIndicatorBefore = `
-<div class="commentBox loadingIndicator" id="loadingIndicatorBefore">
-    ${document.getElementById('loadingIndicatorBefore').innerHTML}
-</div>
-`
+var topComment = document.getElementById('topComment').outerHTML
+var loadingIndicator = document.getElementById('loadingIndicator').outerHTML
+var loadingIndicatorBefore = document.getElementById('loadingIndicatorBefore').outerHTML
 document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
 var bgPaused = false
@@ -1107,11 +1087,7 @@ if (getCookie('graphicsMode') != '') {
 if (getCookie('hideTopComment') == 'true') {
     hideTopCommentElmnt.checked = true
     document.getElementById('topComment').style.display = 'none'
-    topComment = `
-    <div class="commentBox" id="topComment" style="display: none;">
-        ${document.getElementById('topComment').innerHTML}
-    </div>
-    `
+    topComment = document.getElementById('topComment').outerHTML
 }
 
 if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0]) {
