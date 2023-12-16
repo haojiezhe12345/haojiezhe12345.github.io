@@ -150,26 +150,6 @@
 
         <div id="comments" class="noscrollbar">
 
-            <!--
-            <div class="commentBox" id="newCommentBox">
-                <div class="bgcover"></div>
-                <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/0.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-                <div class="sender" id="senderText">0</div>
-                <div class="id" onclick="showPopup('setNamePopup')">更改昵称/头像</div>
-                <div class="comment">
-                    <textarea id="msgText" placeholder="圆神保佑~"></textarea>
-                    <div id="uploadImgList">
-                        <h4>↓可以上传图片了哦</h4>
-                    </div>
-                </div>
-                <label>
-                    <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
-                    <span>+ 添加图片</span>
-                </label>            
-                <button id="sendBtn" onclick="sendMessage()">发送 ✔</button>
-            </div>
-            -->
-
             <div class="commentBox" id="topComment">
                 <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg1.jpg">
                 <div class="bgcover"></div>
@@ -451,60 +431,6 @@
             </div>
             <button id="fullscreenBtn" class="toolbarItem" onclick="goFullscreen()"><span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span></button>
         </div>
-
-        <div id="imgViewerBox" style="display: none"
-            onmousedown="
-                if (event.which == 1) {
-                    imgViewerMouseActive = true
-                    imgViewerMouseMoved = false
-                    this.firstElementChild.style.transition = 'none'
-                }
-            "
-            onmouseup="
-                if (event.which == 1) {
-                    imgViewerMouseActive = false
-                    if (!imgViewerMouseMoved) {
-                        history.back()
-                    }
-                    this.firstElementChild.style.removeProperty('transition')
-                }
-            "
-            onmousemove="
-                if (imgViewerMouseActive) {
-                    imgViewerOffsetX += event.movementX
-                    imgViewerOffsetY += event.movementY
-                    if (event.movementX != 0 || event.movementY != 0) {
-                        imgViewerMouseMoved = true
-                    }
-                    //console.log(imgViewerOffsetX, imgViewerOffsetY)
-                    this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
-                }
-            "
-            onwheel="
-                if (event.deltaY < 0) {
-                    imgViewerScale *= (1000 - event.deltaY) / 1000
-                    //imgViewerScale *= 11 / 10
-                } else {
-                    imgViewerScale *= 1000 / (1000 + event.deltaY)
-                    //imgViewerScale *= 10 / 11
-                }
-                var mouseOffsetX = event.clientX - (document.documentElement.clientWidth / 2) - imgViewerOffsetX
-                var mouseOffsetY = event.clientY - (document.documentElement.clientHeight / 2) - imgViewerOffsetY
-                //console.log(mouseOffsetX, mouseOffsetY)
-                imgViewerOffsetX += mouseOffsetX / event.deltaY * 18
-                imgViewerOffsetY += mouseOffsetY / event.deltaY * 18
-
-                if (imgViewerScale < 1) {
-                    imgViewerScale = 1
-                    imgViewerOffsetX = 0
-                    imgViewerOffsetY = 0
-                }
-                //console.info(imgViewerScale)
-                this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
-            "
-            >
-            <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
-        </div>
     
     </div>
 
@@ -543,6 +469,7 @@
             <!--<br><br>
             <span style="font-size: 12px; font-weight: normal;">PS：设置为“10.3”可触发圆诞主题</span>-->
             <br><br>
+            <p onclick="showUserComment(document.getElementById('setNameInput').value)"><span class="ui zh">我的留言记录 →</span><span class="ui en">My sent messages →</span></p>
             <button class="okBtn" onclick="setUserName()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
@@ -593,6 +520,81 @@
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
+        <div id="showUserCommentPopup" class="popupItem">
+            <div id="userComment">
+                <h2>
+                    <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/.jpg">
+                    <span>User</span>
+                </h2>
+                <div>
+                    <p>2023/1/1<span>#1000</span></p>
+                    <p>
+                        <span onclick="clearComments(1); loadComments(this.parentNode.parentNode.querySelector('span').innerText.replace('#', '')); closePopup()">
+                            Hello, world!
+                        </span>
+                        <i></i>
+                        <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png">
+                        <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png">
+                    </p>
+                </div>
+            </div>
+            <button class="closeBtn" onclick="closePopup()">×</button>
+        </div>
+
+    </div>
+
+    <div id="imgViewerBox" style="display: none"
+        onmousedown="
+            if (event.which == 1) {
+                imgViewerMouseActive = true
+                imgViewerMouseMoved = false
+                this.firstElementChild.style.transition = 'none'
+            }
+        "
+        onmouseup="
+            if (event.which == 1) {
+                imgViewerMouseActive = false
+                if (!imgViewerMouseMoved) {
+                    history.back()
+                }
+                this.firstElementChild.style.removeProperty('transition')
+            }
+        "
+        onmousemove="
+            if (imgViewerMouseActive) {
+                imgViewerOffsetX += event.movementX
+                imgViewerOffsetY += event.movementY
+                if (event.movementX != 0 || event.movementY != 0) {
+                    imgViewerMouseMoved = true
+                }
+                //console.log(imgViewerOffsetX, imgViewerOffsetY)
+                this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
+            }
+        "
+        onwheel="
+            if (event.deltaY < 0) {
+                imgViewerScale *= (1000 - event.deltaY) / 1000
+                //imgViewerScale *= 11 / 10
+            } else {
+                imgViewerScale *= 1000 / (1000 + event.deltaY)
+                //imgViewerScale *= 10 / 11
+            }
+            var mouseOffsetX = event.clientX - (document.documentElement.clientWidth / 2) - imgViewerOffsetX
+            var mouseOffsetY = event.clientY - (document.documentElement.clientHeight / 2) - imgViewerOffsetY
+            //console.log(mouseOffsetX, mouseOffsetY)
+            imgViewerOffsetX += mouseOffsetX / event.deltaY * 18
+            imgViewerOffsetY += mouseOffsetY / event.deltaY * 18
+        
+            if (imgViewerScale < 1) {
+                imgViewerScale = 1
+                imgViewerOffsetX = 0
+                imgViewerOffsetY = 0
+            }
+            //console.info(imgViewerScale)
+            this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
+        "
+        >
+        <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
     </div>
 
     <script>

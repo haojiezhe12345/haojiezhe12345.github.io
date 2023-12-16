@@ -139,7 +139,7 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
     try {
         if (comment.image != '') {
             for (var i of comment.image.split(',')) {
-                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
+                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
             }
         }
     } catch (error) {
@@ -150,8 +150,18 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
         <div class="commentBox" id="#${comment.id}" data-timestamp="${comment.time}">
             <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
             <div class="bgcover"></div>
-            <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-            <div class="sender">${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}</div>
+            <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg"
+                onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
+                onclick="
+                    showUserComment('${comment.sender.replace(/\'/g, "\\'")}');
+                    document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+                ">
+            <div class="sender" onclick="
+                showUserComment('${comment.sender.replace(/\'/g, "\\'")}');
+                document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+                ">
+                ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
+            </div>
             <div class="id">#${comment.id}</div>
             <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
                 ${comment.comment.replace(/\n/g, "<br>")}
@@ -566,6 +576,62 @@ function loadUserInfo() {
     } else {
         name.innerText = getCookie('username')
     }
+}
+
+function showUserComment(user) {
+    if (debug) console.log(user)
+    if (user == null || user == '') {
+        if (debug) console.log('empty user!')
+        return
+    };
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${user}&count=50`);
+    xhr.responseType = "json";
+    xhr.onload = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+
+            document.getElementById('userComment').innerHTML = `
+            <h2>
+                <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${xhr.response[0].sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+                <span>${xhr.response[0].sender}</span>
+            </h2>
+            `
+
+            for (var comment of xhr.response) {
+                var time = new Date(comment.time * 1000)
+                date = time.toLocaleDateString()
+                hour = time.toLocaleTimeString()
+
+                var imgsDOM = '<i></i>'
+                try {
+                    if (comment.image != '') {
+                        for (var i of comment.image.split(',')) {
+                            imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
+                        }
+                    }
+                } catch (error) { }
+
+                document.getElementById('userComment').appendChild(html2elmnt(`
+                    <div>
+                        <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
+                        <p>
+                            <span onclick="clearComments(1); loadComments(this.parentNode.parentNode.querySelector('span').innerText.replace('#', '')); closePopup()">
+                                ${comment.comment.replace(/\n/g, "<br>")}
+                            </span>
+                            ${imgsDOM}
+                        </p>
+                    </div>
+                `))
+            }
+
+            document.getElementById('userComment').appendChild(html2elmnt('<h4 style="text-align: center">- 暂时只支持查看50条留言 -</h4>'))
+
+            closePopup()
+            showPopup('showUserCommentPopup')
+            document.getElementById('userComment').scrollTop = 0
+        }
+    }
+    xhr.send();
 }
 
 // themes
@@ -1213,13 +1279,12 @@ var imgViewerMouseMoved = false
 document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
-        if (document.getElementById('popupContainer').style.display == 'flex') {
+        if (document.getElementById('imgViewerBox').style.display == 'block') {
+            history.back()
+        } else if (document.getElementById('popupContainer').style.display == 'flex') {
             closePopup()
         } else {
-            imgvwr = document.getElementById('imgViewerBox')
-            if (imgvwr.style.display == 'block') {
-                history.back()
-            }
+            document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
         }
     }
 }

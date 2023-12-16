@@ -529,9 +529,6 @@ body {
     height: 40px;
     object-fit: cover;
     border-radius: 100%;
-}
-
-#newCommentBox .avatar {
     cursor: pointer;
 }
 
@@ -542,10 +539,11 @@ body {
     line-height: 40px;
     /*font-weight: bold;*/
     white-space: nowrap;
+    cursor: pointer;
 }
 
-#newCommentBox .sender {
-    cursor: pointer;
+#comments .commentBox:hover .sender {
+    text-decoration: underline;
 }
 
 #comments .commentBox .id {
@@ -1331,6 +1329,19 @@ body {
     text-align: center;
 }
 
+#setNamePopup p {
+    float: left;
+    margin: 5px 0;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+}
+
+#setNamePopup p span {
+    text-decoration: underline;
+}
+
 #setAvatarPopup input {
     width: 290px;
 }
@@ -1347,4 +1358,83 @@ body {
 #getImgPopup img {
     max-width: 100%;
     max-height: 70vh;
+}
+
+#showUserCommentPopup {
+    width: 500px;
+    padding: 0 !important;
+}
+
+#showUserCommentPopup>div {
+    padding: 20px 24px 32px;
+    max-height: 90vh;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+#showUserCommentPopup h2 {
+    text-align: left;
+    margin-bottom: 6px;
+}
+
+#showUserCommentPopup h2 * {
+    vertical-align: middle;
+}
+
+#showUserCommentPopup h2 img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 100px;
+    margin-right: 4px;
+}
+
+#showUserCommentPopup>div>div {
+    border-bottom: 1px solid gray;
+    padding: 20px 10px 22px 10px;
+    margin: 0 8px;
+}
+
+
+#showUserCommentPopup>div>div>p:first-child {
+    margin: 0;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+#showUserCommentPopup>div>div>p:first-child>span {
+    float: right;
+    font-weight: normal;
+}
+
+#showUserCommentPopup>div>div>p:last-child {
+    margin: 14px 5px 0 5px;
+    cursor: pointer;
+}
+
+#showUserCommentPopup>div>div:hover>p:last-child>span {
+    text-decoration: underline;
+}
+
+#showUserCommentPopup>div>div>p:last-child>i {
+    display: block;
+    height: 8px;
+}
+
+#showUserCommentPopup>div>div>p:last-child>img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 0 8px 8px 0;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#showUserCommentPopup>div>div>p:last-child>img:hover {
+    transform: scale(1.05);
+}
+
+#showUserCommentPopup .closeBtn {
+    top: 30px;
+    right: 24px;
 }
