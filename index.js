@@ -2,8 +2,6 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
-var newLoadCommentMode = true
-
 function loadComments(from, count, time) {
     //if (from == null && time == null) setTodayCommentCount()
 
@@ -45,149 +43,74 @@ function loadComments(from, count, time) {
             var prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
 
             for (var comment of xhr.response) {
-                if (!newLoadCommentMode && false) {
-                    //console.log(comment)
 
-                    if (comment.id >= minCommentID && minCommentID != null) {
-                        //console.log('skipping load of comment ID ' + comment.id)
-                        continue
-                    }
-                    if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
-                        console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
-                        continue
-                    }
+                if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
+                    console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
+                    continue
+                }
+                if (comment.id == -999999 && from > maxCommentID && maxCommentID) {
+                    console.log('comments are up to date')
+                    document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                    return
+                }
+                if (comment.id == -999999 && from < minCommentID && minCommentID) {
+                    console.log('reached the oldest comment')
+                    document.getElementById('loadingIndicator').style.display = 'none'
+                    return
+                }
+                if (comment.id > maxCommentID && maxCommentID != null && document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
+                    console.log('newCommentBox is active, skipping upper comments')
+                    document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                    return
+                }
 
-                    var time = new Date(comment.time * 1000)
-                    date = time.toLocaleDateString()
-                    hour = time.toLocaleTimeString()
-
-                    var randBG
-                    while (true) {
-                        randBG = getRandomIntInclusive(1, msgBgCount)
-                        //console.log(lastBgImgs)
-                        if (!lastBgImgs.includes(randBG)) {
-                            break
-                        }
-                    }
-                    lastBgImgs.push(randBG)
-                    if (lastBgImgs.length > 5) {
-                        lastBgImgs.splice(0, 1)
-                    }
-
-                    var imgsDOM = '<br><br>'
-                    try {
-                        if (comment.image != '') {
-                            for (var i of comment.image.split(',')) {
-                                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this)">`
-                            }
-                        }
-                    } catch (error) {
-
-                    }
-
-                    commentDiv.insertBefore(html2elmnt(`
-                    <div class="commentBox">
-                        <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
-                        <div class="bgcover"></div>
-                        <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-                        <div class="sender">${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}</div>
-                        <div class="id">#${comment.id}</div>
-                        <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
-                            ${comment.comment.replace(/\n/g, "<br/>")}
-                            ${imgsDOM}
-                        </div>
-                        <div class="time">${date + ' ' + hour}</div>
-                    </div>
-                `), document.getElementById('loadingIndicator'))
-
-                    //commentDiv.appendChild()
-
-                    if (minCommentID == null) {
-                        minCommentID = comment.id
-                    }
-                    if (maxCommentID == null) {
-                        maxCommentID = comment.id
-                    }
-                    if (comment.id < minCommentID) {
-                        minCommentID = comment.id
-                    }
-                    if (comment.id > maxCommentID) {
-                        maxCommentID = comment.id
-                    }
-                    //console.log('min: ' + minCommentID + '  max: ' + maxCommentID)
-
+                if (comment.id < minCommentID || minCommentID == null) {
+                    appendComment(comment)
+                } else if (comment.id > maxCommentID && maxCommentID != null) {
+                    appendComment(comment, prevLatestCommentEl)
                 } else {
+                    console.log('skipping exist comment ID ' + comment.id)
+                }
 
-                    if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
-                        console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
-                        continue
-                    }
-                    if (comment.id == -999999 && from > maxCommentID && maxCommentID) {
-                        console.log('comments are up to date')
-                        document.getElementById('loadingIndicatorBefore').style.display = 'none'
-                        return
-                    }
-                    if (comment.id == -999999 && from < minCommentID && minCommentID) {
-                        console.log('reached the oldest comment')
-                        document.getElementById('loadingIndicator').style.display = 'none'
-                        return
-                    }
-                    if (comment.id > maxCommentID && maxCommentID != null && document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
-                        console.log('newCommentBox is active, skipping upper comments')
-                        document.getElementById('loadingIndicatorBefore').style.display = 'none'
-                        return
-                    }
+                if (xhrMinCommentID == null) {
+                    xhrMinCommentID = comment.id
+                }
+                if (xhrMaxCommentID == null) {
+                    xhrMaxCommentID = comment.id
+                }
+                if (comment.id < xhrMinCommentID) {
+                    xhrMinCommentID = comment.id
+                }
+                if (comment.id > xhrMaxCommentID) {
+                    xhrMaxCommentID = comment.id
+                }
 
-                    if (comment.id < minCommentID || minCommentID == null) {
-                        appendComment(comment)
-                    } else if (comment.id > maxCommentID && maxCommentID != null) {
-                        appendComment(comment, prevLatestCommentEl)
-                    } else {
-                        console.log('skipping exist comment ID ' + comment.id)
-                    }
+            }
 
-                    if (xhrMinCommentID == null) {
-                        xhrMinCommentID = comment.id
-                    }
-                    if (xhrMaxCommentID == null) {
-                        xhrMaxCommentID = comment.id
-                    }
-                    if (comment.id < xhrMinCommentID) {
-                        xhrMinCommentID = comment.id
-                    }
-                    if (comment.id > xhrMaxCommentID) {
-                        xhrMaxCommentID = comment.id
-                    }
-
+            if (from > maxCommentID && maxCommentID != null && document.getElementById('topComment') == null) {
+                if (isFullscreen) {
+                    var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
+                    commentDiv.scrollTop += newCommentTop - prevCommentTop
+                } else {
+                    var newCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+                    commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
                 }
             }
 
-            if (newLoadCommentMode) {
-                if (from > maxCommentID && maxCommentID != null && document.getElementById('topComment') == null) {
-                    if (isFullscreen) {
-                        var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
-                        commentDiv.scrollTop += newCommentTop - prevCommentTop
-                    } else {
-                        var newCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
-                        commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
-                    }
-                }
-
-                if (minCommentID == null) {
-                    minCommentID = xhrMinCommentID
-                }
-                if (maxCommentID == null) {
-                    maxCommentID = xhrMaxCommentID
-                }
-                if (xhrMinCommentID < minCommentID) {
-                    minCommentID = xhrMinCommentID
-                }
-                if (xhrMaxCommentID > maxCommentID) {
-                    maxCommentID = xhrMaxCommentID
-                }
-
-                if (debug) console.log('maxID:', maxCommentID, ' minID:', minCommentID)
+            if (minCommentID == null) {
+                minCommentID = xhrMinCommentID
             }
+            if (maxCommentID == null) {
+                maxCommentID = xhrMaxCommentID
+            }
+            if (xhrMinCommentID < minCommentID) {
+                minCommentID = xhrMinCommentID
+            }
+            if (xhrMaxCommentID > maxCommentID) {
+                maxCommentID = xhrMaxCommentID
+            }
+
+            if (debug) console.log('maxID:', maxCommentID, ' minID:', minCommentID)
 
         } else {
             console.log(`Error: ${xhr.status}`);
@@ -304,8 +227,6 @@ function clearComments(clearTop) {
     commentHorizontalScrolled = 0
 }
 
-var beforeLoadThreshold = 40
-
 function commentScroll() {
     if (pauseCommentScroll || minCommentID == null || maxCommentID == null) return
     if (minCommentID == -999999 && maxCommentID == -999999) {
@@ -313,12 +234,11 @@ function commentScroll() {
         document.getElementById('loadingIndicator').style.display = 'none'
         return
     }
+    setTimelineActiveMonth()
 
     if (!isFullscreen) {
         var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
         //if (debug) console.log(scrolled)
-        setTimelineActiveMonthByPercent(scrolled)
-
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
         //console.log(toLeft, toRight)
@@ -329,21 +249,19 @@ function commentScroll() {
         }
         if (toRight <= 40) {
             loadComments(minCommentID - 1)
-        } else if (toLeft <= beforeLoadThreshold && newLoadCommentMode) {
+        } else if (toLeft <= 40) {
             loadComments(maxCommentID + 10, 10)
         } else return
 
     } else {
         var scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
         //if (debug) console.log(scrolled)
-        setTimelineActiveMonthByPercent(scrolled)
-
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
         if (toBottom <= 40) {
             loadComments(minCommentID - 1)
-        } else if (toTop <= beforeLoadThreshold && newLoadCommentMode) {
+        } else if (toTop <= 40) {
             var count = getFullscreenHorizonalCommentCount() * 2
             while (count < 9) {
                 count += getFullscreenHorizonalCommentCount()
@@ -818,10 +736,20 @@ function loadTimeline(timeStamp) {
     }
 }
 
-function setTimelineActiveMonthByPercent(percent) {
-    var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - percent))
+function getCurrentComment() {
+    var scrolled = 0
+    if (!isFullscreen) {
+        scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
+    } else {
+        scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
+    }
+    var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - scrolled))
+    return document.getElementById(`#${id}`)
+}
+
+function setTimelineActiveMonth() {
     try {
-        var timeStamp = parseInt(document.getElementById(`#${id}`).dataset.timestamp) * 1000
+        var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
         var date = new Date(timeStamp)
         var year = date.getFullYear()
         var month = date.getMonth() + 1
