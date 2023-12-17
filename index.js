@@ -1359,7 +1359,7 @@ window.onhashchange = function (e) {
     if (e.oldURL.split('#')[1] == 'view-img') {
         closeImgViewer()
     }
-    if (e.oldURL.split('#')[1] == 'popup') {
+    if (e.oldURL.split('#')[1] == 'popup' && e.newURL.split('#')[1] != 'view-img') {
         closePopup()
     }
 }
