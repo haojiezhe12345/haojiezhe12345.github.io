@@ -555,7 +555,7 @@
             if (event.which == 1) {
                 imgViewerMouseActive = false
                 if (!imgViewerMouseMoved) {
-                    history.back()
+                    closeImgViewer()
                 }
                 this.firstElementChild.style.removeProperty('transition')
             }

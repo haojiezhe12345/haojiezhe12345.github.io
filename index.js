@@ -415,11 +415,23 @@ function viewImg(src) {
 }
 
 function closeImgViewer() {
+    if (location.hash == '#view-img') {
+        history.back()
+        return
+    }
+
     document.getElementById('imgViewerBox').style.display = 'none';
     document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
 }
 
 function showPopup(popupID) {
+    location.hash = 'popup'
+
+    var elements = document.getElementsByClassName('popupItem');
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
+    }
+
     var popupContainer = document.getElementById('popupContainer');
     popupContainer.style.display = 'flex';
 
@@ -452,6 +464,11 @@ function showPopup(popupID) {
 }
 
 function closePopup() {
+    if (location.hash == '#popup') {
+        history.back()
+        return
+    }
+
     var popupContainer = document.getElementById('popupContainer');
     popupContainer.style.display = 'none';
 
@@ -494,11 +511,12 @@ function setUserName() {
     }
 
     setCookie('username', inputName)
-    closePopup()
+    //closePopup()
     if (getCookie('username') == '' || getCookie('username') == '匿名用户') {
-        //showPopup('msgPopup')
+        closePopup()
     } else if (getCookie('username') == '10.3') {
-        location.reload()
+        //location.reload()
+        closePopup()
     } else {
         showPopup('setAvatarPopup')
     }
@@ -609,7 +627,7 @@ function showUserComment(user) {
                     <span>${xhr.response[0].sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : xhr.response[0].sender}</span>
                 </h2>
                 `
-                closePopup()
+                //closePopup()
                 showPopup('showUserCommentPopup')
                 userCommentEl.scrollTop = 0
                 userCommentUser = user
@@ -1323,7 +1341,7 @@ document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
         if (document.getElementById('imgViewerBox').style.display == 'block') {
-            history.back()
+            closeImgViewer()
         } else if (document.getElementById('popupContainer').style.display == 'flex') {
             closePopup()
         } else {
@@ -1332,7 +1350,7 @@ document.onkeydown = function (e) {
     }
 }
 
-if (window.location.hash == '#view-img') {
+if (window.location.hash == '#view-img' || window.location.hash == '#popup') {
     window.location.hash = ''
 }
 
@@ -1340,6 +1358,9 @@ window.onhashchange = function (e) {
     //console.log(e.oldURL.split('#')[1], e.newURL.split('#')[1])
     if (e.oldURL.split('#')[1] == 'view-img') {
         closeImgViewer()
+    }
+    if (e.oldURL.split('#')[1] == 'popup') {
+        closePopup()
     }
 }
 
