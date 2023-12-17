@@ -621,6 +621,7 @@ function showUserComment(user) {
 
                 if (comment.id == -999999) {
                     userCommentUser = ''
+                    userCommentEl.appendChild(html2elmnt(`<h4 style="text-align: center">- <span class="ui zh">共 ${userCommentOffset} 条留言</span><span class="ui en">Total ${userCommentOffset} messages</span> -</h4>`))
                     break
                 }
 
@@ -652,7 +653,6 @@ function showUserComment(user) {
                 userCommentOffset++
             }
 
-            //userCommentEl.appendChild(html2elmnt('<h4 style="text-align: center">- 暂时只支持查看50条留言 -</h4>'))
             userCommentEl.addEventListener('scroll', userCommentScroll)
         }
     }
