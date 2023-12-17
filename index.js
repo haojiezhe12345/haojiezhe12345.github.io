@@ -578,26 +578,52 @@ function loadUserInfo() {
     }
 }
 
+var userCommentUser = ''
+var userCommentOffset = 0
+
+var userCommentEl = document.getElementById('userComment')
+
 function showUserComment(user) {
     if (debug) console.log(user)
-    if (user == null || user == '') {
+    if ((user == null && userCommentUser == '') || user == '') {
         if (debug) console.log('empty user!')
         return
     };
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${user}&count=50`);
+
+    if (user == null) {
+        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${userCommentUser}&from=${userCommentOffset}&count=20`);
+        if (debug) console.log(userCommentUser, userCommentOffset)
+    } else {
+        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${user}&count=20`);
+    }
+
     xhr.responseType = "json";
     xhr.onload = () => {
         if (xhr.readyState == 4 && xhr.status == 200) {
 
-            document.getElementById('userComment').innerHTML = `
-            <h2>
-                <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${xhr.response[0].sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
-                <span>${xhr.response[0].sender}</span>
-            </h2>
-            `
+            if (user != null) {
+                userCommentEl.innerHTML = `
+                <h2>
+                    <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${xhr.response[0].sender}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+                    <span>${xhr.response[0].sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : xhr.response[0].sender}</span>
+                </h2>
+                `
+                closePopup()
+                showPopup('showUserCommentPopup')
+                userCommentEl.scrollTop = 0
+                userCommentUser = user
+                userCommentOffset = 0
+                userCommentEl.addEventListener('scroll', userCommentScroll)
+            }
 
             for (var comment of xhr.response) {
+
+                if (comment.id == -999999) {
+                    userCommentUser = ''
+                    break
+                }
+
                 var time = new Date(comment.time * 1000)
                 date = time.toLocaleDateString()
                 hour = time.toLocaleTimeString()
@@ -611,7 +637,7 @@ function showUserComment(user) {
                     }
                 } catch (error) { }
 
-                document.getElementById('userComment').appendChild(html2elmnt(`
+                userCommentEl.appendChild(html2elmnt(`
                     <div>
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
@@ -622,16 +648,29 @@ function showUserComment(user) {
                         </p>
                     </div>
                 `))
+
+                userCommentOffset++
             }
 
-            document.getElementById('userComment').appendChild(html2elmnt('<h4 style="text-align: center">- 暂时只支持查看50条留言 -</h4>'))
-
-            closePopup()
-            showPopup('showUserCommentPopup')
-            document.getElementById('userComment').scrollTop = 0
+            //userCommentEl.appendChild(html2elmnt('<h4 style="text-align: center">- 暂时只支持查看50条留言 -</h4>'))
+            userCommentEl.addEventListener('scroll', userCommentScroll)
         }
     }
+    xhr.onerror = () => {
+        setTimeout(() => {
+            userCommentEl.addEventListener('scroll', userCommentScroll);
+            userCommentScroll();
+        }, 1000);
+    }
     xhr.send();
+}
+
+function userCommentScroll() {
+    var toBottom = userCommentEl.scrollHeight - userCommentEl.clientHeight - userCommentEl.scrollTop
+    if (toBottom < 100 && document.getElementById('popupContainer').style.display == 'flex') {
+        showUserComment()
+        userCommentEl.removeEventListener('scroll', userCommentScroll)
+    }
 }
 
 // themes
@@ -978,6 +1017,7 @@ var maxCommentID = null
 var pauseCommentScroll = false
 var maxCommentTime = 0
 
+// document elmnts
 var commentDiv = document.getElementById('comments')
 var captionDiv = document.getElementById('mainCaptions')
 
@@ -986,16 +1026,19 @@ var avatarInput = document.getElementById('setAvatarInput')
 
 var bgmElmnt = document.getElementById('bgm')
 
+// toggle elmnts
 var isMutedElmnt = document.getElementById('isMuted')
 //var isLowendElmnt = document.getElementById('isLowend')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
 
+// raw htmls
 var topComment = document.getElementById('topComment').outerHTML
 var loadingIndicator = document.getElementById('loadingIndicator').outerHTML
 var loadingIndicatorBefore = document.getElementById('loadingIndicatorBefore').outerHTML
 document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
+// ui vars
 var bgPaused = false
 var isFullscreen = false
 var newCommentDisabled = false

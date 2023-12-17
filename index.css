@@ -540,6 +540,7 @@ body {
     /*font-weight: bold;*/
     white-space: nowrap;
     cursor: pointer;
+    user-select: none;
 }
 
 #comments .commentBox:hover .sender {
@@ -565,6 +566,7 @@ body {
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    overflow-wrap: break-word;
 }
 
 #comments .commentBox .comment a {
@@ -1408,8 +1410,14 @@ body {
 }
 
 #showUserCommentPopup>div>div>p:last-child {
-    margin: 14px 5px 0 5px;
+    margin: 16px 5px 0 5px;
+}
+
+#showUserCommentPopup>div>div>p:last-child>span {
     cursor: pointer;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
 }
 
 #showUserCommentPopup>div>div:hover>p:last-child>span {
