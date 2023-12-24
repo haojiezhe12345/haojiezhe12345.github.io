@@ -50,18 +50,25 @@
         <div id="mainbg2" class="mainbg" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg); opacity: 0; animation-name: none; /*display: none*/"></div>
         -->
 
-        <div class="mainbg defaultbg bgzoom" ><div style="background-position-x: 45%;"></div><span>Artwork by HISA</span></div>
-        <div class="mainbg defaultbg"        ><div style="background-position-x: 40%;"></div><span>Artwork by Rumoon</span></div>
-        <div class="mainbg defaultbg"        ><div style="background-position-x: 50%;"></div><span>Artwork by 南山tsd</span></div>
-        <div class="mainbg defaultbg"        ><div style="background-position-x: 75%;"></div><span>Artwork by LIN+</span></div>
-        <div class="mainbg defaultbg"        ><div style="background-position-x: 45%;"></div><span>Artwork by eps3rd</span></div>
-        <div class="mainbg defaultbg"        ><div style="background-position-x: 50%;"></div><span>Artwork by 冰封死神</span></div>
-        <div class="mainbg birthdaybg bgzoom"><div style="background-position-x: 50%;"></div><span>Artwork by 八重ハルラ</span></div>
-        <div class="mainbg birthdaybg"       ><div style="background-position-x: 50%;"></div><span>Artwork by ほんわか紳士</span></div>
-        <div class="mainbg birthdaybg"       ><div style="background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
-        <div class="mainbg birthdaybg"       ><div style="background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
-        <div class="mainbg nightbg bgzoom"   ><div style="background-position-x: 60%;"></div><span><span class="ui zh">官图 (战斗五芒星CG)</span><span class="ui en">Official art (PMMM: The Battle Pentagram)</span></span></div>
-        <div class="mainbg kamibg bgzoom"    ><div style="background-position-x: 45%; filter: brightness(0.85) !important;"></div><span>Artwork by lyiet</span></div>
+        <div class="mainbg defaultbg bgzoom"  ><div style="background-position-x: 45%;"></div><span>Artwork by HISA</span></div>
+        <div class="mainbg defaultbg"         ><div style="background-position-x: 40%;"></div><span>Artwork by Rumoon</span></div>
+        <div class="mainbg defaultbg"         ><div style="background-position-x: 50%;"></div><span>Artwork by 南山tsd</span></div>
+        <div class="mainbg defaultbg"         ><div style="background-position-x: 75%;"></div><span>Artwork by LIN+</span></div>
+        <div class="mainbg defaultbg"         ><div style="background-position-x: 45%;"></div><span>Artwork by eps3rd</span></div>
+        <div class="mainbg defaultbg"         ><div style="background-position-x: 50%;"></div><span>Artwork by 冰封死神</span></div>
+        <div class="mainbg birthdaybg bgzoom" ><div style="background-position-x: 50%;"></div><span>Artwork by 八重ハルラ</span></div>
+        <div class="mainbg birthdaybg"        ><div style="background-position-x: 50%;"></div><span>Artwork by ほんわか紳士</span></div>
+        <div class="mainbg birthdaybg"        ><div style="background-position-x: 35%;"></div><span>Artwork by mizuki</span></div>
+        <div class="mainbg birthdaybg"        ><div style="background-position-x: 65%;"></div><span>Artwork by ゆきねこ</span></div>
+        <div class="mainbg christmasbg bgzoom"><div style="background-position-y: 65%;"></div><span>Artwork by 五十兎</span></div>
+        <div class="mainbg christmasbg"       ><div style="background-position-x: 60%; background-position-y: 15%;"></div><span>Artwork by 山田あこ</span></div>
+        <div class="mainbg christmasbg"       ><div style="background-position-x: 80%;"></div><span><span class="ui zh">官图</span><span class="ui en">Official art</span></span></div>
+        <div class="mainbg christmasbg"       ><div style="background-position-x: 5%; background-position-y: 100%;"></div><span>Artwork by ほし</span></div>
+        <div class="mainbg christmasbg"       ><div style="background-position-x: 60%; background-position-y: 100%;"></div><span>Artwork by _kanamemadoka_</span></div>
+        <div class="mainbg christmasbg"       ><div style="background-position-y: 0%;"></div><span>Artwork by いとぅー</span></div>
+        <div class="mainbg christmasbg"       ><div style="background-position-y: 10%;"></div><span><span class="ui zh">官图</span><span class="ui en">Official art</span></span></div>
+        <div class="mainbg nightbg bgzoom"    ><div style="background-position-x: 60%;"></div><span><span class="ui zh">官图 (战斗五芒星CG)</span><span class="ui en">Official art (PMMM: The Battle Pentagram)</span></span></div>
+        <div class="mainbg kamibg bgzoom"     ><div style="background-position-x: 45%; filter: brightness(0.85) !important;"></div><span>Artwork by lyiet</span></div>
 
         <div id="mainCaptions" style="opacity: 0;">
             <div class="defaultCaption">
@@ -94,6 +101,9 @@
             <div id="birthdayCaption">
                 <p>Happy birthday, Madoka!</p>
                 <p id="birthdayDate">10/3/2011 - Madoka's 0th birthday</p>
+            </div>
+            <div id="christmasCaption">
+                <p>Merry Christmas!</p>
             </div>
             <div id="nightCaption">
                 <p><span class="ui zh">晚安，小焰～</span><span class="ui en">Good night, Homura-chan ~</span></p>
@@ -146,7 +156,11 @@
         document.getElementById('mouseScrollTooltip').style.display = 'none';
         ">
 
-        <div class="tooltip"><span class="ui zh">今日留言: </span><span class="ui en">Messages today: </span><span id="todayCommentCount"></span><div class="triangle"></div></div>
+        <div class="tooltip">
+            <span class="ui zh">今日留言: </span><span class="ui en">Messages today: </span>
+            <span id="todayCommentCount"></span>
+            <div class="triangle"></div>
+        </div>
 
         <div id="comments" class="noscrollbar">
 
@@ -349,7 +363,10 @@
             <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                 <polygon points="6,0 14,8 6,16 3,13 8,8 3,3"/>
             </svg>
-            <div id="mouseScrollTooltip" class="tooltip"><span class="ui zh">用鼠标滚轮也可滚动</span><span class="ui en">Scrollable with wheel</span><span id="todayCommentCount"></span><div class="triangle"></div></div>
+            <div id="mouseScrollTooltip" class="tooltip">
+                <span class="ui zh">用鼠标滚轮也可滚动</span><span class="ui en">Scrollable with wheel</span>
+                <div class="triangle"></div>
+            </div>
         </div>
 
         <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>
@@ -369,6 +386,7 @@
                             <li onclick="location.hash='#default-theme'; location.reload()"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></li>
                             <li onclick="location.hash='#night'; location.reload()"><span class="ui zh">晚安</span><span class="ui en">Night</span></li>
                             <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></li>
+                            <li onclick="location.hash='#christmas'; location.reload()"><span class="ui zh">圣诞</span><span class="ui en">Christmas</span></li>
                             <li onclick="location.hash='#kami'; location.reload()"><span>kami.im</span></li>
                         </ul>
                     </li>
@@ -460,7 +478,7 @@
 
         <div id="setNamePopup" class="popupItem">
             <h2><span class="ui zh">设置昵称</span><span class="ui en">Set nickname</span></h2>
-            <label for="sender"><span class="ui zh">昵称:</span><span class="ui en">Nickname:</span></label>
+            <label for="setNameInput"><span class="ui zh">昵称:</span><span class="ui en">Nickname:</span></label>
             <input type="text" id="setNameInput" value="" onkeypress="((event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
@@ -598,6 +616,10 @@
     </div>
 
     <script>
+        var jsLoaded = false
+    </script>
+    <script>
+        // for chrome 49 compatibility (async await), the function is placed alone to avoid causing the whole page unusable
         async function printParaCharOneByOne(divID, delay = 0) {
             divEl = document.getElementById(divID)
             var para = []
@@ -619,6 +641,11 @@
         }
     </script>
     <script src="index.js"></script>
+    <script>
+        if (jsLoaded == false) {
+            window.alert('JS加载失败。可能是你的浏览器版本过低\n\nFailed to load JS, is your browser outdated?')
+        }
+    </script>
 </body>
 
 </html>

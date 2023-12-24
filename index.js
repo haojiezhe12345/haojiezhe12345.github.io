@@ -735,8 +735,8 @@ function nextImg() {
 function nextCaption() {
     if (bgPaused) return
 
-    if (theme == 'birthday') {
-        document.getElementById('birthdayCaption').style.display = 'block'
+    if (theme == 'birthday' || theme == 'christmas') {
+        document.getElementById(`${theme}Caption`).style.display = 'block'
         setTimeout(() => {
             captionDiv.style.opacity = 1
         }, 500);
@@ -1044,7 +1044,7 @@ var avatarInput = document.getElementById('setAvatarInput')
 
 var bgmElmnt = document.getElementById('bgm')
 
-// toggle elmnts
+// toggle checkboxes
 var isMutedElmnt = document.getElementById('isMuted')
 //var isLowendElmnt = document.getElementById('isLowend')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
@@ -1056,7 +1056,7 @@ var loadingIndicator = document.getElementById('loadingIndicator').outerHTML
 var loadingIndicatorBefore = document.getElementById('loadingIndicatorBefore').outerHTML
 document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
-// ui vars
+// ui states
 var bgPaused = false
 var isFullscreen = false
 var newCommentDisabled = false
@@ -1086,6 +1086,9 @@ if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday'
     var yearsOld = d.getFullYear() - 2011
     document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
 }
+if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || location.hash == '#christmas') {
+    theme = 'christmas'
+}
 else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.hash != '#default-theme') {
     theme = 'kami'
     try {
@@ -1098,6 +1101,7 @@ else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night'
     theme = 'night'
 }
 
+// for single-image theme, show only the first image and disable slideshow
 if (theme == 'kami' || theme == 'night') {
     document.getElementsByClassName(`${theme}bg`)[0].style.opacity = 1
     document.getElementsByClassName(`${theme}bg`)[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/${theme}/mainbg1.jpg")`
@@ -1110,6 +1114,7 @@ if (theme == 'kami' || theme == 'night') {
     bgPaused = true
 }
 
+// play theme-specific BGMs
 if (theme == 'birthday') {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/mataashita.mp3'
 } else if (theme == 'night') {
@@ -1119,6 +1124,7 @@ if (theme == 'birthday') {
 } else {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm1_16k.mp3'
 }
+
 
 // cookies toggles
 //
@@ -1154,6 +1160,7 @@ if (getCookie('showTimeline') == 'false') {
     toggleTimeline()
 }
 
+
 // background images
 //
 var bgCount
@@ -1173,10 +1180,10 @@ function playBG() {
     nextImg()
     setInterval(nextImg, 8000)
     setTimeout(() => {
-        //document.getElementById('mainbg1').classList.remove('bgzoom')
-        document.getElementsByClassName('defaultbg')[0].classList.remove('bgzoom')
-        document.getElementsByClassName('birthdaybg')[0].classList.remove('bgzoom')
-        document.getElementsByClassName('nightbg')[0].classList.remove('bgzoom')
+        var bgEls = document.getElementsByClassName('mainbg')
+        for (let i = 0; i < bgEls.length; i++) {
+            bgEls[i].classList.remove('bgzoom');
+        }
     }, 10000);
 
     nextCaption()
@@ -1214,6 +1221,7 @@ if (location.hash == '#video') {
 } else {
     playBG()
 }
+
 
 loadUserInfo()
 
@@ -1329,6 +1337,7 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
     }
 })
 
+
 // image viewer
 //
 var imgViewerMouseActive = false
@@ -1364,6 +1373,7 @@ window.onhashchange = function (e) {
     }
 }
 
+
 // PWA init
 //
 var installPrompt = null;
@@ -1393,3 +1403,5 @@ setTimeout(() => {
 //document.addEventListener('onmousemove', audio.play())
 //audio.play()
 */
+
+jsLoaded = true

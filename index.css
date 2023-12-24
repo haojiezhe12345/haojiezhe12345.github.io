@@ -162,7 +162,8 @@ body {
     white-space: normal;
 }
 
-#birthdayCaption p {
+#birthdayCaption p,
+#christmasCaption p {
     color: #ff729c;
     font-family: 'comic sans ms';
     font-weight: bold;
@@ -171,6 +172,11 @@ body {
     font-size: min(6.5vw, 8vh);
     text-align: center;
     margin-top: 0;
+}
+
+#christmasCaption p {
+    color: #ff9cba;
+    text-shadow: 0 0 0.25em black, 0 0 0.25em black;
 }
 
 #birthdayCaption p:last-child {
@@ -1101,11 +1107,9 @@ body {
     display: block;
 }
 
-/*
 .toolbarItem ul:has(input:focus) {
     display: block;
 }
-*/
 
 .toolbarItem ul li {
     position: relative;
