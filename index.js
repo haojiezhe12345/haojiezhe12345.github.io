@@ -457,6 +457,9 @@ function showPopup(popupID) {
         for (let i = 0; i < 1; i++, j++) {
             document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg${i + 1}.jpg`
         }
+        for (let i = 0; i < 7; i++, j++) {
+            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/christmas/mainbg${i + 1}.jpg`
+        }
         for (let i = 0; i < msgBgCount; i++, j++) {
             document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
         }

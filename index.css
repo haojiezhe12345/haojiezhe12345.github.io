@@ -67,7 +67,7 @@ body {
     position: fixed;
     right: 20px;
     bottom: 28%;
-    bottom: calc(20vh + 60px);
+    bottom: calc(20vh + 67px);
     background-color: rgba(0, 0, 0, 0.4);
     color: white;
     font-size: 12px;
