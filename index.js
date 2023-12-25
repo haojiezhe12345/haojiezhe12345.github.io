@@ -1089,7 +1089,7 @@ if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday'
     var yearsOld = d.getFullYear() - 2011
     document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
 }
-if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || location.hash == '#christmas') {
+if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6) || location.hash == '#christmas') {
     theme = 'christmas'
 }
 else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.hash != '#default-theme') {
