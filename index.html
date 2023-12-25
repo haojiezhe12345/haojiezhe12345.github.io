@@ -174,7 +174,7 @@
                     <div class="ui zh">
                         欢迎来到 <strong style="text-decoration: underline;">MadoHomu.love</strong> !<br>
                         这是一个以<strong><span style="color: #ffbbdd;">圆</span><span style="color: #d5a2ff;">焰</span><span style="color: #ffbbdd;">圆</span></strong>为主题的留言网站<br>
-                        友情链接: <a href="http://kami.im" target="_blank">kami.im (圆神站)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (焰魔站)</a>
+                        友情链接: <a href="javascript:;" onclick="showPopup('aboutKamiPopup')">kami.im (圆神站)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (焰魔站)</a>
                         <!--<br>
                         本站会长期运营的! 建议收藏到浏览器!-->
                         <br><br>
@@ -241,7 +241,7 @@
                     <div class="ui en">
                         Welcome to <strong style="text-decoration: underline;">MadoHomu.love</strong> , a website made for <strong><span style="color: #ffbbdd;">Madoka</span> & <span style="color: #d5a2ff;">Homura</span></strong> !
                         <br>
-                        Also try: <a href="http://kami.im" target="_blank">kami.im (for Madokami)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (for Devil Homura)</a>
+                        Also try: <a href="javascript:;" onclick="showPopup('aboutKamiPopup')">kami.im (for Madokami)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (for Devil Homura)</a>
                         <!--<br>
                         本站会长期运营的! 建议收藏到浏览器!-->
                         <br><br>
@@ -566,6 +566,31 @@
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
+        <div id="aboutKamiPopup" class="popupItem">
+            <h2><span class="ui zh">关于kami.im</span><span class="ui en">About kami.im</span></h2>
+            <p>[2023-05-21] kami.im所在云服务器提供商发生火灾, 服务器失联</p>
+            <hr>
+            <p>
+                [2023-06-06] 站长更换新服务器, 并创建临时Discord频道<br>
+                以下是kami.im临时页面原话:<br>
+                服务器在洛杉矶的机房好像出问题了，没有做备份有点尴尬，刚好顺便升级一下 临时Discord频道:https://discord.gg/AFqn4yQcM9
+            </p>
+            <hr>
+            <p>[2023-12-14] kami.im临时页面失联, IP无法ping通, 猜测是站长没有续费</p>
+            <hr>
+            <p>[2023-12-22] kami.im指向的IP可以ping通了, 但80 443(网页)端口未开启, 猜测是IP已经分配给了别人的机器</p>
+            <hr>
+            <p>
+                <strong>以下是访问kami.im的有关途径:</strong><br>
+                <a href="http://kami.im" target="_blank">直接访问kami.im</a><br>
+                <a href="https://web.archive.org/web/20230417000123/https://kami.im/" target="_blank">互联网档案馆 kami.im存档</a><br>
+                <a href="https://discord.gg/EcFN3tzP" target="_blank">kami.im 临时Discord频道 (需翻墙)</a><br>
+                <br>
+                另外, 本站还制作了kami.im主题, 可以在评论区右上角→工具→切换主题启用
+            </p>
+            <button class="closeBtn" onclick="closePopup()">×</button>
+        </div>
+        
     </div>
 
     <div id="imgViewerBox" style="display: none"
