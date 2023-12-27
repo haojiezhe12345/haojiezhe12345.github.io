@@ -13,6 +13,9 @@ https://haojiezhe12345.top:82/madohomu/api/
 media/
 https://haojiezhe12345.top:82/madohomu/media/
 
+res/
+https://haojiezhe12345.top:82/madohomu/res/
+
 "/madohomu"
 "/?no-redirect"
 
