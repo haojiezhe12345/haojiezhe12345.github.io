@@ -328,9 +328,11 @@ function newComment() {
 
     newCommentDisabled = true
 
+    /*
     if (location.hostname != 'haojiezhe12345.top') {
         document.getElementById('banner').style.display = 'block'
     }
+    */
 }
 
 function previewLocalImgs() {
@@ -968,7 +970,13 @@ function toggleLowend() {
 
 function toggleBGM() {
     setCookie('mutebgm', isMutedElmnt.checked)
-    bgmElmnt.muted = isMutedElmnt.checked
+    if (isMutedElmnt.checked) {
+        bgmElmnt.muted = true
+        bgmElmnt.pause()
+    } else {
+        bgmElmnt.muted = false
+        bgmElmnt.play()
+    }
 }
 
 function toggleTopComment() {
@@ -1046,6 +1054,7 @@ var setAvatarImg = document.getElementById('setAvatarImg')
 var avatarInput = document.getElementById('setAvatarInput')
 
 var bgmElmnt = document.getElementById('bgm')
+var bgmRotateElmnt = document.getElementById('bgmRotate')
 
 // toggle checkboxes
 var isMutedElmnt = document.getElementById('isMuted')
@@ -1089,7 +1098,7 @@ if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday'
     var yearsOld = d.getFullYear() - 2011
     document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
 }
-if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6) || location.hash == '#christmas') {
+else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6) || location.hash == '#christmas') {
     theme = 'christmas'
 }
 else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.hash != '#default-theme') {
@@ -1102,6 +1111,12 @@ else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.
 }
 else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') && location.hash != '#default-theme') {
     theme = 'night'
+}
+
+try {
+    document.getElementById(`themeTxt-${theme}`).style.display = 'inline'
+} catch (error) {
+    console.log('theme indicator text not defined')
 }
 
 // for single-image theme, show only the first image and disable slideshow
@@ -1122,6 +1137,8 @@ if (theme == 'birthday') {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/mataashita.mp3'
 } else if (theme == 'night') {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/night_16k.mp3'
+} else if (theme == 'kami') {
+    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/never_leave_you_alone.webm'
 } else if (Math.random() > 0.5) {
     bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm_16k.mp3'
 } else {
@@ -1155,7 +1172,7 @@ if (getCookie('hideTopComment') == 'true') {
 }
 
 if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0]) {
-    document.getElementById('banner').style.display = 'block'
+    //document.getElementById('banner').style.display = 'block'
 }
 
 if (getCookie('showTimeline') == 'false') {

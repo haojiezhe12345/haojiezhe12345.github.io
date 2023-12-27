@@ -289,10 +289,19 @@ body {
     cursor: pointer;
 }
 
-#mainTitle {
+#header {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+#mainTitle {
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    display: inline-block;
+    margin: 16px;
     padding: 4px 16px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
@@ -310,10 +319,43 @@ body {
     text-decoration: underline;
 }
 
+#themeIndicator {
+    display: inline-flex;
+    align-items: center;
+    margin: 6px 10px;
+    padding: 3px 6px;
+    border-radius: 100px;
+    background-color: rgba(255, 255, 255, 0.7);
+    /*background-color: rgba(0, 0, 0, 0.4);*/
+    /*color: white;*/
+    font-size: 12px;
+    user-select: none;
+    cursor: pointer;
+}
+
+#themeIndicator img {
+    /*filter: invert();*/
+    border-radius: 100px;
+}
+
+#bgmRotate {
+    width: 16px;
+    animation: rotate 2s linear infinite;
+}
+
+#currentTheme {
+    text-decoration: underline;
+}
+
+#currentTheme>* {
+    display: none;
+}
+
 #userInfo {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 0;
+    right: 0;
+    margin: 16px;
     padding: 4px 16px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
@@ -956,17 +998,17 @@ body {
     transition: none;
 }
 
-.commentSeekArrow svg {
+.commentSeekArrow img {
     width: 16px;
     transform: scale(1);
     transition: transform 0.2s;
 }
 
-.commentSeekArrow:hover svg {
+.commentSeekArrow:hover img {
     transform: scale(1.2);
 }
 
-.commentSeekArrow:active svg {
+.commentSeekArrow:active img {
     transition: none;
     transform: scale(1);
 }
@@ -1107,9 +1149,11 @@ body {
     display: block;
 }
 
+/* Disabled for it will make the menu open after a checkbox is clicked
 .toolbarItem ul:has(input:focus) {
     display: block;
 }
+*/
 
 .toolbarItem ul li {
     position: relative;
@@ -1250,7 +1294,7 @@ body {
     text-align: center;
 }
 
-.popupItem input {
+.popupItem input[type=text] {
     background-color: rgba(0, 0, 0, 0.08);
     border: 1px solid #555;
     font-size: 16px;
@@ -1449,4 +1493,29 @@ body {
 #showUserCommentPopup .closeBtn {
     top: 30px;
     right: 24px;
+}
+
+#themeSelectorPopup {
+    text-align: center;
+}
+
+#themeSelectorPopup>div>div {
+    display: inline-block;
+    margin: 8px;
+    cursor: pointer;
+}
+
+#themeSelectorPopup>div>div>img {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+
+#themeSelectorPopup>div>div:hover>img {
+    transform: scale(1.05);
+}
+
+#themeSelectorPopup>div>div>span {
+    display: block;
 }

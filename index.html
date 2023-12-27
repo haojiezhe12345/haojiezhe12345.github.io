@@ -40,7 +40,10 @@
         <span class="ui en">If the website doesn't function normally, please <a href="https://haojiezhe12345.top:82/madohomu/">visit backup site</a></span>
     </p>
 
-    <audio id="bgm" loop></audio>
+    <audio id="bgm" loop
+        onplay="bgmRotateElmnt.style.removeProperty('animation')"
+        onpause="bgmRotateElmnt.style.animation = 'none'">
+    </audio>
 
     <div id="bgContainer" 
         onclick="document.getElementById('lowerPanel').classList.remove('lowerPanelUp')"
@@ -138,17 +141,37 @@
 
     </div>
 
-    <div id="mainTitle" class="topItems">
-        <a href="http://madohomu.love/?no-redirect">
-            <span style="color: #ff9dce;">Mado</span>
-            <span style="color: #f00;">❤</span>
-            <span style="color: #c074ff;">Homu</span>
-        </a>
-    </div>
+    <div id="header">
 
-    <div id="userInfo" class="topItems" onclick="showPopup('setNamePopup')">
-        <img id="userInfoAvatar">
-        <span id="userInfoName"></span>
+        <div id="mainTitle" class="topItems">
+            <a href="http://madohomu.love/?no-redirect">
+                <span style="color: #ff9dce;">Mado</span>
+                <span style="color: #f00;">❤</span>
+                <span style="color: #c074ff;">Homu</span>
+            </a>
+        </div>
+    
+        <br>
+
+        <div id="themeIndicator" onclick="showPopup('themeSelectorPopup')">
+            <img id="bgmRotate" src="res/music_note.svg" style="animation: none;">
+            <span>&nbsp;<span class="ui zh">主题:</span><span class="ui en">Theme:</span>&nbsp;</span>
+            <span id="currentTheme">
+                <span id="themeTxt-default"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
+                <span id="themeTxt-night"><span class="ui zh">晚安</span><span class="ui en">Night</span></span>
+                <span id="themeTxt-birthday"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></span>
+                <span id="themeTxt-christmas"><span class="ui zh">圣诞</span><span class="ui en">Christmas</span></span>
+                <span id="themeTxt-kami">kami.im</span>
+            </span>
+            &nbsp;
+            <img src="res/arrow_right.svg" style="width: 10px;">
+        </div>
+
+        <div id="userInfo" class="topItems" onclick="showPopup('setNamePopup')">
+            <img id="userInfoAvatar">
+            <span id="userInfoName"></span>
+        </div>
+    
     </div>
 
     <div id="lowerPanel" ontouchstart="
@@ -232,7 +255,8 @@
                         <br><br>
                         本站已在GitHub开源<br>
                         前端: <a href="https://github.com/haojiezhe12345/haojiezhe12345.github.io" target="_blank">haojiezhe12345.github.io</a><br>
-                        后端: <a href="https://github.com/haojiezhe12345/MadoHomuAPI" target="_blank">MadoHomuAPI</a>
+                        后端: <a href="https://github.com/haojiezhe12345/MadoHomuAPI" target="_blank">MadoHomuAPI</a><br>
+                        本站完整备份(每天更新): <a href="https://1drv.ms/f/s!AhBOA0l_B26M51sTobCapRxkqXoS" target="_blank">https://1drv.ms/f/s!AhBOA0l_B26M51sTobCapRxkqXoS</a>
                         <br><br>
                         站长QQ: 3112611479 (邮箱同号)<br>
                         B站: <a href="https://space.bilibili.com/252913909" target="_blank">浩劫者12345</a><br>
@@ -304,7 +328,8 @@
                         <br><br>
                         MadoHomu.love is open source on GitHub<br>
                         Frontend: <a href="https://github.com/haojiezhe12345/haojiezhe12345.github.io" target="_blank">haojiezhe12345.github.io</a><br>
-                        Backend: <a href="https://github.com/haojiezhe12345/MadoHomuAPI" target="_blank">MadoHomuAPI</a>
+                        Backend: <a href="https://github.com/haojiezhe12345/MadoHomuAPI" target="_blank">MadoHomuAPI</a><br>
+                        Daily backup: <a href="https://1drv.ms/f/s!AhBOA0l_B26M51sTobCapRxkqXoS" target="_blank">https://1drv.ms/f/s!AhBOA0l_B26M51sTobCapRxkqXoS</a>
                         <br><br>
                         My Mail: qq3112611479@gmail.com<br>
                         X (Twitter): <a href="https://twitter.com/haojiezhe12345" target="_blank">@haojiezhe12345</a><br>
@@ -355,14 +380,10 @@
         </div>
 
         <div class="commentSeekArrow" onclick="seekComment(-1)" style="left: 2vw; display: none;">
-            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="10,0 2,8 10,16 13,13 8,8 13,3"/>
-            </svg>
+            <img src="res/arrow_left.svg">
         </div>
         <div class="commentSeekArrow" onclick="seekComment(1)" style="right: 2vw;">
-            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                <polygon points="6,0 14,8 6,16 3,13 8,8 3,3"/>
-            </svg>
+            <img src="res/arrow_right.svg">
             <div id="mouseScrollTooltip" class="tooltip">
                 <span class="ui zh">用鼠标滚轮也可滚动</span><span class="ui en">Scrollable with wheel</span>
                 <div class="triangle"></div>
@@ -568,29 +589,75 @@
 
         <div id="aboutKamiPopup" class="popupItem">
             <h2><span class="ui zh">关于kami.im</span><span class="ui en">About kami.im</span></h2>
-            <p>[2023-05-21] kami.im所在云服务器提供商发生火灾, 服务器失联</p>
-            <hr>
             <p>
-                [2023-06-06] 站长更换新服务器, 并创建临时Discord频道<br>
-                以下是kami.im临时页面原话:<br>
-                服务器在洛杉矶的机房好像出问题了，没有做备份有点尴尬，刚好顺便升级一下 临时Discord频道:https://discord.gg/AFqn4yQcM9
+                <span class="ui zh">[2023-05-21] kami.im所在云服务器提供商发生火灾, 服务器失联</span>
+                <span class="ui en">[May 21, 2023] Krypt was down due to a fire in the cabinets, on which kami.im is hosted</span>
             </p>
             <hr>
-            <p>[2023-12-14] kami.im临时页面失联, IP无法ping通, 猜测是站长没有续费</p>
-            <hr>
-            <p>[2023-12-22] kami.im指向的IP可以ping通了, 但80 443(网页)端口未开启, 猜测是IP已经分配给了别人的机器</p>
+            <p>
+                <span class="ui zh">[2023-06-06] 站长更换新服务器, 创建临时页面和Discord频道:</span>
+                <span class="ui en">[Jun 6, 2023] kami.im moved to a new server with a temporary page and Discord Server:</span>
+                <br>
+                <img src="res/kami_down.png" style="max-width: 100%; max-height: 117px;">
+            </p>
             <hr>
             <p>
-                <strong>以下是访问kami.im的有关途径:</strong><br>
-                <a href="http://kami.im" target="_blank">直接访问kami.im</a><br>
-                <a href="https://web.archive.org/web/20230417000123/https://kami.im/" target="_blank">互联网档案馆 kami.im存档</a><br>
-                <a href="https://discord.gg/EcFN3tzP" target="_blank">kami.im 临时Discord频道 (需翻墙)</a><br>
+                <span class="ui zh">[2023-12-14] kami.im临时页面失联, IP无法ping通, 猜测是站长没有续费</span>
+                <span class="ui en">[Dec 14, 2023] The temporary page was down, the IP timed out</span>
+            </p>
+            <hr>
+            <p>
+                <span class="ui zh">[2023-12-22] kami.im指向的IP可以ping通了, 但80 443(网页)端口未开启, 猜测是IP已经分配给了别人的机器</span>
+                <span class="ui en">[Dec 22, 2023] The IP was up again, but port 80 and 443 remained closed. It may be the webmaster forgot to renew its server, and the IP address was assigned to another server</span>
+            </p>
+            <hr>
+            <p>
+                <strong><span class="ui zh">以下是访问kami.im的有关途径:</span><span class="ui en">Possible ways to access kami.im :</span></strong><br>
+                <a href="http://kami.im" target="_blank"><span class="ui zh">直接访问 kami.im</span><span class="ui en">Go to kami.im directly</span></a><br>
+                <a href="https://web.archive.org/web/20230417000123/https://kami.im/" target="_blank"><span class="ui zh">互联网档案馆 23年4月kami.im存档 (需翻墙)</span><span class="ui en">kami.im on Internet Archive Wayback Machine (April 2023)</span></a><br>
+                <a href="https://discord.gg/EcFN3tzP" target="_blank"><span class="ui zh">kami.im 临时Discord频道 (需翻墙)</span><span class="ui en">kami.im Discord Server</span></a><br>
                 <br>
-                另外, 本站还制作了kami.im主题, 可以在评论区右上角→工具→切换主题启用
+                <span class="ui zh">另外, 本站还制作了kami.im主题, 可以在评论区右上角→工具→切换主题启用</span>
+                <span class="ui en">Alternatively, this site has an kami.im theme which can be enabled in "Tools"→"Change theme", providing familiar experience like kami.im</span>
             </p>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
         
+        <div id="themeSelectorPopup" class="popupItem">
+            <h2><span class="ui zh">选择主题</span><span class="ui en">Choose a theme</span></h2>
+            <p>
+                <span>BGM: </span>
+                <button onclick="isMutedElmnt.click()"><span class="ui zh">播放/暂停</span><span class="ui en">toggle</span></button>
+            </p>
+            <div>
+                <div onclick="location.hash=''; location.reload()">
+                    <img src="res/auto.png">
+                    <span><span class="ui zh">自动</span><span class="ui en">Auto</span></span>
+                </div>
+                <div onclick="location.hash='#default-theme'; location.reload()">
+                    <img src="https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg">
+                    <span><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
+                </div>
+                <div onclick="location.hash='#night'; location.reload()">
+                    <img src="https://haojiezhe12345.top:82/madohomu/bg/night/mainbg1.jpg">
+                    <span><span class="ui zh">晚安</span><span class="ui en">Night</span></span>
+                </div>
+                <div onclick="location.hash='#birthday'; location.reload()">
+                    <img src="https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg1.jpg">
+                    <span><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></span>
+                </div>
+                <div onclick="location.hash='#christmas'; location.reload()">
+                    <img src="https://haojiezhe12345.top:82/madohomu/bg/christmas/mainbg1.jpg">
+                    <span><span class="ui zh">圣诞</span><span class="ui en">Christmas</span></span>
+                </div>
+                <div onclick="location.hash='#kami'; location.reload()">
+                    <img src="https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg1.jpg">
+                    <span>kami.im</span>
+                </div>
+            </div>
+            <button class="closeBtn" onclick="closePopup()">×</button>
+        </div>
+
     </div>
 
     <div id="imgViewerBox" style="display: none"
