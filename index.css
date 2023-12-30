@@ -588,7 +588,6 @@ body {
     /*font-weight: bold;*/
     white-space: nowrap;
     cursor: pointer;
-    user-select: none;
 }
 
 #comments .commentBox:hover .sender {

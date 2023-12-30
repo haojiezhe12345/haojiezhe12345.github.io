@@ -1038,6 +1038,12 @@ function html2elmnt(html) {
     return t.content;
 }
 
+function htmlEscape(txt) {
+    var el = document.createElement('p')
+    el.innerText = txt
+    return el.innerHTML
+}
+
 
 // common vars
 //
