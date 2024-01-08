@@ -118,6 +118,18 @@ function loadComments(from, count, time) {
     };
 }
 
+function loadKami(page = 1) {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', `https://kami.im/praed.php?page=${page}`)
+    xhr.onload = () => {
+        if (xhr.status == 200) {
+            var kamipage = xhr.responseText
+            console.log(kamipage)
+        }
+    }
+    xhr.send()
+}
+
 function appendComment(comment, insertBeforeEl = document.getElementById('loadingIndicator')) {
     var time = new Date(comment.time * 1000)
     date = time.toLocaleDateString()
@@ -137,10 +149,8 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
 
     var imgsDOM = '<br><br>'
     try {
-        if (comment.image != '') {
-            for (var i of comment.image.split(',')) {
-                imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
-            }
+        for (var i of comment.image.split(',')) {
+            imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
         }
     } catch (error) {
 
@@ -164,7 +174,7 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
             </div>
             <div class="id">#${comment.id}</div>
             <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
-                ${comment.comment.replace(/\n/g, "<br>")}
+                ${htmlEscape(comment.comment)}
                 ${imgsDOM}
             </div>
             <div class="time">${date + ' ' + hour}${(comment.hidden == 1) ? ' (hidden)' : ''}</div>
@@ -666,7 +676,7 @@ function showUserComment(user) {
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
                             <span onclick="clearComments(1); loadComments(this.parentNode.parentNode.querySelector('span').innerText.replace('#', '')); closePopup()">
-                                ${comment.comment.replace(/\n/g, "<br>")}
+                                ${htmlEscape(comment.comment)}
                             </span>
                             ${imgsDOM}
                         </p>
