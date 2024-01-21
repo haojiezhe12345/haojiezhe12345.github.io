@@ -1117,7 +1117,10 @@ if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday'
 else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6) || location.hash == '#christmas') {
     theme = 'christmas'
 }
-else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.hash != '#default-theme') {
+else if (location.hash == '#default-theme') {
+    theme = 'default'
+}
+else if (getCookie('theme') == 'kami' || location.hash == '#kami') {
     theme = 'kami'
     try {
         printParaCharOneByOne('kamiCaption', 750)
@@ -1125,7 +1128,7 @@ else if ((getCookie('theme') == 'kami' || location.hash == '#kami') && location.
         console.log(error)
     }
 }
-else if (((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') && location.hash != '#default-theme') {
+else if ((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') {
     theme = 'night'
 }
 
