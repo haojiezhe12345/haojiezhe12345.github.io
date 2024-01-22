@@ -1283,7 +1283,6 @@ body {
     border-radius: 16px;
     box-sizing: border-box;
     max-width: 90%;
-    max-width: min(90%, 700px);
     max-height: 90%;
     overflow: auto;
     display: none;
@@ -1354,6 +1353,7 @@ body {
 
 .popupItem span {
     display: inline-block;
+    text-decoration: inherit;
 }
 
 /*
@@ -1497,6 +1497,7 @@ body {
 
 #themeSelectorPopup {
     text-align: center;
+    max-width: min(90%, 700px) !important;
 }
 
 #themeSelectorPopup>div>div {
