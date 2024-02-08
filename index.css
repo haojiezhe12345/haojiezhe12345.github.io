@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'XinNianKuaiLe';
+    src: url('https://haojiezhe12345.top:82/madohomu/res/XinNianKuaiLe.ttf') format('truetype');
+}
+
 .ui.en {
     display: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -68,7 +73,7 @@ body {
     right: 20px;
     bottom: 28%;
     bottom: calc(20vh + 67px);
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     font-size: 12px;
     padding: 4px 10px;
@@ -163,7 +168,8 @@ body {
 }
 
 #birthdayCaption p,
-#christmasCaption p {
+#christmasCaption p,
+#lunarNewYearCaption p {
     color: #ff729c;
     font-family: 'comic sans ms';
     font-weight: bold;
@@ -174,15 +180,25 @@ body {
     margin-top: 0;
 }
 
+#birthdayCaption p:last-child {
+    font-size: 5vh;
+    font-size: min(5vw, 5vh);
+    font-weight: normal;
+}
+
 #christmasCaption p {
     color: #ff9cba;
     text-shadow: 0 0 0.25em black, 0 0 0.25em black;
 }
 
-#birthdayCaption p:last-child {
-    font-size: 5vh;
-    font-size: min(5vw, 5vh);
+#lunarNewYearCaption p {
+    font-family: XinNianKuaiLe;
+    color: #f33;
+    font-size: min(16vw, 8vh);
     font-weight: normal;
+    font-style: normal;
+    text-shadow: -0.03em -0.03em white, -0.03em 0.03em white, 0.03em -0.03em white, 0.03em 0.03em white,
+        0 0 0.25em white, 0 0 0.25em white;
 }
 
 #nightCaption p:first-child {

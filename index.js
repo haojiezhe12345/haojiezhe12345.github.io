@@ -733,24 +733,27 @@ function nextImg() {
         var bgurl = 'https://haojiezhe12345.top:82/madohomu/bg/'
     }
 
-    bgs[prevBG].style.opacity = 0
-    //bgs[currentBG].style.display = 'block'
-    bgs[currentBG].style.opacity = 1
-    bgs[currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${currentBG + 1}.jpg?2")`
-    bgs[currentBG].firstElementChild.style.removeProperty('animation-name')
-    setTimeout(() => {
-        bgs[prevBG].firstElementChild.style.animationName = 'none'
-        //bgs[nextBG].style.display = 'block'
-        bgs[nextBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${nextBG + 1}.jpg?2")`
-        bgs[nextBG].firstElementChild.style.animationName = 'none'
-    }, 2500);
-
+    try {
+        bgs[prevBG].style.opacity = 0
+        //bgs[currentBG].style.display = 'block'
+        bgs[currentBG].style.opacity = 1
+        bgs[currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${currentBG + 1}.jpg?2")`
+        bgs[currentBG].firstElementChild.style.removeProperty('animation-name')
+        setTimeout(() => {
+            bgs[prevBG].firstElementChild.style.animationName = 'none'
+            //bgs[nextBG].style.display = 'block'
+            bgs[nextBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${nextBG + 1}.jpg?2")`
+            bgs[nextBG].firstElementChild.style.animationName = 'none'
+        }, 2500);
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 function nextCaption() {
     if (bgPaused) return
 
-    if (theme == 'birthday' || theme == 'christmas') {
+    if (theme == 'birthday' || theme == 'christmas' || theme == 'lunarNewYear') {
         document.getElementById(`${theme}Caption`).style.display = 'block'
         setTimeout(() => {
             captionDiv.style.opacity = 1
@@ -931,8 +934,8 @@ function seekComment(seekCount) {
     var scrollpx = 200
     try {
         scrollpx = document.getElementById(`#${maxCommentID}`).getBoundingClientRect().width + 20
-    } catch (err) {
-        if (debug) console.log(err)
+    } catch (error) {
+        if (debug) console.log(error)
     }
     commentDiv.scrollLeft = (Math.round((commentDiv.scrollLeft) / scrollpx) + seekCount) * scrollpx
     setTimeout(() => {
@@ -1116,6 +1119,9 @@ if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday'
 }
 else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6) || location.hash == '#christmas') {
     theme = 'christmas'
+}
+else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6) || location.hash == '#lunarNewYear') {
+    theme = 'lunarNewYear'
 }
 else if (location.hash == '#default-theme') {
     theme = 'default'
