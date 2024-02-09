@@ -1537,67 +1537,57 @@ body {
     display: block;
 }
 
+.fireworks {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
 
 @keyframes firework {
     0% {
-        transform: translate(var(--x), var(--initialY));
         width: var(--initialSize);
-        opacity: 1;
-    }
-
-    50% {
-        width: 0.5vmin;
-        opacity: 1;
-    }
-
-    100% {
-        width: var(--finalSize);
-        opacity: 0;
-    }
-}
-
-@keyframes fireworkPseudo {
-    0% {
+        left: var(--initialX);
+        top: var(--initialY);
         transform: translate(-50%, -50%);
-        width: var(--initialSize);
         opacity: 1;
     }
 
-    50% {
-        width: 0.5vmin;
+    30% {
+        width: var(--initialSize);
+        transform: translate(-50%, -50%);
         opacity: 1;
     }
 
     100% {
         width: var(--finalSize);
+        left: var(--finalX);
+        top: var(--finalY);
+        transform: translate(-50%, 0);
         opacity: 0;
     }
 }
 
-.firework,
-.firework::before,
-.firework::after {
-    --initialSize: 0.5vh;
-    --finalSize: 45vh;
-    --particleSize: 0.2vh;
+.fireworks>div {
     --color1: yellow;
     --color2: khaki;
     --color3: white;
     --color4: lime;
     --color5: gold;
     --color6: mediumseagreen;
-    --y: -40vh;
-    --x: -50%;
-    --initialY: 50vh;
+    --initialX: 50%;
+    --initialY: 100%;
+    --finalX: var(--initialX);
+    --finalY: 50%;
+    --initialSize: 1vh;
+    --finalSize: 45vh;
+    --particleSize: 0.3vh;
     content: "";
-    animation: firework 3s infinite;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(var(--x), var(--y));
-    width: var(--initialSize);
     aspect-ratio: 1;
     opacity: 0;
+    animation: firework 3s infinite;
+    animation-timing-function: cubic-bezier(0, 0, 0.4, 2);
     background:
         /*
         radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 0% 0%,
@@ -1649,72 +1639,42 @@ body {
     background-repeat: no-repeat;
 }
 
-.firework::before {
-    --x: -50%;
-    --y: -50%;
-    --initialY: -50%;
-    /*   transform: translate(-20vmin, -2vmin) rotate(40deg) scale(1.3) rotateY(40deg); */
-    transform: translate(-50%, -50%) rotate(40deg) scale(1.3) rotateY(40deg);
-    /*   animation: fireworkPseudo 2s infinite; */
-}
-
-.firework::after {
-    --x: -50%;
-    --y: -50%;
-    --initialY: -50%;
-    /*   transform: translate(44vmin, -50%) rotate(170deg) scale(1.15) rotateY(-30deg); */
-    transform: translate(-50%, -50%) rotate(170deg) scale(1.15) rotateY(-30deg);
-    /*   animation: fireworkPseudo 2s infinite; */
-}
-
-.firework:nth-child(1),
-.firework:nth-child(1)::before,
-.firework:nth-child(1)::after {
-    --finalSize: 50vh;
-    --x: -10%;
-    left: 10%;
-    top: 50%;
-    animation-delay: 1s;
-}
-
-.firework:nth-child(2),
-.firework:nth-child(2)::before,
-.firework:nth-child(2)::after {
+.fireworks>div:nth-child(1) {
     --color1: pink;
     --color2: violet;
     --color3: fuchsia;
     --color4: orchid;
     --color5: plum;
     --color6: lavender;
+    --initialX: 20%;
+    --finalY: 50%;
     --finalSize: 30vh;
-    --x: -25%;
-    left: 20%;
-    top: 80%;
     animation-delay: 0s;
 }
 
-.firework:nth-child(3),
-.firework:nth-child(3)::before,
-.firework:nth-child(3)::after {
+.fireworks>div:nth-child(2) {
+    --initialX: 80%;
+    --finalY: 40%;
     --finalSize: 35vh;
-    --x: -70%;
-    left: 80%;
-    top: 75%;
     animation-delay: 0.5s;
 }
 
-.firework:nth-child(4),
-.firework:nth-child(4)::before,
-.firework:nth-child(4)::after {
+.fireworks>div:nth-child(3) {
+    --initialX: 10%;
+    --finalY: 30%;
+    --finalSize: 45vh;
+    animation-delay: 1s;
+}
+
+.fireworks>div:nth-child(4) {
     --color1: cyan;
     --color2: lightcyan;
     --color3: lightblue;
     --color4: PaleTurquoise;
     --color5: SkyBlue;
     --color6: lavender;
+    --initialX: 90%;
+    --finalY: 20%;
     --finalSize: 50vh;
-    --x: -70%;
-    left: 90%;
-    top: 40%;
     animation-delay: 1.5s;
 }
