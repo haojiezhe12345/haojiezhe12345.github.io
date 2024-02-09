@@ -1597,6 +1597,7 @@ body {
     transform: translate(var(--x), var(--y));
     width: var(--initialSize);
     aspect-ratio: 1;
+    opacity: 0;
     background:
         /*
         radial-gradient(circle, var(--color1) var(--particleSize), #0000 0) 0% 0%,
