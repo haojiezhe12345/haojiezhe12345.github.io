@@ -167,9 +167,19 @@ body {
     white-space: normal;
 }
 
-#birthdayCaption p,
-#christmasCaption p,
-#lunarNewYearCaption p {
+#mainCaptions .defaultCaption:nth-of-type(odd) {
+    text-align: left;
+    color: #ffbdd2;
+}
+
+#mainCaptions .defaultCaption:nth-of-type(even) {
+    text-align: right;
+    color: #d185ff;
+}
+
+#mainCaptions .birthdayCaption p,
+#mainCaptions .christmasCaption p,
+#mainCaptions .lunarNewYearCaption p {
     color: #ff729c;
     font-family: 'comic sans ms';
     font-weight: bold;
@@ -180,18 +190,18 @@ body {
     margin-top: 0;
 }
 
-#birthdayCaption p:last-child {
+#mainCaptions .birthdayCaption p:last-child {
     font-size: 5vh;
     font-size: min(5vw, 5vh);
     font-weight: normal;
 }
 
-#christmasCaption p {
+#mainCaptions .christmasCaption p {
     color: #ff9cba;
     text-shadow: 0 0 0.25em black, 0 0 0.25em black;
 }
 
-#lunarNewYearCaption p {
+#mainCaptions .lunarNewYearCaption p {
     font-family: XinNianKuaiLe;
     color: #f33;
     font-size: min(16vw, 8vh);
@@ -201,19 +211,19 @@ body {
         0 0 0.25em white, 0 0 0.25em white;
 }
 
-#nightCaption p:first-child {
+#mainCaptions .nightCaption p:first-child {
     text-align: left;
     color: #ffb5da;
     margin: 0 0 38vh 0;
 }
 
-#nightCaption p:last-child {
+#mainCaptions .nightCaption p:last-child {
     text-align: right;
     color: #c074ff;
     margin: 0;
 }
 
-#kamiCaption p {
+#mainCaptions .kamiCaption p {
     color: white;
     text-shadow: none;
     text-shadow: 0.05em 0.05em 0.15em rgba(0, 0, 0, 0.8);
@@ -1542,6 +1552,7 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    display: none;
 }
 
 @keyframes firework {

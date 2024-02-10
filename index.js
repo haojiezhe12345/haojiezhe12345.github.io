@@ -502,14 +502,6 @@ function closePopup() {
     }
 }
 
-function showMsgWindow() {
-    if (getCookie('username') == '') {
-        showPopup('setNamePopup')
-    } else {
-        showPopup('msgPopup')
-    }
-}
-
 function setUserName() {
     inputName = document.getElementById('setNameInput').value;
 
@@ -753,8 +745,15 @@ function nextImg() {
 function nextCaption() {
     if (bgPaused) return
 
-    if (theme == 'birthday' || theme == 'christmas' || theme == 'lunarNewYear') {
-        document.getElementById(`${theme}Caption`).style.display = 'block'
+    try {
+        var themeCaptions = document.getElementsByClassName(`${theme}Caption`);
+    } catch (error) {
+        console.log(error)
+        return
+    }
+
+    if (themeCaptions.length == 1) {
+        themeCaptions[0].style.display = 'block';
         setTimeout(() => {
             captionDiv.style.opacity = 1
         }, 500);
@@ -763,23 +762,15 @@ function nextCaption() {
 
     captionDiv.style.opacity = 0
     setTimeout(() => {
-        var elements = document.getElementsByClassName(`${theme}Caption`);
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].style.display = 'none';
+        for (var i = 0; i < themeCaptions.length; i++) {
+            themeCaptions[i].style.display = 'none';
         }
-        if (currentCaption < elements.length - 1) {
+        if (currentCaption < themeCaptions.length - 1) {
             currentCaption++
         } else {
             currentCaption = 0
         }
-        elements[currentCaption].style.display = 'block';
-        if (currentCaption % 2 == 0) {
-            captionDiv.style.textAlign = 'left'
-            elements[currentCaption].style.color = 'rgb(255, 189, 210)'
-        } else {
-            captionDiv.style.textAlign = 'right'
-            elements[currentCaption].style.color = 'rgb(209, 133, 255)'
-        }
+        themeCaptions[currentCaption].style.display = 'block';
         captionDiv.style.opacity = 1
     }, 1500);
 }
@@ -969,18 +960,6 @@ function goFullscreen() {
     }, 500);
 }
 
-/*
-function toggleLowend() {
-    if (isLowendElmnt.checked) {
-        //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
-        document.getElementById('lowendCSS').disabled = false
-    } else {
-        document.getElementById('lowendCSS').disabled = true
-    }
-    setCookie('isLowend', isLowendElmnt.checked)
-}
-*/
-
 function toggleBGM() {
     setCookie('mutebgm', isMutedElmnt.checked)
     if (isMutedElmnt.checked) {
@@ -1077,7 +1056,6 @@ var bgmRotateElmnt = document.getElementById('bgmRotate')
 
 // toggle checkboxes
 var isMutedElmnt = document.getElementById('isMuted')
-//var isLowendElmnt = document.getElementById('isLowend')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
 
@@ -1112,30 +1090,32 @@ if (location.hash == '#debug') {
 var theme = 'default'
 
 var d = new Date()
-if ((d.getMonth() + 1 == 10 && d.getDate() == 3) || location.hash == '#birthday') {
+if (d.getMonth() + 1 == 10 && d.getDate() == 3) {
     theme = 'birthday'
-    var yearsOld = d.getFullYear() - 2011
-    document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
 }
-else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6) || location.hash == '#christmas') {
+else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6)) {
     theme = 'christmas'
 }
-else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6) || location.hash == '#lunarNewYear') {
+else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
     theme = 'lunarNewYear'
 }
-else if (location.hash == '#default-theme') {
-    theme = 'default'
-}
-else if (getCookie('theme') == 'kami' || location.hash == '#kami') {
-    theme = 'kami'
-    try {
-        printParaCharOneByOne('kamiCaption', 750)
-    } catch (error) {
-        console.log(error)
-    }
-}
-else if ((d.getHours() >= 23 || d.getHours() <= 5) || location.hash == '#night') {
+else if (d.getHours() >= 23 || d.getHours() <= 5) {
     theme = 'night'
+}
+
+var themes = {
+    '#default-theme': 'default',
+    '#birthday': 'birthday',
+    '#christmas': 'christmas',
+    '#lunarNewYear': 'lunarNewYear',
+    '#night': 'night',
+    '#kami': 'kami',
+}
+
+for (var key in themes) {
+    if (location.hash == key) {
+        theme = themes[key]
+    }
 }
 
 try {
@@ -1144,17 +1124,18 @@ try {
     console.log('theme indicator text not defined')
 }
 
-// for single-image theme, show only the first image and disable slideshow
-if (theme == 'kami' || theme == 'night') {
-    document.getElementsByClassName(`${theme}bg`)[0].style.opacity = 1
-    document.getElementsByClassName(`${theme}bg`)[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/${theme}/mainbg1.jpg")`
-
-    document.getElementById(`${theme}Caption`).style.display = 'block'
-    setTimeout(() => {
-        captionDiv.style.opacity = 1
-    }, 500);
-
-    bgPaused = true
+// theme-specific options
+if (theme == 'birthday') {
+    var yearsOld = d.getFullYear() - 2011
+    document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
+} else if (theme == 'lunarNewYear') {
+    document.getElementsByClassName('fireworks')[0].style.display = 'block'
+} else if (theme == 'kami') {
+    try {
+        printParaCharOneByOne(document.getElementsByClassName('kamiCaption')[0], 750)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 // play theme-specific BGMs
@@ -1179,13 +1160,6 @@ if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
     isMutedElmnt.checked = true
 }
 
-/*
-if (getCookie('isLowend') == 'true') {
-    isLowendElmnt.checked = true
-    //document.head.appendChild(html2elmnt('<link rel="stylesheet" href="index_lowend.css" type="text/css" id="lowendCSS">'))
-    document.getElementById('lowendCSS').disabled = false
-}
-*/
 if (getCookie('graphicsMode') != '') {
     changeGraphicsMode(getCookie('graphicsMode'))
 }
@@ -1210,25 +1184,29 @@ if (getCookie('showTimeline') == 'false') {
 //
 var bgCount
 bgCount = document.getElementsByClassName(`${theme}bg`).length
-/*
-if (isBirthday) {
-    bgCount = document.getElementsByClassName('birthdaybg').length
-} else {
-    bgCount = document.getElementsByClassName('defaultbg').length
+
+// for single-image theme, show only the first image and disable slideshow
+if (bgCount == 1) {
+    document.getElementsByClassName(`${theme}bg`)[0].style.opacity = 1
+    document.getElementsByClassName(`${theme}bg`)[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/${theme}/mainbg1.jpg")`
+
+    document.getElementsByClassName(`${theme}Caption`)[0].style.display = 'block'
+    setTimeout(() => {
+        captionDiv.style.opacity = 1
+    }, 500);
+
+    bgPaused = true
 }
-*/
 
 var currentBG = bgCount - 1
 var currentCaption = -1
 
 function playBG() {
+    document.getElementsByClassName(`${theme}bg`)[0].classList.add('bgzoom')
     nextImg()
     setInterval(nextImg, 8000)
     setTimeout(() => {
-        var bgEls = document.getElementsByClassName('mainbg')
-        for (let i = 0; i < bgEls.length; i++) {
-            bgEls[i].classList.remove('bgzoom');
-        }
+        document.getElementsByClassName(`${theme}bg`)[0].classList.remove('bgzoom')
     }, 10000);
 
     nextCaption()
@@ -1391,6 +1369,9 @@ var imgViewerOffsetY = 0
 var imgViewerScale = 1
 var imgViewerMouseMoved = false
 
+
+// global Esc key handler
+//
 document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
@@ -1404,6 +1385,9 @@ document.onkeydown = function (e) {
     }
 }
 
+
+// hash change handler
+//
 if (window.location.hash == '#view-img' || window.location.hash == '#popup') {
     window.location.hash = ''
 }
@@ -1432,21 +1416,5 @@ window.addEventListener("beforeinstallprompt", (event) => {
 var isInStandaloneMode = false
 isInStandaloneMode = (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
 
-
-//var uploadImgList = []
-
-/*
-var isBGMPlaying = false
-setTimeout(() => {
-    document.body.innerHTML += `
-    <audio id="bgm" src="bgm.mp3" muted loop controls></audio>
-    `
-    var audio = document.getElementById('bgm')
-    audio.play()
-}, 1000);
-//document.addEventListener('ontouchstart', audio.play())
-//document.addEventListener('onmousemove', audio.play())
-//audio.play()
-*/
 
 jsLoaded = true
