@@ -150,7 +150,7 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
     var imgsDOM = '<br><br>'
     try {
         for (var i of comment.image.split(',')) {
-            imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
+            imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
         }
     } catch (error) {
 
@@ -158,9 +158,9 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
 
     commentDiv.insertBefore(html2elmnt(`
         <div class="commentBox" id="#${comment.id}" data-timestamp="${comment.time}">
-            <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
+            <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
             <div class="bgcover"></div>
-            <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg"
+            <img class="avatar" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg"
                 onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
                 onclick="
                     showUserComment('${comment.sender.replace(/\'/g, "\\'")}');
@@ -450,30 +450,31 @@ function showPopup(popupID) {
     var popup = document.getElementById(popupID);
     popup.style.display = 'block';
 
-    document.getElementById('setNameInput').value = getCookie('username')
-    avatarInput.value = ''
-    setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
-    setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
+    if (popupID == 'setNamePopup') {
+        document.getElementById('setNameInput').value = getCookie('username')
+    }
+
+    if (popupID == 'setAvatarPopup') {
+        avatarInput.value = ''
+        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+        setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
+    }
 
     if (popupID == 'getImgPopup') {
-        let j = 0
-        for (let i = 0; i < 6; i++, j++) {
-            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/mainbg${i + 1}.jpg`
-        }
-        for (let i = 0; i < 4; i++, j++) {
-            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg${i + 1}.jpg`
-        }
-        for (let i = 0; i < 1; i++, j++) {
-            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/night/mainbg${i + 1}.jpg`
-        }
-        for (let i = 0; i < 1; i++, j++) {
-            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg${i + 1}.jpg`
-        }
-        for (let i = 0; i < 7; i++, j++) {
-            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/christmas/mainbg${i + 1}.jpg`
-        }
-        for (let i = 0; i < msgBgCount; i++, j++) {
-            document.getElementsByClassName('getImgList')[j].src = `https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg`
+        document.getElementById('getImgPopup').firstElementChild.lastElementChild.innerHTML = ''
+        for (var key in themes) {
+            var themeName = themes[key]
+            try {
+                for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
+                    document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg">
+                        <p>${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}</p>
+                        <br>
+                    `))
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 }
@@ -491,15 +492,8 @@ function closePopup() {
     for (var i = 0; i < elements.length; i++) {
         elements[i].style.display = 'none';
     }
+
     loadUserInfo()
-
-    try {
-        document.getElementById('senderText').innerHTML = getCookie('username')
-        document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
-        document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-    } catch (error) {
-
-    }
 }
 
 function setUserName() {
@@ -601,6 +595,14 @@ function loadUserInfo() {
     } else {
         name.innerText = getCookie('username')
     }
+
+    try {
+        document.getElementById('senderText').innerHTML = getCookie('username')
+        document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+        document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
+    } catch (error) {
+
+    }
 }
 
 var userCommentUser = ''
@@ -658,7 +660,7 @@ function showUserComment(user) {
                 try {
                     if (comment.image != '') {
                         for (var i of comment.image.split(',')) {
-                            imgsDOM += `<img src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
+                            imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
                         }
                     }
                 } catch (error) { }
