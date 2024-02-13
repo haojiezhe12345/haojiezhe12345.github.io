@@ -424,6 +424,7 @@ function viewImg(src) {
     imgViewerOffsetY = 0
     imgViewerScale = 1
     document.getElementById('imgViewer').style.transform = 'translateX(0px) translateY(0px) scale(1)'
+    document.getElementById('imgViewer').style.removeProperty('image-rendering')
 }
 
 function closeImgViewer() {
