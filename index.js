@@ -605,17 +605,15 @@ function loadUserInfo() {
     }
 }
 
-var userCommentUser = ''
-var userCommentOffset = 0
-
-var userCommentEl = document.getElementById('userComment')
-
 function showUserComment(user) {
     if (debug) console.log(user)
     if ((user == null && userCommentUser == '') || user == '') {
         if (debug) console.log('empty user!')
         return
     };
+
+    userCommentEl.removeEventListener('scroll', userCommentScroll)
+
     const xhr = new XMLHttpRequest();
 
     if (user == null) {
@@ -641,7 +639,9 @@ function showUserComment(user) {
                 userCommentEl.scrollTop = 0
                 userCommentUser = user
                 userCommentOffset = 0
-                userCommentEl.addEventListener('scroll', userCommentScroll)
+                //userCommentEl.addEventListener('scroll', userCommentScroll)
+
+                setTimeout(showUserComment)
             }
 
             for (var comment of xhr.response) {
@@ -680,7 +680,9 @@ function showUserComment(user) {
                 userCommentOffset++
             }
 
-            userCommentEl.addEventListener('scroll', userCommentScroll)
+            setTimeout(() => {
+                userCommentEl.addEventListener('scroll', userCommentScroll)
+            }, 50);
         }
     }
     xhr.onerror = () => {
@@ -696,7 +698,6 @@ function userCommentScroll() {
     var toBottom = userCommentEl.scrollHeight - userCommentEl.clientHeight - userCommentEl.scrollTop
     if (toBottom < 100 && document.getElementById('popupContainer').style.display == 'flex') {
         showUserComment()
-        userCommentEl.removeEventListener('scroll', userCommentScroll)
     }
 }
 
@@ -1046,9 +1047,13 @@ var maxCommentID = null
 var pauseCommentScroll = false
 var maxCommentTime = 0
 
+var userCommentUser = ''
+var userCommentOffset = 0
+
 // document elmnts
 var commentDiv = document.getElementById('comments')
 var captionDiv = document.getElementById('mainCaptions')
+var userCommentEl = document.getElementById('userComment')
 
 var setAvatarImg = document.getElementById('setAvatarImg')
 var avatarInput = document.getElementById('setAvatarInput')

@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'XinNianKuaiLe';
-    src: url('https://haojiezhe12345.top:82/madohomu/res/XinNianKuaiLe.ttf') format('truetype');
+    font-family: 'AaWoyoudianfangLite';
+    src: url('https://haojiezhe12345.top:82/madohomu/res/AaWoyoudianfangLite.ttf') format('truetype');
 }
 
 .ui.en {
@@ -202,7 +202,7 @@ body {
 }
 
 #mainCaptions .lunarNewYearCaption p {
-    font-family: XinNianKuaiLe;
+    font-family: AaWoyoudianfangLite;
     color: #f33;
     font-size: min(16vw, 8vh);
     font-weight: normal;
@@ -331,24 +331,47 @@ body {
     padding: 4px 16px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
-    border-radius: 20px;
+    border-radius: 100px;
     font-weight: bold;
+
+    /*margin: 13px;*/
+    /*border: 3px solid transparent;*/
+    /*box-shadow: 0 0 12px 9px rgba(255, 255, 255, 0.9);*/
+    /*background:
+        linear-gradient(100deg, #ffecf5, #f4e7ff) padding-box,
+        linear-gradient(100deg, #ffc6e3, #d4a0ff) border-box;*/
+
+    background-color: rgba(255, 228, 251, 0.9);
+    box-shadow: 0 0 12px 12px rgba(255, 228, 251, 0.9);
+    transition: all 0.2s;
+}
+
+#mainTitle:hover {
+    background-color: rgb(255, 228, 251);
+    box-shadow: 0 0 12px 12px rgb(255, 228, 251);
 }
 
 #mainTitle a {
-    margin: 0;
-    font-size: 20px;
+    height: 26px;
+    padding: 2px 0 0;
+    display: flex;
+    align-items: center;
+    font-family: AaWoyoudianfangLite;
+    font-size: 23px;
+    letter-spacing: 1.8px;
     text-decoration: none;
+    transition: all 0.2s;
 }
 
 #mainTitle a:hover {
-    text-decoration: underline;
+    /*text-decoration: underline;*/
+    transform: scale(1.075);
 }
 
 #themeIndicator {
     display: inline-flex;
     align-items: center;
-    margin: 6px 10px;
+    margin: 6px 12px;
     padding: 3px 6px;
     border-radius: 100px;
     background-color: rgba(255, 255, 255, 0.7);
@@ -362,6 +385,7 @@ body {
 #themeIndicator img {
     /*filter: invert();*/
     border-radius: 100px;
+    transition: all 0.1s;
 }
 
 #bgmRotate {
@@ -377,6 +401,10 @@ body {
     display: none;
 }
 
+#themeIndicator:hover img:last-child {
+    margin-left: 3px;
+}
+
 #userInfo {
     position: absolute;
     top: 0;
@@ -385,19 +413,32 @@ body {
     padding: 4px 16px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
-    border-radius: 20px;
+    border-radius: 100px;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+#userInfo:hover {
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 12px 12px rgb(255, 255, 255);
 }
 
 #userInfo>* {
     vertical-align: middle;
+    display: inline-block;
+    user-select: none;
+    transition: all 0.15s;
 }
 
 #userInfo img {
-    width: 27px;
-    height: 27px;
+    width: 28px;
+    height: 28px;
     border-radius: 100%;
     object-fit: cover;
+}
+
+#userInfo:hover span {
+    transform: scale(1.05);
 }
 
 #lowerPanel {
@@ -1107,6 +1148,7 @@ body {
 }
 
 #lowerPanel #toolbar {
+    display: flex;
     position: absolute;
     right: -100%;
     top: -4px;
