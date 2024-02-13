@@ -433,7 +433,7 @@ function closeImgViewer() {
     }
 
     document.getElementById('imgViewerBox').style.display = 'none';
-    document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
 }
 
 function showPopup(popupID) {
@@ -798,7 +798,7 @@ function changeLang(targetLang) {
         console.log(`invalid lang "${targetLang}"`)
         return
     }
-    mainCSS = document.getElementById('langCSS').innerHTML = `
+    document.getElementById('langCSS').innerHTML = `
     .ui {
         display: none !important;
     }

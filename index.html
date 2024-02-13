@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta id="viewport1" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta id="viewport1" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>圆焰圆 MadoHomu.love</title>
 
     <link rel="stylesheet" href="index.css" type="text/css">
@@ -179,7 +179,7 @@
 
         <div id="mainTitle">
             <a href="http://madohomu.love/?no-redirect">
-                <span style="color: #ff91c8;">Mado</span>
+                <span style="color: #ff80c0;">Mado</span>
                 <span style="color: #c074ff;">Homu</span>
                 <span style="color: #f00;">.love</span>
             </a>
@@ -651,28 +651,37 @@
             }
         "
         onwheel="
+            event.preventDefault()
             if (event.deltaY < 0) {
-                imgViewerScale *= (1000 - event.deltaY) / 1000
+                scaleMultiplier = (1000 - event.deltaY) / 1000
                 //imgViewerScale *= 11 / 10
             } else {
-                imgViewerScale *= 1000 / (1000 + event.deltaY)
+                scaleMultiplier = 1000 / (1000 + event.deltaY)
                 //imgViewerScale *= 10 / 11
             }
-            var mouseOffsetX = event.clientX - (document.documentElement.clientWidth / 2) - imgViewerOffsetX
-            var mouseOffsetY = event.clientY - (document.documentElement.clientHeight / 2) - imgViewerOffsetY
-            //console.log(mouseOffsetX, mouseOffsetY)
-            imgViewerOffsetX += mouseOffsetX / event.deltaY * 18
-            imgViewerOffsetY += mouseOffsetY / event.deltaY * 18
+            imgViewerScale *= scaleMultiplier
+
+            var mouseOffsetX = event.clientX - (document.documentElement.clientWidth / 2)
+            var mouseOffsetY = event.clientY - (document.documentElement.clientHeight / 2)
+            if (debug) console.log(mouseOffsetX, mouseOffsetY)
+
+            imgViewerOffsetX += (scaleMultiplier - 1) * (imgViewerOffsetX - mouseOffsetX)
+            imgViewerOffsetY += (scaleMultiplier - 1) * (imgViewerOffsetY - mouseOffsetY)
         
             if (imgViewerScale < 1) {
                 imgViewerScale = 1
                 imgViewerOffsetX = 0
                 imgViewerOffsetY = 0
             }
-            //console.info(imgViewerScale)
+            if (debug) console.log(imgViewerScale)
+
             this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
-        "
-        >
+            if (imgViewerScale > 3) {
+                this.firstElementChild.style.imageRendering = 'pixelated'
+            } else {
+                this.firstElementChild.style.removeProperty('image-rendering')
+            }
+        ">
         <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
     </div>
 
