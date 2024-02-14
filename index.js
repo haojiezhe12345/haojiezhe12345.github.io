@@ -323,7 +323,7 @@ function newComment() {
                 <div id="uploadImgList" style="display: none"></div>
             </div>
             <label>
-                <input id="uploadImgPicker" type="file" onchange="previewLocalImgs()" multiple style="display: none;" />
+                <input id="uploadImgPicker" type="file" accept="image/*" onchange="previewLocalImgs()" multiple style="display: none;" />
                 <span><span class="ui zh">+ 添加图片</span><span class="ui en">+ Add images</span></span>
             </label>
             <button id="sendBtn" onclick="sendMessage()"><span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span></button>

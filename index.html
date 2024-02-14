@@ -420,18 +420,7 @@
                 <span class="ui zh">工具 🛠</span><span class="ui en">Tools 🛠</span>
                 <ul>
                     <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
-                    <li>
-                        <span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span>
-                        <i>▶</i>
-                        <ul>
-                            <li onclick="location.hash=''; location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
-                            <li onclick="location.hash='#default-theme'; location.reload()"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></li>
-                            <li onclick="location.hash='#night'; location.reload()"><span class="ui zh">晚安</span><span class="ui en">Night</span></li>
-                            <li onclick="location.hash='#birthday'; location.reload()"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></li>
-                            <li onclick="location.hash='#christmas'; location.reload()"><span class="ui zh">圣诞</span><span class="ui en">Christmas</span></li>
-                            <li onclick="location.hash='#kami'; location.reload()"><span>kami.im</span></li>
-                        </ul>
-                    </li>
+                    <li onclick="showPopup('themeSelectorPopup')"><span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span></li>
                     <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
                     <li onclick="
                         if (installPrompt != null) installPrompt.prompt()
@@ -449,7 +438,7 @@
                         </ul>
                     </li>
                     <li>
-                        <span class="ui zh">🖥️ 画质</span><span class="ui en">🖥️ Graphics</span>
+                        <span class="ui zh">✨ 特效</span><span class="ui en">✨ Graphics</span>
                         <i>▶</i>
                         <ul>
                             <li onclick="changeGraphicsMode('high')"><span class="ui zh">高</span><span class="ui en">Fancy</span></li>
@@ -509,7 +498,7 @@
             <h2><span class="ui zh">设置头像</span><span class="ui en">Set avatar</span></h2>
             <img id="setAvatarImg" src="" onerror="">
             <form id="avatarForm" enctype="multipart/form-data">
-                <input id="setAvatarInput" type="file" onchange="uploadAvatar()"/>
+                <input id="setAvatarInput" type="file" accept="image/*" onchange="uploadAvatar()"/>
             </form>
             <br>
             <button class="okBtn" onclick="closePopup();"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
