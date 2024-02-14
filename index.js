@@ -51,6 +51,10 @@ function loadComments(from, count, time) {
                 if (comment.id == -999999 && from > maxCommentID && maxCommentID) {
                     console.log('comments are up to date')
                     document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                    commentsUpToDate = true
+                    setTimeout(() => {
+                        commentsUpToDate = false
+                    }, 10000);
                     return
                 }
                 if (comment.id == -999999 && from < minCommentID && minCommentID) {
@@ -242,6 +246,7 @@ function clearComments(clearTop) {
     }
     minCommentID = null
     maxCommentID = null
+    commentsUpToDate = false
 
     newCommentDisabled = false
     commentHorizontalScrolled = 0
@@ -257,7 +262,7 @@ function commentScroll() {
     setTimelineActiveMonth()
 
     if (!isFullscreen) {
-        var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
+        //var scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
         //if (debug) console.log(scrolled)
         var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
         var toLeft = commentDiv.scrollLeft
@@ -269,19 +274,19 @@ function commentScroll() {
         }
         if (toRight <= 40) {
             loadComments(minCommentID - 1)
-        } else if (toLeft <= 40) {
+        } else if (toLeft <= 40 && commentsUpToDate == false) {
             loadComments(maxCommentID + 10, 10)
         } else return
 
     } else {
-        var scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
+        //var scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
         //if (debug) console.log(scrolled)
         var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
         if (toBottom <= 40) {
             loadComments(minCommentID - 1)
-        } else if (toTop <= 40) {
+        } else if (toTop <= 40 && commentsUpToDate == false) {
             var count = getFullscreenHorizonalCommentCount() * 2
             while (count < 9) {
                 count += getFullscreenHorizonalCommentCount()
@@ -1046,6 +1051,7 @@ function htmlEscape(txt) {
 var minCommentID = null
 var maxCommentID = null
 var pauseCommentScroll = false
+var commentsUpToDate = false
 var maxCommentTime = 0
 
 var userCommentUser = ''
