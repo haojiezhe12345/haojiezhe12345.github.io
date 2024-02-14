@@ -1492,12 +1492,10 @@ body {
 }
 
 #showUserCommentPopup h2 {
+    display: flex;
+    align-items: center;
     text-align: left;
     margin-bottom: 6px;
-}
-
-#showUserCommentPopup h2 * {
-    vertical-align: middle;
 }
 
 #showUserCommentPopup h2 img {
@@ -1505,7 +1503,7 @@ body {
     height: 50px;
     object-fit: cover;
     border-radius: 100px;
-    margin-right: 4px;
+    margin-right: 10px;
 }
 
 #showUserCommentPopup>div>div {
