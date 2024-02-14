@@ -23,7 +23,6 @@ function loadComments(from, count, time) {
         xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?time=${time}`);
     }
 
-    xhr.send();
     xhr.responseType = "json";
     xhr.onload = () => {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -120,6 +119,18 @@ function loadComments(from, count, time) {
             console.log(`Error: ${xhr.status}`);
         }
     };
+    xhr.onerror = () => {
+        window.alert([
+            '加载留言失败',
+            '请尝试刷新页面, 清除DNS缓存, 切换网络, 或者10分钟后重试',
+            '如数小时内仍未解决, 请发邮件到 3112611479@qq.com (或加此QQ)',
+            '',
+            'Failed to load messages',
+            'Try refreshing this page, flush DNS cache, switch to mobile data, or try again in 10 minutes',
+            'Please contact 3112611479@qq.com if it\'s not fixed for hours',
+        ].join('\n'))
+    }
+    xhr.send();
 }
 
 function loadKami(page = 1) {
@@ -224,7 +235,7 @@ function sendMessage() {
         }
     };
     xhr.onerror = () => {
-        window.alert('发送留言失败\n如果问题持续, 请发邮件到3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
+        window.alert('发送留言失败\n如果问题持续, 请发邮件到 3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
         document.getElementById('sendBtn').disabled = false;
         document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
     }

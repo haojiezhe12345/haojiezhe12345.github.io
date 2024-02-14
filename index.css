@@ -1576,6 +1576,7 @@ body {
 #themeSelectorPopup>div>div>img {
     width: 180px;
     height: 120px;
+    box-sizing: border-box;
     object-fit: cover;
     transition: transform 0.2s;
 }
