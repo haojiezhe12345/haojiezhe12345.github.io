@@ -1,9 +1,3 @@
-favicon.png
-https://haojiezhe12345.top:82/madohomu/favicon.png
-
-favicon_192.png
-https://haojiezhe12345.top:82/madohomu/favicon_192.png
-
 bg/
 https://haojiezhe12345.top:82/madohomu/bg/
 
