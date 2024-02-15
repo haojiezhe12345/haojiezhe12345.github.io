@@ -763,14 +763,16 @@ function nextImg() {
     }
 
     try {
-        bgs[prevBG].style.opacity = 0
-        //bgs[currentBG].style.display = 'block'
+        //bgs[prevBG].style.opacity = 0
+        bgs[prevBG].style.removeProperty('opacity')
+        bgs[currentBG].style.display = 'block'
         bgs[currentBG].style.opacity = 1
         bgs[currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${currentBG + 1}.jpg?2")`
         bgs[currentBG].firstElementChild.style.removeProperty('animation-name')
         setTimeout(() => {
-            bgs[prevBG].firstElementChild.style.animationName = 'none'
-            //bgs[nextBG].style.display = 'block'
+            //bgs[prevBG].firstElementChild.style.animationName = 'none'
+            bgs[prevBG].style.removeProperty('display')
+            bgs[nextBG].style.display = 'block'
             bgs[nextBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${nextBG + 1}.jpg?2")`
             bgs[nextBG].firstElementChild.style.animationName = 'none'
         }, 2500);
@@ -1230,6 +1232,7 @@ bgCount = document.getElementsByClassName(`${theme}bg`).length
 // for single-image theme, show only the first image and disable slideshow
 if (bgCount == 1) {
     document.getElementsByClassName(`${theme}bg`)[0].style.opacity = 1
+    document.getElementsByClassName(`${theme}bg`)[0].style.display = 'block'
     document.getElementsByClassName(`${theme}bg`)[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/${theme}/mainbg1.jpg")`
 
     document.getElementsByClassName(`${theme}Caption`)[0].style.display = 'block'
