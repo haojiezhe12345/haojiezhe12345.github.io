@@ -485,13 +485,30 @@ function showPopup(popupID) {
                 for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
                     document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
                         <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg">
-                        <p>${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}</p>
+                        <p>
+                            ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
+                            ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
+                                <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
+                            ` : ''}
+                        </p>
                         <br>
                     `))
                 }
             } catch (error) {
                 console.log(error)
             }
+        }
+        for (let i = 0; i < msgBgCount; i++) {
+            document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
+            <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg">
+            <p>
+                ${msgBgInfo[i].description != null
+                    ? msgBgInfo[i].description
+                    : `Artwork by ${msgBgInfo[i].illustrator} <a href="https://www.pixiv.net/artworks/${msgBgInfo[i].pixivid}" target="_blank">Pixiv↗</a>`}
+            </p>
+            <br>
+        `))
+
         }
     }
 }
@@ -1271,6 +1288,8 @@ if (location.hash == '#video') {
 }
 
 
+// user (login not implemented)
+//
 loadUserInfo()
 
 
@@ -1313,7 +1332,52 @@ commentDiv.addEventListener("wheel", (event) => {
     }
 });
 
-var msgBgCount = 11
+const msgBgInfo = [
+    {
+        'description': 'Official Guidebook "You Are Not Alone"',
+    },
+    {
+        'illustrator': 'Nine',
+        'pixivid': '57114653',
+    },
+    {
+        'illustrator': '曼曼',
+        'pixivid': '91471007',
+    },
+    {
+        'illustrator': 'カラスBTK',
+        'pixivid': '99591809',
+    },
+    {
+        'illustrator': 'さんしょう',
+        'pixivid': '18530512',
+    },
+    {
+        'illustrator': 'STAR影法師',
+        'pixivid': '60649948',
+    },
+    {
+        'illustrator': 'Nardack',
+        'pixivid': '88198018',
+    },
+    {
+        'illustrator': 'Rella',
+        'pixivid': '29076044',
+    },
+    {
+        'illustrator': 'おれつ',
+        'pixivid': '57636925',
+    },
+    {
+        'illustrator': 'ChrisTy☆クリスティ',
+        'pixivid': '65489049',
+    },
+    {
+        'illustrator': 'ChrisTy☆クリスティ',
+        'pixivid': '63582832',
+    },
+]
+const msgBgCount = msgBgInfo.length
 var lastBgImgs = []
 
 
@@ -1442,4 +1506,6 @@ var isInStandaloneMode = false
 isInStandaloneMode = (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
 
 
+// everything is now initiated
+//
 jsLoaded = true

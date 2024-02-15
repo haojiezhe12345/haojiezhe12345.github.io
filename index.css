@@ -61,8 +61,7 @@ body {
     image-rendering: auto;
     /*background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg.jpg);*/
     background-size: cover;
-    background-position-x: center;
-    background-position-y: center;
+    background-position: center;
     animation-name: bgzoomNoOpacity;
     animation-duration: 10s;
     animation-timing-function: ease;
@@ -1475,7 +1474,7 @@ body {
 
 #getImgPopup img {
     max-width: 100%;
-    max-height: 70vh;
+    max-height: 60vh;
     /*min-height: 40vh;*/
 }
 
