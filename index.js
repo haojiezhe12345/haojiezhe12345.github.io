@@ -67,13 +67,7 @@ function loadComments(from, count, time) {
                     return
                 }
 
-                if (comment.id < minCommentID || minCommentID == null) {
-                    appendComment(comment)
-                } else if (comment.id > maxCommentID && maxCommentID != null) {
-                    appendComment(comment, prevLatestCommentEl)
-                } else {
-                    console.log('skipping exist comment ID ' + comment.id)
-                }
+                insertComment(comment)
 
                 if (xhrMinCommentID == null) {
                     xhrMinCommentID = comment.id
@@ -150,7 +144,44 @@ function loadKami(page = 1) {
     xhr.send()
 }
 
-function appendComment(comment, insertBeforeEl = document.getElementById('loadingIndicator')) {
+function insertComment(comment) {
+    //if (debug) console.log('Inserting comment', comment.id)
+    var insertBeforeEl = null
+
+    // compare comments by time, then ID
+    function compareCommentAt(i) {
+        return compareArr([comment.time, comment.id], [parseInt(commentList[i].dataset.timestamp), parseInt(commentList[i].id.replace('#', ''))])
+    }
+    var commentList = document.querySelectorAll('.commentBox[id^="#"]')
+    // insert into []
+    // this matches all lists of length 0
+    if (commentList.length == 0) {
+        insertBeforeEl = document.getElementById('loadingIndicator')
+    } else {
+        // insert into the leftmost or rightmost of [0], [0, 1, 2 ...]
+        // this matches all lists of length 1, and some of those >= 2
+        if (compareCommentAt(0) > 0) {
+            insertBeforeEl = commentList[0]
+        } else if (compareCommentAt(commentList.length - 1) < 0) {
+            insertBeforeEl = document.getElementById('loadingIndicator')
+        } else {
+            // insert into the middle of [0, 1, ...]
+            // this matches all lists with length >= 2
+            for (let i = 0; i < commentList.length - 1; i++) {
+                if (compareCommentAt(i) < 0 && compareCommentAt(i + 1) > 0) {
+                    insertBeforeEl = commentList[i + 1]
+                    break
+                }
+            }
+        }
+    }
+    // if insert fails, there must be two same comments
+    if (insertBeforeEl == null) {
+        console.log('Duplicate comment detected:', comment.id)
+        return
+    }
+    //if (debug) console.log('Insert before:', insertBeforeEl)
+
     var time = new Date(comment.time * 1000)
     date = time.toLocaleDateString()
     hour = time.toLocaleTimeString()
@@ -172,13 +203,11 @@ function appendComment(comment, insertBeforeEl = document.getElementById('loadin
         for (var i of comment.image.split(',')) {
             imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
         }
-    } catch (error) {
-
-    }
+    } catch (error) { }
 
     commentDiv.insertBefore(html2elmnt(`
         <div class="commentBox" id="#${comment.id}" data-timestamp="${comment.time}">
-            <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg">
+            <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
             <img class="avatar" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg"
                 onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
@@ -458,6 +487,8 @@ function closeImgViewer() {
     document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
 }
 
+// popup
+//
 function showPopup(popupID) {
     location.hash = 'popup'
 
@@ -513,7 +544,6 @@ function showPopup(popupID) {
             </p>
             <br>
         `))
-
         }
     }
 }
@@ -535,6 +565,8 @@ function closePopup() {
     loadUserInfo()
 }
 
+// user related
+//
 function setUserName() {
     inputName = document.getElementById('setNameInput').value;
 
@@ -915,12 +947,14 @@ function loadTimeline(timeStamp) {
 function getCurrentComment() {
     var scrolled = 0
     if (!isFullscreen) {
-        scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
+        scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth)// - commentDiv.clientWidth)
     } else {
-        scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
+        scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight)// - commentDiv.clientHeight)
     }
-    var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - scrolled))
-    return document.getElementById(`#${id}`)
+    //var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - scrolled))
+    //return document.getElementById(`#${id}`)
+    var commentList = document.querySelectorAll('.commentBox[id^="#"]')
+    return commentList[Math.round(commentList.length * scrolled)]
 }
 
 function setTimelineActiveMonth() {
@@ -1078,6 +1112,18 @@ function htmlEscape(txt) {
     var el = document.createElement('p')
     el.innerText = txt
     return el.innerHTML
+}
+
+function compareArr(a1, a2) {
+    //if (debug) console.log(a1, a2)
+    for (let i = 0; i < a1.length; i++) {
+        if (a1[i] != a2[i]) {
+            return a1[i] - a2[i]
+        } else {
+            continue
+        }
+    }
+    return 0
 }
 
 
