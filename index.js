@@ -200,8 +200,10 @@ function insertComment(comment) {
 
     var imgsDOM = '<br><br>'
     try {
-        for (var i of comment.image.split(',')) {
-            imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
+        if (comment.image != '') {
+            for (var i of comment.image.split(',')) {
+                imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
+            }
         }
     } catch (error) { }
 
