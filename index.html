@@ -463,7 +463,7 @@
                         <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
                         <span style="display: inline-flex; align-items: center; padding: 0;">
                             <input id="goto" style="width: 64px;">
-                            <button onclick="clearComments(1);loadComments(document.getElementById('goto').value)">Go</button>
+                            <button onclick="clearComments(1);loadComments({ 'from': document.getElementById('goto').value })">Go</button>
                         </span>
                     </li>
                 </ul>
@@ -520,7 +520,7 @@
                 <div>
                     <p>2023/1/1<span>#1000</span></p>
                     <p>
-                        <span onclick="clearComments(1); loadComments(this.parentNode.parentNode.querySelector('span').innerText.replace('#', '')); closePopup()">
+                        <span onclick="clearComments(1); loadComments({ 'from': this.parentNode.parentNode.querySelector('span').innerText.replace('#', '') }); closePopup()">
                             Hello, world!
                         </span>
                         <i></i>

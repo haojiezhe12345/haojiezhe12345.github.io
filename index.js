@@ -2,44 +2,44 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
-function loadComments(from, count, time) {
+function loadComments(queryObj = {}, kami = false, isLoadedWithPrevious = false) {
     //if (from == null && time == null) setTodayCommentCount()
 
     const xhr = new XMLHttpRequest();
 
-    if (from == null && count == null && time == null) {
-        xhr.open("GET", "https://haojiezhe12345.top:82/madohomu/api/comments");
-    }
-    if (from != null && count == null) {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?from=${from}`);
-    }
-    if (from == null && count != null) {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?count=${count}`);
-    }
-    if (from != null && count != null) {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?from=${from}&count=${count}`);
-    }
-    if (from == null && count == null && time != null) {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?time=${time}`);
+    if (kami == false) {
+        xhr.open("GET", "https://haojiezhe12345.top:82/madohomu/api/comments" + obj2queryString(queryObj));
+    } else {
+        xhr.open("GET", "https://haojiezhe12345.top:82/madohomu/api/comments/kami" + obj2queryString(queryObj));
     }
 
     xhr.responseType = "json";
     xhr.onload = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.status == 200) {
             //console.log(xhr.response);
+            isLoadCommentErrorShowed = false
 
-            if (xhr.response[0].time > maxCommentTime) {
-                maxCommentTime = xhr.response[0].time
-                loadTimeline(maxCommentTime)
+            if (xhr.response[0].time > maxTimelineTime) {
+                maxTimelineTime = xhr.response[0].time
+                loadTimeline(maxTimelineTime)
                 setTodayCommentCount()
             }
 
-            var xhrMaxCommentID = null
-            var xhrMinCommentID = null
-            //var prevLatestCommentEl = document.getElementById('topComment') ? document.getElementById('topComment').nextElementSibling : commentDiv.firstElementChild
-            var prevLatestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
-            var prevCommentTop = prevLatestCommentEl.getBoundingClientRect().top
-            var prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+            var isCommentsNewer = getMaxCommentID() != null && queryObj.from > getMaxCommentID()
+            var isCommentsOlder = getMinCommentID() != null && queryObj.from < getMinCommentID()
+            if (debug) console.log('isNewer', isCommentsNewer, ' isOlder', isCommentsOlder)
+
+            if (isCommentsNewer && document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
+                console.log('newCommentBox is active, and you are viewing older comments\nskipping upper comments')
+                document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                return
+            }
+
+            if (isLoadedWithPrevious == false) {
+                window.prevLatestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
+                window.prevCommentTop = prevLatestCommentEl.getBoundingClientRect().top
+                window.prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+            }
 
             for (var comment of xhr.response) {
 
@@ -47,44 +47,26 @@ function loadComments(from, count, time) {
                     console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
                     continue
                 }
-                if (comment.id == -999999 && from > maxCommentID && maxCommentID) {
+                if (comment.id == -999999 && isCommentsNewer) {
                     console.log('comments are up to date')
                     document.getElementById('loadingIndicatorBefore').style.display = 'none'
                     commentsUpToDate = true
-                    setTimeout(() => {
+                    window.clearCommentsUpToDateTimeout = setTimeout(() => {
                         commentsUpToDate = false
                     }, 10000);
                     return
                 }
-                if (comment.id == -999999 && from < minCommentID && minCommentID) {
+                if (comment.id == -999999 && isCommentsOlder) {
                     console.log('reached the oldest comment')
                     document.getElementById('loadingIndicator').style.display = 'none'
-                    return
-                }
-                if (comment.id > maxCommentID && maxCommentID != null && document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
-                    console.log('newCommentBox is active, skipping upper comments')
-                    document.getElementById('loadingIndicatorBefore').style.display = 'none'
                     return
                 }
 
                 insertComment(comment)
 
-                if (xhrMinCommentID == null) {
-                    xhrMinCommentID = comment.id
-                }
-                if (xhrMaxCommentID == null) {
-                    xhrMaxCommentID = comment.id
-                }
-                if (comment.id < xhrMinCommentID) {
-                    xhrMinCommentID = comment.id
-                }
-                if (comment.id > xhrMaxCommentID) {
-                    xhrMaxCommentID = comment.id
-                }
-
             }
 
-            if (from > maxCommentID && maxCommentID != null && document.getElementById('topComment') == null) {
+            if (isCommentsNewer && document.getElementById('topComment') == null) {
                 if (isFullscreen) {
                     var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
                     commentDiv.scrollTop += newCommentTop - prevCommentTop
@@ -94,29 +76,20 @@ function loadComments(from, count, time) {
                 }
             }
 
-            if (minCommentID == null) {
-                minCommentID = xhrMinCommentID
-            }
-            if (maxCommentID == null) {
-                maxCommentID = xhrMaxCommentID
-            }
-            if (xhrMinCommentID < minCommentID) {
-                minCommentID = xhrMinCommentID
-            }
-            if (xhrMaxCommentID > maxCommentID) {
-                maxCommentID = xhrMaxCommentID
-            }
+            if (debug) console.log('maxID:', getMaxCommentID(), ' minID:', getMinCommentID())
 
-            if (debug) console.log('maxID:', maxCommentID, ' minID:', minCommentID)
-
-            isLoadCommentErrorShowed = false
+            if (getMinCommentID() == -999999 && getMaxCommentID() == -999999) {
+                document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                document.getElementById('loadingIndicator').style.display = 'none'
+                pauseCommentScroll = true
+            }
 
         } else {
             console.log(`Error: ${xhr.status}`);
         }
     };
     xhr.onerror = () => {
-        if (isLoadCommentErrorShowed == false) {
+        if (isLoadCommentErrorShowed == false && kami == false) {
             window.alert([
                 '加载留言失败',
                 '请尝试刷新页面, 清除DNS缓存, 切换网络, 或者10分钟后重试',
@@ -152,7 +125,7 @@ function insertComment(comment) {
     function compareCommentAt(i) {
         return compareArr([comment.time, comment.id], [parseInt(commentList[i].dataset.timestamp), parseInt(commentList[i].id.replace('#', ''))])
     }
-    var commentList = document.querySelectorAll('.commentBox[id^="#"]')
+    var commentList = document.getElementsByClassName('commentItem')
     // insert into []
     // this matches all lists of length 0
     if (commentList.length == 0) {
@@ -208,7 +181,7 @@ function insertComment(comment) {
     } catch (error) { }
 
     commentDiv.insertBefore(html2elmnt(`
-        <div class="commentBox" id="#${comment.id}" data-timestamp="${comment.time}">
+        <div class="commentBox commentItem" id="#${comment.id}" data-timestamp="${comment.time}">
             <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
             <img class="avatar" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg"
@@ -260,8 +233,8 @@ function sendMessage() {
     var url = "https://haojiezhe12345.top:82/madohomu/api/post";
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
+    xhr.onload = function () {
+        if (xhr.status === 200) {
             console.log(xhr.responseText);
             document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送成功!</span><span class="ui en">Sent!</span>'
             setTimeout(() => {
@@ -291,21 +264,18 @@ function clearComments(clearTop) {
         commentDiv.innerHTML = topComment + loadingIndicatorBefore + loadingIndicator
         document.getElementById('loadingIndicatorBefore').style.display = 'none'
     }
-    minCommentID = null
-    maxCommentID = null
+
+    pauseCommentScroll = false
     commentsUpToDate = false
+    clearTimeout(window.clearCommentsUpToDateTimeout)
 
     newCommentDisabled = false
     commentHorizontalScrolled = 0
 }
 
 function commentScroll() {
-    if (pauseCommentScroll || minCommentID == null || maxCommentID == null) return
-    if (minCommentID == -999999 && maxCommentID == -999999) {
-        document.getElementById('loadingIndicatorBefore').style.display = 'none'
-        document.getElementById('loadingIndicator').style.display = 'none'
-        return
-    }
+    if (pauseCommentScroll || document.getElementsByClassName('commentItem').length == 0) return
+
     setTimelineActiveMonth()
 
     if (!isFullscreen) {
@@ -320,9 +290,9 @@ function commentScroll() {
             document.getElementsByClassName('commentSeekArrow')[0].style.removeProperty('display')
         }
         if (toRight <= 40) {
-            loadComments(minCommentID - 1)
+            loadComments({ 'from': getMinCommentID() - 1 })
         } else if (toLeft <= 40 && commentsUpToDate == false) {
-            loadComments(maxCommentID + 10, 10)
+            loadComments({ 'from': getMaxCommentID() + 10, 'count': 10 })
         } else return
 
     } else {
@@ -332,14 +302,14 @@ function commentScroll() {
         var toTop = commentDiv.scrollTop
         //console.log(toTop, toBottom)
         if (toBottom <= 40) {
-            loadComments(minCommentID - 1)
+            loadComments({ 'from': getMinCommentID() - 1 })
         } else if (toTop <= 40 && commentsUpToDate == false) {
             var count = getFullscreenHorizonalCommentCount() * 2
             while (count < 9) {
                 count += getFullscreenHorizonalCommentCount()
             }
             commentDiv.scrollTop = 0
-            loadComments(maxCommentID + count, count)
+            loadComments({ 'from': getMaxCommentID() + count, 'count': count })
         } else return
     }
     //commentDiv.removeEventListener("scroll", commentScroll)
@@ -464,6 +434,28 @@ function previewLocalImgs() {
     imgUploadInput.value = ''
 }
 
+function getMaxCommentID() {
+    var commentList = document.querySelectorAll('.commentItem[id^="#"]')
+    if (commentList.length > 0) return parseInt(commentList[0].id.replace('#', ''))
+}
+
+function getMinCommentID() {
+    var commentList = document.querySelectorAll('.commentItem[id^="#"]')
+    if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].id.replace('#', ''))
+}
+
+function getMaxCommentTime() {
+    var commentList = document.querySelectorAll('.commentItem[id^="#"]')
+    if (commentList.length > 0) return parseInt(commentList[0].dataset.timestamp)
+}
+
+function getMinCommentTime() {
+    var commentList = document.querySelectorAll('.commentItem[id^="#"]')
+    if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].dataset.timestamp)
+}
+
+// img viewer
+//
 function viewImg(src) {
     //window.open(elmnt.src, '_blank').focus()
     document.getElementById('imgViewer').src = src
@@ -639,8 +631,8 @@ function uploadAvatar() {
 
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "https://haojiezhe12345.top:82/madohomu/api/upload");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
                         console.log(xhr.responseText);
                         setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
                     }
@@ -698,7 +690,7 @@ function showUserComment(user) {
 
     xhr.responseType = "json";
     xhr.onload = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.status == 200) {
 
             if (user != null) {
                 userCommentEl.innerHTML = `
@@ -742,7 +734,7 @@ function showUserComment(user) {
                     <div>
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
-                            <span onclick="clearComments(1); loadComments(this.parentNode.parentNode.querySelector('span').innerText.replace('#', '')); closePopup()">
+                            <span onclick="clearComments(1); loadComments({ 'from': this.parentNode.parentNode.querySelector('span').innerText.replace('#', '') }); closePopup()">
                                 ${htmlEscape(comment.comment)}
                             </span>
                             ${imgsDOM}
@@ -953,9 +945,7 @@ function getCurrentComment() {
     } else {
         scrolled = commentDiv.scrollTop / (commentDiv.scrollHeight)// - commentDiv.clientHeight)
     }
-    //var id = minCommentID + Math.ceil((maxCommentID - minCommentID) * (1 - scrolled))
-    //return document.getElementById(`#${id}`)
-    var commentList = document.querySelectorAll('.commentBox[id^="#"]')
+    var commentList = document.getElementsByClassName('commentItem')
     return commentList[Math.round(commentList.length * scrolled)]
 }
 
@@ -992,7 +982,7 @@ function setTodayCommentCount() {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments/count?utc=${utc}`);
     xhr.onload = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.status == 200) {
             document.getElementById('todayCommentCount').innerHTML = xhr.responseText
             console.log('today comment count:', xhr.responseText)
         }
@@ -1004,7 +994,7 @@ function seekComment(seekCount) {
     commentDiv.style.scrollBehavior = 'smooth'
     var scrollpx = 200
     try {
-        scrollpx = document.getElementById(`#${maxCommentID}`).getBoundingClientRect().width + 20
+        scrollpx = document.getElementById('loadingIndicatorBefore').nextElementSibling.getBoundingClientRect().width + 20
     } catch (error) {
         if (debug) console.log(error)
     }
@@ -1128,14 +1118,21 @@ function compareArr(a1, a2) {
     return 0
 }
 
+function obj2queryString(obj) {
+    if (obj.length == 0) return ''
+    var arr = []
+    for (key in obj) {
+        arr.push(`${key}=${obj[key]}`)
+    }
+    return '?' + arr.join('&')
+}
+
 
 // common vars
 //
-var minCommentID = null
-var maxCommentID = null
 var pauseCommentScroll = false
 var commentsUpToDate = false
-var maxCommentTime = 0
+var maxTimelineTime = 0
 
 var userCommentUser = ''
 var userCommentOffset = 0
@@ -1446,7 +1443,7 @@ document.getElementById('timelineContainer').addEventListener('click', (event) =
         var year = parseInt(event.target.innerHTML)
         if (year == 2022 || event.target == document.getElementById('timeline').firstElementChild.firstElementChild) {
             clearComments((year == 2022) ? 1 : null)
-            loadComments((year == 2022) ? 0 : null)
+            loadComments((year == 2022) ? { 'from': 0 } : undefined)
             return
         }
         var date = new Date(year + 1, 0, 0)
@@ -1461,7 +1458,7 @@ document.getElementById('timelineContainer').addEventListener('click', (event) =
     timestamp = date.getTime() / 1000
     //console.log(timestamp)
     clearComments(1)
-    loadComments(null, null, timestamp)
+    loadComments({ 'time': timestamp })
 })
 
 document.getElementById('timelineContainer').addEventListener('wheel', (event) => {
@@ -1490,7 +1487,7 @@ document.getElementById('timelineContainer').addEventListener('mouseover', (even
         var month = parseInt(event.target.innerHTML)
         document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div>${year}-${('0' + month).slice(-2)}${(year <= 2022) ? ' (kami.im)' : ''}</div>`))
         for (let i = 1; i <= new Date(year, month, 0).getDate(); i++) {
-            if (new Date(year, month - 1, i).getTime() / 1000 < maxCommentTime)
+            if (new Date(year, month - 1, i).getTime() / 1000 < maxTimelineTime)
                 document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
         }
     } else if (event.target.nodeName == 'STRONG') {
@@ -1502,7 +1499,7 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
         clearComments(1);
-        loadComments(document.getElementById('goto').value)
+        loadComments({ 'from': document.getElementById('goto').value })
     }
 })
 
