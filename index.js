@@ -2,12 +2,8 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
-function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
+function loadComments(queryObj = {}, keepPos = undefined) {
     //if (from == null && time == null) setTodayCommentCount()
-
-    if (queryObj.time && queryObj.time <= 1684651800) {
-        Object.assign(queryObj, { 'db': 'kami' })
-    }
 
     var isCommentsNewer = queryObj.db == 'kami'
         ? (getMaxKamiID() != null && queryObj.from > getMaxKamiID())
@@ -61,11 +57,15 @@ function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
                 setTodayCommentCount()
             }
 
-            if (isLoadedWithPrevious == false) {
-                window.prevLatestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
-                window.prevCommentTop = prevLatestCommentEl.getBoundingClientRect().top
-                window.prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+            if (keepPos == undefined) {
+                keepPos = xhr.response[0].time > getMaxCommentTime()
+                if (keepPos == true) {
+                    window.prevLatestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
+                    window.prevCommentTop = prevLatestCommentEl.getBoundingClientRect().top
+                    window.prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+                }
             }
+            if (debug) console.log('KeepPos:', keepPos)
 
             for (let comment of xhr.response) {
 
@@ -74,7 +74,7 @@ function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
                     continue
                 }
 
-                if (queryObj.from && queryObj.from < 35668 && comment.id >= 35668) {
+                if (queryObj.db == 'kami' && comment.id >= 35668 && getMaxCommentTime() <= 1684651800) {
                     continue
                 }
 
@@ -82,7 +82,7 @@ function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
 
             }
 
-            if (isCommentsNewer && document.getElementById('topComment') == null) {
+            if (keepPos == true && document.getElementById('topComment') == null) {
                 if (isFullscreen) {
                     var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
                     commentDiv.scrollTop += newCommentTop - prevCommentTop
@@ -185,11 +185,11 @@ function insertComment(comment, isKami = false) {
             <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg`}"
                 onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
                 onclick="
-                    showUserComment('${comment.sender.replace(/\'/g, "\\'")}');
+                    showUserComment('${comment.sender.replace(/\'/g, "\\'")}'${isKami == true ? `, ${comment.uid}` : ''});
                     document.getElementById('lowerPanel').classList.add('lowerPanelUp')
                 ">
             <div class="sender" onclick="
-                showUserComment('${comment.sender.replace(/\'/g, "\\'")}');
+                showUserComment('${comment.sender.replace(/\'/g, "\\'")}'${isKami == true ? `, ${comment.uid}` : ''});
                 document.getElementById('lowerPanel').classList.add('lowerPanelUp')
                 ">
                 ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
@@ -283,7 +283,8 @@ function loadNewerComments() {
 
     if (getMaxKamiID() == null || getMaxKamiID() >= 35662) {
         if (getMaxCommentID() == null) {
-            loadComments({ 'from': count, 'count': count })
+            loadComments({ 'time': getMaxCommentTime() })
+            loadComments({ 'time': getMinCommentTime() })
         } else {
             loadComments({ 'from': getMaxCommentID() + count, 'count': count })
         }
@@ -313,12 +314,12 @@ function getMinKamiID() {
 }
 
 function getMaxCommentTime() {
-    var commentList = document.querySelectorAll('.commentItem[id^="#"]')
+    var commentList = document.querySelectorAll('.commentItem')
     if (commentList.length > 0) return parseInt(commentList[0].dataset.timestamp)
 }
 
 function getMinCommentTime() {
-    var commentList = document.querySelectorAll('.commentItem[id^="#"]')
+    var commentList = document.querySelectorAll('.commentItem')
     if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].dataset.timestamp)
 }
 
@@ -704,7 +705,7 @@ function loadUserInfo() {
     }
 }
 
-function showUserComment(user) {
+function showUserComment(user, useKamiAvatar = false) {
     if (debug) console.log(user)
     if ((user == null && userCommentUser == '') || user == '') {
         if (debug) console.log('empty user!')
@@ -716,7 +717,7 @@ function showUserComment(user) {
     if (user != null) {
         userCommentEl.innerHTML = `
         <h2>
-            <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${user}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+            <img src="${useKamiAvatar != false ? `https://kami.im/getavatar.php?uid=${useKamiAvatar}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${user}.jpg`}" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
             <span>${user == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : user}</span>
         </h2>
         `
@@ -730,9 +731,9 @@ function showUserComment(user) {
     const xhr = new XMLHttpRequest();
 
     if (user != null) {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${user}&count=20`);
+        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${user}&count=50`);
     } else {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${userCommentUser}&from=${userCommentOffset}&count=20${userCommentIsKami == true ? '&db=kami' : ''}`);
+        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${userCommentUser}&from=${userCommentOffset}&count=50${userCommentIsKami == true ? '&db=kami' : ''}`);
         if (debug) console.log(userCommentUser, userCommentOffset)
     }
 
@@ -1490,10 +1491,14 @@ document.getElementById('timelineContainer').addEventListener('click', (event) =
     } else if (event.target.hasAttribute('data-time')) {
         var date = new Date(event.target.dataset.time)
     } else return
-    timestamp = date.getTime() / 1000
+    var timestamp = date.getTime() / 1000
     //console.log(timestamp)
     clearComments(1)
-    loadComments({ 'time': timestamp })
+    if (timestamp <= 1684651800) {
+        loadComments({ 'time': timestamp, 'db': 'kami' })
+    } else {
+        loadComments({ 'time': timestamp })
+    }
 })
 
 document.getElementById('timelineContainer').addEventListener('wheel', (event) => {
