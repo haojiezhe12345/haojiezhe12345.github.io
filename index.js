@@ -73,21 +73,6 @@ function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
                     console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
                     continue
                 }
-                // DELETE if new backend deployed
-                if (comment.id == -999999 && isCommentsNewer) {
-                    console.log('comments are up to date')
-                    document.getElementById('loadingIndicatorBefore').style.display = 'none'
-                    commentsUpToDate = true
-                    window.clearCommentsUpToDateTimeout = setTimeout(() => {
-                        commentsUpToDate = false
-                    }, 10000);
-                    return
-                }
-                if (comment.id == -999999 && isCommentsOlder) {
-                    console.log('reached the oldest comment')
-                    document.getElementById('loadingIndicator').style.display = 'none'
-                    return
-                }
 
                 if (queryObj.from && queryObj.from < 35668 && comment.id >= 35668) {
                     continue
@@ -97,7 +82,7 @@ function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
 
             }
 
-            if (document.getElementById('topComment') == null) {
+            if (isCommentsNewer && document.getElementById('topComment') == null) {
                 if (isFullscreen) {
                     var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
                     commentDiv.scrollTop += newCommentTop - prevCommentTop
@@ -108,13 +93,6 @@ function loadComments(queryObj = {}, isLoadedWithPrevious = false) {
             }
 
             if (debug) console.log('maxID:', getMaxCommentID(), ' minID:', getMinCommentID())
-
-            // DELETE if new backend deployed
-            if (getMinCommentID() == -999999 && getMaxCommentID() == -999999) {
-                document.getElementById('loadingIndicatorBefore').style.display = 'none'
-                document.getElementById('loadingIndicator').style.display = 'none'
-                pauseCommentScroll = true
-            }
 
         } else {
             console.log(`Error: ${xhr.status}`);
@@ -742,15 +720,11 @@ function showUserComment(user) {
             <span>${user == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : user}</span>
         </h2>
         `
-        //closePopup()
         showPopup('showUserCommentPopup')
         //userCommentEl.scrollTop = 0
         userCommentUser = user
         userCommentOffset = 0
         userCommentIsKami = false
-        //userCommentEl.addEventListener('scroll', userCommentScroll)
-
-        //setTimeout(showUserComment)
     }
 
     const xhr = new XMLHttpRequest();
@@ -767,13 +741,6 @@ function showUserComment(user) {
         if (xhr.status == 200) {
 
             for (var comment of xhr.response) {
-
-                // DELETE if new backend deployed
-                if (comment.id == -999999) {
-                    userCommentUser = ''
-                    userCommentEl.appendChild(html2elmnt(`<h4 style="text-align: center">- <span class="ui zh">共 ${userCommentOffset} 条留言</span><span class="ui en">Total ${userCommentOffset} messages</span> -</h4>`))
-                    break
-                }
 
                 var time = new Date(comment.time * 1000)
                 date = time.toLocaleDateString()
@@ -792,7 +759,7 @@ function showUserComment(user) {
                     <div>
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
-                            <span onclick="clearComments(1); loadComments({ 'from': this.parentNode.parentNode.querySelector('span').innerText.replace('#', '') }); closePopup()">
+                            <span onclick="clearComments(1); loadComments({ 'from': ${comment.id}${userCommentIsKami == true ? ", 'db': 'kami'" : ""} }); closePopup()">
                                 ${htmlEscape(comment.comment)}
                             </span>
                             ${imgsDOM}
