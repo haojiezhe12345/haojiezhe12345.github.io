@@ -1374,9 +1374,9 @@ if (getCookie('showTimeline') == 'false') {
     toggleTimeline()
 }
 
-if (localStorage.getItem('showKami') == 'true') {
+if (localStorage.getItem('showKami') == 'true' || theme == 'kami') {
     showKamiElmnt.checked = true
-} else if (localStorage.getItem('showKami') == 'true') {
+} else if (localStorage.getItem('showKami') == 'false') {
     showKamiElmnt.checked = false
 }
 
