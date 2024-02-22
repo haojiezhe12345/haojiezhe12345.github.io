@@ -448,6 +448,10 @@
                     </li>
                     <li onclick="isMutedElmnt.click()"><span class="ui zh">🔊 播放/暂停BGM</span><span class="ui en">🔊 Mute / Unmute BGM</span></li>
                     <li>
+                        <input type="checkbox" id="showKami" name="showKami" onchange="toggleKami()">
+                        <label for="showKami"><b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b></label>
+                    </li>
+                    <li>
                         <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
                         <label for="showTimeline"><span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span></label>
                     </li>
@@ -457,9 +461,9 @@
                     </li>
                     <li>
                         <input type="checkbox" id="showHidden" name="showHidden">
-                        <label for="showHidden"><span class="ui zh">显示被隐藏评论</span><span class="ui en">Show hidden messages</span></label>
+                        <label for="showHidden"><span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span></label>
                     </li>
-                    <li title="大于0的值为本站内容&#10;小于0的值为kami.im站内容&#10;如填错导致不显示请刷新页面">
+                    <li>
                         <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
                         <span style="display: inline-flex; align-items: center; padding: 0;">
                             <input id="goto" style="width: 64px;">

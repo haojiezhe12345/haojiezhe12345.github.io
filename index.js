@@ -2,15 +2,15 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
-function loadComments(queryObj = {}, keepPos = undefined) {
+function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
     //if (from == null && time == null) setTodayCommentCount()
 
     var isCommentsNewer = queryObj.db == 'kami'
-        ? (getMaxKamiID() != null && queryObj.from > getMaxKamiID())
-        : (getMaxCommentID() != null && queryObj.from > getMaxCommentID())
+        ? (queryObj.from > getMaxKamiID())
+        : (queryObj.from > getMaxCommentID())
     var isCommentsOlder = queryObj.db == 'kami'
-        ? (getMinKamiID() != null && queryObj.from < getMinKamiID())
-        : (getMinCommentID() != null && queryObj.from < getMinCommentID())
+        ? (queryObj.from < getMinKamiID())
+        : (queryObj.from < getMinCommentID())
 
     const xhr = new XMLHttpRequest();
 
@@ -22,8 +22,10 @@ function loadComments(queryObj = {}, keepPos = undefined) {
             //console.log(xhr.response);
             isLoadCommentErrorShowed = false
 
-            if (debug) console.log('isNewer', isCommentsNewer, ' isOlder', isCommentsOlder)
+            if (debug) console.log(queryObj)
+            if (debug) console.log('isNewer:', isCommentsNewer, ' isOlder:', isCommentsOlder, ' length:', xhr.response.length)
 
+            // handle empty response
             if (xhr.response.length == 0) {
                 if (isCommentsNewer) {
                     console.log('comments are up to date')
@@ -51,29 +53,35 @@ function loadComments(queryObj = {}, keepPos = undefined) {
                 return
             }
 
+            // update timeline & today comment count
             if (xhr.response[0].time > maxTimelineTime) {
                 maxTimelineTime = xhr.response[0].time
                 loadTimeline(maxTimelineTime)
                 setTodayCommentCount()
             }
 
-            if (keepPos == undefined) {
-                keepPos = xhr.response[0].time > getMaxCommentTime()
-                if (keepPos == true) {
-                    window.prevLatestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
-                    window.prevCommentTop = prevLatestCommentEl.getBoundingClientRect().top
-                    window.prevCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
-                }
-            }
+            // save old comment position before inserting new comments
+            var keepPos = (xhr.response[0].time > getMaxCommentTime() || keepPosEl != undefined)
             if (debug) console.log('KeepPos:', keepPos)
+            if (keepPosEl == undefined) {
+                keepPosEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
+            }
+            var prevCommentTop = keepPosEl.getBoundingClientRect().top
+            var prevCommentLeft = keepPosEl.getBoundingClientRect().left
 
+            // save prev Max/MinCommentTime for loading kami SxS
+            var prevMaxCommentTime = getMaxCommentTime()
+            var prevMinCommentTime = getMinCommentTime()
+
+            // insert comments
             for (let comment of xhr.response) {
 
+                // skip hidden
                 if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
                     console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
                     continue
                 }
-
+                // skip 2024 kami msgs when loading 2023.05
                 if (queryObj.db == 'kami' && comment.id >= 35668 && getMaxCommentTime() <= 1684651800) {
                     continue
                 }
@@ -82,13 +90,44 @@ function loadComments(queryObj = {}, keepPos = undefined) {
 
             }
 
-            if (keepPos == true && document.getElementById('topComment') == null) {
+            // restore the postition after inserting comments
+            if (keepPos && document.getElementById('topComment') == null) {
+                if (debug) console.log(keepPosEl)
                 if (isFullscreen) {
-                    var newCommentTop = prevLatestCommentEl.getBoundingClientRect().top
+                    var newCommentTop = keepPosEl.getBoundingClientRect().top
                     commentDiv.scrollTop += newCommentTop - prevCommentTop
                 } else {
-                    var newCommentLeft = prevLatestCommentEl.getBoundingClientRect().left
+                    var newCommentLeft = keepPosEl.getBoundingClientRect().left
                     commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
+                }
+            }
+
+            // load kami SxS
+            if (showKamiElmnt.checked == true && queryObj.db == null && noKami == false) {
+                if (isCommentsOlder) {
+                    loadComments({
+                        'timeMin': xhr.response[xhr.response.length - 1].time,
+                        'timeMax': prevMinCommentTime,
+                        'db': 'kami'
+                    })
+                } else if (isCommentsNewer) {
+                    loadComments({
+                        'timeMin': prevMaxCommentTime,
+                        'timeMax': xhr.response[0].time,
+                        'db': 'kami'
+                    }, keepPosEl)
+                } else if (queryObj.time != null || queryObj.from != null) {
+                    loadComments({
+                        'timeMin': xhr.response[xhr.response.length - 1].time,
+                        'timeMax': xhr.response[0].time,
+                        'db': 'kami'
+                    })
+                } else if (queryObj.timeMin == null && queryObj.timeMax == null) {
+                    loadComments({
+                        'timeMin': xhr.response[xhr.response.length - 1].time,
+                        'timeMax': parseInt(Date.now() / 1000),
+                        'db': 'kami'
+                    })
                 }
             }
 
@@ -121,7 +160,13 @@ function insertComment(comment, isKami = false) {
 
     // compare comments by time, then ID
     function compareCommentAt(i) {
-        return compareArr([comment.time, comment.id], [parseInt(commentList[i].dataset.timestamp), parseInt(commentList[i].id.replace('#', ''))])
+        return compareArr(
+            [comment.time, comment.id],
+            [parseInt(commentList[i].dataset.timestamp),
+            commentList[i].id == ''
+                ? parseInt(commentList[i].dataset.kamiid.replace('#', ''))
+                : parseInt(commentList[i].id.replace('#', ''))
+            ])
     }
     var commentList = document.getElementsByClassName('commentItem')
     // insert into []
@@ -167,6 +212,10 @@ function insertComment(comment, isKami = false) {
     lastBgImgs.push(randBG)
     if (lastBgImgs.length > 5) {
         lastBgImgs.splice(0, 1)
+    }
+
+    if (isKami == true) {
+        comment.comment = comment.comment.replace('This message is sent using a proxy. If it is dirty, please click here to delete it.', '')
     }
 
     var imgsDOM = '<br><br>'
@@ -255,12 +304,16 @@ function commentScroll() {
 
 function loadOlderComments() {
     if (getMinCommentID() == null || getMinCommentID() <= 1) {
+        // no madohomu, or reached end
         if (getMinKamiID() == null) {
+            // madohomu reached end, need to load kami
             loadComments({ 'from': 35662, 'db': 'kami' })
         } else {
+            // load older kami
             loadComments({ 'from': getMinKamiID() - 1, 'db': 'kami' })
         }
     } else {
+        // load older madohomu
         loadComments({ 'from': getMinCommentID() - 1 })
     }
 }
@@ -282,13 +335,19 @@ function loadNewerComments() {
     }
 
     if (getMaxKamiID() == null || getMaxKamiID() >= 35662) {
+        // no kami, or >2023.05
         if (getMaxCommentID() == null) {
-            loadComments({ 'time': getMaxCommentTime() })
-            loadComments({ 'time': getMinCommentTime() })
+            // jumped to a kami msg >2023.05 and need to load madohomu
+            // load newer madohomu by maxKamiTime (can be omitted, it will load on next commentScroll)
+            if (getMaxKamiID() == 35662) loadComments({ 'time': getMaxCommentTime() }, document.getElementById('loadingIndicatorBefore').nextElementSibling)
+            // load madohomu between minKamiTime and maxKamiTime, no need if kami <2023.05
+            if (getMaxKamiID() != 35662) loadComments({ 'timeMin': getMinCommentTime(), 'timeMax': getMaxCommentTime() }, document.getElementById('loadingIndicatorBefore').nextElementSibling, true)
         } else {
+            // load newer madohomu
             loadComments({ 'from': getMaxCommentID() + count, 'count': count })
         }
     } else {
+        // load kami <2023.05
         loadComments({ 'from': getMaxKamiID() + count, 'count': count, 'db': 'kami' })
     }
 }
@@ -1098,6 +1157,10 @@ function toggleTimeline() {
     }
 }
 
+function toggleKami() {
+    localStorage.setItem('showKami', showKamiElmnt.checked)
+}
+
 // functional funcs
 //
 function getRandomIntInclusive(min, max) {
@@ -1188,6 +1251,7 @@ var bgmRotateElmnt = document.getElementById('bgmRotate')
 var isMutedElmnt = document.getElementById('isMuted')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
+var showKamiElmnt = document.getElementById('showKami')
 
 // raw htmls
 var topComment = document.getElementById('topComment').outerHTML
@@ -1308,6 +1372,12 @@ if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0])
 if (getCookie('showTimeline') == 'false') {
     showTimelineElmnt.checked = false
     toggleTimeline()
+}
+
+if (localStorage.getItem('showKami') == 'true') {
+    showKamiElmnt.checked = true
+} else if (localStorage.getItem('showKami') == 'true') {
+    showKamiElmnt.checked = false
 }
 
 
