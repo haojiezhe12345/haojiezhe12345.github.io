@@ -167,7 +167,7 @@
             </span>
             <i onclick="
                 this.parentNode.style.display = 'none'
-                setCookie('hiddenBanner', this.parentNode.classList[0])
+                setConfig('hiddenBanner', this.parentNode.classList[0])
                 ">×</i>
         </div>
     
@@ -374,9 +374,9 @@
                         <span>🌎 Language (语言)</span>
                         <i>▶</i>
                         <ul>
-                            <li onclick="setCookie('lang', ''); location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
-                            <li onclick="changeLang('en'); setCookie('lang', 'en')"><span>English</span></li>
-                            <li onclick="changeLang('zh'); setCookie('lang', 'zh')"><span>中文</span></li>
+                            <li onclick="setConfig('lang', ''); location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
+                            <li onclick="changeLang('en'); setConfig('lang', 'en')"><span>English</span></li>
+                            <li onclick="changeLang('zh'); setConfig('lang', 'zh')"><span>中文</span></li>
                         </ul>
                     </li>
                     <li>

@@ -396,8 +396,8 @@ function newComment() {
     commentDiv.insertBefore(html2elmnt(`
         <div class="commentBox" id="newCommentBox">
             <div class="bgcover"></div>
-            <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
-            <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getCookie('username')}</div>
+            <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
+            <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getConfig('username')}</div>
             <div class="id" onclick="showPopup('setNamePopup')"><span class="ui zh">设置昵称/头像</span><span class="ui en">Change profile</span></div>
             <div class="comment">
                 <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
@@ -499,7 +499,7 @@ function previewLocalImgs() {
 }
 
 function sendMessage() {
-    var sender = getCookie('username')
+    var sender = getConfig('username')
     var msg = document.getElementById('msgText').value
 
     var imgList = []
@@ -592,12 +592,12 @@ function showPopup(popupID) {
     popup.style.display = 'block';
 
     if (popupID == 'setNamePopup') {
-        document.getElementById('setNameInput').value = getCookie('username')
+        document.getElementById('setNameInput').value = getConfig('username')
     }
 
     if (popupID == 'setAvatarPopup') {
         avatarInput.value = ''
-        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
         setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
     }
 
@@ -670,11 +670,11 @@ function setUserName() {
         console.log(error)
     }
 
-    setCookie('username', inputName)
+    setConfig('username', inputName)
     //closePopup()
-    if (getCookie('username') == '' || getCookie('username') == '匿名用户') {
+    if (getConfig('username') == '' || getConfig('username') == '匿名用户') {
         closePopup()
-    } else if (getCookie('username') == '10.3') {
+    } else if (getConfig('username') == '10.3') {
         //location.reload()
         closePopup()
     } else {
@@ -728,11 +728,11 @@ function uploadAvatar() {
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         console.log(xhr.responseText);
-                        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+                        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
                     }
                 };
                 var formData = new FormData();
-                formData.append(`${getCookie('username')}.jpg`, blob)
+                formData.append(`${getConfig('username')}.jpg`, blob)
                 xhr.send(formData);
 
             }, "image/jpeg")
@@ -747,17 +747,17 @@ function loadUserInfo() {
     var name = document.getElementById('userInfoName')
 
     avatar.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-    avatar.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+    avatar.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
 
-    if (getCookie('username') == '') {
+    if (getConfig('username') == '') {
         name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
     } else {
-        name.innerText = getCookie('username')
+        name.innerText = getConfig('username')
     }
 
     try {
-        document.getElementById('senderText').innerHTML = getCookie('username')
-        document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getCookie('username')}.jpg?${new Date().getTime()}`
+        document.getElementById('senderText').innerHTML = getConfig('username')
+        document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
         document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
     } catch (error) {
 
@@ -985,7 +985,7 @@ function changeGraphicsMode(mode) {
         document.getElementById('lowendCSS').href = 'index_lowend.css'
         document.getElementById('lowendCSS').disabled = false
     } else return
-    setCookie('graphicsMode', mode)
+    setConfig('graphicsMode', mode)
 }
 
 function getFullscreenHorizonalCommentCount() {
@@ -1125,7 +1125,7 @@ function goFullscreen() {
 }
 
 function toggleBGM() {
-    setCookie('mutebgm', isMutedElmnt.checked)
+    setConfig('mutebgm', isMutedElmnt.checked)
     if (isMutedElmnt.checked) {
         bgmElmnt.muted = true
         bgmElmnt.pause()
@@ -1136,7 +1136,7 @@ function toggleBGM() {
 }
 
 function toggleTopComment() {
-    setCookie('hideTopComment', hideTopCommentElmnt.checked)
+    setConfig('hideTopComment', hideTopCommentElmnt.checked)
     if (hideTopCommentElmnt.checked) {
         document.getElementById('topComment').style.display = 'none'
         topComment = document.getElementById('topComment').outerHTML
@@ -1147,7 +1147,7 @@ function toggleTopComment() {
 }
 
 function toggleTimeline() {
-    setCookie('showTimeline', showTimelineElmnt.checked)
+    setConfig('showTimeline', showTimelineElmnt.checked)
     if (showTimelineElmnt.checked) {
         document.getElementById('timelineContainer').style.display = 'block'
         commentDiv.classList.add('noscrollbar')
@@ -1158,7 +1158,7 @@ function toggleTimeline() {
 }
 
 function toggleKami() {
-    localStorage.setItem('showKami', showKamiElmnt.checked)
+    setConfig('showKami', showKamiElmnt.checked)
 }
 
 // functional funcs
@@ -1189,6 +1189,21 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function getConfig(key) {
+    if (localStorage.getItem(key) == null) {
+        if (getCookie(key) != '') {
+            setConfig(key, getCookie(key))
+        } else {
+            return ''
+        }
+    }
+    return localStorage.getItem(key)
+}
+
+function setConfig(key, value) {
+    localStorage.setItem(key, value)
 }
 
 function html2elmnt(html) {
@@ -1266,8 +1281,8 @@ var newCommentDisabled = false
 var isLoadCommentErrorShowed = false
 
 var currentLang = 'zh'
-if (getCookie('lang') != '') {
-    currentLang = getCookie('lang')
+if (getConfig('lang') != '') {
+    currentLang = getConfig('lang')
 } else if (navigator.language.slice(0, 2) != 'zh' && navigator.language.slice(0, 3) != 'yue') {
     currentLang = 'en'
 }
@@ -1349,34 +1364,34 @@ if (theme == 'birthday') {
 
 // cookies toggles
 //
-if (getCookie('mutebgm') == 'false' || getCookie('mutebgm') == '') {
+if (getConfig('mutebgm') == 'false' || getConfig('mutebgm') == '') {
     document.getElementById('bgm').play()
 } else {
     isMutedElmnt.checked = true
 }
 
-if (getCookie('graphicsMode') != '') {
-    changeGraphicsMode(getCookie('graphicsMode'))
+if (getConfig('graphicsMode') != '') {
+    changeGraphicsMode(getConfig('graphicsMode'))
 }
 
-if (getCookie('hideTopComment') == 'true') {
+if (getConfig('hideTopComment') == 'true') {
     hideTopCommentElmnt.checked = true
     document.getElementById('topComment').style.display = 'none'
     topComment = document.getElementById('topComment').outerHTML
 }
 
-if (getCookie('hiddenBanner') != document.getElementById('banner').classList[0]) {
+if (getConfig('hiddenBanner') != document.getElementById('banner').classList[0]) {
     //document.getElementById('banner').style.display = 'block'
 }
 
-if (getCookie('showTimeline') == 'false') {
+if (getConfig('showTimeline') == 'false') {
     showTimelineElmnt.checked = false
     toggleTimeline()
 }
 
-if (localStorage.getItem('showKami') == 'true' || theme == 'kami') {
+if (getConfig('showKami') == 'true' || theme == 'kami') {
     showKamiElmnt.checked = true
-} else if (localStorage.getItem('showKami') == 'false') {
+} else if (getConfig('showKami') == 'false') {
     showKamiElmnt.checked = false
 }
 
