@@ -623,13 +623,13 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 16px;
     transition: background-color 0.2s;
 }
 
 #comments .commentBox:hover .bgcover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
 }
 
 #comments .commentBox:hover .bg {
@@ -1106,7 +1106,27 @@ body {
 #lowerPanel .backTransparent {
     position: absolute;
     display: none;
+    padding: 24px 16px 4px;
     /*background-color: black;*/
+    animation-name: showBackTransparent;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes showBackTransparent {
+    0% {
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    99% {
+        pointer-events: none;
+        opacity: 1;
+    }
+
+    100% {
+        pointer-events: all;
+    }
 }
 
 #lowerPanel:hover .backTransparent,
@@ -1114,10 +1134,12 @@ body {
     display: block;
 }
 
+#lowerPanel #newMsgContainer {
+    top: -36px;
+    left: 0;
+}
+
 #lowerPanel #newMsg {
-    position: absolute;
-    left: -100%;
-    top: -12px;
     border: none;
     background-color: #ffb5da;
     /*background-image: linear-gradient(100deg, #ffaad4, #ce93ff);*/
@@ -1127,11 +1149,6 @@ body {
     border-radius: 100px;
     box-shadow: 0 0 16px 4px rgba(255, 255, 255, 0.7);
     transition: all 0.2s;
-}
-
-#lowerPanel:hover #newMsg,
-#lowerPanel.lowerPanelUp #newMsg {
-    left: 16px;
 }
 
 #lowerPanel #newMsg:hover {
@@ -1147,22 +1164,19 @@ body {
     transition: none;
 }
 
+#lowerPanel #toolbarContainer {
+    top: -28px;
+    right: 0;
+}
+
 #lowerPanel #toolbar {
     display: flex;
-    position: absolute;
-    right: -100%;
-    top: -4px;
     white-space: nowrap;
     background-color: rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 8px 8px rgba(255, 255, 255, 0.7);
     padding: 0px 12px;
     border-radius: 8px;
     transition: all 0.2s;
-}
-
-#lowerPanel:hover #toolbar,
-#lowerPanel.lowerPanelUp #toolbar {
-    right: 16px;
 }
 
 .toolbarItem {

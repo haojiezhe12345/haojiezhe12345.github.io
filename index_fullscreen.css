@@ -117,33 +117,26 @@
         opacity: 0;
         transform: translate(10%, -50%);
     }
+
     to {
         opacity: 1;
         transform: translate(0, -50%);
     }
 }
 
-#lowerPanel #newMsg {
-    position: absolute;
-    top: unset;
-    left: unset;
-    right: 16px;
-    bottom: 16px;
+#lowerPanel .backTransparent {
+    display: block;
+    padding: 16px;
 }
 
-#lowerPanel:hover #newMsg,
-#lowerPanel.lowerPanelUp #newMsg {
-    left: unset;
-    right: 16px;
+#lowerPanel #newMsgContainer {
+    top: initial;
+    left: initial;
+    right: 8px;
+    bottom: 0;
 }
 
-#lowerPanel #toolbar {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-}
-
-#lowerPanel:hover #toolbar,
-#lowerPanel.lowerPanelUp #toolbar {
-    right: 16px;
+#lowerPanel #toolbarContainer {
+    top: 0;
+    right: 8px;
 }

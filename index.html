@@ -302,7 +302,7 @@
                     text-decoration: underline;
                     font-size: 16px;
                     right: 0;
-                    left: unset;
+                    left: initial;
                     cursor: pointer;
                 "><span class="ui zh">不再显示 ×</span><span class="ui en">Hide ×</span></div>
 
@@ -351,70 +351,72 @@
             </div>
         </div>
 
-        <div class="backTransparent" style="top: -28px;left: 0;width: 155px;height: 64px;"></div>
-        <button id="newMsg" onclick="newComment()"><span class="ui zh">➕ 发送留言</span><span class="ui en">➕ New message</span></button>
-
-        <div class="backTransparent" style="top: -24px;right: 0;width: 200px;height: 60px;"></div>
-        <div id="toolbar">
-            <div id="menu" class="toolbarItem">
-                <span class="ui zh">工具 🛠</span><span class="ui en">Tools 🛠</span>
-                <ul>
-                    <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
-                    <li onclick="showPopup('themeSelectorPopup')"><span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span></li>
-                    <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
-                    <li onclick="
-                        if (installPrompt != null) installPrompt.prompt()
-                        else if (isInStandaloneMode) window.alert('你已安装过App\nApp already installed')
-                        else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
-                        "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
-                    <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
-                    <li>
-                        <span>🌎 Language (语言)</span>
-                        <i>▶</i>
-                        <ul>
-                            <li onclick="setConfig('lang', ''); location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
-                            <li onclick="changeLang('en'); setConfig('lang', 'en')"><span>English</span></li>
-                            <li onclick="changeLang('zh'); setConfig('lang', 'zh')"><span>中文</span></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <span class="ui zh">✨ 特效</span><span class="ui en">✨ Graphics</span>
-                        <i>▶</i>
-                        <ul>
-                            <li onclick="changeGraphicsMode('high')"><span class="ui zh">极高</span><span class="ui en">Fancy</span></li>
-                            <li onclick="changeGraphicsMode('mid')"><span class="ui zh">中等</span><span class="ui en">Balanced</span></li>
-                            <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
-                        </ul>
-                    </li>
-                    <li onclick="isMutedElmnt.click()"><span class="ui zh">🔊 播放/暂停BGM</span><span class="ui en">🔊 Mute / Unmute BGM</span></li>
-                    <li onclick="clearComments();loadComments()">
-                        <input type="checkbox" id="showKami" name="showKami" onchange="toggleKami()">
-                        <label for="showKami"><b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b></label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
-                        <label for="showTimeline"><span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span></label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="hideTopComment" name="hideTopComment" onchange="toggleTopComment()">
-                        <label for="hideTopComment"><span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span></label>
-                    </li>
-                    <li>
-                        <input type="checkbox" id="showHidden" name="showHidden">
-                        <label for="showHidden"><span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span></label>
-                    </li>
-                    <li>
-                        <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
-                        <span style="display: inline-flex; align-items: center; padding: 0;">
-                            <input id="goto" style="width: 64px;">
-                            <button onclick="clearComments(1);loadComments({ 'from': document.getElementById('goto').value })">Go</button>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-            <button id="fullscreenBtn" class="toolbarItem" onclick="goFullscreen()"><span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span></button>
+        <div id="newMsgContainer" class="backTransparent">
+            <button id="newMsg" onclick="newComment()"><span class="ui zh">➕ 发送留言</span><span class="ui en">➕ New message</span></button>
         </div>
-    
+
+        <div id="toolbarContainer" class="backTransparent">
+            <div id="toolbar">
+                <div id="menu" class="toolbarItem">
+                    <span class="ui zh">工具 🛠</span><span class="ui en">Tools 🛠</span>
+                    <ul>
+                        <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
+                        <li onclick="showPopup('themeSelectorPopup')"><span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span></li>
+                        <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
+                        <li onclick="
+                            if (installPrompt != null) installPrompt.prompt()
+                            else if (isInStandaloneMode) window.alert('你已安装过App\nApp already installed')
+                            else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
+                            "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
+                        <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
+                        <li>
+                            <span>🌎 Language (语言)</span>
+                            <i>▶</i>
+                            <ul>
+                                <li onclick="setConfig('lang', ''); location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
+                                <li onclick="changeLang('en'); setConfig('lang', 'en')"><span>English</span></li>
+                                <li onclick="changeLang('zh'); setConfig('lang', 'zh')"><span>中文</span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="ui zh">✨ 特效</span><span class="ui en">✨ Graphics</span>
+                            <i>▶</i>
+                            <ul>
+                                <li onclick="changeGraphicsMode('high')"><span class="ui zh">极高</span><span class="ui en">Fancy</span></li>
+                                <li onclick="changeGraphicsMode('mid')"><span class="ui zh">中等</span><span class="ui en">Balanced</span></li>
+                                <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
+                            </ul>
+                        </li>
+                        <li onclick="isMutedElmnt.click()"><span class="ui zh">🔊 播放/暂停BGM</span><span class="ui en">🔊 Mute / Unmute BGM</span></li>
+                        <li onclick="clearComments();loadComments()">
+                            <input type="checkbox" id="showKami" name="showKami" onchange="toggleKami()">
+                            <label for="showKami"><b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b></label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
+                            <label for="showTimeline"><span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span></label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="hideTopComment" name="hideTopComment" onchange="toggleTopComment()">
+                            <label for="hideTopComment"><span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span></label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="showHidden" name="showHidden">
+                            <label for="showHidden"><span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span></label>
+                        </li>
+                        <li>
+                            <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
+                            <span style="display: inline-flex; align-items: center; padding: 0;">
+                                <input id="goto" style="width: 64px;">
+                                <button onclick="clearComments(1);loadComments({ 'from': document.getElementById('goto').value })">Go</button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <button id="fullscreenBtn" class="toolbarItem" onclick="goFullscreen()"><span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span></button>
+            </div>
+        </div>
+
     </div>
 
     <div id="popupContainer">

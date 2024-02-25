@@ -19,3 +19,9 @@
     animation-duration: 0.1s !important;
     animation-fill-mode: forwards !important;
 }
+
+#lowerPanel .backTransparent {
+    animation-name: enableClickDelayed !important;
+    animation-duration: 0.1s !important;
+    animation-fill-mode: forwards !important;
+}
