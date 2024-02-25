@@ -72,7 +72,7 @@ body {
     position: fixed;
     right: 20px;
     bottom: 28%;
-    bottom: calc(20vh + 67px);
+    bottom: calc(20vh + 68px);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     font-size: 12px;
@@ -445,30 +445,33 @@ body {
     position: absolute;
     left: 0;
     width: 100%;
-    bottom: -35vh;
+    bottom: 0;
+    transform: translateY(35vh);
     padding-top: 24px;
-    transition: bottom 0.5s;
+    transition: transform 0.5s;
     animation-name: commentsup;
     animation-duration: 1.7s;
 }
 
 @keyframes commentsup {
     0% {
-        bottom: -70vh;
+        transform: translateY(105%);
+        transform: translateY(calc(100% + 30px));
     }
 
     30% {
-        bottom: -70vh;
+        transform: translateY(105%);
+        transform: translateY(calc(100% + 30px));
     }
 
     100% {
-        bottom: -35vh;
+        transform: translateY(35vh);
     }
 }
 
 #lowerPanel:hover,
 #lowerPanel.lowerPanelUp {
-    bottom: 0;
+    transform: translateY(0vh);
 }
 
 #lowerPanel>.tooltip {
