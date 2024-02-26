@@ -320,6 +320,11 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    pointer-events: none;
+}
+
+#header>* {
+    pointer-events: initial;
 }
 
 #mainTitle {
@@ -446,7 +451,7 @@ body {
     left: 0;
     width: 100%;
     bottom: 0;
-    transform: translateY(35vh);
+    transform: translateY(33vh);
     padding-top: 24px;
     transition: transform 0.5s;
     animation-name: commentsup;
@@ -465,7 +470,7 @@ body {
     }
 
     100% {
-        transform: translateY(35vh);
+        transform: translateY(33vh);
     }
 }
 
@@ -501,6 +506,7 @@ body {
 }
 
 #comments {
+    display: flex;
     white-space: nowrap;
     overflow: auto;
     box-sizing: border-box;
@@ -515,7 +521,7 @@ body {
 }
 
 #comments.noscrollbar {
-    padding-bottom: 0;
+    padding-bottom: 5px;
     /*-ms-overflow-style: none;*/
     /*overflow: auto;*/
 }
@@ -552,10 +558,11 @@ body {
 }
 
 #comments .commentBox {
+    flex-shrink: 0;
     position: relative;
     display: inline-block;
     width: 45vh;
-    height: 55vh;
+    height: 53vh;
     max-width: 80vw;
     margin-right: 20px;
     border-radius: 16px;
@@ -1795,6 +1802,8 @@ body {
 }
 
 .fullscreen #comments {
+    flex-wrap: wrap;
+    justify-content: center;
     white-space: normal;
     text-align: center;
     width: 100%;
@@ -1816,9 +1825,9 @@ body {
 }
 
 .fullscreen #comments .loadingIndicator {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
     line-height: normal !important;
     margin: 0;
     text-align: center;
@@ -1907,50 +1916,4 @@ body {
 .fullscreen #lowerPanel #toolbarContainer {
     top: 0;
     right: 8px;
-}
-
-
-/* for touch-keyboard-opened mobile and landscape mobile */
-
-@media (max-height: 667px) {
-
-    #comments .commentBox {
-        width: 300px;
-        height: 367px;
-        max-width: 80vw;
-        max-height: 75vh;
-    }
-
-    .fullscreen #comments .commentBox {
-        width: 300px;
-        height: 333px;
-        max-width: 80vw;
-        max-height: 90vh;
-    }
-
-    @keyframes newCommentBoxAppear {
-        0% {
-            width: 0;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-
-        30% {
-            width: 300px;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-
-        40% {
-            width: 300px;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-
-        100% {
-            width: 300px;
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
 }
