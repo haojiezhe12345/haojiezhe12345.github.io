@@ -591,6 +591,14 @@ body {
     }
 }
 
+.touchKeyboardShowing #comments .commentBox {
+    width: 320px;
+    height: 380px;
+    max-width: 80vw;
+    max-height: 75vh;
+    max-height: calc(100vh - 100px);
+}
+
 .enableClickDelayed,
 #comments .commentBox>*:not(.loadingCircle) {
     pointer-events: unset;
@@ -727,32 +735,29 @@ body {
 }
 
 #comments #newCommentBox {
-    animation-name: newCommentBoxAppear;
-    animation-duration: 1.1s;
-    /*animation-timing-function: ease-in-out;*/
+    animation-name: newCommentBoxScratch, newCommentBoxZoom;
+    animation-duration: 0.4s, 0.8s;
+    animation-delay: 0s, 0.2s;
 }
 
-@keyframes newCommentBoxAppear {
-    0% {
+@keyframes newCommentBoxScratch {
+    from {
         width: 0;
         opacity: 0;
-        transform: scale(0.9);
     }
 
-    30% {
-        width: 45vh;
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes newCommentBoxZoom {
+    from {
         opacity: 0;
         transform: scale(0.9);
     }
 
-    40% {
-        width: 45vh;
-        opacity: 0;
-        transform: scale(0.9);
-    }
-
-    100% {
-        width: 45vh;
+    to {
         opacity: 1;
         transform: scale(1);
     }
@@ -1822,6 +1827,13 @@ body {
     height: 50vh;
     text-align: left;
     max-height: 96vw;
+}
+
+.touchKeyboardShowing.fullscreen #comments .commentBox {
+    width: 320px;
+    height: 380px;
+    max-width: 80vw;
+    max-height: 90vh;
 }
 
 .fullscreen #comments .loadingIndicator {

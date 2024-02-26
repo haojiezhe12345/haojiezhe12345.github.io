@@ -388,6 +388,10 @@ function newComment() {
     commentDiv.scrollLeft = 0
     commentDiv.scrollTop = 0
 
+    prevWindowWidth = window.innerWidth
+    prevWindowHeight = window.innerHeight
+    if (debug) console.log(`${prevWindowWidth}x${prevWindowHeight}`)
+
     if (newCommentDisabled) {
         document.getElementById('msgText').focus({ preventScroll: true })
         return
@@ -1670,6 +1674,31 @@ window.onhashchange = function (e) {
     if (e.oldURL.split('#')[1] == 'popup' && e.newURL.split('#')[1] != 'view-img') {
         closePopup()
     }
+}
+
+
+// detect touch keyboard
+//
+var prevWindowWidth = null
+var prevWindowHeight = null
+
+window.onresize = () => {
+    var newWindowWidth = window.innerWidth
+    var newWindowHeight = window.innerHeight
+    //if (debug) console.log(`${prevWindowWidth}x${prevWindowHeight} -> ${newWindowWidth}x${newWindowHeight}`)
+
+    var newCommentBoxEl = document.getElementById('newCommentBox')
+    if (newCommentBoxEl != null && document.activeElement == document.getElementById('msgText') && newWindowHeight < prevWindowHeight) {
+        if (!document.body.classList.contains('touchKeyboardShowing') && (newCommentBoxEl.offsetHeight < 380)) {
+            console.log('detected editing newComment with touch keyboard')
+            document.body.classList.add('touchKeyboardShowing')
+        }
+    } else {
+        //if (debug) console.log('leaving editing newComment with touch keyboard')
+        document.body.classList.remove('touchKeyboardShowing')
+    }
+    prevWindowWidth = newWindowWidth
+    prevWindowHeight = newWindowHeight
 }
 
 
