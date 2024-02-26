@@ -1908,3 +1908,49 @@ body {
     top: 0;
     right: 8px;
 }
+
+
+/* for touch-keyboard-opened mobile and landscape mobile */
+
+@media (max-height: 667px) {
+
+    #comments .commentBox {
+        width: 300px;
+        height: 367px;
+        max-width: 80vw;
+        max-height: 75vh;
+    }
+
+    .fullscreen #comments .commentBox {
+        width: 300px;
+        height: 333px;
+        max-width: 80vw;
+        max-height: 90vh;
+    }
+
+    @keyframes newCommentBoxAppear {
+        0% {
+            width: 0;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        30% {
+            width: 300px;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        40% {
+            width: 300px;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        100% {
+            width: 300px;
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}
