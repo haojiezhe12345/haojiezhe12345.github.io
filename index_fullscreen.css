@@ -4,6 +4,7 @@
     left: 0;
     bottom: 0;
     width: 100%;
+    transform: none;
     padding: 0;
     transition: none;
     animation-name: fullscreenAnim;
