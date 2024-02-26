@@ -1103,19 +1103,17 @@ function seekComment(seekCount) {
 function goFullscreen() {
     if (!isFullscreen) {
         var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
-        //document.getElementById('fullscreenCSS').disabled = false
         setTimeout(() => {
             commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
-        }, 200);
+        }, 50);
         document.body.classList.add('fullscreen')
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">退出全屏 ↙</span><span class="ui en">Collapse ↙</span>'
         isFullscreen = true
     } else {
         var scrollPercent = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
-        //document.getElementById('fullscreenCSS').disabled = true
         setTimeout(() => {
             commentDiv.scrollLeft = (commentDiv.scrollWidth - commentDiv.clientWidth) * scrollPercent
-        }, 200);
+        }, 50);
         document.body.classList.remove('fullscreen')
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
         isFullscreen = false

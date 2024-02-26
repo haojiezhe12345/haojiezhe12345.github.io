@@ -511,7 +511,7 @@ body {
     background-color: rgba(255, 255, 255, 0);
     backdrop-filter: drop-shadow(0 0) blur(0);
     box-shadow: none;
-    transition: all 0.5s;
+    transition: opacity 0.5s, background-color 0.5s, backdrop-filter 0.5s, box-shadow 0.5s;
 }
 
 #comments.noscrollbar {
@@ -956,7 +956,7 @@ body {
 #timelineContainer #timeline p>* {
     display: inline-block;
     cursor: pointer;
-    transition: all 0.1s;
+    transition: color 0.1s, transform 0.1s;
 }
 
 #timelineContainer #timeline p>*:hover,
@@ -1773,7 +1773,7 @@ body {
     padding: 0;
     transition: none;
     animation-name: fullscreenAnim;
-    animation-duration: 0.7s;
+    animation-duration: 0.5s;
     overflow: hidden;
 }
 
@@ -1783,7 +1783,7 @@ body {
         opacity: 0;
     }
 
-    30% {
+    10% {
         transform: scale(1.1);
         opacity: 0;
     }
@@ -1876,9 +1876,11 @@ body {
     margin: 0;
     margin-top: -80px;
     transform: translateY(-50%);
+
+    animation: showHoverCalendarFullscreen 0.2s;
 }
 
-@keyframes showHoverCalendar {
+@keyframes showHoverCalendarFullscreen {
     from {
         opacity: 0;
         transform: translate(10%, -50%);
