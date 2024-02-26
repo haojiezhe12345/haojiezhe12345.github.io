@@ -1100,7 +1100,7 @@ function seekComment(seekCount) {
 
 // toggles
 //
-function goFullscreen() {
+function toggleFullscreen() {
     if (!isFullscreen) {
         var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
         setTimeout(() => {
@@ -1647,6 +1647,8 @@ document.onkeydown = function (e) {
             closeImgViewer()
         } else if (document.getElementById('popupContainer').style.display == 'flex') {
             closePopup()
+        } else if (isFullscreen) {
+            toggleFullscreen()
         } else {
             document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
         }
