@@ -131,6 +131,8 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
                 }
             }
 
+            setTimelineActiveMonth(true)
+
             if (debug) console.log('maxID:', getMaxCommentID(), ' minID:', getMinCommentID())
 
         } else {
@@ -1048,27 +1050,47 @@ function getCurrentComment() {
     return commentList[Math.round(commentList.length * scrolled)]
 }
 
-function setTimelineActiveMonth() {
+function setTimelineActiveMonth(scroll = false) {
     try {
         var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
         var date = new Date(timeStamp)
         var year = date.getFullYear()
         var month = date.getMonth() + 1
         //if (debug) console.log(id, timeStamp, year, month)
-        for (var yearEl of document.getElementById('timeline').children) {
+        for (let yearEl of document.getElementById('timeline').children) {
             if (yearEl.firstElementChild.innerHTML == year) {
                 yearEl.firstElementChild.classList.add('month-active')
+                if (scroll) yearEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
             } else {
                 yearEl.firstElementChild.classList.remove('month-active')
             }
-            for (var monthEl of yearEl.children) {
+            for (let monthEl of yearEl.children) {
                 if (monthEl.nodeName == 'SPAN') {
                     if (yearEl.firstElementChild.innerHTML == year && monthEl.innerHTML == month) {
                         monthEl.classList.add('month-active')
+                        //if (scroll) monthEl.scrollIntoView(false)
                     } else {
                         monthEl.classList.remove('month-active')
                     }
                 }
+            }
+        }
+        setHoverCalendarActiveDay()
+    } catch (error) {
+        if (debug) console.log(error)
+    }
+}
+
+function setHoverCalendarActiveDay() {
+    try {
+        var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
+        var date = new Date(timeStamp)
+        for (let dayEl of document.getElementById('hoverCalendar').querySelectorAll('div[data-time]')) {
+            var date1 = new Date(dayEl.dataset.time)
+            if (date.getFullYear() == date1.getFullYear() && date.getMonth() == date1.getMonth() && date.getDate() == date1.getDate()) {
+                dayEl.classList.add('day-active')
+            } else {
+                dayEl.classList.remove('day-active')
             }
         }
     } catch (error) {
@@ -1110,6 +1132,7 @@ function toggleFullscreen() {
         var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
         setTimeout(() => {
             commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
+            setTimelineActiveMonth(true)
         }, 50);
         document.body.classList.add('fullscreen')
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">退出全屏 ↙</span><span class="ui en">Collapse ↙</span>'
@@ -1118,6 +1141,7 @@ function toggleFullscreen() {
         var scrollPercent = commentDiv.scrollTop / (commentDiv.scrollHeight - commentDiv.clientHeight)
         setTimeout(() => {
             commentDiv.scrollLeft = (commentDiv.scrollWidth - commentDiv.clientWidth) * scrollPercent
+            setTimelineActiveMonth(true)
         }, 50);
         document.body.classList.remove('fullscreen')
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
@@ -1620,6 +1644,7 @@ document.getElementById('timelineContainer').addEventListener('mouseover', (even
             if (new Date(year, month - 1, i).getTime() / 1000 < maxTimelineTime)
                 document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
         }
+        setHoverCalendarActiveDay()
     } else if (event.target.nodeName == 'STRONG') {
         document.getElementById('hoverCalendar').style.display = 'none'
     }

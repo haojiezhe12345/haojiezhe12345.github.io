@@ -448,7 +448,7 @@ body {
 }
 
 #lowerPanel {
-    position: absolute;
+    position: fixed;
     left: 0;
     width: 100%;
     bottom: 0;
@@ -925,14 +925,14 @@ body {
     user-select: none;
     color: white;
     scrollbar-width: none;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: drop-shadow(0 0) blur(1vh);
     box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.2);
     transition: background-color 0.2s;
 }
 
 #timelineContainer:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.45);
 }
 
 #timelineContainer::-webkit-scrollbar {
@@ -963,7 +963,7 @@ body {
 }
 
 #timelineContainer #timeline p:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 #timelineContainer #timeline p>* {
@@ -1037,7 +1037,7 @@ body {
 }
 
 #timelineContainer #hoverCalendar div:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 #timelineContainer #hoverCalendar div:first-child {
@@ -1047,6 +1047,12 @@ body {
 
 #timelineContainer #hoverCalendar div:first-child:hover {
     background: none;
+}
+
+#timelineContainer #hoverCalendar .day-active {
+    color: #ffbbdd;
+    text-shadow: 0 0 12px #ffbbdd, 0 0 12px #ffbbdd;
+    font-weight: bold;
 }
 
 .commentSeekArrow {
@@ -1339,7 +1345,7 @@ body {
 }
 
 #popupContainer {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -1791,7 +1797,6 @@ body {
 /* Fullscreen styles */
 
 .fullscreen #lowerPanel {
-    position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
