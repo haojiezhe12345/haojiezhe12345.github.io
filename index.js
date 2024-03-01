@@ -1085,7 +1085,7 @@ function setHoverCalendarActiveDay() {
     try {
         var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
         var date = new Date(timeStamp)
-        for (let dayEl of document.getElementById('hoverCalendar').querySelectorAll('div[data-time]')) {
+        for (let dayEl of hoverCalendarEl.querySelectorAll('div[data-time]')) {
             var date1 = new Date(dayEl.dataset.time)
             if (date.getFullYear() == date1.getFullYear() && date.getMonth() == date1.getMonth() && date.getDate() == date1.getDate()) {
                 dayEl.classList.add('day-active')
@@ -1290,6 +1290,8 @@ var avatarInput = document.getElementById('setAvatarInput')
 
 var bgmElmnt = document.getElementById('bgm')
 var bgmRotateElmnt = document.getElementById('bgmRotate')
+
+var hoverCalendarEl = document.getElementById('hoverCalendar')
 
 // toggle checkboxes
 var isMutedElmnt = document.getElementById('isMuted')
@@ -1623,30 +1625,34 @@ document.getElementById('timelineContainer').addEventListener('wheel', (event) =
 document.getElementById('timelineContainer').addEventListener('mouseover', (event) => {
     if (event.target.nodeName == 'SPAN') {
         if (!isFullscreen) {
-            document.getElementById('hoverCalendar').style.left = event.target.getBoundingClientRect().left + event.target.getBoundingClientRect().width / 2 + 'px'
-            document.getElementById('hoverCalendar').style.bottom = document.getElementById('timelineContainer').getBoundingClientRect().height + 'px'
-            document.getElementById('hoverCalendar').style.removeProperty('top')
-            document.getElementById('hoverCalendar').style.removeProperty('right')
+            var left = event.target.getBoundingClientRect().left + event.target.getBoundingClientRect().width / 2
+            var width = 113
+            if (left + width > window.innerWidth) left = window.innerWidth - width
+            if (left < width) left = width
+            hoverCalendarEl.style.left = left + 'px'
+            hoverCalendarEl.style.bottom = document.getElementById('timelineContainer').getBoundingClientRect().height + 'px'
+            hoverCalendarEl.style.removeProperty('top')
+            hoverCalendarEl.style.removeProperty('right')
         }
         else {
-            document.getElementById('hoverCalendar').style.top = event.target.getBoundingClientRect().top + event.target.getBoundingClientRect().height / 2 + 'px'
-            document.getElementById('hoverCalendar').style.right = document.getElementById('timelineContainer').getBoundingClientRect().width + 'px'
-            document.getElementById('hoverCalendar').style.removeProperty('left')
-            document.getElementById('hoverCalendar').style.removeProperty('bottom')
+            hoverCalendarEl.style.top = event.target.getBoundingClientRect().top + event.target.getBoundingClientRect().height / 2 + 'px'
+            hoverCalendarEl.style.right = document.getElementById('timelineContainer').getBoundingClientRect().width + 'px'
+            hoverCalendarEl.style.removeProperty('left')
+            hoverCalendarEl.style.removeProperty('bottom')
         }
-        document.getElementById('hoverCalendar').style.removeProperty('display')
+        hoverCalendarEl.style.removeProperty('display')
 
-        document.getElementById('hoverCalendar').innerHTML = ''
+        hoverCalendarEl.innerHTML = ''
         var year = parseInt(event.target.parentNode.firstElementChild.innerHTML)
         var month = parseInt(event.target.innerHTML)
-        document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div>${year}-${('0' + month).slice(-2)}${(year <= 2022) ? ' (kami.im)' : ''}</div>`))
+        hoverCalendarEl.appendChild(html2elmnt(`<div>${year}-${('0' + month).slice(-2)}${(year <= 2022 || (year == 2023 && month <= 5)) ? ' (kami.im)' : ''}</div>`))
         for (let i = 1; i <= new Date(year, month, 0).getDate(); i++) {
             if (new Date(year, month - 1, i).getTime() / 1000 < maxTimelineTime)
-                document.getElementById('hoverCalendar').appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
+                hoverCalendarEl.appendChild(html2elmnt(`<div data-time="${new Date(year, month - 1, i).toDateString()}">${i}</div>`))
         }
         setHoverCalendarActiveDay()
     } else if (event.target.nodeName == 'STRONG') {
-        document.getElementById('hoverCalendar').style.display = 'none'
+        hoverCalendarEl.style.display = 'none'
     }
 })
 
