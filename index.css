@@ -21,6 +21,7 @@ body {
     overflow: hidden;
     width: 100%;
     height: 100%;
+    font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #bgm {
@@ -1534,6 +1535,20 @@ body {
     object-fit: cover;
     border-radius: 100px;
     margin-right: 10px;
+}
+
+#showUserCommentPopup>div>h2 .kamiuid {
+    color: gray;
+    padding: 0px 4px;
+    font-size: 18px;
+}
+
+#showUserCommentPopup>div>h2 .kamiuid::before {
+    content: ' (kami.im UID:';
+}
+
+#showUserCommentPopup>div>h2 .kamiuid::after {
+    content: ')';
 }
 
 #showUserCommentPopup>div>div {
