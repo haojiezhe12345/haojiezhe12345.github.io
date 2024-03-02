@@ -31,11 +31,6 @@
 
 <body onclick="if (!isMutedElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
 
-    <p id="backupSiteNotice">
-        <span class="ui zh">如网页显示不全或无法发送留言, 请访问<a href="https://haojiezhe12345.top:82/madohomu/">备用链接</a></span><br>
-        <span class="ui en">If the website doesn't function normally, please <a href="https://haojiezhe12345.top:82/madohomu/">visit backup site</a></span>
-    </p>
-
     <audio id="bgm" loop
         onplay="bgmRotateElmnt.style.removeProperty('animation')"
         onpause="bgmRotateElmnt.style.animation = 'none'">
@@ -213,7 +208,6 @@
         <div class="tooltip">
             <span class="ui zh">今日留言: </span><span class="ui en">Messages today: </span>
             <span id="todayCommentCount"></span>
-            <div class="triangle"></div>
         </div>
 
         <div id="comments" class="noscrollbar">
@@ -345,7 +339,6 @@
             <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
             <div id="mouseScrollTooltip" class="tooltip">
                 <span class="ui zh">用鼠标滚轮也可滚动</span><span class="ui en">Scrollable with wheel</span>
-                <div class="triangle"></div>
             </div>
         </div>
 

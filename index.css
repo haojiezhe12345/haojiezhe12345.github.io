@@ -8,19 +8,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html {
-    overflow: hidden;
-}
-
 body {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    margin: 0;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
     font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -35,12 +23,13 @@ body {
 }
 
 #bgContainer {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-image: linear-gradient(100deg, #ffd1e8, #b49ac9);
+    overflow: hidden;
 }
 
 .mainbg {
@@ -317,7 +306,7 @@ body {
 }
 
 #header {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -490,7 +479,8 @@ body {
     font-weight: bold;
 }
 
-.tooltip .triangle {
+.tooltip::after {
+    content: "";
     position: absolute;
     bottom: -10px;
     left: 24px;
@@ -1115,7 +1105,7 @@ body {
     animation-delay: -0.2s;
 }
 
-.commentSeekArrow>.tooltip .triangle {
+.commentSeekArrow>.tooltip::after {
     left: auto;
     right: 26px;
     border-top: 10px solid white;
@@ -1795,6 +1785,10 @@ body {
 
 
 /* Fullscreen styles */
+
+body.fullscreen {
+    overflow: hidden;
+}
 
 .fullscreen #lowerPanel {
     top: 0;
