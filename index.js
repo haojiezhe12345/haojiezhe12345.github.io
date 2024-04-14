@@ -1243,9 +1243,12 @@ function html2elmnt(html) {
 }
 
 function htmlEscape(txt) {
-    var el = document.createElement('p')
-    el.innerText = txt
-    return el.innerHTML
+    return txt
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\n/g, "<br>")
+        .replace(/\s/g, "&nbsp;")
 }
 
 function compareArr(a1, a2) {
