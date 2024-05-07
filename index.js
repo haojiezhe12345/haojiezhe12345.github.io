@@ -984,13 +984,14 @@ function changeLang(targetLang) {
 
 function changeGraphicsMode(mode) {
     if (mode == 'high') {
-        document.getElementById('lowendCSS').disabled = true
+        document.body.classList.remove('lowend')
+        document.body.classList.remove('midend')
     } else if (mode == 'mid') {
-        document.getElementById('lowendCSS').href = 'index_midend.css'
-        document.getElementById('lowendCSS').disabled = false
+        document.body.classList.remove('lowend')
+        document.body.classList.add('midend')
     } else if (mode == 'low') {
-        document.getElementById('lowendCSS').href = 'index_lowend.css'
-        document.getElementById('lowendCSS').disabled = false
+        document.body.classList.add('lowend')
+        document.body.classList.remove('midend')
     } else return
     setConfig('graphicsMode', mode)
 }

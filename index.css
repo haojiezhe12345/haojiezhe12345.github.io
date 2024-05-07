@@ -592,7 +592,7 @@ body {
 
 .enableClickDelayed,
 #comments .commentBox>*:not(.loadingCircle) {
-    pointer-events: unset;
+    pointer-events: initial;
 }
 
 #lowerPanel:hover .enableClickDelayed,
@@ -1783,6 +1783,43 @@ body {
     animation-delay: 1.5s;
 }
 
+
+/* Mid-end styles */
+
+.midend * {
+    backdrop-filter: none !important;
+    filter: none !important;
+}
+
+/* Low-end styles */
+
+.lowend * {
+    backdrop-filter: none !important;
+    filter: none !important;
+    transition: none !important;
+    animation: none !important;
+}
+
+.lowend #lowerPanel:hover .enableClickDelayed,
+.lowend #lowerPanel.lowerPanelUp .enableClickDelayed,
+.lowend #lowerPanel:hover #comments .commentBox>*:not(.loadingCircle),
+.lowend #lowerPanel.lowerPanelUp #comments .commentBox>*:not(.loadingCircle) {
+    animation-name: enableClickDelayed !important;
+    animation-duration: 0.2s !important;
+    animation-fill-mode: forwards !important;
+}
+
+.lowend .toolbarItem ul li {
+    animation-name: enableClickDelayed !important;
+    animation-duration: 0.1s !important;
+    animation-fill-mode: forwards !important;
+}
+
+.lowend #lowerPanel .backTransparent {
+    animation-name: enableClickDelayed !important;
+    animation-duration: 0.1s !important;
+    animation-fill-mode: forwards !important;
+}
 
 /* Fullscreen styles */
 
