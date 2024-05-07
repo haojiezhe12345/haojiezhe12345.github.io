@@ -13,7 +13,3 @@ https://haojiezhe12345.top:82/madohomu/res/
 "/madohomu"
 "/?no-redirect"
 
-madohomu.love:80
-madohomu.love/?no-redirect
-
-

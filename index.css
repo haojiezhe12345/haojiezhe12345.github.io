@@ -310,6 +310,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    user-select: none;
     pointer-events: none;
 }
 
@@ -355,6 +356,7 @@ body {
     font-size: 23px;
     letter-spacing: 1.8px;
     text-decoration: none;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
@@ -373,7 +375,6 @@ body {
     /*background-color: rgba(0, 0, 0, 0.4);*/
     /*color: white;*/
     font-size: 12px;
-    user-select: none;
     cursor: pointer;
 }
 
@@ -421,7 +422,6 @@ body {
 #userInfo>* {
     vertical-align: middle;
     display: inline-block;
-    user-select: none;
     transition: all 0.15s;
 }
 
