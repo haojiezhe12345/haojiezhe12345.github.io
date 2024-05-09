@@ -615,7 +615,7 @@ function showPopup(popupID) {
             try {
                 for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
                     document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
                         <p>
                             ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
                             ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
@@ -631,7 +631,7 @@ function showPopup(popupID) {
         }
         for (let i = 0; i < msgBgCount; i++) {
             document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
-            <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg">
+            <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
             <p>
                 ${msgBgInfo[i].description != null
                     ? msgBgInfo[i].description
