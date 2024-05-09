@@ -1344,9 +1344,6 @@ body {
     align-items: center;
     justify-content: center;
     display: none;
-    animation-name: showPopup;
-    animation-duration: 0.65s;
-    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
 }
 
 @keyframes showPopup {
@@ -1368,6 +1365,9 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.2);
+    animation-name: showPopup;
+    animation-duration: 0.65s;
+    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
 }
 
 #popupContainer .popupItem {
@@ -1381,6 +1381,9 @@ body {
     max-height: 90%;
     overflow: auto;
     display: none;
+    animation-name: showPopup;
+    animation-duration: 0.65s;
+    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
 }
 
 .popupItem h2 {
