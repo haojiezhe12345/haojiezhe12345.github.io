@@ -1371,19 +1371,26 @@ body {
 }
 
 #popupContainer .popupItem {
+    display: flex;
+    flex-flow: column;
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
-    padding: 20px 32px 32px;
     border-radius: 16px;
     box-sizing: border-box;
     max-width: 90%;
     max-height: 90%;
-    overflow: auto;
-    display: none;
+    max-height: min(90%, 150vw);
+    overflow: hidden;
     animation-name: showPopup;
     animation-duration: 0.65s;
     animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
+}
+
+#popupContainer .popupItem>div:first-child {
+    min-height: 0;
+    padding: 24px 32px;
+    overflow: auto;
 }
 
 .popupItem h2 {
@@ -1427,8 +1434,8 @@ body {
 
 .popupItem .closeBtn {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 24px;
+    right: 24px;
     width: 16px;
     height: 16px;
     line-height: 18px;
@@ -1511,11 +1518,10 @@ body {
 
 #showUserCommentPopup {
     width: 500px;
-    padding: 0 !important;
 }
 
 #showUserCommentPopup>div {
-    padding: 20px 24px 32px;
+    padding: 20px 24px 32px !important;
     max-height: 90vh;
     box-sizing: border-box;
     overflow: auto;
@@ -1616,13 +1622,13 @@ body {
     max-width: min(90%, 700px) !important;
 }
 
-#themeSelectorPopup>div>div {
+#themeSelectorPopup>div>div>div {
     display: inline-block;
     margin: 8px;
     cursor: pointer;
 }
 
-#themeSelectorPopup>div>div>img {
+#themeSelectorPopup>div>div>div>img {
     width: 180px;
     height: 120px;
     box-sizing: border-box;
@@ -1630,11 +1636,11 @@ body {
     transition: transform 0.2s;
 }
 
-#themeSelectorPopup>div>div:hover>img {
+#themeSelectorPopup>div>div>div:hover>img {
     transform: scale(1.05);
 }
 
-#themeSelectorPopup>div>div>span {
+#themeSelectorPopup>div>div>div>span {
     display: block;
 }
 

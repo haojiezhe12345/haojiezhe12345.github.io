@@ -596,7 +596,7 @@ function showPopup(popupID) {
     popupContainer.style.display = 'flex';
 
     var popup = document.getElementById(popupID);
-    popup.style.display = 'block';
+    popup.style.removeProperty('display');
 
     if (popupID == 'setNamePopup') {
         document.getElementById('setNameInput').value = getConfig('username')

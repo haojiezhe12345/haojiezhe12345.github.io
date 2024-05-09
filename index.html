@@ -417,27 +417,31 @@
         <div id="popupBG" onclick="closePopup()"></div>
 
         <div id="setNamePopup" class="popupItem">
-            <h2><span class="ui zh">设置昵称</span><span class="ui en">Set nickname</span></h2>
-            <label for="setNameInput"><span class="ui zh">昵称:</span><span class="ui en">Nickname:</span></label>
-            <input type="text" id="setNameInput" value="" onkeypress="((event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    setUserName()
-                }})(event)">
-            <br><br>
-            <p onclick="showUserComment(document.getElementById('setNameInput').value)"><span class="ui zh">我的留言记录 ↗</span><span class="ui en">My sent messages →</span></p>
-            <button class="okBtn" onclick="setUserName()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            <div>
+                <h2><span class="ui zh">设置昵称</span><span class="ui en">Set nickname</span></h2>
+                <label for="setNameInput"><span class="ui zh">昵称:</span><span class="ui en">Nickname:</span></label>
+                <input type="text" id="setNameInput" value="" onkeypress="((event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        setUserName()
+                    }})(event)">
+                <br><br>
+                <p onclick="showUserComment(document.getElementById('setNameInput').value)"><span class="ui zh">我的留言记录 ↗</span><span class="ui en">My sent messages →</span></p>
+                <button class="okBtn" onclick="setUserName()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
         <div id="setAvatarPopup" class="popupItem">
-            <h2><span class="ui zh">设置头像</span><span class="ui en">Set avatar</span></h2>
-            <img id="setAvatarImg" src="" onerror="">
-            <form id="avatarForm" enctype="multipart/form-data">
-                <input id="setAvatarInput" type="file" accept="image/*" onchange="uploadAvatar()"/>
-            </form>
-            <br>
-            <button class="okBtn" onclick="closePopup();"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            <div>
+                <h2><span class="ui zh">设置头像</span><span class="ui en">Set avatar</span></h2>
+                <img id="setAvatarImg" src="" onerror="">
+                <form id="avatarForm" enctype="multipart/form-data">
+                    <input id="setAvatarInput" type="file" accept="image/*" onchange="uploadAvatar()"/>
+                </form>
+                <br>
+                <button class="okBtn" onclick="closePopup();"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
@@ -476,42 +480,44 @@
         </div>
         
         <div id="themeSelectorPopup" class="popupItem">
-            <h2><span class="ui zh">选择主题</span><span class="ui en">Choose a theme</span></h2>
-            <p>
-                <span>
-                    <label for="isMuted"><span class="ui zh">BGM静音</span><span class="ui en">Mute BGM</span></label>
-                    <input type="checkbox" id="isMuted" name="isMuted" onchange="toggleBGM()">
-                </span>
-                <a href="javascript:;" onclick="showPopup('getImgPopup')" style="margin-left: 16px;"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
-            </p>
             <div>
-                <div onclick="location.hash=''; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/res/auto_theme.jpg" style="border: 8px solid white;">
-                    <span><span class="ui zh">自动</span><span class="ui en">Auto</span></span>
-                </div>
-                <div onclick="location.hash='#default-theme'; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg">
-                    <span><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
-                </div>
-                <div onclick="location.hash='#night'; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/night/mainbg1.jpg">
-                    <span><span class="ui zh">晚安 (11:00-6:00)</span><span class="ui en">Night (11PM-6AM)</span></span>
-                </div>
-                <div onclick="location.hash='#birthday'; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg1.jpg">
-                    <span><span class="ui zh">圆诞 (10.3)</span><span class="ui en">MadoBirthday (Oct 3)</span></span>
-                </div>
-                <div onclick="location.hash='#christmas'; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/christmas/mainbg1.jpg">
-                    <span><span class="ui zh">圣诞 (12.25)</span><span class="ui en">Christmas</span></span>
-                </div>
-                <div onclick="location.hash='#lunarNewYear'; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/lunarNewYear/mainbg1.jpg">
-                    <span><span class="ui zh">新年 (农历)</span><span class="ui en">Lunar New Year</span></span>
-                </div>
-                <div onclick="location.hash='#kami'; location.reload()">
-                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg1.jpg">
-                    <span>kami.im</span>
+                <h2><span class="ui zh">选择主题</span><span class="ui en">Choose a theme</span></h2>
+                <p>
+                    <span>
+                        <label for="isMuted"><span class="ui zh">BGM静音</span><span class="ui en">Mute BGM</span></label>
+                        <input type="checkbox" id="isMuted" name="isMuted" onchange="toggleBGM()">
+                    </span>
+                    <a href="javascript:;" onclick="showPopup('getImgPopup')" style="margin-left: 16px;"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
+                </p>
+                <div>
+                    <div onclick="location.hash=''; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/res/auto_theme.jpg" style="border: 8px solid white;">
+                        <span><span class="ui zh">自动</span><span class="ui en">Auto</span></span>
+                    </div>
+                    <div onclick="location.hash='#default-theme'; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg">
+                        <span><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
+                    </div>
+                    <div onclick="location.hash='#night'; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/night/mainbg1.jpg">
+                        <span><span class="ui zh">晚安 (11:00-6:00)</span><span class="ui en">Night (11PM-6AM)</span></span>
+                    </div>
+                    <div onclick="location.hash='#birthday'; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg1.jpg">
+                        <span><span class="ui zh">圆诞 (10.3)</span><span class="ui en">MadoBirthday (Oct 3)</span></span>
+                    </div>
+                    <div onclick="location.hash='#christmas'; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/christmas/mainbg1.jpg">
+                        <span><span class="ui zh">圣诞 (12.25)</span><span class="ui en">Christmas</span></span>
+                    </div>
+                    <div onclick="location.hash='#lunarNewYear'; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/lunarNewYear/mainbg1.jpg">
+                        <span><span class="ui zh">新年 (农历)</span><span class="ui en">Lunar New Year</span></span>
+                    </div>
+                    <div onclick="location.hash='#kami'; location.reload()">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg1.jpg">
+                        <span>kami.im</span>
+                    </div>
                 </div>
             </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
