@@ -1540,6 +1540,11 @@ body {
     object-fit: cover;
     border-radius: 100px;
     margin-right: 10px;
+    flex-shrink: 0;
+}
+
+#showUserCommentPopup>div>h2>span {
+    line-height: 1em;
 }
 
 #showUserCommentPopup>div>h2 .kamiuid {
