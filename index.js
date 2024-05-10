@@ -661,7 +661,7 @@ function closePopup() {
 // user related
 //
 function setUserName() {
-    inputName = document.getElementById('setNameInput').value;
+    var inputName = document.getElementById('setNameInput').value;
 
     try {
         var invalidFileChars = "\\/:*?\"<>|;";
@@ -675,11 +675,14 @@ function setUserName() {
         console.log(error)
     }
 
-    setConfig('username', inputName)
-    //closePopup()
-    if (getConfig('username') == '' || getConfig('username') == '匿名用户') {
+    if (['', '匿名用户'].includes(inputName)) {
         closePopup()
-    } else if (getConfig('username') == '10.3') {
+        return
+    }
+
+    setConfig('username', inputName)
+
+    if (getConfig('username') == '10.3') {
         //location.reload()
         closePopup()
     } else {
