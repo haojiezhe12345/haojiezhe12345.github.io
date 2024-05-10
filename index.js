@@ -1229,6 +1229,7 @@ function getConfig(key) {
     if (localStorage.getItem(key) == null) {
         if (getCookie(key) != '') {
             setConfig(key, getCookie(key))
+            document.cookie = `${key}=;expires=${new Date(0).toUTCString()};path=/`;
         } else {
             return ''
         }
