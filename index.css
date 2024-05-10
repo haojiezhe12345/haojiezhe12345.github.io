@@ -410,8 +410,11 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
     border-radius: 100px;
-    cursor: pointer;
     transition: all 0.2s;
+}
+
+#userInfo.nologin {
+    cursor: pointer;
 }
 
 #userInfo:hover {
@@ -434,6 +437,75 @@ body {
 
 #userInfo:hover span {
     transform: scale(1.05);
+}
+
+#my-dropdown {
+    display: none;
+    position: absolute;
+    right: 5%;
+    bottom: 0;
+    transform: translateY(100%);
+}
+
+#userInfo:hover #my-dropdown {
+    display: block;
+}
+
+#userInfo.nologin #my-dropdown {
+    display: none;
+}
+
+#my-dropdown>div {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 10px;
+    margin-top: 16px;
+    padding: 3px;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
+    animation: showDropdown 0.3s;
+}
+
+@keyframes showDropdown {
+    0% {
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    99% {
+        pointer-events: none;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        pointer-events: initial;
+    }
+}
+
+#my-dropdown>div::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: 14px;
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid rgba(255, 255, 255, 0.9);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+}
+
+#my-dropdown>div>div {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#my-dropdown>div>div:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 #lowerPanel {

@@ -656,8 +656,6 @@ function closePopup() {
     for (var i = 0; i < elements.length; i++) {
         elements[i].style.display = 'none';
     }
-
-    loadUserInfo()
 }
 
 // user related
@@ -687,6 +685,8 @@ function setUserName() {
     } else {
         showPopup('setAvatarPopup')
     }
+
+    loadUserInfo()
 }
 
 function uploadAvatar() {
@@ -736,6 +736,7 @@ function uploadAvatar() {
                     if (xhr.status === 200) {
                         console.log(xhr.responseText);
                         setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
+                        loadUserInfo()
                     }
                 };
                 var formData = new FormData();
@@ -750,6 +751,7 @@ function uploadAvatar() {
 }
 
 function loadUserInfo() {
+    var userInfo = document.getElementById('userInfo')
     var avatar = document.getElementById('userInfoAvatar')
     var name = document.getElementById('userInfoName')
 
@@ -758,17 +760,19 @@ function loadUserInfo() {
 
     if (getConfig('username') == '') {
         name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
+        userInfo.onclick = () => { showPopup('setNamePopup') }
+        userInfo.classList.add('nologin')
     } else {
         name.innerText = getConfig('username')
+        userInfo.onclick = undefined
+        userInfo.classList.remove('nologin')
     }
 
     try {
         document.getElementById('senderText').innerHTML = getConfig('username')
         document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
         document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-    } catch (error) {
-
-    }
+    } catch (error) { }
 }
 
 function showUserComment(user, useKamiAvatar = false) {

@@ -195,9 +195,18 @@
             <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg" style="width: 10px;">
         </div>
 
-        <div id="userInfo" onclick="showPopup('setNamePopup')">
+        <div id="userInfo">
             <img id="userInfoAvatar">
             <span id="userInfoName"></span>
+            
+            <div id="my-dropdown">
+                <div>
+                    <div onclick="showPopup('setNamePopup')"><span class="ui zh">切换用户</span><span class="ui en">Change account</span></div>
+                    <div onclick="showPopup('setAvatarPopup')"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></div>
+                    <div onclick="showUserComment(getConfig('username'))"><span class="ui zh">我的留言</span><span class="ui en">My sent messages</span></div>
+                    <div onclick="localStorage.removeItem('username'); setTimeout(loadUserInfo, 0)"><span class="ui zh">退出</span><span class="ui en">Logout</span></div>
+                </div>
+            </div>
         </div>
     
     </div>
