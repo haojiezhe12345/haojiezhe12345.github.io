@@ -1348,7 +1348,11 @@ if (location.hash == '#debug') {
 
 // show popup by hash
 if (location.hash.slice(0, 7) == '#popup-') {
-    showPopup(location.hash.slice(7))
+    try {
+        showPopup(location.hash.slice(7))
+    } catch (error) {
+        location.hash = ''
+    }
 }
 
 
