@@ -459,28 +459,22 @@ body {
     position: relative;
     background-color: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(8px);
-    border-radius: 10px;
-    margin-top: 16px;
-    padding: 3px;
+    border-radius: 8px;
+    margin-top: 20px;
+    padding: 8px 0;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.6);
     animation: showDropdown 0.3s;
 }
 
 @keyframes showDropdown {
-    0% {
-        pointer-events: none;
+    from {
         opacity: 0;
         transform: translateY(-10px);
     }
 
-    99% {
-        pointer-events: none;
+    to {
         opacity: 1;
         transform: translateY(0);
-    }
-
-    100% {
-        pointer-events: initial;
     }
 }
 
@@ -497,7 +491,7 @@ body {
 }
 
 #my-dropdown>div>div {
-    padding: 10px 20px;
+    padding: 10px 24px;
     font-size: 15px;
     cursor: pointer;
     white-space: nowrap;
@@ -505,7 +499,6 @@ body {
 
 #my-dropdown>div>div:hover {
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
 }
 
 #lowerPanel {
