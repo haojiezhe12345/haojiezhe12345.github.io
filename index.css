@@ -1714,6 +1714,61 @@ body {
     display: block;
 }
 
+.setting-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.3em;
+    user-select: none;
+}
+
+.setting-switch>input {
+    position: relative;
+    width: 3em;
+    height: 1.5em;
+    margin: 0;
+}
+
+.setting-switch>input::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #613e74;
+    border-radius: 100em;
+    transition: background-color 0.1s, filter 0.1s;
+}
+
+.setting-switch:hover>input::before {
+    filter: brightness(1.1);
+}
+
+.setting-switch>input:checked::before {
+    background-color: #f595be;
+}
+
+.setting-switch>input::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0.25em 0.3em;
+    width: 1em;
+    height: 1em;
+    background-color: white;
+    border-radius: 100em;
+    transition: left 0.1s, transform 0.2s;
+}
+
+.setting-switch:hover>input::after {
+    transform: scale(1.1);
+}
+
+.setting-switch>input:checked::after {
+    left: 1.4em;
+}
 
 /* Firework styles */
 
