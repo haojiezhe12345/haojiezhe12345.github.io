@@ -532,6 +532,25 @@
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
 
+        <div id="game1" class="popupItem">
+            <div>
+                <h2><span class="ui zh">馒头卡？点一下！</span><span class="ui en">Madoka Click</span></h2>
+                <div>
+                    <label class="setting-switch">
+                        <input type="checkbox" onchange="
+                            if (this.checked) {
+                                this.parentNode.classList.add('active')
+                            } else {
+                                this.parentNode.classList.remove('active')
+                            }
+                        ">
+                    </label>
+                </div>
+                <p>图片作者：星浩 | 按钮设计：本站站长</p>
+            </div>
+            <button class="closeBtn" onclick="closePopup()">×</button>
+        </div>
+
     </div>
 
     <div id="imgViewerBox" style="display: none"

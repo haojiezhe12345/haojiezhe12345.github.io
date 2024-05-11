@@ -1784,6 +1784,24 @@ body {
     left: 1.4em;
 }
 
+#game1 {
+    text-align: center;
+}
+
+#game1 .setting-switch>input {
+    font-size: 100px;
+}
+
+#game1 .setting-switch>input::after {
+    background: url('https://haojiezhe12345.top:82/madohomu/res/xh_mdk0.png');
+    background-size: 100% 100%;
+}
+
+#game1 .setting-switch.active>input::after {
+    background: url('https://haojiezhe12345.top:82/madohomu/res/xh_mdk1.png');
+    background-size: 100% 100%;
+}
+
 /* Firework styles */
 
 .fireworks {

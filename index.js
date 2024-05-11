@@ -585,7 +585,9 @@ function closeImgViewer() {
 // popup
 //
 function showPopup(popupID) {
-    location.hash = 'popup'
+    if (location.hash.slice(0, 7) != '#popup-') {
+        location.hash = 'popup'
+    }
 
     var elements = document.getElementsByClassName('popupItem');
     for (var i = 0; i < elements.length; i++) {
@@ -1333,6 +1335,7 @@ var isFullscreen = false
 var newCommentDisabled = false
 var isLoadCommentErrorShowed = false
 
+
 // set language
 changeLang(getConfig('lang'))
 
@@ -1340,6 +1343,12 @@ var debug = false
 if (location.hash == '#debug') {
     debug = true
     document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+}
+
+
+// show popup by hash
+if (location.hash.slice(0, 7) == '#popup-') {
+    showPopup(location.hash.slice(7))
 }
 
 
