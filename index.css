@@ -1738,7 +1738,7 @@ body {
     bottom: 0;
     background-color: #613e74;
     border-radius: 100em;
-    transition: background-color 0.15s, filter 0.1s;
+    transition: background-color 0.15s, filter 0.1s, transform 0.1s;
 }
 
 .setting-switch:hover>input::before {
@@ -1747,6 +1747,7 @@ body {
 
 .setting-switch:active>input::before {
     filter: brightness(0.95);
+    transform: scale(1.05);
 }
 
 .setting-switch>input:checked::before {
@@ -1763,15 +1764,20 @@ body {
     height: 1em;
     background-color: white;
     border-radius: 100em;
-    transition: left 0.3s, transform 0.2s;
-    transition-timing-function: cubic-bezier(0.25, 1, 0.2, 0.9), ease;
+    transition: left 0.3s, margin 0.1s, width 0.1s, height 0.1s;
+    transition-timing-function: cubic-bezier(0.15, 1, 0.3, 1.2), ease, ease, ease;
 }
 
 .setting-switch:hover>input::after {
-    transform: scale(1.1);
+    margin: 0.2em 0.25em;
+    width: 1.1em;
+    height: 1.1em;
 }
+
 .setting-switch:active>input::after {
-    transform: scale(1.0);
+    margin: 0.25em 0.20em;
+    width: 1.2em;
+    height: 1em;
 }
 
 .setting-switch>input:checked::after {
