@@ -1738,7 +1738,7 @@ body {
     bottom: 0;
     background-color: #613e74;
     border-radius: 100em;
-    transition: background-color 0.1s, filter 0.1s;
+    transition: background-color 0.15s, filter 0.1s;
 }
 
 .setting-switch:hover>input::before {
@@ -1764,7 +1764,8 @@ body {
     height: 1em;
     background-color: white;
     border-radius: 100em;
-    transition: left 0.1s, transform 0.2s;
+    transition: left 0.3s, transform 0.2s;
+    transition-timing-function: cubic-bezier(0.25, 1, 0.2, 0.9), ease;
 }
 
 .setting-switch:hover>input::after {
