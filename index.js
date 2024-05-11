@@ -973,7 +973,14 @@ function playWalpurgis(time_ms) {
 }
 
 function changeLang(targetLang) {
-    if (targetLang != 'zh' && targetLang != 'en') {
+    if (!targetLang) {
+        if (navigator.language.slice(0, 2) == 'zh' || navigator.language.slice(0, 3) == 'yue') {
+            targetLang = 'zh'
+        } else {
+            targetLang = 'en'
+        }
+    }
+    if (!['zh', 'en'].includes(targetLang)) {
         console.log(`invalid lang "${targetLang}"`)
         return
     }
@@ -985,7 +992,6 @@ function changeLang(targetLang) {
         display: inline !important;
     }
     `
-    currentLang = targetLang
     console.log(`changed lang to ${targetLang}`)
 }
 
@@ -1241,7 +1247,11 @@ function getConfig(key) {
 }
 
 function setConfig(key, value) {
-    localStorage.setItem(key, value)
+    if (value === '') {
+        localStorage.removeItem(key)
+    } else {
+        localStorage.setItem(key, value)
+    }
 }
 
 function html2elmnt(html) {
@@ -1323,13 +1333,8 @@ var isFullscreen = false
 var newCommentDisabled = false
 var isLoadCommentErrorShowed = false
 
-var currentLang = 'zh'
-if (getConfig('lang') != '') {
-    currentLang = getConfig('lang')
-} else if (navigator.language.slice(0, 2) != 'zh' && navigator.language.slice(0, 3) != 'yue') {
-    currentLang = 'en'
-}
-if (currentLang == 'en') changeLang('en')
+// set language
+changeLang(getConfig('lang'))
 
 var debug = false
 if (location.hash == '#debug') {

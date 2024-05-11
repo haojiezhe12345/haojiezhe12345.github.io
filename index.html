@@ -204,7 +204,7 @@
                     <div onclick="showPopup('setNamePopup')"><span class="ui zh">切换用户</span><span class="ui en">Change account</span></div>
                     <div onclick="showPopup('setAvatarPopup')"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></div>
                     <div onclick="showUserComment(getConfig('username'))"><span class="ui zh">我的留言</span><span class="ui en">My sent messages</span></div>
-                    <div onclick="localStorage.removeItem('username'); setTimeout(loadUserInfo, 0)"><span class="ui zh">退出</span><span class="ui en">Logout</span></div>
+                    <div onclick="setConfig('username', ''); setTimeout(loadUserInfo, 0)"><span class="ui zh">退出</span><span class="ui en">Logout</span></div>
                 </div>
             </div>
         </div>
@@ -375,7 +375,7 @@
                             <span>🌎 Language (语言)</span>
                             <i>▶</i>
                             <ul>
-                                <li onclick="setConfig('lang', ''); location.reload()"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
+                                <li onclick="changeLang(); setConfig('lang', '')"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
                                 <li onclick="changeLang('en'); setConfig('lang', 'en')"><span>English</span></li>
                                 <li onclick="changeLang('zh'); setConfig('lang', 'zh')"><span>中文</span></li>
                             </ul>
