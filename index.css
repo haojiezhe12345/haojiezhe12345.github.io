@@ -1745,6 +1745,11 @@ body {
     filter: brightness(1.1);
 }
 
+.setting-switch:active>input::before {
+    filter: brightness(0.95);
+    transition: none;
+}
+
 .setting-switch>input:checked::before {
     background-color: #f595be;
 }
@@ -1764,6 +1769,10 @@ body {
 
 .setting-switch:hover>input::after {
     transform: scale(1.1);
+}
+.setting-switch:active>input::after {
+    transform: scale(1.0);
+    transition: none;
 }
 
 .setting-switch>input:checked::after {
