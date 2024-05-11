@@ -1168,13 +1168,13 @@ function toggleFullscreen() {
 }
 
 function toggleBGM() {
-    setConfig('mutebgm', isMutedElmnt.checked)
-    if (isMutedElmnt.checked) {
-        bgmElmnt.muted = true
-        bgmElmnt.pause()
-    } else {
+    setConfig('mutebgm', !BGMSwitchElmnt.checked)
+    if (BGMSwitchElmnt.checked) {
         bgmElmnt.muted = false
         bgmElmnt.play()
+    } else {
+        bgmElmnt.muted = true
+        bgmElmnt.pause()
     }
 }
 
@@ -1316,7 +1316,7 @@ var bgmRotateElmnt = document.getElementById('bgmRotate')
 var hoverCalendarEl = document.getElementById('hoverCalendar')
 
 // toggle checkboxes
-var isMutedElmnt = document.getElementById('isMuted')
+var BGMSwitchElmnt = document.getElementById('BGMSwitch')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
 var showKamiElmnt = document.getElementById('showKami')
@@ -1414,8 +1414,9 @@ if (theme == 'birthday') {
 //
 if (getConfig('mutebgm') == 'false' || getConfig('mutebgm') == '') {
     document.getElementById('bgm').play()
+    BGMSwitchElmnt.checked = true
 } else {
-    isMutedElmnt.checked = true
+    BGMSwitchElmnt.checked = false
 }
 
 if (getConfig('graphicsMode') != '') {

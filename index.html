@@ -31,7 +31,7 @@
 
 </head>
 
-<body onclick="if (!isMutedElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
+<body onclick="if (BGMSwitchElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
 
     <audio id="bgm" loop
         onplay="bgmRotateElmnt.style.removeProperty('animation')"
@@ -389,7 +389,7 @@
                                 <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
                             </ul>
                         </li>
-                        <li onclick="isMutedElmnt.click()"><span class="ui zh">🔊 播放/暂停BGM</span><span class="ui en">🔊 Mute / Unmute BGM</span></li>
+                        <li onclick="BGMSwitchElmnt.click()"><span class="ui zh">🔊 播放/暂停BGM</span><span class="ui en">🔊 Mute / Unmute BGM</span></li>
                         <li onclick="clearComments();loadComments()">
                             <input type="checkbox" id="showKami" name="showKami" onchange="toggleKami()">
                             <label for="showKami"><b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b></label>
@@ -493,8 +493,8 @@
                 <h2><span class="ui zh">选择主题</span><span class="ui en">Choose a theme</span></h2>
                 <p>
                     <label class="setting-switch">
-                        <span><span class="ui zh">BGM静音</span><span class="ui en">Mute BGM</span></span>
-                        <input type="checkbox" id="isMuted" onchange="toggleBGM()">
+                        <span><span class="ui zh">BGM</span><span class="ui en">BGM</span></span>
+                        <input type="checkbox" id="BGMSwitch" onchange="toggleBGM()">
                     </label>
                     <a href="javascript:;" onclick="showPopup('getImgPopup')" style="margin-left: 16px;"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
                 </p>
