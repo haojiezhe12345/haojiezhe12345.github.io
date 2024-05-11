@@ -546,7 +546,51 @@
                         ">
                     </label>
                 </div>
-                <p>图片作者：星浩 | 按钮设计：本站站长</p>
+                <p>图片作者: 星浩 | 按钮设计: 本站站长</p>
+            </div>
+            <button class="closeBtn" onclick="closePopup()">×</button>
+        </div>
+
+        <div id="game2" class="popupItem">
+            <div>
+                <h2><span class="ui zh">小情侣（？）</span><span class="ui en">Minigame</span></h2>
+                <label id="game2-main" class="setting-switch">
+                    <img>
+                    <input type="checkbox" onchange="(async () => {
+                        if (!this.picList) {
+                            this.picList = {
+                                hmr: [],
+                                mdk: [],
+                            }
+                            for (let name of ['hmr', 'mdk']) {
+                                let res = await fetch(`https://haojiezhe12345.top:82/madohomu/res/mello/${name}/`)
+                                let doc = document.createElement('template')
+                                doc.innerHTML = await res.text()
+                                for (let a of doc.content.querySelectorAll('a')) {
+                                    if (!a.innerHTML.includes('[To Parent Directory]')) {
+                                        this.picList[name].push(a.innerHTML)
+                                    }
+                                }
+                            }
+                            console.log(this.picList)
+                        }
+                        if (this.checked) {
+                            this.nextElementSibling.src = `https://haojiezhe12345.top:82/madohomu/res/mello/mdk/${this.picList.mdk[Math.floor(Math.random() * this.picList.mdk.length)]}`
+                            this.nextElementSibling.style.animationName = 'bounceRight'
+                        } else {
+                            this.previousElementSibling.src = `https://haojiezhe12345.top:82/madohomu/res/mello/hmr/${this.picList.hmr[Math.floor(Math.random() * this.picList.hmr.length)]}`
+                            this.previousElementSibling.style.animationName = 'bounceLeft'
+                        }
+                        setTimeout(() => {
+                            this.nextElementSibling.style.removeProperty('animation-name')
+                            this.previousElementSibling.style.removeProperty('animation-name')
+                        }, 300);
+                    })()">
+                    <img>
+                </label>
+                <p><span class="ui zh">点上面的按钮看小情侣互动！</span><span class="ui en">Click the button above to start!</span></p>
+                <p><span class="ui zh">(是随机抽图的呢)</span><span class="ui en">(Image are chosen randomly...)</span></p>
+                <p><span class="ui zh">图源 (X/推特): </span><span class="ui en">Image source (X/Twitter): </span><a href="https://twitter.com/swan0517/media" target="_blank">@swan0517 (Mello)</a></p>
             </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>

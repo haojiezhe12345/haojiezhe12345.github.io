@@ -1789,7 +1789,7 @@ body {
 }
 
 #game1 .setting-switch>input {
-    font-size: 100px;
+    font-size: 80px;
 }
 
 #game1 .setting-switch>input::after {
@@ -1800,6 +1800,58 @@ body {
 #game1 .setting-switch.active>input::after {
     background: url('https://haojiezhe12345.top:82/madohomu/res/xh_mdk1.png');
     background-size: 100% 100%;
+}
+
+#game2 {
+    text-align: center;
+}
+
+#game2-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 64px;
+}
+
+#game2-main img {
+    width: 120px;
+    width: min(30vw, 200px);
+    animation-duration: 0.3s;
+}
+
+#game2-main input {
+    flex-shrink: 0;
+    font-size: 20px;
+    font-size: min(4vw, 20px);
+}
+
+@keyframes bounceLeft {
+    0% {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(-10%);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+}
+
+@keyframes bounceRight {
+    0% {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(10%);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
 }
 
 /* Firework styles */
