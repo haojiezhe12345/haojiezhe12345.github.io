@@ -1351,6 +1351,7 @@ if (location.hash.slice(0, 7) == '#popup-') {
     try {
         showPopup(location.hash.slice(7))
     } catch (error) {
+        closePopup()
         location.hash = ''
     }
 }
