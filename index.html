@@ -180,9 +180,9 @@
     
         <br>
 
-        <div id="themeIndicator" onclick="showPopup('themeSelectorPopup')">
+        <div class="mainTitleUnder" onclick="showPopup('themeSelectorPopup')">
             <img id="bgmRotate" src="https://haojiezhe12345.top:82/madohomu/res/music_note.svg" style="animation: none;">
-            <span>&nbsp;<span class="ui zh">主题:</span><span class="ui en">Theme:</span>&nbsp;</span>
+            <span><span class="ui zh">主题:</span><span class="ui en">Theme:</span></span>
             <span id="currentTheme">
                 <span id="themeTxt-default"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
                 <span id="themeTxt-night"><span class="ui zh">晚安</span><span class="ui en">Night</span></span>
@@ -191,8 +191,15 @@
                 <span id="themeTxt-lunarNewYear"><span class="ui zh">新年</span><span class="ui en">Lunar New Year</span></span>
                 <span id="themeTxt-kami">kami.im</span>
             </span>
-            &nbsp;
-            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg" style="width: 10px;">
+            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
+        </div>
+
+        <br>
+
+        <div class="mainTitleUnder" onclick="showPopup('game2')">
+            <img src="https://haojiezhe12345.top:82/madohomu/res/sports_esports.svg">
+            <span><span class="ui zh">小游戏</span><span class="ui en">Minigame</span>(New!)</span>
+            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
         </div>
 
         <div id="userInfo">
@@ -546,7 +553,7 @@
                         ">
                     </label>
                 </div>
-                <p>图片作者: 星浩 | 按钮设计: 本站站长</p>
+                <p>图片作者: 星浩</p>
             </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>
@@ -572,7 +579,6 @@
                                     }
                                 }
                             }
-                            console.log(this.picList)
                         }
                         if (this.checked) {
                             this.nextElementSibling.src = `https://haojiezhe12345.top:82/madohomu/res/mello/mdk/${this.picList.mdk[Math.floor(Math.random() * this.picList.mdk.length)]}`
@@ -589,8 +595,9 @@
                     <img>
                 </label>
                 <p><span class="ui zh">点上面的按钮看小情侣互动！</span><span class="ui en">Click the button above to start!</span></p>
-                <p><span class="ui zh">(是随机抽图的呢)</span><span class="ui en">(Image are chosen randomly...)</span></p>
+                <p><span class="ui zh">(是随机抽图的呢)</span><span class="ui en">(Images are randomly displayed :D)</span></p>
                 <p><span class="ui zh">图源 (X/推特): </span><span class="ui en">Image source (X/Twitter): </span><a href="https://twitter.com/swan0517/media" target="_blank">@swan0517 (Mello)</a></p>
+                <a onclick="showPopup('game1')"><img src="https://haojiezhe12345.top:82/madohomu/res/xh_mdk1.png"></a>
             </div>
             <button class="closeBtn" onclick="closePopup()">×</button>
         </div>

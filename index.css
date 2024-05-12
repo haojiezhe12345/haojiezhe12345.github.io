@@ -365,9 +365,10 @@ body {
     transform: scale(1.075);
 }
 
-#themeIndicator {
+.mainTitleUnder {
     display: inline-flex;
     align-items: center;
+    gap: 0.3em;
     margin: 6px 12px;
     padding: 3px 6px;
     border-radius: 100px;
@@ -376,16 +377,29 @@ body {
     /*color: white;*/
     font-size: 12px;
     cursor: pointer;
+    transition: background-color 0.1s;
 }
 
-#themeIndicator img {
+.mainTitleUnder:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.mainTitleUnder img {
+    width: 16px;
     /*filter: invert();*/
     border-radius: 100px;
     transition: all 0.1s;
 }
 
+.mainTitleUnder img:last-child {
+    width: 10px;
+}
+
+.mainTitleUnder:hover img:last-child {
+    margin-left: 3px;
+}
+
 #bgmRotate {
-    width: 16px;
     animation: rotate 2s linear infinite;
 }
 
@@ -397,9 +411,6 @@ body {
     display: none;
 }
 
-#themeIndicator:hover img:last-child {
-    margin-left: 3px;
-}
 
 #userInfo {
     position: absolute;
@@ -1827,6 +1838,20 @@ body {
     flex-shrink: 0;
     font-size: 20px;
     font-size: min(4vw, 20px);
+}
+
+#game2>div>a {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+#game2>div>a>img {
+    display: block;
+    width: 36px;
+    transform: scale(1.5);
 }
 
 @keyframes bounceLeft {
