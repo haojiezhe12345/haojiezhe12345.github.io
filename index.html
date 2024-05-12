@@ -663,27 +663,6 @@
     <script>
         var jsLoaded = false
     </script>
-    <script>
-        // for chrome 49 compatibility (async await), the function is placed alone to avoid causing the whole page unusable
-        async function printParaCharOneByOne(divEl, delay = 0) {
-            var para = []
-            for (var paraEl of divEl.children) {
-                para.push(paraEl.innerHTML)
-                paraEl.innerHTML = ''
-            }
-            await new Promise(r => setTimeout(r, delay))
-            for (var i = 0; i < para.length; i++) {
-                for (char of para[i]) {
-                    divEl.children[i].innerHTML += char
-                    if (char == ',' || char == '.') {
-                        await new Promise(r => setTimeout(r, 400))
-                    } else {
-                        await new Promise(r => setTimeout(r, 50))
-                    }
-                }
-            }
-        }
-    </script>
     <script src="index.js"></script>
     <script>
         if (jsLoaded == false) {

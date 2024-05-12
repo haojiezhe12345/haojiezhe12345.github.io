@@ -961,6 +961,48 @@ function nextCaption() {
     }, 1500);
 }
 
+function printParaCharOneByOne(divEl, delay = 0) {
+    const paras = []
+    for (let i = 0; i < divEl.children.length; i++) {
+        const paraEl = divEl.children[i]
+        paras.push(paraEl.innerHTML)
+        paraEl.innerHTML = ''
+    }
+    let paraIndex = 0
+    let charIndex = 0
+    const pauseChars = [',', '.']
+    const pauseMultiplier = 6
+    let pauseCount = 0
+    setTimeout(() => {
+        let printInterval = setInterval(() => {
+            if (paraIndex < paras.length) {
+                if (charIndex < paras[paraIndex].length) {
+                    const char = paras[paraIndex][charIndex]
+                    if (pauseChars.includes(char)) {
+                        if (pauseCount == 0) {
+                            divEl.children[paraIndex].innerHTML += char
+                        }
+                        if (pauseCount < pauseMultiplier) {
+                            pauseCount++
+                            return
+                        } else {
+                            pauseCount = 0
+                        }
+                    } else {
+                        divEl.children[paraIndex].innerHTML += char
+                    }
+                    charIndex++
+                } else {
+                    charIndex = 0
+                    paraIndex++
+                }
+            } else {
+                clearInterval(printInterval)
+            }
+        }, 50);
+    }, delay);
+}
+
 function playWalpurgis(time_ms) {
     document.getElementById('videoBgBox').style.opacity = 1
     document.getElementById('videoBgBox').style.display = 'block'
