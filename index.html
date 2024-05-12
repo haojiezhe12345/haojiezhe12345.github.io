@@ -563,35 +563,28 @@
                 <h2><span class="ui zh">小情侣（？）</span><span class="ui en">Minigame</span></h2>
                 <label id="game2-main" class="setting-switch">
                     <img>
-                    <input type="checkbox" onchange="(async () => {
+                    <input type="checkbox" onchange="
+                        const promises = []
                         if (!this.picList) {
-                            this.picList = {
-                                hmr: [],
-                                mdk: [],
-                            }
+                            this.picList = {}
                             for (let name of ['hmr', 'mdk']) {
-                                let res = await fetch(`https://haojiezhe12345.top:82/madohomu/res/mello/${name}/`)
-                                let doc = document.createElement('template')
-                                doc.innerHTML = await res.text()
-                                for (let a of doc.content.querySelectorAll('a')) {
-                                    if (!a.innerHTML.includes('[To Parent Directory]')) {
-                                        this.picList[name].push(a.innerHTML)
-                                    }
-                                }
+                                promises.push(getFileListAsync(`https://haojiezhe12345.top:82/madohomu/res/mello/${name}/`).then(l => this.picList[name] = l))
                             }
                         }
-                        if (this.checked) {
-                            this.nextElementSibling.src = `https://haojiezhe12345.top:82/madohomu/res/mello/mdk/${this.picList.mdk[Math.floor(Math.random() * this.picList.mdk.length)]}`
-                            this.nextElementSibling.style.animationName = 'bounceRight'
-                        } else {
-                            this.previousElementSibling.src = `https://haojiezhe12345.top:82/madohomu/res/mello/hmr/${this.picList.hmr[Math.floor(Math.random() * this.picList.hmr.length)]}`
-                            this.previousElementSibling.style.animationName = 'bounceLeft'
-                        }
-                        setTimeout(() => {
-                            this.nextElementSibling.style.removeProperty('animation-name')
-                            this.previousElementSibling.style.removeProperty('animation-name')
-                        }, 300);
-                    })()">
+                        Promise.all(promises).then(() => {
+                            if (this.checked) {
+                                this.nextElementSibling.src = this.picList.mdk[Math.floor(Math.random() * this.picList.mdk.length)]
+                                this.nextElementSibling.style.animationName = 'bounceRight'
+                            } else {
+                                this.previousElementSibling.src = this.picList.hmr[Math.floor(Math.random() * this.picList.hmr.length)]
+                                this.previousElementSibling.style.animationName = 'bounceLeft'
+                            }
+                            setTimeout(() => {
+                                this.nextElementSibling.style.removeProperty('animation-name')
+                                this.previousElementSibling.style.removeProperty('animation-name')
+                            }, 300);
+                        })
+                    ">
                     <img>
                 </label>
                 <p><span class="ui zh">点上面的按钮看小情侣互动！</span><span class="ui en">Click the button above to start!</span></p>

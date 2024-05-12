@@ -1206,7 +1206,7 @@ function toggleKami() {
     setConfig('showKami', showKamiElmnt.checked)
 }
 
-// functional funcs
+// utilities
 //
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -1291,6 +1291,25 @@ function obj2queryString(obj) {
         arr.push(`${key}=${obj[key]}`)
     }
     return '?' + arr.join('&')
+}
+
+function getFileListAsync(url) {
+    return new Promise((resolve, reject) => {
+        fetch(url).then(res => Promise.all([res.url, res.text()])).then(([url, text]) => {
+            const doc = document.createElement('template')
+            doc.innerHTML = text
+            //console.log(url, doc)
+            const filelist = []
+            const alist = doc.content.querySelectorAll('a')
+            for (let i = 0; i < alist.length; i++) {
+                let a = alist[i]
+                if (a.previousSibling && !a.previousSibling.textContent.includes('<dir>')) {
+                    filelist.push(url + a.textContent)
+                }
+            }
+            resolve(filelist)
+        })
+    })
 }
 
 
