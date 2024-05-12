@@ -446,7 +446,8 @@ function previewLocalImgs() {
         return;
     }
 
-    for (let imgfile of imgUploadInput.files) {
+    for (let i = 0; i < imgUploadInput.files.length; i++) {
+        const imgfile = imgUploadInput.files[i]
 
         //console.log(imgfile)
         if (!imgfile.type.match(/image.*/)) {
@@ -512,7 +513,8 @@ function sendMessage() {
     var imgList = []
     var uploadImgClass = document.getElementsByClassName('uploadImg')
     if (uploadImgClass.length > 0) {
-        for (var imgElmnt of uploadImgClass) {
+        for (let i = 0; i < uploadImgClass.length; i++) {
+            const imgElmnt = uploadImgClass[i]
             imgList.push(imgElmnt.src.split(';base64,')[1])
         }
     }
@@ -733,7 +735,7 @@ function uploadAvatar() {
             var ctx = canvas.getContext("2d");
             ctx.drawImage(image, 0, 0, width, height);
 
-            canvas.toBlob((blob) => {
+            fetch(canvas.toDataURL("image/jpeg")).then(res => res.blob()).then((blob) => {
 
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "https://haojiezhe12345.top:82/madohomu/api/upload");
@@ -748,7 +750,7 @@ function uploadAvatar() {
                 formData.append(`${getConfig('username')}.jpg`, blob)
                 xhr.send(formData);
 
-            }, "image/jpeg")
+            })
         }
         image.src = fileReader.result;
     };
@@ -1073,14 +1075,17 @@ function setTimelineActiveMonth(scroll = false) {
         var year = date.getFullYear()
         var month = date.getMonth() + 1
         //if (debug) console.log(id, timeStamp, year, month)
-        for (let yearEl of document.getElementById('timeline').children) {
+        const yearEls = document.getElementById('timeline').children
+        for (let i = 0; i < yearEls.length; i++) {
+            const yearEl = yearEls[i]
             if (yearEl.firstElementChild.innerHTML == year) {
                 yearEl.firstElementChild.classList.add('month-active')
                 if (scroll) yearEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
             } else {
                 yearEl.firstElementChild.classList.remove('month-active')
             }
-            for (let monthEl of yearEl.children) {
+            for (let i = 0; i < yearEl.children.length; i++) {
+                const monthEl = yearEl.children[i]
                 if (monthEl.nodeName == 'SPAN') {
                     if (yearEl.firstElementChild.innerHTML == year && monthEl.innerHTML == month) {
                         monthEl.classList.add('month-active')
@@ -1101,7 +1106,9 @@ function setHoverCalendarActiveDay() {
     try {
         var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
         var date = new Date(timeStamp)
-        for (let dayEl of hoverCalendarEl.querySelectorAll('div[data-time]')) {
+        const dayEls = hoverCalendarEl.querySelectorAll('div[data-time]')
+        for (let i = 0; i < dayEls.length; i++) {
+            const dayEl = dayEls[i]
             var date1 = new Date(dayEl.dataset.time)
             if (date.getFullYear() == date1.getFullYear() && date.getMonth() == date1.getMonth() && date.getDate() == date1.getDate()) {
                 dayEl.classList.add('day-active')
