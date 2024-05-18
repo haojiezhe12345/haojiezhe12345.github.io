@@ -465,20 +465,14 @@ function previewLocalImgs() {
             image.onload = () => {
 
                 //console.log(image)
-                var MAX_WIDTH = 1200;
-                var MAX_HEIGHT = 1200;
                 var width = image.width;
                 var height = image.height;
-                if (width > height) {
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                } else {
-                    if (height > MAX_HEIGHT) {
-                        width *= MAX_HEIGHT / height;
-                        height = MAX_HEIGHT;
-                    }
+
+                const max_pixels = 2.1 * 1000 * 1000;
+                if (width * height > max_pixels) {
+                    let zoom = Math.sqrt(max_pixels / (width * height))
+                    width = Math.round(width * zoom)
+                    height = Math.round(height * zoom)
                 }
 
                 var canvas = document.createElement("canvas");
@@ -487,9 +481,7 @@ function previewLocalImgs() {
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(image, 0, 0, width, height);
 
-                imgDataURL = canvas.toDataURL("image/jpeg")
-
-                //uploadImgList.push(imgDataURL.split(';base64,')[1])
+                var imgDataURL = canvas.toDataURL("image/jpeg")
 
                 document.getElementById('uploadImgList').appendChild(html2elmnt(`
                     <div>
