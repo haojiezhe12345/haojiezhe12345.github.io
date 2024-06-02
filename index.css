@@ -1598,9 +1598,6 @@ body {
 
 #showUserCommentPopup>div {
     padding: 20px 24px 32px !important;
-    max-height: 90vh;
-    box-sizing: border-box;
-    overflow: auto;
 }
 
 #showUserCommentPopup>div>h2 {
@@ -1882,6 +1879,7 @@ body {
     }
 }
 
+
 /* Firework styles */
 
 .fireworks {
@@ -2066,6 +2064,7 @@ body {
     animation-duration: 0.1s !important;
     animation-fill-mode: forwards !important;
 }
+
 
 /* Fullscreen styles */
 
