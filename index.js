@@ -1353,6 +1353,10 @@ function getFileListAsync(url) {
     })
 }
 
+function getFileNameWithoutExt(path) {
+    return path.match(/[^\\/]+(?=\.\w+$)/)[0]
+}
+
 
 // common vars
 //
@@ -1764,6 +1768,99 @@ var imgViewerOffsetX = 0
 var imgViewerOffsetY = 0
 var imgViewerScale = 1
 var imgViewerMouseMoved = false
+
+
+// music player
+//
+const MusicPlayer = {
+    elements: {
+        player: document.getElementById('musicVideo'),
+        playBtn: document.getElementById('musicPlayBtn'),
+        title: document.getElementById('nowPlayingTitle'),
+        progress: document.querySelector('#nowPlayingProgress>div'),
+        list: document.querySelector('#musicPlayerList>div'),
+    },
+
+    playList: [],
+
+    loadMusicList() {
+        this.elements.list.innerHTML = ''
+        getFileListAsync('https://haojiezhe12345.top:82/madohomu/media/bgm').then(list => {
+            this.playList = list
+            for (let url of list) {
+                this.elements.list.appendChild(html2elmnt(`
+                    <div>${getFileNameWithoutExt(url)}</div>
+                `))
+            }
+        })
+    },
+
+    play(index) {
+        if (index == null && !this.elements.player.src) {
+            index = 0
+        }
+        if (index != null) {
+            if (this.playList[index] == null) {
+                index = 0
+            }
+            this.elements.player.src = this.playList[index]
+            this.elements.title.textContent = getFileNameWithoutExt(this.playList[index])
+            for (let i = 0; i < this.elements.list.children.length; i++) {
+                this.elements.list.children[i].classList.remove('playing')
+            }
+            this.elements.list.children[index].classList.add('playing')
+        }
+        this.elements.player.play()
+    },
+
+    playNext() {
+        for (let i = 0; i < this.elements.list.children.length; i++) {
+            if (this.elements.list.children[i].classList.contains('playing')) {
+                this.play(i + 1)
+                return
+            }
+        }
+    },
+
+    pause() {
+        this.elements.player.pause()
+    },
+
+    initPlayer() {
+        this.loadMusicList()
+        this.elements.playBtn.onclick = e => {
+            if (e.target.classList.contains('playing')) {
+                this.pause()
+            } else {
+                this.play()
+            }
+        }
+        this.elements.list.onclick = e => {
+            this.play(Array.from(e.target.parentNode.children).indexOf(e.target))
+        }
+        this.elements.progress.parentNode.onclick = e => {
+            this.elements.player.currentTime = this.elements.player.duration * e.offsetX / this.elements.progress.parentNode.offsetWidth
+        }
+        this.elements.player.onplay = () => {
+            this.elements.playBtn.classList.add('playing')
+        }
+        this.elements.player.onpause = () => {
+            this.elements.playBtn.classList.remove('playing')
+        }
+        this.elements.player.onended = () => {
+            this.playNext()
+        }
+        setInterval(() => {
+            this.elements.progress.style.width = `${this.elements.player.currentTime / this.elements.player.duration * 100}%`
+        }, 500);
+    },
+}
+
+try {
+    MusicPlayer.initPlayer()
+} catch (error) {
+    console.warn(error)
+}
 
 
 // global Esc key handler

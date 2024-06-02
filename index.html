@@ -505,7 +505,7 @@
                     </label>
                     <a href="javascript:;" onclick="showPopup('getImgPopup')" style="margin-left: 16px;"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
                 </p>
-                <div>
+                <div class="themeList">
                     <div onclick="location.hash=''; location.reload()">
                         <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/res/auto_theme.jpg" style="border: 8px solid white;">
                         <span><span class="ui zh">自动</span><span class="ui en">Auto</span></span>
@@ -533,6 +533,25 @@
                     <div onclick="location.hash='#kami'; location.reload()">
                         <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg1.jpg">
                         <span>kami.im</span>
+                    </div>
+                </div>
+            </div>
+            <div id="musicPlayer">
+                <video id="musicVideo"></video>
+                <div>
+                    <div id="nowPlayingTitle">No Music Playing</div>
+                    <div id="nowPlayingProgress">
+                        <div></div>
+                    </div>
+                </div>
+                <img id="musicPlayBtn">
+                <div id="musicPlayerList">
+                    <img src="https://haojiezhe12345.top:82/madohomu/res/playlist_play.svg">
+                    <div>
+                        <div>Music 1</div>
+                        <div>Music 2</div>
+                        <div>Music 3</div>
+                        <div>Music 4</div>
                     </div>
                 </div>
             </div>
