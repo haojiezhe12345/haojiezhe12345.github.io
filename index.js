@@ -1778,16 +1778,16 @@ const MusicPlayer = {
         playerImg: document.getElementById('musicImg'),
         playBtn: document.getElementById('musicPlayBtn'),
         title: document.getElementById('nowPlayingTitle'),
-        progress: document.querySelector('#nowPlayingProgress>div'),
-        list: document.querySelector('#musicPlayerList>div'),
+        progress: document.getElementById('nowPlayingProgress').firstElementChild,
+        list: document.getElementById('songList'),
     },
 
     playList: [],
-    preferredMusic: [],
+    preferredSongs: [],
 
-    loadPlayList() {
+    loadPlayList(dir) {
         this.elements.list.innerHTML = ''
-        getFileListAsync('https://haojiezhe12345.top:82/madohomu/media/bgm').then(list => {
+        getFileListAsync(dir).then(list => {
             this.playList = []
             for (let url of list) {
                 if (!url.endsWith('.jpg')) {
@@ -1797,24 +1797,31 @@ const MusicPlayer = {
                     `))
                 }
             }
+            if (this.playList[0]) this.setActiveSong(0)
         })
     },
 
-    play(index) {
-        if (index == null && !this.elements.player.src) {
-            index = 0
+    setActiveSong(index) {
+        this.elements.player.src = this.playList[index]
+        this.elements.playerImg.src = this.playList[index] + '.jpg'
+        this.elements.playerImg.onclick = function () { viewImg(this.src) }
+        this.elements.playerImg.onerror = function () {
+            this.onerror = null
+            this.onclick = null
+            this.src = 'https://haojiezhe12345.top:82/madohomu/res/music_note.svg'
         }
+        this.elements.title.textContent = getFileNameWithoutExt(this.playList[index])
+        for (let i = 0; i < this.elements.list.children.length; i++) {
+            this.elements.list.children[i].classList.remove('playing')
+        }
+        this.elements.list.children[index].classList.add('playing')
+    },
+
+    play(index) {
+        if (index == null && !this.elements.player.src) index = 0
         if (index != null) {
-            if (this.playList[index] == null) {
-                index = 0
-            }
-            this.elements.player.src = this.playList[index]
-            this.elements.playerImg.src = this.playList[index] + '.jpg'
-            this.elements.title.textContent = getFileNameWithoutExt(this.playList[index])
-            for (let i = 0; i < this.elements.list.children.length; i++) {
-                this.elements.list.children[i].classList.remove('playing')
-            }
-            this.elements.list.children[index].classList.add('playing')
+            if (this.playList[index] == null) index = 0
+            if (this.playList[index]) this.setActiveSong(index)
         }
         this.elements.player.play()
     },
@@ -1832,8 +1839,8 @@ const MusicPlayer = {
         this.elements.player.pause()
     },
 
-    initPlayer() {
-        this.loadPlayList()
+    initPlayer(dir) {
+        this.loadPlayList(dir)
         this.elements.playBtn.onclick = () => {
             if (this.elements.playBtn.classList.contains('playing')) {
                 this.pause()
@@ -1841,7 +1848,7 @@ const MusicPlayer = {
                 this.play()
             }
         }
-        this.elements.list.parentNode.onclick = e => {
+        this.elements.list.onclick = e => {
             if (Array.from(this.elements.list.children).includes(e.target)) {
                 this.play(Array.from(this.elements.list.children).indexOf(e.target))
             }
@@ -1865,7 +1872,7 @@ const MusicPlayer = {
 }
 
 try {
-    MusicPlayer.initPlayer()
+    MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm')
 } catch (error) {
     console.warn(error)
 }

@@ -1813,7 +1813,9 @@ body {
 }
 
 #musicPlayerList>div {
+    display: flex;
     display: none;
+    flex-flow: column;
     position: absolute;
     top: 0;
     right: 0;
@@ -1823,7 +1825,6 @@ body {
     backdrop-filter: blur(12px);
     border-radius: 8px;
     box-shadow: 0 0 8px -2px rgba(0, 0, 0, 0.6);
-    padding: 8px 0;
     min-width: 160px;
     max-height: 40vh;
     overflow: auto;
@@ -1831,25 +1832,38 @@ body {
 }
 
 #musicPlayerList:hover>div {
-    display: block;
+    display: flex;
 }
 
-#musicPlayerList>div>div {
+#musicPlayerList>div>div:first-child {
+    padding: 10px 0;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#songList {
+    min-height: 0;
+    overflow: auto;
+}
+
+#songList>div {
     font-size: 14px;
     padding: 9px 16px;
     user-select: none;
     white-space: nowrap;
 }
 
-#musicPlayerList>div>div:nth-child(odd) {
+#songList>div:nth-child(odd) {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-#musicPlayerList>div>div:hover {
+#songList>div:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-#musicPlayerList>div>div.playing {
+#songList>div.playing {
     font-weight: bold;
     color: #f8a;
 }
