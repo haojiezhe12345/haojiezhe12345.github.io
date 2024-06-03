@@ -1774,7 +1774,8 @@ var imgViewerMouseMoved = false
 //
 const MusicPlayer = {
     elements: {
-        player: document.getElementById('musicVideo'),
+        player: document.getElementById('musicAudio'),
+        playerImg: document.getElementById('musicImg'),
         playBtn: document.getElementById('musicPlayBtn'),
         title: document.getElementById('nowPlayingTitle'),
         progress: document.querySelector('#nowPlayingProgress>div'),
@@ -1782,15 +1783,19 @@ const MusicPlayer = {
     },
 
     playList: [],
+    preferredMusic: [],
 
-    loadMusicList() {
+    loadPlayList() {
         this.elements.list.innerHTML = ''
         getFileListAsync('https://haojiezhe12345.top:82/madohomu/media/bgm').then(list => {
-            this.playList = list
+            this.playList = []
             for (let url of list) {
-                this.elements.list.appendChild(html2elmnt(`
-                    <div>${getFileNameWithoutExt(url)}</div>
-                `))
+                if (!url.endsWith('.jpg')) {
+                    this.playList.push(url)
+                    this.elements.list.appendChild(html2elmnt(`
+                        <div>${getFileNameWithoutExt(url)}</div>
+                    `))
+                }
             }
         })
     },
@@ -1804,6 +1809,7 @@ const MusicPlayer = {
                 index = 0
             }
             this.elements.player.src = this.playList[index]
+            this.elements.playerImg.src = this.playList[index] + '.jpg'
             this.elements.title.textContent = getFileNameWithoutExt(this.playList[index])
             for (let i = 0; i < this.elements.list.children.length; i++) {
                 this.elements.list.children[i].classList.remove('playing')
@@ -1827,16 +1833,18 @@ const MusicPlayer = {
     },
 
     initPlayer() {
-        this.loadMusicList()
-        this.elements.playBtn.onclick = e => {
-            if (e.target.classList.contains('playing')) {
+        this.loadPlayList()
+        this.elements.playBtn.onclick = () => {
+            if (this.elements.playBtn.classList.contains('playing')) {
                 this.pause()
             } else {
                 this.play()
             }
         }
-        this.elements.list.onclick = e => {
-            this.play(Array.from(e.target.parentNode.children).indexOf(e.target))
+        this.elements.list.parentNode.onclick = e => {
+            if (Array.from(this.elements.list.children).includes(e.target)) {
+                this.play(Array.from(this.elements.list.children).indexOf(e.target))
+            }
         }
         this.elements.progress.parentNode.onclick = e => {
             this.elements.player.currentTime = this.elements.player.duration * e.offsetX / this.elements.progress.parentNode.offsetWidth
