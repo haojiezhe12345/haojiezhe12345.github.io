@@ -1827,7 +1827,7 @@ body {
     box-shadow: 0 0 8px -2px rgba(0, 0, 0, 0.6);
     min-width: 160px;
     max-height: 40vh;
-    overflow: auto;
+    overflow: hidden;
     animation: showContextMenu 0.2s;
 }
 
@@ -1845,7 +1845,8 @@ body {
 
 #songList {
     min-height: 0;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #songList>div {

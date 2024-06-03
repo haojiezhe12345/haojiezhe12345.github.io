@@ -1357,6 +1357,13 @@ function getFileNameWithoutExt(path) {
     return path.match(/[^\\/]+(?=\.\w+$)/)[0]
 }
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 // common vars
 //
@@ -1783,22 +1790,35 @@ const MusicPlayer = {
     },
 
     playList: [],
-    preferredSongs: [],
+    playListShuffle: [],
+    preferredSongs: [/.*/],
 
     loadPlayList(dir) {
         this.elements.list.innerHTML = ''
         getFileListAsync(dir).then(list => {
-            this.playList = []
-            for (let url of list) {
-                if (!url.endsWith('.jpg')) {
-                    this.playList.push(url)
-                    this.elements.list.appendChild(html2elmnt(`
-                        <div>${getFileNameWithoutExt(url)}</div>
-                    `))
+            list = list.filter(item => !item.endsWith('.jpg'))
+            let preferred = []
+            for (let i = 0; i < list.length; i++) {
+                for (let song of this.preferredSongs) {
+                    if (song.test(list[i])) {
+                        preferred.push(list.splice(i, 1)[0])
+                        break
+                    }
                 }
             }
+            shuffleArray(preferred)
+            this.playList = [...preferred, ...list]
+            this.showPlayList(this.playList)
             if (this.playList[0]) this.setActiveSong(0)
         })
+    },
+
+    showPlayList(list) {
+        for (let url of list) {
+            this.elements.list.appendChild(html2elmnt(`
+                <div>${getFileNameWithoutExt(url)}</div>
+            `))
+        }
     },
 
     setActiveSong(index) {
@@ -1872,6 +1892,10 @@ const MusicPlayer = {
 }
 
 try {
+    MusicPlayer.preferredSongs = [
+        /Sagitta luminis - オルゴール ミドリ/,
+        /君の銀の庭 - オルゴール ミドリ/,
+    ]
     MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm')
 } catch (error) {
     console.warn(error)
