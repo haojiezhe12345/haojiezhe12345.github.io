@@ -31,12 +31,7 @@
 
 </head>
 
-<body onclick="if (BGMSwitchElmnt.checked) bgmElmnt.play(); document.getElementById('mainVideo').muted = false">
-
-    <audio id="bgm" loop
-        onplay="bgmRotateElmnt.style.removeProperty('animation')"
-        onpause="bgmRotateElmnt.style.animation = 'none'">
-    </audio>
+<body onclick="">
 
     <div id="bgContainer" 
         onclick="document.getElementById('lowerPanel').classList.remove('lowerPanelUp')"
@@ -181,7 +176,7 @@
         <br>
 
         <div class="mainTitleUnder" onclick="showPopup('themeSelectorPopup')">
-            <img id="bgmRotate" src="https://haojiezhe12345.top:82/madohomu/res/music_note.svg" style="animation: none;">
+            <img id="bgmRotate" src="https://haojiezhe12345.top:82/madohomu/res/music_note.svg">
             <span><span class="ui zh">主题:</span><span class="ui en">Theme:</span></span>
             <span id="currentTheme">
                 <span id="themeTxt-default"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
@@ -370,7 +365,7 @@
                     <span class="ui zh">工具 🛠</span><span class="ui en">Tools 🛠</span>
                     <ul>
                         <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
-                        <li onclick="showPopup('themeSelectorPopup')"><span class="ui zh">🖌️ 切换主题</span><span class="ui en">🖌️ Change theme</span></li>
+                        <li onclick="showPopup('themeSelectorPopup')"><span class="ui zh">🖌️ 主题&音乐设置</span><span class="ui en">🖌️ Themes & Music</span></li>
                         <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
                         <li onclick="
                             if (installPrompt != null) installPrompt.prompt()
@@ -396,7 +391,6 @@
                                 <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
                             </ul>
                         </li>
-                        <li onclick="BGMSwitchElmnt.click()"><span class="ui zh">🔊 播放/暂停BGM</span><span class="ui en">🔊 Mute / Unmute BGM</span></li>
                         <li onclick="clearComments();loadComments()">
                             <input type="checkbox" id="showKami" name="showKami" onchange="toggleKami()">
                             <label for="showKami"><b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b></label>
@@ -497,12 +491,8 @@
         
         <div id="themeSelectorPopup" class="popupItem">
             <div>
-                <h2><span class="ui zh">选择主题</span><span class="ui en">Choose a theme</span></h2>
+                <h2><span class="ui zh">主题 & 音乐</span><span class="ui en">Themes & Music</span></h2>
                 <p>
-                    <label class="setting-switch">
-                        <span><span class="ui zh">BGM</span><span class="ui en">BGM</span></span>
-                        <input type="checkbox" id="BGMSwitch" onchange="toggleBGM()">
-                    </label>
                     <a href="javascript:;" onclick="showPopup('getImgPopup')" style="margin-left: 16px;"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
                 </p>
                 <div class="themeList">
@@ -549,7 +539,13 @@
                 <div id="musicPlayerList">
                     <button><img src="https://haojiezhe12345.top:82/madohomu/res/playlist_play.svg"></button>
                     <div>
-                        <div>播放列表</div>
+                        <div>
+                            <b>播放列表</b>
+                            <label class="setting-switch" style="font-size: 14px;">
+                                <span><span class="ui zh">随机播放</span><span class="ui en">Shuffle</span></span>
+                                <input type="checkbox">
+                            </label>        
+                        </div>
                         <div id="songList">
                             <div>Music 1</div>
                             <div>Music 2</div>

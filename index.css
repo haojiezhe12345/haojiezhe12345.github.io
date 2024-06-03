@@ -12,16 +12,6 @@ body {
     font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#bgm {
-    /*
-    position: absolute;
-    top: 64px;
-    left: 0;
-    z-index: 100;
-    */
-    display: none;
-}
-
 #bgContainer {
     position: fixed;
     top: 0;
@@ -399,7 +389,7 @@ body {
     margin-left: 3px;
 }
 
-#bgmRotate {
+#bgmRotate.playing {
     animation: rotate 2s linear infinite;
 }
 
@@ -1836,11 +1826,11 @@ body {
 }
 
 #musicPlayerList>div>div:first-child {
-    padding: 10px 0;
+    padding: 10px 16px;
     font-size: 15px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 #songList {

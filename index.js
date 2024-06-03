@@ -1210,17 +1210,6 @@ function toggleFullscreen() {
     }, 500);
 }
 
-function toggleBGM() {
-    setConfig('mutebgm', !BGMSwitchElmnt.checked)
-    if (BGMSwitchElmnt.checked) {
-        bgmElmnt.muted = false
-        bgmElmnt.play()
-    } else {
-        bgmElmnt.muted = true
-        bgmElmnt.pause()
-    }
-}
-
 function toggleTopComment() {
     setConfig('hideTopComment', hideTopCommentElmnt.checked)
     if (hideTopCommentElmnt.checked) {
@@ -1383,13 +1372,9 @@ var userCommentEl = document.getElementById('userComment')
 var setAvatarImg = document.getElementById('setAvatarImg')
 var avatarInput = document.getElementById('setAvatarInput')
 
-var bgmElmnt = document.getElementById('bgm')
-var bgmRotateElmnt = document.getElementById('bgmRotate')
-
 var hoverCalendarEl = document.getElementById('hoverCalendar')
 
 // toggle checkboxes
-var BGMSwitchElmnt = document.getElementById('BGMSwitch')
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
 var showKamiElmnt = document.getElementById('showKami')
@@ -1481,29 +1466,9 @@ if (theme == 'birthday') {
     }
 }
 
-// play theme-specific BGMs
-if (theme == 'birthday') {
-    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/mataashita.mp3'
-} else if (theme == 'night') {
-    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/night_16k.mp3'
-} else if (theme == 'kami') {
-    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/never_leave_you_alone.webm'
-} else if (Math.random() > 0.5) {
-    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm_16k.mp3'
-} else {
-    bgmElmnt.src = 'https://haojiezhe12345.top:82/madohomu/media/bgm1_16k.mp3'
-}
-
 
 // cookies toggles
 //
-if (getConfig('mutebgm') == 'false' || getConfig('mutebgm') == '') {
-    document.getElementById('bgm').play()
-    BGMSwitchElmnt.checked = true
-} else {
-    BGMSwitchElmnt.checked = false
-}
-
 if (getConfig('graphicsMode') != '') {
     changeGraphicsMode(getConfig('graphicsMode'))
 }
