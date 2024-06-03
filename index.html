@@ -31,7 +31,7 @@
 
 </head>
 
-<body onclick="">
+<body onclick="if (!MusicPlayer.userPaused) MusicPlayer.play()">
 
     <div id="bgContainer" 
         onclick="document.getElementById('lowerPanel').classList.remove('lowerPanelUp')"
@@ -493,7 +493,7 @@
             <div>
                 <h2><span class="ui zh">主题 & 音乐</span><span class="ui en">Themes & Music</span></h2>
                 <p>
-                    <a href="javascript:;" onclick="showPopup('getImgPopup')" style="margin-left: 16px;"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
+                    <a href="javascript:;" onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></a>
                 </p>
                 <div class="themeList">
                     <div onclick="location.hash=''; location.reload()">
@@ -540,10 +540,10 @@
                     <button><img src="https://haojiezhe12345.top:82/madohomu/res/playlist_play.svg"></button>
                     <div>
                         <div>
-                            <b>播放列表</b>
+                            <b><span class="ui zh">播放列表</span><span class="ui en">Playlist</span></b>
                             <label class="setting-switch" style="font-size: 14px;">
                                 <span><span class="ui zh">随机播放</span><span class="ui en">Shuffle</span></span>
-                                <input type="checkbox">
+                                <input type="checkbox" disabled>
                             </label>        
                         </div>
                         <div id="songList">

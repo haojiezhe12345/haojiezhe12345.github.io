@@ -1749,6 +1749,7 @@ const MusicPlayer = {
         player: document.getElementById('musicAudio'),
         playerImg: document.getElementById('musicImg'),
         playBtn: document.getElementById('musicPlayBtn'),
+        playingIndicator: document.getElementById('bgmRotate'),
         title: document.getElementById('nowPlayingTitle'),
         progress: document.getElementById('nowPlayingProgress').firstElementChild,
         list: document.getElementById('songList'),
@@ -1757,6 +1758,7 @@ const MusicPlayer = {
     playList: [],
     playListShuffle: [],
     preferredSongs: [/.*/],
+    userPaused: true,
 
     loadPlayList(dir) {
         this.elements.list.innerHTML = ''
@@ -1809,6 +1811,8 @@ const MusicPlayer = {
             if (this.playList[index]) this.setActiveSong(index)
         }
         this.elements.player.play()
+        this.userPaused = false
+        setConfig('mutebgm', false)
     },
 
     playNext() {
@@ -1821,11 +1825,19 @@ const MusicPlayer = {
     },
 
     pause() {
+        this.userPaused = true
+        setConfig('mutebgm', true)
         this.elements.player.pause()
     },
 
     initPlayer(dir) {
         this.loadPlayList(dir)
+        if (getConfig('mutebgm') == 'true') {
+            this.userPaused = true
+        } else {
+            this.userPaused = false
+            this.play()
+        }
         this.elements.playBtn.onclick = () => {
             if (this.elements.playBtn.classList.contains('playing')) {
                 this.pause()
@@ -1843,9 +1855,11 @@ const MusicPlayer = {
         }
         this.elements.player.onplay = () => {
             this.elements.playBtn.classList.add('playing')
+            this.elements.playingIndicator.classList.add('playing')
         }
         this.elements.player.onpause = () => {
             this.elements.playBtn.classList.remove('playing')
+            this.elements.playingIndicator.classList.remove('playing')
         }
         this.elements.player.onended = () => {
             this.playNext()
