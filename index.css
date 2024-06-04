@@ -389,8 +389,18 @@ body {
     margin-left: 3px;
 }
 
-#bgmRotate.playing {
+.mainTitleUnder .musicPlayingIndicator.playing {
     animation: rotate 2s linear infinite;
+}
+
+#themeIndicator {
+    max-width: 120px;
+}
+
+#themeIndicator .currentSong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #currentTheme {
@@ -1748,7 +1758,7 @@ body {
     font-size: 15px;
 }
 
-#nowPlayingTitle {
+#musicPlayer .currentSong {
     padding: 0 8px;
     white-space: nowrap;
     overflow: hidden;

@@ -1749,8 +1749,8 @@ const MusicPlayer = {
         player: document.getElementById('musicAudio'),
         playerImg: document.getElementById('musicImg'),
         playBtn: document.getElementById('musicPlayBtn'),
-        playingIndicator: document.getElementById('bgmRotate'),
-        title: document.getElementById('nowPlayingTitle'),
+        playingIndicators: document.getElementsByClassName('musicPlayingIndicator'),
+        titles: document.getElementsByClassName('currentSong'),
         progress: document.getElementById('nowPlayingProgress').firstElementChild,
         list: document.getElementById('songList'),
         shuffleBtn: document.getElementById('musicShuffleBtn'),
@@ -1798,7 +1798,9 @@ const MusicPlayer = {
             this.onclick = null
             this.src = 'https://haojiezhe12345.top:82/madohomu/res/music_note.svg'
         }
-        this.elements.title.textContent = getFileNameWithoutExt(this.playList[index])
+        for (let i = 0; i < this.elements.titles.length; i++) {
+            this.elements.titles[i].textContent = getFileNameWithoutExt(this.playList[index])
+        }
         for (let i = 0; i < this.elements.list.children.length; i++) {
             this.elements.list.children[i].classList.remove('playing')
         }
@@ -1876,12 +1878,14 @@ const MusicPlayer = {
             }
         }
         this.elements.player.onplay = () => {
-            this.elements.playBtn.classList.add('playing')
-            this.elements.playingIndicator.classList.add('playing')
+            for (let i = 0; i < this.elements.playingIndicators.length; i++) {
+                this.elements.playingIndicators[i].classList.add('playing');
+            }
         }
         this.elements.player.onpause = () => {
-            this.elements.playBtn.classList.remove('playing')
-            this.elements.playingIndicator.classList.remove('playing')
+            for (let i = 0; i < this.elements.playingIndicators.length; i++) {
+                this.elements.playingIndicators[i].classList.remove('playing');
+            }
         }
         this.elements.player.onended = () => {
             this.playNext()

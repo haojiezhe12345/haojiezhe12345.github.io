@@ -176,16 +176,19 @@
         <br>
 
         <div class="mainTitleUnder" onclick="showPopup('themeSelectorPopup')">
-            <img id="bgmRotate" src="https://haojiezhe12345.top:82/madohomu/res/music_note.svg">
-            <span><span class="ui zh">主题:</span><span class="ui en">Theme:</span></span>
-            <span id="currentTheme">
-                <span id="themeTxt-default"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
-                <span id="themeTxt-night"><span class="ui zh">晚安</span><span class="ui en">Night</span></span>
-                <span id="themeTxt-birthday"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></span>
-                <span id="themeTxt-christmas"><span class="ui zh">圣诞</span><span class="ui en">Christmas</span></span>
-                <span id="themeTxt-lunarNewYear"><span class="ui zh">新年</span><span class="ui en">Lunar New Year</span></span>
-                <span id="themeTxt-kami">kami.im</span>
-            </span>
+            <img class="musicPlayingIndicator" src="https://haojiezhe12345.top:82/madohomu/res/music_note.svg">
+            <div id="themeIndicator">
+                <div class="currentSong"></div>
+                <span><span class="ui zh">主题:</span><span class="ui en">Theme:</span></span>
+                <span id="currentTheme">
+                    <span id="themeTxt-default"><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
+                    <span id="themeTxt-night"><span class="ui zh">晚安</span><span class="ui en">Night</span></span>
+                    <span id="themeTxt-birthday"><span class="ui zh">圆诞</span><span class="ui en">MadoBirthday</span></span>
+                    <span id="themeTxt-christmas"><span class="ui zh">圣诞</span><span class="ui en">Christmas</span></span>
+                    <span id="themeTxt-lunarNewYear"><span class="ui zh">新年</span><span class="ui en">Lunar New Year</span></span>
+                    <span id="themeTxt-kami">kami.im</span>
+                </span>
+            </div>
             <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
         </div>
 
@@ -530,12 +533,12 @@
                 <audio id="musicAudio"></audio>
                 <img id="musicImg">
                 <div>
-                    <div id="nowPlayingTitle">No Music Playing</div>
+                    <div class="currentSong">No Music Playing</div>
                     <div id="nowPlayingProgress">
                         <div></div>
                     </div>
                 </div>
-                <button id="musicPlayBtn"></button>
+                <button id="musicPlayBtn" class="musicPlayingIndicator"></button>
                 <div id="musicPlayerList">
                     <button><img src="https://haojiezhe12345.top:82/madohomu/res/playlist_play.svg"></button>
                     <div>
