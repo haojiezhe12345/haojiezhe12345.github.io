@@ -1764,7 +1764,7 @@ const MusicPlayer = {
     loadPlayList(dir) {
         this.elements.list.innerHTML = ''
         getFileListAsync(dir).then(list => {
-            list = list.filter(item => !item.endsWith('.jpg'))
+            list = list.filter(item => !(item.endsWith('.jpg') || item.endsWith('.disabled')))
             let preferred = []
             for (let i = 0; i < list.length; i++) {
                 for (let song of this.preferredSongs) {

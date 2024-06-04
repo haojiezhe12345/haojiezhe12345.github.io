@@ -407,7 +407,7 @@ body {
 }
 
 #currentTheme {
-    text-decoration: underline;
+    font-weight: bold;
 }
 
 #currentTheme>* {
