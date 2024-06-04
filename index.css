@@ -1884,6 +1884,10 @@ body {
     user-select: none;
     white-space: nowrap;
     list-style-position: inside;
+    box-sizing: border-box;
+    max-width: 85vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #songList>li:nth-child(odd) {

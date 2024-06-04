@@ -1776,6 +1776,7 @@ const MusicPlayer = {
             }
             shuffleArray(preferred)
             this.playList = [...preferred, ...list]
+            this.createShuffleList()
             this.showPlayList(this.playList)
             if (this.playList[0]) this.setActiveSong(0)
         })
@@ -1822,6 +1823,11 @@ const MusicPlayer = {
             }
         }
         return 0
+    },
+
+    createShuffleList() {
+        this.shuffleList = [...Array(this.playList.length).keys()]
+        shuffleArray(this.shuffleList)
     },
 
     play(index) {
@@ -1882,8 +1888,7 @@ const MusicPlayer = {
         }
         this.elements.shuffleBtn.onchange = () => {
             if (this.elements.shuffleBtn.checked) {
-                this.shuffleList = [...Array(this.playList.length).keys()]
-                shuffleArray(this.shuffleList)
+                this.createShuffleList()
             }
         }
 
