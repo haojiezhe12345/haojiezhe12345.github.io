@@ -1865,7 +1865,9 @@ const MusicPlayer = {
             }
         }
         this.elements.progress.parentNode.onclick = e => {
-            this.elements.player.currentTime = this.elements.player.duration * e.offsetX / this.elements.progress.parentNode.offsetWidth
+            let percent = e.offsetX / this.elements.progress.parentNode.offsetWidth
+            this.elements.player.currentTime = this.elements.player.duration * percent
+            this.elements.progress.style.width = `${percent * 100}%`
         }
         this.elements.shuffleBtn.onchange = () => {
             if (this.elements.shuffleBtn.checked) {
