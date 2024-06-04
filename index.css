@@ -1786,16 +1786,21 @@ body {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-#musicPlayer button>img {
+#musicPlayer button>img,
+#musicPlayer button::before {
     display: block;
+    width: 24px;
+    height: 24px;
 }
 
-#musicPlayBtn>img {
-    content: url('https://haojiezhe12345.top:82/madohomu/res/play_arrow.svg');
+#musicPlayBtn::before {
+    content: "";
+    background-image: url('https://haojiezhe12345.top:82/madohomu/res/play_arrow.svg');
+    background-size: 100% 100%;
 }
 
-#musicPlayBtn.playing>img {
-    content: url('https://haojiezhe12345.top:82/madohomu/res/pause.svg');
+#musicPlayBtn.playing::before {
+    background-image: url('https://haojiezhe12345.top:82/madohomu/res/pause.svg');
 }
 
 #musicPlayerList {
