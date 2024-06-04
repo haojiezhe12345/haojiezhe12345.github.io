@@ -1847,24 +1847,27 @@ body {
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    margin: 0;
+    padding: 0;
 }
 
-#songList>div {
+#songList>li {
     font-size: 14px;
     padding: 9px 16px;
     user-select: none;
     white-space: nowrap;
+    list-style-position: inside;
 }
 
-#songList>div:nth-child(odd) {
+#songList>li:nth-child(odd) {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-#songList>div:hover {
+#songList>li:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-#songList>div.playing {
+#songList>li.playing {
     font-weight: bold;
     color: #f8a;
 }

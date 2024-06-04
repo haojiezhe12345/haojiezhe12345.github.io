@@ -1784,7 +1784,7 @@ const MusicPlayer = {
     showPlayList(list) {
         for (let url of list) {
             this.elements.list.appendChild(html2elmnt(`
-                <div>${getFileNameWithoutExt(url)}</div>
+                <li>${getFileNameWithoutExt(url)}</li>
             `))
         }
     },
