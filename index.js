@@ -1910,7 +1910,7 @@ try {
             /君の銀の庭 - オルゴール ミドリ/,
         ]
     }
-    MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm')
+    MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm/')
 } catch (error) {
     console.warn(error)
 }
