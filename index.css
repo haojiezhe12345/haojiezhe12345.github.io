@@ -125,7 +125,8 @@ body {
 
 #mainCaptions {
     position: absolute;
-    top: 17%;
+    top: 150px;
+    top: max(150px, 17%);
     left: 7%;
     right: 7%;
     opacity: 0;
@@ -194,7 +195,9 @@ body {
 #mainCaptions .nightCaption p:first-child {
     text-align: left;
     color: #ffb5da;
-    margin: 0 0 38vh 0;
+    margin: 0;
+    margin-bottom: calc(60vh - 200px);
+    margin-bottom: min(calc(60vh - 200px), 38vh);
 }
 
 #mainCaptions .nightCaption p:last-child {
