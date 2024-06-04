@@ -1938,6 +1938,10 @@ try {
 }
 
 
+// set title link href
+document.querySelector('#mainTitle>a').href = location.origin + location.pathname
+
+
 // global Esc key handler
 //
 document.onkeydown = function (e) {
