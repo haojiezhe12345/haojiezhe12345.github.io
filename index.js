@@ -1805,6 +1805,14 @@ const MusicPlayer = {
             this.elements.list.children[i].classList.remove('playing')
         }
         this.elements.list.children[index].classList.add('playing')
+
+        if (navigator.mediaSession) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: getFileNameWithoutExt(this.playList[index]),
+                artist: 'MadoHomu.love',
+                artwork: [{ src: this.playList[index] + '.jpg' }]
+            })
+        }
     },
 
     getPlayingIndex() {
@@ -1854,6 +1862,7 @@ const MusicPlayer = {
             this.userPaused = false
             this.play()
         }
+
         this.elements.playBtn.onclick = () => {
             if (this.elements.playBtn.classList.contains('playing')) {
                 this.pause()
@@ -1877,6 +1886,7 @@ const MusicPlayer = {
                 shuffleArray(this.shuffleList)
             }
         }
+
         this.elements.player.onplay = () => {
             for (let i = 0; i < this.elements.playingIndicators.length; i++) {
                 this.elements.playingIndicators[i].classList.add('playing');
@@ -1890,9 +1900,16 @@ const MusicPlayer = {
         this.elements.player.onended = () => {
             this.playNext()
         }
+
         setInterval(() => {
             this.elements.progress.style.width = `${this.elements.player.currentTime / this.elements.player.duration * 100}%`
         }, 500);
+
+        if (navigator.mediaSession) {
+            navigator.mediaSession.setActionHandler('play', () => this.play())
+            navigator.mediaSession.setActionHandler('pause', () => this.pause())
+            navigator.mediaSession.setActionHandler('nexttrack', () => this.playNext())
+        }
     },
 }
 
