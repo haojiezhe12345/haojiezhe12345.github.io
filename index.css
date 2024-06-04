@@ -1839,6 +1839,10 @@ body {
     justify-content: space-between;
 }
 
+#musicPlayerList>div>div:first-child>label {
+    font-size: 14px;
+}
+
 #songList {
     min-height: 0;
     overflow-x: hidden;

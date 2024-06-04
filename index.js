@@ -1753,10 +1753,11 @@ const MusicPlayer = {
         title: document.getElementById('nowPlayingTitle'),
         progress: document.getElementById('nowPlayingProgress').firstElementChild,
         list: document.getElementById('songList'),
+        shuffleBtn: document.getElementById('musicShuffleBtn'),
     },
 
     playList: [],
-    playListShuffle: [],
+    shuffleList: [],
     preferredSongs: [/.*/],
     userPaused: true,
 
@@ -1804,6 +1805,15 @@ const MusicPlayer = {
         this.elements.list.children[index].classList.add('playing')
     },
 
+    getPlayingIndex() {
+        for (let i = 0; i < this.elements.list.children.length; i++) {
+            if (this.elements.list.children[i].classList.contains('playing')) {
+                return i
+            }
+        }
+        return 0
+    },
+
     play(index) {
         if (index == null && !this.elements.player.src) index = 0
         if (index != null) {
@@ -1816,11 +1826,15 @@ const MusicPlayer = {
     },
 
     playNext() {
-        for (let i = 0; i < this.elements.list.children.length; i++) {
-            if (this.elements.list.children[i].classList.contains('playing')) {
-                this.play(i + 1)
-                return
+        if (this.elements.shuffleBtn.checked) {
+            let x = this.shuffleList[this.shuffleList.indexOf(this.getPlayingIndex()) + 1]
+            if (x != null) {
+                this.play(x)
+            } else {
+                this.play(this.shuffleList[0])
             }
+        } else {
+            this.play(this.getPlayingIndex() + 1)
         }
     },
 
@@ -1852,6 +1866,12 @@ const MusicPlayer = {
         }
         this.elements.progress.parentNode.onclick = e => {
             this.elements.player.currentTime = this.elements.player.duration * e.offsetX / this.elements.progress.parentNode.offsetWidth
+        }
+        this.elements.shuffleBtn.onchange = () => {
+            if (this.elements.shuffleBtn.checked) {
+                this.shuffleList = [...Array(this.playList.length).keys()]
+                shuffleArray(this.shuffleList)
+            }
         }
         this.elements.player.onplay = () => {
             this.elements.playBtn.classList.add('playing')
