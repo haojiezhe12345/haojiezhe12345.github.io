@@ -1891,10 +1891,19 @@ const MusicPlayer = {
 }
 
 try {
-    MusicPlayer.preferredSongs = [
-        /Sagitta luminis - オルゴール ミドリ/,
-        /君の銀の庭 - オルゴール ミドリ/,
-    ]
+    // play theme-specific BGMs
+    if (theme == 'birthday') {
+        MusicPlayer.preferredSongs = [/また あした - 悠木碧/]
+    } else if (theme == 'night') {
+        MusicPlayer.preferredSongs = [/Scaena felix - オルゴール ミドリ/]
+    } else if (theme == 'kami') {
+        MusicPlayer.preferredSongs = [/never leave you alone - 梶浦由記/]
+    } else {
+        MusicPlayer.preferredSongs = [
+            /Sagitta luminis - オルゴール ミドリ/,
+            /君の銀の庭 - オルゴール ミドリ/,
+        ]
+    }
     MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm')
 } catch (error) {
     console.warn(error)
