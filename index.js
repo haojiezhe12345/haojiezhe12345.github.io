@@ -1353,6 +1353,16 @@ function shuffleArray(array) {
     }
 }
 
+function getArrayNextItem(arr, item) {
+    let x = arr[arr.indexOf(item) + 1]
+    return x != null ? x : arr[0]
+}
+
+function getArrayPrevItem(arr, item) {
+    let x = arr[arr.indexOf(item) - 1]
+    return x != null ? x : arr[arr.length - 1]
+}
+
 
 // common vars
 //
@@ -1757,7 +1767,7 @@ const MusicPlayer = {
     },
 
     playList: [],
-    shuffleList: [],
+    playOrder: [],
     preferredSongs: [/.*/],
     userPaused: true,
 
@@ -1776,7 +1786,7 @@ const MusicPlayer = {
             }
             shuffleArray(preferred)
             this.playList = [...preferred, ...list]
-            this.createShuffleList()
+            this.playOrder = []
             this.showPlayList(this.playList)
             if (this.playList[0]) this.setActiveSong(0)
         })
@@ -1806,6 +1816,7 @@ const MusicPlayer = {
             this.elements.list.children[i].classList.remove('playing')
         }
         this.elements.list.children[index].classList.add('playing')
+        //this.elements.list.children[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
 
         if (navigator.mediaSession) {
             navigator.mediaSession.metadata = new MediaMetadata({
@@ -1825,33 +1836,31 @@ const MusicPlayer = {
         return 0
     },
 
-    createShuffleList() {
-        this.shuffleList = [...Array(this.playList.length).keys()]
-        shuffleArray(this.shuffleList)
+    checkPlayOrder() {
+        if (this.playOrder.length != this.playList.length) {
+            this.playOrder = [...Array(this.playList.length).keys()]
+            if (this.elements.shuffleBtn.checked) {
+                shuffleArray(this.playOrder)
+            }
+        }
     },
 
-    play(index) {
-        if (index == null && !this.elements.player.src) index = 0
-        if (index != null) {
-            if (this.playList[index] == null) index = 0
-            if (this.playList[index]) this.setActiveSong(index)
-        }
+    play(index = null) {
+        if (index == null && !this.elements.player.src && this.playList.length > 0) index = 0
+        if (index != null) this.setActiveSong(index)
         this.elements.player.play()
         this.userPaused = false
         setConfig('mutebgm', false)
     },
 
     playNext() {
-        if (this.elements.shuffleBtn.checked) {
-            let x = this.shuffleList[this.shuffleList.indexOf(this.getPlayingIndex()) + 1]
-            if (x != null) {
-                this.play(x)
-            } else {
-                this.play(this.shuffleList[0])
-            }
-        } else {
-            this.play(this.getPlayingIndex() + 1)
-        }
+        this.checkPlayOrder()
+        this.play(getArrayNextItem(this.playOrder, this.getPlayingIndex()))
+    },
+
+    playPrev() {
+        this.checkPlayOrder()
+        this.play(getArrayPrevItem(this.playOrder, this.getPlayingIndex()))
     },
 
     pause() {
@@ -1887,9 +1896,7 @@ const MusicPlayer = {
             this.elements.progress.style.width = `${percent * 100}%`
         }
         this.elements.shuffleBtn.onchange = () => {
-            if (this.elements.shuffleBtn.checked) {
-                this.createShuffleList()
-            }
+            this.playOrder = []
         }
 
         this.elements.player.onplay = () => {
@@ -1913,6 +1920,7 @@ const MusicPlayer = {
         if (navigator.mediaSession) {
             navigator.mediaSession.setActionHandler('play', () => this.play())
             navigator.mediaSession.setActionHandler('pause', () => this.pause())
+            navigator.mediaSession.setActionHandler('previoustrack', () => this.playPrev())
             navigator.mediaSession.setActionHandler('nexttrack', () => this.playNext())
         }
     },
