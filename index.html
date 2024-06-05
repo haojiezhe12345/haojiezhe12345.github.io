@@ -394,21 +394,29 @@
                                 <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
                             </ul>
                         </li>
-                        <li onclick="clearComments();loadComments()">
-                            <input type="checkbox" id="showKami" name="showKami" onchange="toggleKami()">
-                            <label for="showKami"><b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b></label>
+                        <li>
+                            <label>
+                                <input type="checkbox" id="showKami" onchange="toggleKami();clearComments();loadComments()">
+                                <b><span class="ui zh">显示kami.im留言</span><span class="ui en">Show messages from kami.im</span></b>
+                            </label>
                         </li>
                         <li>
-                            <input type="checkbox" id="showTimeline" name="showTimeline" onchange="toggleTimeline()" checked>
-                            <label for="showTimeline"><span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span></label>
+                            <label>
+                                <input type="checkbox" id="showTimeline" onchange="toggleTimeline()" checked>
+                                <span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span>
+                            </label>
                         </li>
                         <li>
-                            <input type="checkbox" id="hideTopComment" name="hideTopComment" onchange="toggleTopComment()">
-                            <label for="hideTopComment"><span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span></label>
+                            <label>
+                                <input type="checkbox" id="hideTopComment" onchange="toggleTopComment()">
+                                <span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span>
+                            </label>
                         </li>
                         <li>
-                            <input type="checkbox" id="showHidden" name="showHidden">
-                            <label for="showHidden"><span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span></label>
+                            <label>
+                                <input type="checkbox" id="showHidden">
+                                <span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span>
+                            </label>
                         </li>
                         <li>
                             <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
