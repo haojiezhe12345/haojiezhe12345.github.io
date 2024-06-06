@@ -1821,7 +1821,6 @@ const MusicPlayer = {
             this.elements.list.children[i].classList.remove('playing')
         }
         this.elements.list.children[index].classList.add('playing')
-        //this.elements.list.children[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
 
         if (navigator.mediaSession) {
             navigator.mediaSession.metadata = new MediaMetadata({
@@ -1902,6 +1901,9 @@ const MusicPlayer = {
         }
         this.elements.shuffleBtn.onchange = () => {
             this.playOrder = []
+        }
+        this.elements.list.parentNode.parentNode.querySelector('button').onmouseenter = () => {
+            this.elements.list.querySelector('.playing').scrollIntoView({ block: "center" })
         }
 
         this.elements.player.onplay = () => {
