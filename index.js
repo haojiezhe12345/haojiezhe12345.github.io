@@ -1334,7 +1334,7 @@ function getFileListAsync(url) {
             for (let i = 0; i < alist.length; i++) {
                 let a = alist[i]
                 if (a.previousSibling && !a.previousSibling.textContent.includes('<dir>')) {
-                    filelist.push(url + a.textContent)
+                    filelist.push(url + encodeURIComponent(a.textContent))
                 }
             }
             resolve(filelist)
@@ -1342,8 +1342,13 @@ function getFileListAsync(url) {
     })
 }
 
-function getFileNameWithoutExt(path) {
-    return path.match(/[^\\/]+(?=\.\w+$)/)[0]
+function getFileNameWithoutExt(path, decodeuri = false) {
+    if (decodeuri) {
+        return decodeURIComponent(path.match(/[^\\/]+(?=\.\w+$)/)[0])
+    }
+    else {
+        return path.match(/[^\\/]+(?=\.\w+$)/)[0]
+    }
 }
 
 function shuffleArray(array) {
@@ -1778,7 +1783,7 @@ const MusicPlayer = {
             let preferred = []
             for (let i = 0; i < list.length; i++) {
                 for (let song of this.preferredSongs) {
-                    if (song.test(list[i])) {
+                    if (song.test(decodeURIComponent(list[i]))) {
                         preferred.push(list.splice(i, 1)[0])
                         break
                     }
@@ -1795,7 +1800,7 @@ const MusicPlayer = {
     showPlayList(list) {
         for (let url of list) {
             this.elements.list.appendChild(html2elmnt(`
-                <li>${getFileNameWithoutExt(url)}</li>
+                <li>${getFileNameWithoutExt(url, true)}</li>
             `))
         }
     },
@@ -1810,7 +1815,7 @@ const MusicPlayer = {
             this.src = 'https://haojiezhe12345.top:82/madohomu/res/music_note.svg'
         }
         for (let i = 0; i < this.elements.titles.length; i++) {
-            this.elements.titles[i].textContent = getFileNameWithoutExt(this.playList[index])
+            this.elements.titles[i].textContent = getFileNameWithoutExt(this.playList[index], true)
         }
         for (let i = 0; i < this.elements.list.children.length; i++) {
             this.elements.list.children[i].classList.remove('playing')
@@ -1820,7 +1825,7 @@ const MusicPlayer = {
 
         if (navigator.mediaSession) {
             navigator.mediaSession.metadata = new MediaMetadata({
-                title: getFileNameWithoutExt(this.playList[index]),
+                title: getFileNameWithoutExt(this.playList[index], true),
                 artist: 'MadoHomu.love',
                 artwork: [{ src: this.playList[index] + '.jpg' }]
             })
