@@ -33,5 +33,5 @@ print(json.dumps(replaceDict, indent=4))
 remoteDir = R'Z:\Web\Dashboard0\madohomu'
 
 for file in os.listdir(remoteDir):
-    if (file[:5] == 'index'):
+    if (file.startswith('index')):
         copyAndReplace(file, remoteDir, replaceDict)

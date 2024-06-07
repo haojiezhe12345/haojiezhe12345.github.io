@@ -1958,7 +1958,7 @@ try {
 
 // iframe communication
 //
-const iframeComm = {
+const iframeCom = {
     funcs: {
         setPageZoom(scale) {
             window.top.postMessage({ type: 'setPageZoom', data: scale }, '*')
@@ -1977,7 +1977,7 @@ const iframeComm = {
 }
 
 try {
-    iframeComm.checkCaps()
+    iframeCom.checkCaps()
 } catch (error) {
     console.warn(error)
 }
@@ -1988,7 +1988,7 @@ try {
 window.onmessage = e => {
     switch (e.data.type) {
         case 'iframeCaps':
-            iframeComm.enableCaps(e.data.data)
+            iframeCom.enableCaps(e.data.data)
             break;
         default:
             break;
