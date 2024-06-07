@@ -369,6 +369,7 @@
                     <ul>
                         <li onclick="clearComments();loadComments()"><span class="ui zh">🔄 刷新</span><span class="ui en">🔄 Refresh</span></li>
                         <li onclick="showPopup('themeSelectorPopup')"><span class="ui zh">🖌️ 主题&音乐设置</span><span class="ui en">🖌️ Themes & Music</span></li>
+                        <li onclick="showPopup('displaySettings')"><span class="ui zh">🖥️ 显示设置</span><span class="ui en">🖥️ Display settings</span></li>
                         <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
                         <li onclick="
                             if (installPrompt != null) installPrompt.prompt()
@@ -383,15 +384,6 @@
                                 <li onclick="changeLang(); setConfig('lang', '')"><span class="ui zh">(自动)</span><span class="ui en">(Auto)</span></li>
                                 <li onclick="changeLang('en'); setConfig('lang', 'en')"><span>English</span></li>
                                 <li onclick="changeLang('zh'); setConfig('lang', 'zh')"><span>中文</span></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <span class="ui zh">✨ 特效</span><span class="ui en">✨ Graphics</span>
-                            <i></i>
-                            <ul>
-                                <li onclick="changeGraphicsMode('high')"><span class="ui zh">极高</span><span class="ui en">Fancy</span></li>
-                                <li onclick="changeGraphicsMode('mid')"><span class="ui zh">中等</span><span class="ui en">Balanced</span></li>
-                                <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
                             </ul>
                         </li>
                         <li id="pageZoomController" style="display: none;">
@@ -415,24 +407,6 @@
                             </label>
                         </li>
                         <li>
-                            <label>
-                                <input type="checkbox" id="showTimeline" onchange="toggleTimeline()" checked>
-                                <span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" id="hideTopComment" onchange="toggleTopComment()">
-                                <span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" id="showHidden">
-                                <span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span>
-                            </label>
-                        </li>
-                        <li>
                             <span class="ui zh">跳转到留言(#ID)</span><span class="ui en">Go to message (#ID)</span>
                             <span style="display: inline-flex; align-items: center; padding: 0;">
                                 <input id="goto" style="width: 64px;">
@@ -447,9 +421,9 @@
 
     </div>
 
-    <div id="popupContainer">
+    <div id="popupContainer" style="display: none;">
 
-        <div id="popupBG" onclick="closePopup()"></div>
+        <div id="popupBG"></div>
 
         <div id="setNamePopup" class="popupItem">
             <div>
@@ -464,7 +438,7 @@
                 <p onclick="showUserComment(document.getElementById('setNameInput').value)"><span class="ui zh">我的留言记录 ↗</span><span class="ui en">My sent messages →</span></p>
                 <button class="okBtn" onclick="setUserName()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
         </div>
 
         <div id="setAvatarPopup" class="popupItem">
@@ -477,7 +451,7 @@
                 <br>
                 <button class="okBtn" onclick="closePopup();"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
         </div>
 
         <div id="getImgPopup" class="popupItem">
@@ -486,7 +460,7 @@
                 <h4><span class="ui zh">长按/右键图片, 然后选"保存到手机/下载图片/图片另存为"</span><span class="ui en">Long press / right click,<br>then select Download image / Save image as...</span></h4>
                 <div></div>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
         </div>
 
         <div id="showUserCommentPopup" class="popupItem">
@@ -511,14 +485,17 @@
                     <span class="ui en">- Total 0 messages -</span>
                 </h4>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
         </div>
         
         <div id="themeSelectorPopup" class="popupItem">
             <div>
                 <h2><span class="ui zh">主题 & 音乐</span><span class="ui en">Themes & Music</span></h2>
                 <p style="width: 100%;">
-                    <span onclick="showPopup('getImgPopup')" style="float: right; color: #333; cursor: pointer; display: inline-flex; align-items: center; border-bottom: 1.5px solid #333; height: 18px; padding-left: 4px;">
+                    <span onclick="showPopup('displaySettings')" class="underlinedIconLink">
+                        <span class="ui zh">🖥️ 显示设置</span><span class="ui en">🖥️ Display settings</span>
+                    </span>
+                    <span onclick="showPopup('getImgPopup')" class="underlinedIconLink" style="float: right; padding-left: 4px;">
                         <span class="ui zh">下载背景图片</span><span class="ui en">Download backgrounds</span>
                         <img src="https://haojiezhe12345.top:82/madohomu/res/download.svg">
                     </span>
@@ -583,7 +560,44 @@
                     </div>
                 </div>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
+        </div>
+
+        <div id="displaySettings" class="popupItem">
+            <div>
+                <h2><span class="ui zh">显示设置</span><span class="ui en">Display settings</span></h2>
+                <ul>
+                    <li>
+                        <label class="setting-switch">
+                            <span><span class="ui zh">显示时间轴</span><span class="ui en">Show timeline</span></span>
+                            <input type="checkbox" id="showTimeline" onchange="toggleTimeline()" checked>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="setting-switch">
+                            <span class="ui zh">隐藏置顶公告</span><span class="ui en">Hide pinned announcement</span>
+                            <input type="checkbox" id="hideTopComment" onchange="toggleTopComment()">
+                        </label>
+                    </li>
+                    <li>
+                        <label class="setting-switch">
+                            <span class="ui zh">显示被隐藏留言</span><span class="ui en">Show hidden messages</span>
+                            <input type="checkbox" id="showHidden">
+                        </label>
+                    </li>
+                    <li>
+                        <span>
+                            <span class="ui zh">画面效果</span><span class="ui en">Graphics</span>
+                        </span>
+                        <select id="graphicsMode" onchange="changeGraphicsMode(this.value)">
+                            <option value="high">极高 | Fancy</option>
+                            <option value="mid">中等 | Balanced</option>
+                            <option value="low">流畅 | Fast</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+            <button class="closeBtn"></button>
         </div>
 
         <div id="game1" class="popupItem">
@@ -602,7 +616,7 @@
                 </div>
                 <p>图片作者: 星浩</p>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
         </div>
 
         <div id="game2" class="popupItem">
@@ -639,7 +653,7 @@
                 <p><span class="ui zh">图源 (X/推特): </span><span class="ui en">Image source (X/Twitter): </span><a href="https://twitter.com/swan0517/media" target="_blank">@swan0517 (Mello)</a></p>
                 <a onclick="showPopup('game1')"><img src="https://haojiezhe12345.top:82/madohomu/res/xh_mdk1.png"></a>
             </div>
-            <button class="closeBtn" onclick="closePopup()">×</button>
+            <button class="closeBtn"></button>
         </div>
 
     </div>

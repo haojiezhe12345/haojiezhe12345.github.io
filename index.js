@@ -578,80 +578,107 @@ function closeImgViewer() {
 
 // popup
 //
-function showPopup(popupID) {
-    if (location.hash.slice(0, 7) != '#popup-') {
-        location.hash = 'popup'
-    }
+const popup = {
+    elements: {
+        popupContainer: document.getElementById('popupContainer'),
+        popupItems: document.getElementsByClassName('popupItem'),
+    },
 
-    var elements = document.getElementsByClassName('popupItem');
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].style.display = 'none';
-    }
+    hideAllPopupItems() {
+        for (let i = 0; i < this.elements.popupItems.length; i++) {
+            this.elements.popupItems[i].style.display = 'none';
+        }
+    },
 
-    var popupContainer = document.getElementById('popupContainer');
-    popupContainer.style.display = 'flex';
+    show(popupID) {
+        if (location.hash.slice(0, 7) != '#popup-') {
+            location.hash = 'popup'
+        }
 
-    var popup = document.getElementById(popupID);
-    popup.style.removeProperty('display');
+        this.hideAllPopupItems()
+        this.elements.popupContainer.style.removeProperty('display');
+        document.getElementById(popupID).style.removeProperty('display');
 
-    if (popupID == 'setNamePopup') {
-        document.getElementById('setNameInput').value = getConfig('username')
-    }
+        switch (popupID) {
+            case 'setNamePopup':
+                document.getElementById('setNameInput').value = getConfig('username')
+                break;
 
-    if (popupID == 'setAvatarPopup') {
-        avatarInput.value = ''
-        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
-        setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-    }
+            case 'setAvatarPopup':
+                avatarInput.value = ''
+                setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
+                setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
+                break
 
-    if (popupID == 'getImgPopup') {
-        document.getElementById('getImgPopup').firstElementChild.lastElementChild.innerHTML = ''
-        for (var key in themes) {
-            var themeName = themes[key]
-            try {
-                for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
+            case 'getImgPopup':
+                document.getElementById('getImgPopup').firstElementChild.lastElementChild.innerHTML = ''
+                for (var key in themes) {
+                    var themeName = themes[key]
+                    try {
+                        for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
+                            document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
+                                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                                    <p>
+                                        ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
+                                        ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
+                                            <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
+                                        ` : ''}
+                                    </p>
+                                    <br>
+                                `))
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+                for (let i = 0; i < msgBgCount; i++) {
                     document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
                         <p>
-                            ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
-                            ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
-                                <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
-                            ` : ''}
+                            ${msgBgInfo[i].description != null
+                            ? msgBgInfo[i].description
+                            : `Artwork by ${msgBgInfo[i].illustrator} <a href="https://www.pixiv.net/artworks/${msgBgInfo[i].pixivid}" target="_blank">Pixiv↗</a>`}
                         </p>
                         <br>
                     `))
                 }
-            } catch (error) {
-                console.log(error)
+                break
+
+            case 'displaySettings':
+                let mode = getConfig('graphicsMode')
+                document.getElementById('graphicsMode').value = mode ? mode : 'high'
+                break
+
+            default:
+                break;
+        }
+    },
+
+    close() {
+        if (location.hash == '#popup') {
+            history.back()
+            return
+        }
+
+        this.elements.popupContainer.style.display = 'none';
+        this.hideAllPopupItems()
+    },
+
+    init() {
+        this.elements.popupContainer.onclick = e => {
+            if (e.target.classList.contains('closeBtn') || e.target.id == 'popupBG') {
+                this.close()
             }
         }
-        for (let i = 0; i < msgBgCount; i++) {
-            document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
-            <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
-            <p>
-                ${msgBgInfo[i].description != null
-                    ? msgBgInfo[i].description
-                    : `Artwork by ${msgBgInfo[i].illustrator} <a href="https://www.pixiv.net/artworks/${msgBgInfo[i].pixivid}" target="_blank">Pixiv↗</a>`}
-            </p>
-            <br>
-        `))
-        }
-    }
+    },
 }
 
-function closePopup() {
-    if (location.hash == '#popup') {
-        history.back()
-        return
-    }
-
-    var popupContainer = document.getElementById('popupContainer');
-    popupContainer.style.display = 'none';
-
-    var elements = document.getElementsByClassName('popupItem');
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].style.display = 'none';
-    }
+const showPopup = id => popup.show(id)
+const closePopup = () => popup.close()
+try {
+    popup.init()
+} catch (error) {
+    logErr(error, 'failed to init popup')
 }
 
 // user related
@@ -869,7 +896,7 @@ function showUserComment(user, useKamiAvatar = false) {
 
 function userCommentScroll() {
     var toBottom = userCommentEl.scrollHeight - userCommentEl.clientHeight - userCommentEl.scrollTop
-    if (toBottom < 100 && document.getElementById('popupContainer').style.display == 'flex') {
+    if (toBottom < 100 && document.getElementById('popupContainer').style.display != 'none') {
         showUserComment()
     }
 }
@@ -1366,6 +1393,11 @@ function getArrayNextItem(arr, item) {
 function getArrayPrevItem(arr, item) {
     let x = arr[arr.indexOf(item) - 1]
     return x != null ? x : arr[arr.length - 1]
+}
+
+function logErr(err, msg) {
+    console.warn(err)
+    console.error(msg)
 }
 
 
@@ -1952,7 +1984,7 @@ try {
     }
     MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm/')
 } catch (error) {
-    console.warn(error)
+    logErr(error, 'failed to init music player')
 }
 
 
@@ -1979,7 +2011,7 @@ const iframeCom = {
 try {
     iframeCom.checkCaps()
 } catch (error) {
-    console.warn(error)
+    logErr(error, 'failed to check for iframe capabilities')
 }
 
 
@@ -2001,9 +2033,9 @@ window.onmessage = e => {
 document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
-        if (document.getElementById('imgViewerBox').style.display == 'block') {
+        if (document.getElementById('imgViewerBox').style.display != 'none') {
             closeImgViewer()
-        } else if (document.getElementById('popupContainer').style.display == 'flex') {
+        } else if (document.getElementById('popupContainer').style.display != 'none') {
             closePopup()
         } else if (isFullscreen) {
             toggleFullscreen()
