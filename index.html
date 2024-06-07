@@ -394,6 +394,20 @@
                                 <li onclick="changeGraphicsMode('low')"><span class="ui zh">流畅</span><span class="ui en">Fast</span></li>
                             </ul>
                         </li>
+                        <li id="pageZoomController" style="display: none;">
+                            <span class="ui zh">🔍 缩放</span><span class="ui en">🔍 Zoom</span>
+                            <i></i>
+                            <ul style="top: -72px;">
+                                <li onclick="iframeComm.funcs.setPageZoom(0.5)"><span>50%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(0.8)"><span>80%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(1)"><span>100%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(1.25)"><span>125%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(1.5)"><span>150%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(1.75)"><span>175%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(2)"><span>200%</span></li>
+                                <li onclick="iframeComm.funcs.setPageZoom(2.5)"><span>250%</span></li>
+                            </ul>
+                        </li>
                         <li>
                             <label>
                                 <input type="checkbox" id="showKami" onchange="toggleKami();clearComments();loadComments()">

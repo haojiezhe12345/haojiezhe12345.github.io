@@ -1407,6 +1407,9 @@ var newCommentDisabled = false
 var isLoadCommentErrorShowed = false
 
 
+// set title link href
+document.querySelector('#mainTitle>a').href = location.origin + location.pathname
+
 // set language
 changeLang(getConfig('lang'))
 
@@ -1953,8 +1956,44 @@ try {
 }
 
 
-// set title link href
-document.querySelector('#mainTitle>a').href = location.origin + location.pathname
+// iframe communication
+//
+const iframeComm = {
+    funcs: {
+        setPageZoom(scale) {
+            window.top.postMessage({ type: 'setPageZoom', data: scale }, '*')
+        }
+    },
+
+    checkCaps() {
+        window.top.postMessage({ type: 'checkIframeCaps' }, '*')
+    },
+
+    enableCaps(Caps) {
+        if (Caps.includes('setPageZoom')) {
+            document.getElementById('pageZoomController').style.removeProperty('display')
+        }
+    },
+}
+
+try {
+    iframeComm.checkCaps()
+} catch (error) {
+    console.warn(error)
+}
+
+
+// window message handler
+//
+window.onmessage = e => {
+    switch (e.data.type) {
+        case 'iframeCaps':
+            iframeComm.enableCaps(e.data.data)
+            break;
+        default:
+            break;
+    }
+}
 
 
 // global Esc key handler

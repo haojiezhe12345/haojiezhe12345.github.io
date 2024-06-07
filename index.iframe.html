@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +8,51 @@
     <style>
         body {
             margin: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: white;
         }
 
         iframe {
             display: block;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             border: none;
+            transform-origin: 0 0;
         }
     </style>
 </head>
+
 <body>
     <iframe src="https://haojiezhe12345.top:82/madohomu/"></iframe>
+    <script>
+        const iframe = document.querySelector('iframe')
+        const iframeWindow = iframe.contentWindow
+
+        function setIframeZoom(scale) {
+            iframe.style.width = `${100 / scale}%`
+            iframe.style.height = `${100 / scale}%`
+            iframe.style.transform = `scale(${scale})`
+        }
+
+        window.onmessage = e => {
+            switch (e.data.type) {
+                case 'checkIframeCaps':
+                    iframeWindow.postMessage({
+                        type: 'iframeCaps',
+                        data: [
+                            'setPageZoom',
+                        ],
+                    }, '*')
+                    break;
+                case 'setPageZoom':
+                    setIframeZoom(e.data.data)
+                default:
+                    break;
+            }
+        }
+    </script>
 </body>
+
 </html>
