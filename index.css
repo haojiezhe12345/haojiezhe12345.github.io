@@ -1361,9 +1361,15 @@ body {
 
 .toolbarItem ul li>i {
     margin-left: auto;
-    padding: 0;
-    font-style: normal;
-    font-size: 10px;
+}
+
+.toolbarItem ul li>i::after {
+    content: "";
+    background-image: url('https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg');
+    background-size: 100% 100%;
+    display: block;
+    width: 10px;
+    height: 10px;
 }
 
 .toolbarItem ul li>ul {
