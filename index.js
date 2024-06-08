@@ -549,33 +549,6 @@ function sendMessage() {
     xhr.send(data);
 }
 
-// img viewer
-//
-function viewImg(src) {
-    //window.open(elmnt.src, '_blank').focus()
-    document.getElementById('imgViewer').src = src
-    document.getElementById('imgViewerBox').style.display = 'block'
-    document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0')
-    window.location.hash = 'view-img'
-
-    imgViewerMouseActive = false
-    imgViewerOffsetX = 0
-    imgViewerOffsetY = 0
-    imgViewerScale = 1
-    document.getElementById('imgViewer').style.transform = 'translateX(0px) translateY(0px) scale(1)'
-    document.getElementById('imgViewer').style.removeProperty('image-rendering')
-}
-
-function closeImgViewer() {
-    if (location.hash == '#view-img') {
-        history.back()
-        return
-    }
-
-    document.getElementById('imgViewerBox').style.display = 'none';
-    document.getElementById('viewport1').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
-}
-
 // popup
 //
 const popup = {
@@ -662,6 +635,10 @@ const popup = {
 
         this.elements.popupContainer.style.display = 'none';
         this.hideAllPopupItems()
+    },
+
+    isOpen() {
+        return this.elements.popupContainer.style.display != 'none' ? true : false
     },
 
     init() {
@@ -896,7 +873,7 @@ function showUserComment(user, useKamiAvatar = false) {
 
 function userCommentScroll() {
     var toBottom = userCommentEl.scrollHeight - userCommentEl.clientHeight - userCommentEl.scrollTop
-    if (toBottom < 100 && document.getElementById('popupContainer').style.display != 'none') {
+    if (toBottom < 100 && popup.isOpen()) {
         showUserComment()
     }
 }
@@ -1785,11 +1762,121 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
 
 // image viewer
 //
-var imgViewerMouseActive = false
-var imgViewerOffsetX = 0
-var imgViewerOffsetY = 0
-var imgViewerScale = 1
-var imgViewerMouseMoved = false
+const imgViewer = {
+    elements: {
+        container: document.getElementById('imgViewerBox'),
+        viewer: document.getElementById('imgViewer'),
+        viewport: document.getElementById('viewport1'),
+    },
+
+    viewportContent: '',
+    imgViewerMouseActive: false,
+    imgViewerOffsetX: 0,
+    imgViewerOffsetY: 0,
+    imgViewerScale: 1,
+    imgViewerMouseMoved: false,
+    
+    view(src) {
+        this.elements.viewer.src = src
+        this.elements.container.style.removeProperty('display')
+        this.elements.viewport.setAttribute('content', this.viewportContent.replace(', maximum-scale=1.0', ''))
+        window.location.hash = 'view-img'
+
+        this.imgViewerMouseActive = false
+        this.imgViewerOffsetX = 0
+        this.imgViewerOffsetY = 0
+        this.imgViewerScale = 1
+        this.elements.viewer.style.transform = 'translateX(0px) translateY(0px) scale(1)'
+        this.elements.viewer.style.removeProperty('image-rendering')
+    },
+
+    close() {
+        if (location.hash == '#view-img') {
+            history.back()
+            return
+        }
+
+        this.elements.container.style.display = 'none';
+        this.elements.viewport.setAttribute('content', this.viewportContent);
+    },
+
+    isOpen() {
+        return this.elements.container.style.display != 'none' ? true : false
+    },
+
+    init() {
+        this.viewportContent = this.elements.viewport.getAttribute('content')
+
+        this.elements.container.onmousedown = e => {
+            if (e.button == 0) {
+                this.imgViewerMouseActive = true
+                this.imgViewerMouseMoved = false
+                this.elements.viewer.style.transition = 'none'
+            }
+        }
+        this.elements.container.onmouseup = e => {
+            if (e.button == 0) {
+                this.imgViewerMouseActive = false
+                if (!this.imgViewerMouseMoved) {
+                    this.close()
+                }
+                this.elements.viewer.style.removeProperty('transition')
+            }
+        }
+        this.elements.container.onmousemove = e => {
+            if (this.imgViewerMouseActive) {
+                this.imgViewerOffsetX += e.movementX
+                this.imgViewerOffsetY += e.movementY
+                if (e.movementX != 0 || e.movementY != 0) {
+                    this.imgViewerMouseMoved = true
+                }
+                //console.log(this.imgViewerOffsetX, this.imgViewerOffsetY)
+                this.elements.viewer.style.transform = `translateX(${this.imgViewerOffsetX}px) translateY(${this.imgViewerOffsetY}px) scale(${this.imgViewerScale})`
+            }
+        }
+        this.elements.container.onwheel = e => {
+            e.preventDefault()
+            let scaleMultiplier = 1
+            if (e.deltaY < 0) {
+                scaleMultiplier = (1000 - e.deltaY) / 1000
+                //this.imgViewerScale *= 11 / 10
+            } else {
+                scaleMultiplier = 1000 / (1000 + e.deltaY)
+                //this.imgViewerScale *= 10 / 11
+            }
+            this.imgViewerScale *= scaleMultiplier
+
+            var mouseOffsetX = e.clientX - (document.documentElement.clientWidth / 2)
+            var mouseOffsetY = e.clientY - (document.documentElement.clientHeight / 2)
+            if (debug) console.log(mouseOffsetX, mouseOffsetY)
+
+            this.imgViewerOffsetX += (scaleMultiplier - 1) * (this.imgViewerOffsetX - mouseOffsetX)
+            this.imgViewerOffsetY += (scaleMultiplier - 1) * (this.imgViewerOffsetY - mouseOffsetY)
+
+            if (this.imgViewerScale < 1) {
+                this.imgViewerScale = 1
+                this.imgViewerOffsetX = 0
+                this.imgViewerOffsetY = 0
+            }
+            if (debug) console.log(this.imgViewerScale)
+
+            this.elements.viewer.style.transform = `translateX(${this.imgViewerOffsetX}px) translateY(${this.imgViewerOffsetY}px) scale(${this.imgViewerScale})`
+            if (this.imgViewerScale > 3) {
+                this.elements.viewer.style.imageRendering = 'pixelated'
+            } else {
+                this.elements.viewer.style.removeProperty('image-rendering')
+            }
+        }
+    },
+}
+
+const viewImg = src => imgViewer.view(src)
+const closeImgViewer = () => imgViewer.close()
+try {
+    imgViewer.init()
+} catch (error) {
+    logErr(error, 'Failed to init image viewer')
+}
 
 
 // music player
@@ -2033,9 +2120,9 @@ window.onmessage = e => {
 document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape') {
-        if (document.getElementById('imgViewerBox').style.display != 'none') {
+        if (imgViewer.isOpen()) {
             closeImgViewer()
-        } else if (document.getElementById('popupContainer').style.display != 'none') {
+        } else if (popup.isOpen()) {
             closePopup()
         } else if (isFullscreen) {
             toggleFullscreen()

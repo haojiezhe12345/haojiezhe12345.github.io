@@ -658,66 +658,7 @@
 
     </div>
 
-    <div id="imgViewerBox" style="display: none"
-        onmousedown="
-            if (event.which == 1) {
-                imgViewerMouseActive = true
-                imgViewerMouseMoved = false
-                this.firstElementChild.style.transition = 'none'
-            }
-        "
-        onmouseup="
-            if (event.which == 1) {
-                imgViewerMouseActive = false
-                if (!imgViewerMouseMoved) {
-                    closeImgViewer()
-                }
-                this.firstElementChild.style.removeProperty('transition')
-            }
-        "
-        onmousemove="
-            if (imgViewerMouseActive) {
-                imgViewerOffsetX += event.movementX
-                imgViewerOffsetY += event.movementY
-                if (event.movementX != 0 || event.movementY != 0) {
-                    imgViewerMouseMoved = true
-                }
-                //console.log(imgViewerOffsetX, imgViewerOffsetY)
-                this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
-            }
-        "
-        onwheel="
-            event.preventDefault()
-            if (event.deltaY < 0) {
-                scaleMultiplier = (1000 - event.deltaY) / 1000
-                //imgViewerScale *= 11 / 10
-            } else {
-                scaleMultiplier = 1000 / (1000 + event.deltaY)
-                //imgViewerScale *= 10 / 11
-            }
-            imgViewerScale *= scaleMultiplier
-
-            var mouseOffsetX = event.clientX - (document.documentElement.clientWidth / 2)
-            var mouseOffsetY = event.clientY - (document.documentElement.clientHeight / 2)
-            if (debug) console.log(mouseOffsetX, mouseOffsetY)
-
-            imgViewerOffsetX += (scaleMultiplier - 1) * (imgViewerOffsetX - mouseOffsetX)
-            imgViewerOffsetY += (scaleMultiplier - 1) * (imgViewerOffsetY - mouseOffsetY)
-        
-            if (imgViewerScale < 1) {
-                imgViewerScale = 1
-                imgViewerOffsetX = 0
-                imgViewerOffsetY = 0
-            }
-            if (debug) console.log(imgViewerScale)
-
-            this.firstElementChild.style.transform = `translateX(${imgViewerOffsetX}px) translateY(${imgViewerOffsetY}px) scale(${imgViewerScale})`
-            if (imgViewerScale > 3) {
-                this.firstElementChild.style.imageRendering = 'pixelated'
-            } else {
-                this.firstElementChild.style.removeProperty('image-rendering')
-            }
-        ">
+    <div id="imgViewerBox" style="display: none">
         <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
     </div>
 
