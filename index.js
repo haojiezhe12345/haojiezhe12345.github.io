@@ -620,6 +620,7 @@ const popup = {
             case 'displaySettings':
                 let mode = getConfig('graphicsMode')
                 document.getElementById('graphicsMode').value = mode ? mode : 'high'
+                iframeCom.send('getPageZoom')
                 break
 
             default:
@@ -2078,41 +2079,44 @@ try {
 // iframe communication
 //
 const iframeCom = {
+    elements: {
+        pageZoomController: document.getElementById('pageZoomController'),
+        safeZoneSetting: document.getElementById('safeZoneSetting'),
+    },
+
     send(type, data) {
         window.top.postMessage({ type, data }, '*')
     },
 
-    checkCaps() {
-        this.send('checkIframeCaps')
-    },
+    init() {
+        window.addEventListener('message', e => {
+            switch (e.data.type) {
+                case 'iframeCaps':
+                    let caps = e.data.data
+                    if (caps.includes('setPageZoom')) {
+                        this.elements.pageZoomController.removeAttribute('disabled')
+                    }
+                    if (caps.includes('setSafezone')) {
+                        this.elements.safeZoneSetting.removeAttribute('disabled')
+                    }
+                    break;
 
-    enableCaps(Caps) {
-        if (Caps.includes('setPageZoom')) {
-            document.getElementById('pageZoomController').removeAttribute('disabled')
-        }
-        if (Caps.includes('setSafezone')) {
-            document.getElementById('safeZoneSetting').removeAttribute('disabled')
-        }
+                case 'pageZoom':
+                    this.elements.pageZoomController.value = e.data.data
+                    break;
+
+                default:
+                    break;
+            }
+        })
+        this.send('checkIframeCaps')
     },
 }
 
 try {
-    iframeCom.checkCaps()
+    iframeCom.init()
 } catch (error) {
-    logErr(error, 'failed to check for iframe capabilities')
-}
-
-
-// window message handler
-//
-window.onmessage = e => {
-    switch (e.data.type) {
-        case 'iframeCaps':
-            iframeCom.enableCaps(e.data.data)
-            break;
-        default:
-            break;
-    }
+    logErr(error, 'failed to check init iframe communication')
 }
 
 

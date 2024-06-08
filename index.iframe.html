@@ -76,7 +76,10 @@
     <script>
         const iframeContainer = document.getElementById('mainContainer')
         const iframe = document.getElementById('mainIframe')
-        const iframeWindow = iframe.contentWindow
+
+        function sendToIframe(type, data) {
+            iframe.contentWindow.postMessage({ type, data }, '*')
+        }
 
         function setIframeZoom(scale) {
             iframe.style.width = `${100 / scale}%`
@@ -86,11 +89,9 @@
 
         const safezone = {
             overlay: document.getElementById('safezoneOverlay'),
-            mousedown: false,
 
             adjust(e) {
                 if (e.target != document.querySelector('#safezoneOverlay>button') && (e.buttons == 1 || e.type == 'click')) {
-                    console.log(e)
                     if (e.clientY < window.innerHeight / 2) {
                         iframeContainer.style.top = `${e.clientY}px`
                         if (e.clientX < window.innerWidth / 2) {
@@ -125,17 +126,19 @@
         window.onmessage = e => {
             switch (e.data.type) {
                 case 'checkIframeCaps':
-                    iframeWindow.postMessage({
-                        type: 'iframeCaps',
-                        data: [
-                            'setPageZoom',
-                            'setSafezone',
-                        ],
-                    }, '*')
+                    sendToIframe('iframeCaps', [
+                        'setPageZoom',
+                        'setSafezone',
+                    ])
                     break;
 
                 case 'setPageZoom':
                     setIframeZoom(e.data.data)
+                    break
+
+                case 'getPageZoom':
+                    let match = iframe.style.transform.match(/scale\((.*)\)/)
+                    sendToIframe('pageZoom', match ? Math.round(parseFloat(match[1]) * 100) : 100)
                     break
 
                 case 'setSafezone':
