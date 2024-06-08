@@ -1947,6 +1947,7 @@ body {
     width: 3em;
     height: 1.5em;
     margin: 0;
+    flex-shrink: 0;
 }
 
 .setting-switch>input::before {

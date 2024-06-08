@@ -1775,7 +1775,7 @@ const imgViewer = {
     imgViewerOffsetY: 0,
     imgViewerScale: 1,
     imgViewerMouseMoved: false,
-    
+
     view(src) {
         this.elements.viewer.src = src
         this.elements.container.style.removeProperty('display')
@@ -2078,19 +2078,20 @@ try {
 // iframe communication
 //
 const iframeCom = {
-    funcs: {
-        setPageZoom(scale) {
-            window.top.postMessage({ type: 'setPageZoom', data: scale }, '*')
-        }
+    send(type, data) {
+        window.top.postMessage({ type, data }, '*')
     },
 
     checkCaps() {
-        window.top.postMessage({ type: 'checkIframeCaps' }, '*')
+        this.send('checkIframeCaps')
     },
 
     enableCaps(Caps) {
         if (Caps.includes('setPageZoom')) {
-            document.getElementById('pageZoomController').style.removeProperty('display')
+            document.getElementById('pageZoomController').removeAttribute('disabled')
+        }
+        if (Caps.includes('setSafezone')) {
+            document.getElementById('safeZoneSetting').removeAttribute('disabled')
         }
     },
 }
@@ -2119,7 +2120,7 @@ window.onmessage = e => {
 //
 document.onkeydown = function (e) {
     //console.log(e.key)
-    if (e.key == 'Escape') {
+    if (e.key == 'Escape' || e.keyCode == 27) {
         if (imgViewer.isOpen()) {
             closeImgViewer()
         } else if (popup.isOpen()) {

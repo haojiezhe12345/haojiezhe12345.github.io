@@ -19,26 +19,107 @@
             background-color: white;
         }
 
-        iframe {
+        #mainContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #mainIframe {
             display: block;
             width: 100%;
             height: 100%;
             border: none;
             transform-origin: 0 0;
         }
+
+        #safezoneOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('https://haojiezhe12345.top:82/madohomu/res/corner.png');
+            background-size: 100% 100%;
+        }
+
+        #safezoneOverlay>button {
+            font-size: 48px;
+        }
+
+        #safezoneOverlay>p {
+            background-color: white;
+            margin: 8px 0;
+            padding: 4px 8px;
+        }
     </style>
 </head>
 
 <body>
-    <iframe src="https://haojiezhe12345.top:82/madohomu/"></iframe>
+    <div id="mainContainer">
+        <iframe id="mainIframe" src="https://haojiezhe12345.top:82/madohomu/"></iframe>
+        <div id="safezoneOverlay" style="display: none;">
+            <button onclick="safezone.hide()">OK</button>
+            <p>Tap on the corner to adjust safezone</p>
+        </div>
+    </div>
+
     <script>
-        const iframe = document.querySelector('iframe')
+        const iframeContainer = document.getElementById('mainContainer')
+        const iframe = document.getElementById('mainIframe')
         const iframeWindow = iframe.contentWindow
 
         function setIframeZoom(scale) {
             iframe.style.width = `${100 / scale}%`
             iframe.style.height = `${100 / scale}%`
             iframe.style.transform = `scale(${scale})`
+        }
+
+        const safezone = {
+            overlay: document.getElementById('safezoneOverlay'),
+            mousedown: false,
+
+            adjust(e) {
+                if (e.target != document.querySelector('#safezoneOverlay>button') && (e.buttons == 1 || e.type == 'click')) {
+                    console.log(e)
+                    if (e.clientY < window.innerHeight / 2) {
+                        iframeContainer.style.top = `${e.clientY}px`
+                        if (e.clientX < window.innerWidth / 2) {
+                            iframeContainer.style.left = `${e.clientX}px`
+                        } else {
+                            iframeContainer.style.right = `${window.innerWidth - e.clientX}px`
+                        }
+                    } else {
+                        iframeContainer.style.bottom = `${window.innerHeight - e.clientY}px`
+                        if (e.clientX < window.innerWidth / 2) {
+                            iframeContainer.style.left = `${e.clientX}px`
+                        } else {
+                            iframeContainer.style.right = `${window.innerWidth - e.clientX}px`
+                        }
+                    }
+                }
+            },
+
+            show() {
+                this.overlay.style.removeProperty('display')
+                document.body.addEventListener('click', this.adjust)
+                document.body.addEventListener('mousemove', this.adjust)
+            },
+
+            hide() {
+                this.overlay.style.display = 'none'
+                document.body.removeEventListener('click', this.adjust)
+                document.body.removeEventListener('mousemove', this.adjust)
+            },
         }
 
         window.onmessage = e => {
@@ -48,11 +129,19 @@
                         type: 'iframeCaps',
                         data: [
                             'setPageZoom',
+                            'setSafezone',
                         ],
                     }, '*')
                     break;
+
                 case 'setPageZoom':
                     setIframeZoom(e.data.data)
+                    break
+
+                case 'setSafezone':
+                    safezone.show()
+                    break
+
                 default:
                     break;
             }

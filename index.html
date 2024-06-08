@@ -386,20 +386,6 @@
                                 <li onclick="changeLang('zh'); setConfig('lang', 'zh')"><span>中文</span></li>
                             </ul>
                         </li>
-                        <li id="pageZoomController" style="display: none;">
-                            <span class="ui zh">🔍 缩放</span><span class="ui en">🔍 Zoom</span>
-                            <i></i>
-                            <ul style="top: -72px;">
-                                <li onclick="iframeCom.funcs.setPageZoom(0.5)"><span>50%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(0.8)"><span>80%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(1)"><span>100%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(1.25)"><span>125%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(1.5)"><span>150%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(1.75)"><span>175%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(2)"><span>200%</span></li>
-                                <li onclick="iframeCom.funcs.setPageZoom(2.5)"><span>250%</span></li>
-                            </ul>
-                        </li>
                         <li>
                             <label>
                                 <input type="checkbox" id="showKami" onchange="toggleKami();clearComments();loadComments()">
@@ -594,6 +580,22 @@
                             <option value="mid">中等 | Balanced</option>
                             <option value="low">流畅 | Fast</option>
                         </select>
+                    </li>
+                    <li>
+                        <span>
+                            <span class="ui zh">界面缩放</span><span class="ui en">UI scale</span>
+                        </span>
+                        <input type="number" id="pageZoomController" value="100" min="50" max="500" step="10"
+                            style="width: 4em;"
+                            onchange="iframeCom.send('setPageZoom', this.checkValidity() ? parseInt(this.value) / 100 : null)" disabled>
+                    </li>
+                    <li>
+                        <span>
+                            <span class="ui zh">屏幕安全区域</span><span class="ui en">Screen safezone</span>
+                        </span>
+                        <button id="safeZoneSetting" onclick="iframeCom.send('setSafezone')" disabled>
+                            <span class="ui zh">调整</span><span class="ui en">Adjust</span>
+                        </button>
                     </li>
                 </ul>
             </div>
