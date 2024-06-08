@@ -2085,10 +2085,11 @@ const iframeCom = {
     },
 
     send(type, data) {
-        window.top.postMessage({ type, data }, '*')
+        window.parent.postMessage({ type, data }, '*')
     },
 
     init() {
+        if (window.parent == window) return
         window.addEventListener('message', e => {
             switch (e.data.type) {
                 case 'iframeCaps':
