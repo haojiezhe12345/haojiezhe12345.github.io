@@ -154,11 +154,14 @@
         //
         window.wallpaperPropertyListener = {
             applyUserProperties(properties) {
-                if (properties.scale) {
-                    setIframeZoom(properties.scale.value / 100)
+                if (properties.ui_scale) {
+                    setIframeZoom(properties.ui_scale.value / 100)
                 }
-                if (properties.bottom) {
-                    iframeContainer.style.bottom = `${properties.bottom.value}px`
+                if (properties.ui_bottom) {
+                    iframeContainer.style.bottom = `${properties.ui_bottom.value}px`
+                }
+                if (properties.ui_volume) {
+                    sendToIframe('setVolume', properties.ui_volume.value / 100)
                 }
             },
         };

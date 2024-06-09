@@ -1992,6 +1992,10 @@ const MusicPlayer = {
         this.elements.player.pause()
     },
 
+    setVolume(vol) {
+        this.elements.player.volume = vol
+    },
+
     initPlayer(dir) {
         this.loadPlayList(dir)
         if (getConfig('mutebgm') == 'true') {
@@ -2100,6 +2104,10 @@ const iframeCom = {
 
                 case 'pageZoom':
                     this.elements.pageZoomController.value = e.data.data
+                    break;
+
+                case 'setVolume':
+                    MusicPlayer.setVolume(e.data.data)
                     break;
 
                 default:
