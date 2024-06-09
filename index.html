@@ -585,13 +585,28 @@
                         <span>
                             <span class="ui zh">界面缩放</span><span class="ui en">UI scale</span>
                         </span>
-                        <input type="number" id="pageZoomController" value="100" min="50" max="500" step="10"
-                            style="width: 4em;"
-                            onchange="iframeCom.send('setPageZoom', this.checkValidity() ? parseInt(this.value) / 100 : null)" disabled>
+                        <div>
+                            <button onclick="
+                                var el = this.nextElementSibling
+                                if (el.disabled) return
+                                if (parseInt(el.value) > 50) el.value = parseInt(el.value) - 10
+                                el.dispatchEvent(new Event('change'))
+                                ">-</button>
+                            <input id="pageZoomController" value="100" style="width: 3em;" disabled onchange="
+                                let x = parseInt(this.value)
+                                if (50 <= x && x <= 500) iframeCom.send('setPageZoom', x / 100)
+                                ">
+                            <button onclick="
+                                var el = this.previousElementSibling
+                                if (el.disabled) return
+                                if (parseInt(el.value) < 500) el.value = parseInt(el.value) + 10
+                                el.dispatchEvent(new Event('change'))
+                                ">+</button>
+                        </div>
                     </li>
                     <li>
                         <span>
-                            <span class="ui zh">屏幕安全区域</span><span class="ui en">Screen safezone</span>
+                            <span class="ui zh">屏幕安全区域</span><span class="ui en">Screen safe area</span>
                         </span>
                         <button id="safeZoneSetting" onclick="iframeCom.send('setSafezone')" disabled>
                             <span class="ui zh">调整</span><span class="ui en">Adjust</span>

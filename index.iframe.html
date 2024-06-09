@@ -52,10 +52,6 @@
             background-size: 100% 100%;
         }
 
-        #safezoneOverlay>button {
-            font-size: 48px;
-        }
-
         #safezoneOverlay>p {
             background-color: white;
             margin: 8px 0;
@@ -68,7 +64,10 @@
     <div id="mainContainer">
         <iframe id="mainIframe" src="https://haojiezhe12345.top:82/madohomu/"></iframe>
         <div id="safezoneOverlay" style="display: none;">
-            <button onclick="safezone.hide()">OK</button>
+            <div>
+                <button style="font-size: 48px; color: green;" onclick="safezone.hide()">OK</button>
+                <button style="font-size: 32px; color: red;" onclick="safezone.reset()">Reset</button>
+            </div>
             <p>Tap on the corner to adjust safezone</p>
         </div>
     </div>
@@ -91,7 +90,7 @@
             overlay: document.getElementById('safezoneOverlay'),
 
             adjust(e) {
-                if (e.target != document.querySelector('#safezoneOverlay>button') && (e.buttons == 1 || e.type == 'click')) {
+                if (e.target.nodeName != 'BUTTON' && (e.buttons == 1 || e.type == 'click')) {
                     if (e.clientY < window.innerHeight / 2) {
                         iframeContainer.style.top = `${e.clientY}px`
                         if (e.clientX < window.innerWidth / 2) {
@@ -108,6 +107,13 @@
                         }
                     }
                 }
+            },
+
+            reset() {
+                iframeContainer.style.removeProperty('top')
+                iframeContainer.style.removeProperty('left')
+                iframeContainer.style.removeProperty('right')
+                iframeContainer.style.removeProperty('bottom')
             },
 
             show() {
