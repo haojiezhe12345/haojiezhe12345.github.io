@@ -1771,7 +1771,6 @@ const imgViewer = {
     },
 
     viewportContent: '',
-    imgViewerMouseActive: false,
     imgViewerOffsetX: 0,
     imgViewerOffsetY: 0,
     imgViewerScale: 1,
@@ -1783,7 +1782,6 @@ const imgViewer = {
         this.elements.viewport.setAttribute('content', this.viewportContent.replace(', maximum-scale=1.0', ''))
         window.location.hash = 'view-img'
 
-        this.imgViewerMouseActive = false
         this.imgViewerOffsetX = 0
         this.imgViewerOffsetY = 0
         this.imgViewerScale = 1
@@ -1810,14 +1808,12 @@ const imgViewer = {
 
         this.elements.container.onmousedown = e => {
             if (e.button == 0) {
-                this.imgViewerMouseActive = true
                 this.imgViewerMouseMoved = false
                 this.elements.viewer.style.transition = 'none'
             }
         }
         this.elements.container.onmouseup = e => {
             if (e.button == 0) {
-                this.imgViewerMouseActive = false
                 if (!this.imgViewerMouseMoved) {
                     this.close()
                 }
@@ -1825,7 +1821,7 @@ const imgViewer = {
             }
         }
         this.elements.container.onmousemove = e => {
-            if (this.imgViewerMouseActive) {
+            if (e.buttons == 1) {
                 this.imgViewerOffsetX += e.movementX
                 this.imgViewerOffsetY += e.movementY
                 if (e.movementX != 0 || e.movementY != 0) {
