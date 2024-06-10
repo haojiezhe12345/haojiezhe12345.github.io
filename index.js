@@ -1173,7 +1173,7 @@ function setTodayCommentCount() {
     xhr.send();
 }
 
-function seekComment(seekCount) {
+function seekComment_old(seekCount) {
     commentDiv.style.scrollBehavior = 'smooth'
     var scrollpx = 200
     try {
@@ -1597,6 +1597,58 @@ loadUserInfo()
 
 // comments
 //
+const comments = {
+    elements: {
+        container: document.getElementById('comments'),
+    },
+
+    seekLeft: 0,
+    seekDone: true,
+
+    seek(delta) {
+        if (document.querySelector('.commentItem') == null) return
+        const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20
+        if (this.seekDone) {
+            this.seekLeft = (Math.round((this.elements.container.scrollLeft) / commentWidth) + delta) * commentWidth
+            window.requestAnimationFrame((t1) => this.seekAnimate(t1, this.elements.container.scrollWidth))
+        } else {
+            this.seekLeft += (delta * commentWidth)
+        }
+        if (this.seekLeft < 0)
+            this.seekLeft = 0
+        if (this.seekLeft > (this.elements.container.scrollWidth - this.elements.container.clientWidth))
+            this.seekLeft = (this.elements.container.scrollWidth - this.elements.container.clientWidth)
+    },
+
+    seekAnimate(t, scrollWidth) {
+        if (this.seekDone == true) {
+            this.seekDone = false
+            this.t0 = t
+            window.requestAnimationFrame((t1) => this.seekAnimate(t1, scrollWidth))
+            return
+        }
+        let fps = 1000 / (t - this.t0)
+        this.t0 = t
+        //console.log(t, fps)
+
+        const distance_delta = this.seekLeft - this.elements.container.scrollLeft
+        //console.log(this.elements.container.scrollLeft, this.seekLeft)
+        let prevScrollLeft = this.elements.container.scrollLeft
+        this.elements.container.scrollLeft += distance_delta / (5 * fps / 60)
+
+        if (Math.abs(distance_delta) > 1
+            && prevScrollLeft != this.elements.container.scrollLeft
+            && this.elements.container.scrollWidth == scrollWidth
+        ) {
+            window.requestAnimationFrame((t1) => this.seekAnimate(t1, scrollWidth))
+        } else {
+            this.seekDone = true
+        }
+    },
+}
+
+const seekComment = (x) => comments.seek(x)
+
 loadComments()
 setTimeout(() => {
     commentDiv.addEventListener("scroll", commentScroll)
@@ -1604,7 +1656,7 @@ setTimeout(() => {
 setInterval(commentScroll, 1000)
 
 var commentHorizontalScrolled = 0
-var altScrollmode = false
+var altScrollmode = 3
 
 commentDiv.addEventListener("wheel", (event) => {
     if (!isFullscreen) {
