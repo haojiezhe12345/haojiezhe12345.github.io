@@ -1086,7 +1086,7 @@ function setTimelineActiveMonth(scroll = false) {
             const yearEl = yearEls[i]
             if (yearEl.firstElementChild.innerHTML == year) {
                 yearEl.firstElementChild.classList.add('month-active')
-                if (scroll) yearEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" })
+                if (scroll) yearEl.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
             } else {
                 yearEl.firstElementChild.classList.remove('month-active')
             }
@@ -2106,6 +2106,7 @@ try {
 //
 const iframeCom = {
     elements: {
+        nonIframeNotice: document.getElementById('nonIframeNotice'),
         pageZoomController: document.getElementById('pageZoomController'),
         safeZoneSetting: document.getElementById('safeZoneSetting'),
     },
@@ -2126,6 +2127,7 @@ const iframeCom = {
                     if (caps.includes('setSafezone')) {
                         this.elements.safeZoneSetting.removeAttribute('disabled')
                     }
+                    this.elements.nonIframeNotice.remove()
                     break;
 
                 case 'pageZoom':

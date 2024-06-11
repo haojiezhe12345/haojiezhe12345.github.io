@@ -581,11 +581,18 @@
                             <option value="low">流畅 | Fast</option>
                         </select>
                     </li>
+                    <li id="nonIframeNotice" 
+                        style="padding: 4px 14px; font-size: 14px; color: #444; font-weight: lighter; text-align: center; justify-content: center;">
+                        <span>
+                            <span class="ui zh">要修改屏幕缩放, 请使用</span><span class="ui en">To adjust screen scale, use</span>
+                            <a href="index.iframe.html"><span class="ui zh">Iframe版</span><span class="ui en">Iframe version</span></a>
+                        </span>
+                    </li>
                     <li>
                         <span>
                             <span class="ui zh">界面缩放</span><span class="ui en">UI scale</span>
                         </span>
-                        <div>
+                        <div style="white-space: nowrap;">
                             <button onclick="
                                 var el = this.nextElementSibling
                                 if (el.disabled) return

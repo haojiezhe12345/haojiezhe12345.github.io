@@ -1264,10 +1264,10 @@ body {
     display: flex;
     align-items: baseline;
     white-space: nowrap;
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 8px 8px rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 215, 230, 0.9);
+    box-shadow: 0 0 8px 8px rgba(255, 215, 230, 0.9);
     padding: 0px 12px;
-    border-radius: 8px;
+    border-radius: 100px;
     transition: all 0.2s;
 }
 
@@ -1286,7 +1286,7 @@ body {
 }
 
 .toolbarItem:hover {
-    background-color: white;
+    background-color: #c9f;
     /*box-shadow: 0 0 8px 8px white;*/
 }
 
