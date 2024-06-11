@@ -2076,6 +2076,9 @@ const MusicPlayer = {
         this.elements.player.onended = () => {
             this.playNext()
         }
+        document.body.addEventListener('click', () => {
+            if (!this.userPaused) this.play()
+        })
 
         setInterval(() => {
             this.elements.progress.style.width = `${this.elements.player.currentTime / this.elements.player.duration * 100}%`
