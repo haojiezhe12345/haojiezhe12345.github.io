@@ -1634,15 +1634,14 @@ const comments = {
         const distance_delta = this.seekLeft - this.elements.container.scrollLeft
         //console.log(this.elements.container.scrollLeft, this.seekLeft)
         let prevScrollLeft = this.elements.container.scrollLeft
-        this.elements.container.scrollLeft += distance_delta / (5 * fps / 60)
+        if (Math.abs(distance_delta) > 1 && this.elements.container.scrollWidth == scrollWidth) {
+            this.elements.container.scrollLeft += distance_delta / (5 * fps / 60)
+        }
 
-        if (Math.abs(distance_delta) > 1
-            && prevScrollLeft != this.elements.container.scrollLeft
-            && this.elements.container.scrollWidth == scrollWidth
-        ) {
-            window.requestAnimationFrame((t1) => this.seekAnimate(t1, scrollWidth))
-        } else {
+        if (prevScrollLeft == this.elements.container.scrollLeft) {
             this.seekDone = true
+        } else {
+            window.requestAnimationFrame((t1) => this.seekAnimate(t1, scrollWidth))
         }
     },
 }
