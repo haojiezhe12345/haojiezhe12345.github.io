@@ -269,7 +269,6 @@ function clearComments(clearTop) {
     clearTimeout(window.clearCommentsUpToDateTimeout)
 
     newCommentDisabled = false
-    commentHorizontalScrolled = 0
     document.body.classList.remove('touchKeyboardShowing')
 }
 
@@ -1610,7 +1609,7 @@ const comments = {
         const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20
         if (this.seekDone) {
             this.seekLeft = (Math.round((this.elements.container.scrollLeft) / commentWidth) + delta) * commentWidth
-            window.requestAnimationFrame((t1) => this.seekAnimate(t1, this.elements.container.scrollWidth))
+            window.requestAnimationFrame(t1 => this.seekAnimate(t1, this.elements.container.scrollWidth))
         } else {
             this.seekLeft += (delta * commentWidth)
         }
@@ -1624,7 +1623,7 @@ const comments = {
         if (this.seekDone == true) {
             this.seekDone = false
             this.t0 = t
-            window.requestAnimationFrame((t1) => this.seekAnimate(t1, scrollWidth))
+            window.requestAnimationFrame(t1 => this.seekAnimate(t1, scrollWidth))
             return
         }
         let fps = 1000 / (t - this.t0)
@@ -1641,49 +1640,33 @@ const comments = {
         if (prevScrollLeft == this.elements.container.scrollLeft) {
             this.seekDone = true
         } else {
-            window.requestAnimationFrame((t1) => this.seekAnimate(t1, scrollWidth))
+            window.requestAnimationFrame(t1 => this.seekAnimate(t1, scrollWidth))
+        }
+    },
+
+    init() {
+        this.elements.container.onwheel = e => {
+            if (isFullscreen) {
+
+            } else {
+                e.deltaY > 0 ? this.seek(1) : this.seek(-1)
+            }
         }
     },
 }
 
-const seekComment = (x) => comments.seek(x)
+const seekComment = delta => comments.seek(delta)
+try {
+    comments.init()
+} catch (error) {
+    logErr(error, 'failed to init comments')
+}
 
 loadComments()
 setTimeout(() => {
     commentDiv.addEventListener("scroll", commentScroll)
 }, 500);
 setInterval(commentScroll, 1000)
-
-var commentHorizontalScrolled = 0
-var altScrollmode = 3
-
-commentDiv.addEventListener("wheel", (event) => {
-    if (!isFullscreen) {
-        if (altScrollmode == 1) {
-            console.info(event.deltaY)
-            console.info(commentDiv.scrollLeft)
-            commentHorizontalScrolled += event.deltaY * 1
-            if (commentHorizontalScrolled < 0)
-                commentHorizontalScrolled = 0
-            if (commentHorizontalScrolled > (commentDiv.scrollWidth - commentDiv.clientWidth))
-                commentHorizontalScrolled = commentDiv.scrollWidth - commentDiv.clientWidth
-            console.log(commentHorizontalScrolled)
-            commentDiv.scrollLeft = commentHorizontalScrolled
-        } else if (altScrollmode == 2 && event.deltaX == 0) {
-            console.info(event)
-            const e1 = new WheelEvent("wheel", {
-                deltaX: event.deltaY,
-                deltaMode: 0,
-            });
-            console.info(e1)
-            commentDiv.dispatchEvent(e1)
-        } else if (altScrollmode == 3) {
-            (event.deltaY > 0) ? seekComment(1) : seekComment(-1)
-        } else {
-            commentDiv.scrollLeft += event.deltaY
-        }
-    }
-});
 
 const msgBgInfo = [
     {
