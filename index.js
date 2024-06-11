@@ -264,44 +264,12 @@ function clearComments(clearTop) {
         document.getElementById('loadingIndicatorBefore').style.display = 'none'
     }
 
-    pauseCommentScroll = false
+    comments.scrollPaused = false
     commentsUpToDate = false
     clearTimeout(window.clearCommentsUpToDateTimeout)
 
     newCommentDisabled = false
     document.body.classList.remove('touchKeyboardShowing')
-}
-
-function commentScroll() {
-    if (pauseCommentScroll || document.getElementsByClassName('commentItem').length == 0) return
-
-    setTimelineActiveMonth()
-
-    if (!isFullscreen) {
-        var toRight = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
-        var toLeft = commentDiv.scrollLeft
-        //console.log(toLeft, toRight)
-        if (toLeft < 40) { document.getElementsByClassName('commentSeekArrow')[0].style.display = 'none' }
-        else { document.getElementsByClassName('commentSeekArrow')[0].style.removeProperty('display') }
-
-        if (toRight <= 40) { loadOlderComments() }
-        else if (toLeft <= 40 && commentsUpToDate == false) { loadNewerComments() }
-        else return
-
-    } else {
-        var toBottom = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
-        var toTop = commentDiv.scrollTop
-        //console.log(toTop, toBottom)
-        if (toBottom <= 40) { loadOlderComments() }
-        else if (toTop <= 40 && commentsUpToDate == false) { loadNewerComments() }
-        else return
-    }
-    //commentDiv.removeEventListener("scroll", commentScroll)
-    pauseCommentScroll = true
-    setTimeout(() => {
-        //commentDiv.addEventListener("scroll", commentScroll)
-        pauseCommentScroll = false
-    }, 500);
 }
 
 function loadOlderComments() {
@@ -1172,20 +1140,6 @@ function setTodayCommentCount() {
     xhr.send();
 }
 
-function seekComment_old(seekCount) {
-    commentDiv.style.scrollBehavior = 'smooth'
-    var scrollpx = 200
-    try {
-        scrollpx = document.getElementById('loadingIndicatorBefore').nextElementSibling.getBoundingClientRect().width + 20
-    } catch (error) {
-        if (debug) console.log(error)
-    }
-    commentDiv.scrollLeft = (Math.round((commentDiv.scrollLeft) / scrollpx) + seekCount) * scrollpx
-    setTimeout(() => {
-        commentDiv.style.removeProperty('scroll-behavior')
-    }, 500);
-}
-
 // toggles
 //
 function toggleFullscreen() {
@@ -1208,10 +1162,7 @@ function toggleFullscreen() {
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
         isFullscreen = false
     }
-    pauseCommentScroll = true
-    setTimeout(() => {
-        pauseCommentScroll = false
-    }, 500);
+    comments.pauseScroll(500)
 }
 
 function toggleTopComment() {
@@ -1380,7 +1331,6 @@ function logErr(err, msg) {
 
 // common vars
 //
-var pauseCommentScroll = false
 var commentsUpToDate = false
 var maxTimelineTime = 0
 
@@ -1599,13 +1549,16 @@ loadUserInfo()
 const comments = {
     elements: {
         container: document.getElementById('comments'),
+        seekArrows: document.getElementsByClassName('commentSeekArrow'),
     },
 
     seekLeft: 0,
     seekDone: true,
+    scrollPaused: false,
 
     seek(delta) {
         if (document.querySelector('.commentItem') == null) return
+
         const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20
         if (this.seekDone) {
             this.seekLeft = (Math.round((this.elements.container.scrollLeft) / commentWidth) + delta) * commentWidth
@@ -1613,6 +1566,7 @@ const comments = {
         } else {
             this.seekLeft += (delta * commentWidth)
         }
+
         if (this.seekLeft < 0)
             this.seekLeft = 0
         if (this.seekLeft > (this.elements.container.scrollWidth - this.elements.container.clientWidth))
@@ -1644,6 +1598,43 @@ const comments = {
         }
     },
 
+    scroll() {
+        if (this.scrollPaused || document.querySelector('.commentItem') == null) return
+
+        setTimelineActiveMonth()
+
+        if (!isFullscreen) {
+            var toStart = commentDiv.scrollLeft
+            var toEnd = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
+        } else {
+            var toStart = commentDiv.scrollTop
+            var toEnd = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
+        }
+        //console.log(toStart, toEnd)
+
+        if (toStart < 40 && commentsUpToDate == false) {
+            loadNewerComments()
+            this.pauseScroll(500)
+        }
+        if (toEnd < 40) {
+            loadOlderComments()
+            this.pauseScroll(500)
+        }
+
+        if (!isFullscreen) {
+            toStart < 40
+                ? this.elements.seekArrows[0].style.display = 'none'
+                : this.elements.seekArrows[0].style.removeProperty('display')
+        }
+    },
+
+    pauseScroll(time) {
+        this.scrollPaused = true
+        setTimeout(() => {
+            this.scrollPaused = false
+        }, time);
+    },
+
     init() {
         this.elements.container.onwheel = e => {
             if (isFullscreen) {
@@ -1652,6 +1643,10 @@ const comments = {
                 e.deltaY > 0 ? this.seek(1) : this.seek(-1)
             }
         }
+        this.elements.container.onscroll = () => this.scroll()
+
+        loadComments()
+        setInterval(() => this.scroll(), 1000)
     },
 }
 
@@ -1661,12 +1656,6 @@ try {
 } catch (error) {
     logErr(error, 'failed to init comments')
 }
-
-loadComments()
-setTimeout(() => {
-    commentDiv.addEventListener("scroll", commentScroll)
-}, 500);
-setInterval(commentScroll, 1000)
 
 const msgBgInfo = [
     {
