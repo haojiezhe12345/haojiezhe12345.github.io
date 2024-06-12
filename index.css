@@ -1727,18 +1727,18 @@ body {
     height: 1.2em;
 }
 
-.themeList {
+#themeList {
     text-align: center;
     max-width: 650px;
 }
 
-.themeList>div {
+#themeList>div {
     display: inline-block;
     margin: 8px;
     cursor: pointer;
 }
 
-.themeList>div>img {
+#themeList>div>img {
     width: 180px;
     height: 120px;
     box-sizing: border-box;
@@ -1746,11 +1746,11 @@ body {
     transition: transform 0.2s;
 }
 
-.themeList>div:hover>img {
+#themeList>div:hover>img {
     transform: scale(1.05);
 }
 
-.themeList>div>span {
+#themeList>div>span {
     display: block;
 }
 

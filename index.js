@@ -1392,6 +1392,34 @@ if (location.hash.slice(0, 7) == '#popup-') {
 
 // theme
 //
+const Theme = {
+    elements: {
+        selectors: document.querySelectorAll('#themeList>div[data-theme]'),
+    },
+
+    theme: '',
+
+    change(theme) {
+        console.log(`changing theme to "${theme}"`)
+        location.hash = theme
+        location.reload()
+    },
+
+    init() {
+        Array.from(this.elements.selectors).forEach(e => {
+            e.onclick = () => {
+                this.change(e.dataset.theme)
+            }
+        })
+    },
+}
+
+try {
+    Theme.init()
+} catch (error) {
+    logErr(error, 'failed to init theme')
+}
+
 var theme = 'default'
 
 var d = new Date()
