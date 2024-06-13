@@ -8,6 +8,22 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html {
+    font-size: 16px;
+}
+
+input,
+button,
+select {
+    font-size: 0.8rem;
+}
+
+input[type="checkbox"] {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin: 0.2rem;
+}
+
 body {
     font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -49,15 +65,15 @@ body {
 }
 
 .mainbg>span {
-    position: fixed;
-    right: 20px;
+    position: absolute;
+    right: 1.25rem;
     bottom: 28%;
-    bottom: calc(20vh + 68px);
+    bottom: calc(20vh + 4.25rem);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    font-size: 12px;
-    padding: 4px 10px;
-    border-radius: 100px;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 6.25rem;
     animation-name: fadein;
     animation-duration: 2s;
 }
@@ -125,8 +141,8 @@ body {
 
 #mainCaptions {
     position: absolute;
-    top: 150px;
-    top: max(150px, 17%);
+    top: 9.375rem;
+    top: max(9.375rem, 17%);
     left: 7%;
     right: 7%;
     opacity: 0;
@@ -196,8 +212,8 @@ body {
     text-align: left;
     color: #ffb5da;
     margin: 0;
-    margin-bottom: calc(60vh - 200px);
-    margin-bottom: min(calc(60vh - 200px), 38vh);
+    margin-bottom: calc(60vh - 12.5rem);
+    margin-bottom: min(calc(60vh - 12.5rem), 38vh);
 }
 
 #mainCaptions .nightCaption p:last-child {
@@ -259,30 +275,30 @@ body {
 #banner {
     display: none;
     position: absolute;
-    top: 70px;
+    top: 4.375rem;
     left: 50%;
     margin-right: -50%;
     transform: translateX(-50%);
     box-sizing: border-box;
     max-width: 100%;
-    padding: 4px 8%;
+    padding: 0.25rem 8%;
     text-align: center;
-    font-size: 14px;
+    font-size: 0.875rem;
     user-select: none;
     /*white-space: nowrap;*/
     background-color: wheat;
     color: black;
-    border: 2px solid orange;
+    border: 0.125rem solid orange;
     animation: fadein 1s;
 }
 
 #banner.banner-info {
     background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 0.25rem 0.0625rem rgba(255, 255, 255, 0.7);
     border: none;
-    border-radius: 100px;
-    padding: 6px 8%;
-    backdrop-filter: blur(8px);
+    border-radius: 6.25rem;
+    padding: 0.375rem 8%;
+    backdrop-filter: blur(0.5rem);
 }
 
 #banner>i {
@@ -291,9 +307,9 @@ body {
     right: 0;
     transform: translateY(-50%);
     font-family: Arial;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-style: normal;
-    width: 28px;
+    width: 1.75rem;
     text-align: center;
     cursor: pointer;
 }
@@ -316,38 +332,38 @@ body {
     /*top: 0;*/
     /*left: 0;*/
     display: inline-block;
-    margin: 16px;
-    padding: 4px 16px;
+    margin: 1rem;
+    padding: 0.25rem 1rem;
     background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
-    border-radius: 100px;
+    box-shadow: 0 0 0.75rem 0.75rem rgba(255, 255, 255, 0.9);
+    border-radius: 6.25rem;
     font-weight: bold;
 
-    /*margin: 13px;*/
-    /*border: 3px solid transparent;*/
-    /*box-shadow: 0 0 12px 9px rgba(255, 255, 255, 0.9);*/
+    /*margin: 0.8125rem;*/
+    /*border: 0.1875rem solid transparent;*/
+    /*box-shadow: 0 0 0.75rem 0.5625rem rgba(255, 255, 255, 0.9);*/
     /*background:
         linear-gradient(100deg, #ffecf5, #f4e7ff) padding-box,
         linear-gradient(100deg, #ffc6e3, #d4a0ff) border-box;*/
 
     background-color: rgba(255, 228, 251, 0.9);
-    box-shadow: 0 0 12px 12px rgba(255, 228, 251, 0.9);
+    box-shadow: 0 0 0.75rem 0.75rem rgba(255, 228, 251, 0.9);
     transition: all 0.2s;
 }
 
 #mainTitle:hover {
     background-color: rgb(255, 228, 251);
-    box-shadow: 0 0 12px 12px rgb(255, 228, 251);
+    box-shadow: 0 0 0.75rem 0.75rem rgb(255, 228, 251);
 }
 
 #mainTitle a {
-    height: 26px;
-    padding: 2px 0 0;
+    height: 1.625rem;
+    padding: 0.125rem 0 0;
     display: flex;
     align-items: center;
     font-family: AaWoyoudianfangLite;
-    font-size: 23px;
-    letter-spacing: 1.8px;
+    font-size: 1.4375rem;
+    letter-spacing: 0.1125rem;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.2s;
@@ -362,13 +378,13 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.3em;
-    margin: 6px 12px;
-    padding: 3px 6px;
-    border-radius: 100px;
+    margin: 0.375rem 0.75rem;
+    padding: 0.1875rem 0.375rem;
+    border-radius: 6.25rem;
     background-color: rgba(255, 255, 255, 0.7);
     /*background-color: rgba(0, 0, 0, 0.4);*/
     /*color: white;*/
-    font-size: 12px;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: background-color 0.1s;
 }
@@ -378,18 +394,18 @@ body {
 }
 
 .mainTitleUnder img {
-    width: 16px;
+    width: 1rem;
     /*filter: invert();*/
-    border-radius: 100px;
+    border-radius: 6.25rem;
     transition: all 0.1s;
 }
 
 .mainTitleUnder img:last-child {
-    width: 10px;
+    width: 0.625rem;
 }
 
 .mainTitleUnder:hover img:last-child {
-    margin-left: 3px;
+    margin-left: 0.1875rem;
 }
 
 .mainTitleUnder .musicPlayingIndicator.playing {
@@ -397,7 +413,7 @@ body {
 }
 
 #themeIndicator {
-    max-width: 120px;
+    max-width: 7.5rem;
 }
 
 #themeIndicator .currentSong {
@@ -419,11 +435,11 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    margin: 16px;
-    padding: 4px 16px;
+    margin: 1rem;
+    padding: 0.25rem 1rem;
     background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 12px 12px rgba(255, 255, 255, 0.9);
-    border-radius: 100px;
+    box-shadow: 0 0 0.75rem 0.75rem rgba(255, 255, 255, 0.9);
+    border-radius: 6.25rem;
     transition: all 0.2s;
 }
 
@@ -433,7 +449,7 @@ body {
 
 #userInfo:hover {
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 0 12px 12px rgb(255, 255, 255);
+    box-shadow: 0 0 0.75rem 0.75rem rgb(255, 255, 255);
 }
 
 #userInfo>* {
@@ -443,8 +459,8 @@ body {
 }
 
 #userInfo img {
-    width: 28px;
-    height: 28px;
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: 100%;
     object-fit: cover;
 }
@@ -472,18 +488,18 @@ body {
 #my-dropdown>div {
     position: relative;
     background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    border-radius: 8px;
-    margin-top: 20px;
-    padding: 8px 0;
-    box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(0.5rem);
+    border-radius: 0.5rem;
+    margin-top: 1.25rem;
+    padding: 0.5rem 0;
+    box-shadow: 0rem 0.125rem 0.5rem -0.125rem rgba(0, 0, 0, 0.6);
     animation: showDropdown 0.3s;
 }
 
 @keyframes showDropdown {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-0.625rem);
     }
 
     to {
@@ -495,18 +511,18 @@ body {
 #my-dropdown>div::after {
     content: "";
     position: absolute;
-    top: -10px;
-    right: 14px;
+    top: -0.625rem;
+    right: 0.875rem;
     width: 0;
     height: 0;
-    border-bottom: 10px solid rgba(255, 255, 255, 0.9);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
+    border-bottom: 0.625rem solid rgba(255, 255, 255, 0.9);
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
 }
 
 #my-dropdown>div>div {
-    padding: 10px 24px;
-    font-size: 15px;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.9375rem;
     cursor: pointer;
     white-space: nowrap;
 }
@@ -521,7 +537,7 @@ body {
     width: 100%;
     bottom: 0;
     transform: translateY(33vh);
-    padding-top: 24px;
+    padding-top: 1.5rem;
     transition: transform 0.5s;
     animation-name: commentsup;
     animation-duration: 1.7s;
@@ -530,12 +546,12 @@ body {
 @keyframes commentsup {
     0% {
         transform: translateY(105%);
-        transform: translateY(calc(100% + 30px));
+        transform: translateY(calc(100% + 1.875rem));
     }
 
     30% {
         transform: translateY(105%);
-        transform: translateY(calc(100% + 30px));
+        transform: translateY(calc(100% + 1.875rem));
     }
 
     100% {
@@ -550,24 +566,24 @@ body {
 
 #lowerPanel>.tooltip {
     position: absolute;
-    top: -8px;
-    left: 16px;
+    top: -0.5rem;
+    left: 1rem;
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 8px 16px;
-    border-radius: 100px;
+    padding: 0.5rem 1rem;
+    border-radius: 6.25rem;
     font-weight: bold;
 }
 
 .tooltip::after {
     content: "";
     position: absolute;
-    bottom: -10px;
-    left: 24px;
+    bottom: -0.625rem;
+    left: 1.5rem;
     width: 0;
     height: 0;
-    border-top: 10px solid rgba(255, 255, 255, 0.8);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
+    border-top: 0.625rem solid rgba(255, 255, 255, 0.8);
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
 }
 
 #lowerPanel:hover>.tooltip,
@@ -580,7 +596,7 @@ body {
     white-space: nowrap;
     overflow: auto;
     box-sizing: border-box;
-    padding: 20px 16px 8px;
+    padding: 1.25rem 1rem 0.5rem;
     /*scroll-behavior: smooth;*/
 
     opacity: 0.75;
@@ -591,20 +607,20 @@ body {
 }
 
 #comments.noscrollbar {
-    padding-bottom: 5px;
+    padding-bottom: 0.3125rem;
     /*-ms-overflow-style: none;*/
     /*overflow: auto;*/
 }
 
 #comments.noscrollbar::-webkit-scrollbar {
     /*display: none;*/
-    width: 7px;
-    height: 7px;
+    width: 0.4375rem;
+    height: 0.4375rem;
 }
 
 #comments.noscrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 100px;
+    border-radius: 6.25rem;
 }
 
 #comments.noscrollbar::-webkit-scrollbar-thumb:hover {
@@ -634,8 +650,8 @@ body {
     width: 45vh;
     height: 53vh;
     max-width: 80vw;
-    margin-right: 20px;
-    border-radius: 16px;
+    margin-right: 1.25rem;
+    border-radius: 1rem;
     color: white;
     white-space: normal;
     overflow: hidden;
@@ -662,11 +678,11 @@ body {
 }
 
 .touchKeyboardShowing #comments .commentBox {
-    width: 320px;
-    height: 380px;
+    width: 20rem;
+    height: 23.75rem;
     max-width: 80vw;
     max-height: 75vh;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 6.25rem);
 }
 
 .enableClickDelayed,
@@ -701,7 +717,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 1rem;
     transition: filter 0.2s;
 }
 
@@ -712,7 +728,7 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 16px;
+    border-radius: 1rem;
     transition: background-color 0.2s;
 }
 
@@ -721,15 +737,15 @@ body {
 }
 
 #comments .commentBox:hover .bg {
-    filter: blur(8px);
+    filter: blur(0.5rem);
 }
 
 #comments .commentBox .avatar {
     position: absolute;
-    top: 16px;
-    left: 16px;
-    width: 40px;
-    height: 40px;
+    top: 1rem;
+    left: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
     object-fit: cover;
     border-radius: 100%;
     cursor: pointer;
@@ -737,9 +753,9 @@ body {
 
 #comments .commentBox .sender {
     position: absolute;
-    top: 16px;
-    left: 64px;
-    line-height: 40px;
+    top: 1rem;
+    left: 4rem;
+    line-height: 2.5rem;
     /*font-weight: bold;*/
     white-space: nowrap;
     cursor: pointer;
@@ -751,18 +767,18 @@ body {
 
 #comments .commentBox .id {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    line-height: 40px;
-    font-size: 14px;
+    top: 1rem;
+    right: 1rem;
+    line-height: 2.5rem;
+    font-size: 0.875rem;
 }
 
 #comments .commentBox .comment {
     position: absolute;
-    top: 68px;
-    left: 16px;
-    right: 16px;
-    bottom: 48px;
+    top: 4.25rem;
+    left: 1rem;
+    right: 1rem;
+    bottom: 3rem;
     box-sizing: border-box;
     /*width: 100%;*/
     padding: 0;
@@ -793,14 +809,14 @@ body {
 
 #comments .commentBox .time {
     box-sizing: border-box;
-    padding-top: 24px;
-    font-size: 12px;
+    padding-top: 1.5rem;
+    font-size: 0.75rem;
     font-weight: bold;
 
     position: absolute;
     bottom: 0;
     left: 0;
-    padding: 16px;
+    padding: 1rem;
 
 }
 
@@ -845,22 +861,22 @@ body {
 #comments #newCommentBox .comment {
     overflow: visible;
     background-color: rgba(255, 255, 255, 0.65);
-    border-radius: 8px;
-    /*top: 72px;*/
-    left: 20px;
-    right: 20px;
-    bottom: 54px;
+    border-radius: 0.5rem;
+    /*top: 4.5rem;*/
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 3.375rem;
 }
 
 #comments #newCommentBox textarea {
     width: 100%;
     height: 63%;
     box-sizing: border-box;
-    padding: 4px 6px;
+    padding: 0.25rem 0.375rem;
     border: none;
     background: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     resize: none;
 }
 
@@ -869,8 +885,8 @@ body {
     width: 100%;
     height: 35%;
     box-sizing: border-box;
-    padding: 8px;
-    border-radius: 8px;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
     /*background-color: rgba(255, 255, 255, 0.3);*/
     overflow-x: auto;
     overflow-y: hidden;
@@ -879,22 +895,22 @@ body {
 
 #comments #newCommentBox #uploadImgList h4 {
     position: absolute;
-    left: 20px;
-    bottom: 16px;
+    left: 1.25rem;
+    bottom: 1rem;
     margin: 0;
 }
 
 #comments #newCommentBox #uploadImgList div {
     position: relative;
     display: inline-block;
-    min-width: 40px;
+    min-width: 2.5rem;
     height: 100%;
     aspect-ratio: 1/1;
-    margin-right: 4px;
+    margin-right: 0.25rem;
 }
 
 #comments #newCommentBox #uploadImgList div img {
-    min-width: 40px;
+    min-width: 2.5rem;
     height: 100%;
     aspect-ratio: 1/1;
     object-fit: cover;
@@ -903,16 +919,16 @@ body {
 
 #comments #newCommentBox #uploadImgList div button {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 0.25rem;
+    right: 0.25rem;
     padding: 0;
 }
 
 #comments #newCommentBox label {
     position: absolute;
-    left: 22px;
-    bottom: 18px;
-    font-size: 16px;
+    left: 1.375rem;
+    bottom: 1.125rem;
+    font-size: 1rem;
     text-decoration: underline;
     cursor: pointer;
 }
@@ -923,12 +939,12 @@ body {
 
 #comments #newCommentBox #sendBtn {
     box-sizing: border-box;
-    padding: 8px 16px;
-    font-size: 16px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     font-weight: bold;
     position: absolute;
-    bottom: 8px;
-    right: 16px;
+    bottom: 0.5rem;
+    right: 1rem;
     border: none;
     border-radius: 100vh;
     background-color: #ffb5da;
@@ -957,14 +973,14 @@ body {
 
 .loadingCircle {
     display: inline-block;
-    margin: 8px;
-    width: 32px;
-    height: 32px;
+    margin: 0.5rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 100%;
     box-sizing: border-box;
-    border: 4px solid #703a9d;
-    border-top: 4px solid #ffb5da;
-    box-shadow: 0 0 2px black, 0 0 4px black;
+    border: 0.25rem solid #703a9d;
+    border-top: 0.25rem solid #ffb5da;
+    box-shadow: 0 0 0.125rem black, 0 0 0.25rem black;
     animation-name: rotate;
     animation-duration: 0.5s;
     animation-iteration-count: infinite;
@@ -986,9 +1002,9 @@ body {
     position: relative;
     width: 90%;
     box-sizing: border-box;
-    margin: 2px 5% 4px;
-    padding: 2px;
-    border-radius: 100px;
+    margin: 0.125rem 5% 0.25rem;
+    padding: 0.125rem;
+    border-radius: 6.25rem;
     white-space: nowrap;
     text-align: center;
     user-select: none;
@@ -996,7 +1012,7 @@ body {
     scrollbar-width: none;
     background-color: rgba(0, 0, 0, 0.3);
     backdrop-filter: drop-shadow(0 0) blur(1vh);
-    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 0.25rem 0.125rem rgba(0, 0, 0, 0.2);
     transition: background-color 0.2s;
 }
 
@@ -1026,8 +1042,8 @@ body {
     display: inline-flex;
     align-items: baseline;
     margin: 0;
-    padding: 1px 0;
-    border-radius: 100px;
+    padding: 0.0625rem 0;
+    border-radius: 6.25rem;
     transition: background-color 0.2s;
 }
 
@@ -1047,12 +1063,12 @@ body {
 }
 
 #timelineContainer #timeline p strong {
-    font-size: 18px;
-    padding: 0 8px;
+    font-size: 1.125rem;
+    padding: 0 0.5rem;
 }
 
 #timelineContainer #timeline p span {
-    padding: 0 8px;
+    padding: 0 0.5rem;
 }
 
 #timelineContainer #timeline p span:hover,
@@ -1064,18 +1080,18 @@ body {
     display: none;
     font-family: Consolas;
     position: absolute;
-    bottom: 30px;
+    bottom: 1.875rem;
     margin: 0;
     margin-left: -5vw;
     transform: translateX(-50%);
-    width: 210px;
+    width: 13.125rem;
     overflow: hidden;
     white-space: normal;
     text-align: left;
-    padding: 6px 8px;
-    border-radius: 12px;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.75rem;
     background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(0.5rem);
     background-color: #222;
     transition: all 0.2s;
 
@@ -1100,8 +1116,8 @@ body {
 
 #timelineContainer #hoverCalendar div {
     display: inline-block;
-    width: 30px;
-    padding: 4px 0;
+    width: 1.875rem;
+    padding: 0.25rem 0;
     text-align: center;
 }
 
@@ -1120,7 +1136,7 @@ body {
 
 #timelineContainer #hoverCalendar .day-active {
     color: #ffbbdd;
-    text-shadow: 0 0 12px #ffbbdd, 0 0 12px #ffbbdd;
+    text-shadow: 0 0 0.75rem #ffbbdd, 0 0 0.75rem #ffbbdd;
     font-weight: bold;
 }
 
@@ -1131,9 +1147,9 @@ body {
     transform: translateY(-50%);
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 100px;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 6.25rem;
     background-color: white;
     opacity: 0.7;
     user-select: none;
@@ -1156,7 +1172,7 @@ body {
 }
 
 .commentSeekArrow img {
-    width: 16px;
+    width: 1rem;
     transform: scale(1);
     transition: transform 0.2s;
 }
@@ -1173,12 +1189,12 @@ body {
 .commentSeekArrow>.tooltip {
     display: none;
     position: absolute;
-    bottom: 60px;
-    right: -10px;
+    bottom: 3.75rem;
+    right: -0.625rem;
     white-space: nowrap;
     background-color: white;
-    padding: 8px 16px;
-    border-radius: 100px;
+    padding: 0.5rem 1rem;
+    border-radius: 6.25rem;
     font-weight: bold;
     animation: fadein 0.4s;
     animation-delay: -0.2s;
@@ -1186,8 +1202,8 @@ body {
 
 .commentSeekArrow>.tooltip::after {
     left: auto;
-    right: 26px;
-    border-top: 10px solid white;
+    right: 1.625rem;
+    border-top: 0.625rem solid white;
 }
 
 .commentSeekArrow:hover>.tooltip {
@@ -1197,7 +1213,7 @@ body {
 #lowerPanel .backTransparent {
     position: absolute;
     display: none;
-    padding: 24px 16px 4px;
+    padding: 1.5rem 1rem 0.25rem;
     /*background-color: black;*/
     animation-name: showBackTransparent;
     animation-duration: 0.5s;
@@ -1226,7 +1242,7 @@ body {
 }
 
 #lowerPanel #newMsgContainer {
-    top: -36px;
+    top: -2.25rem;
     left: 0;
 }
 
@@ -1234,11 +1250,11 @@ body {
     border: none;
     background-color: #ffb5da;
     /*background-image: linear-gradient(100deg, #ffaad4, #ce93ff);*/
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
-    padding: 12px 20px;
-    border-radius: 100px;
-    box-shadow: 0 0 16px 4px rgba(255, 255, 255, 0.7);
+    padding: 0.75rem 1.25rem;
+    border-radius: 6.25rem;
+    box-shadow: 0 0 1rem 0.25rem rgba(255, 255, 255, 0.7);
     transition: all 0.2s;
 }
 
@@ -1256,7 +1272,7 @@ body {
 }
 
 #lowerPanel #toolbarContainer {
-    top: -28px;
+    top: -1.75rem;
     right: 0;
 }
 
@@ -1265,20 +1281,20 @@ body {
     align-items: baseline;
     white-space: nowrap;
     background-color: rgba(255, 215, 230, 0.9);
-    box-shadow: 0 0 8px 8px rgba(255, 215, 230, 0.9);
-    padding: 0px 12px;
-    border-radius: 100px;
+    box-shadow: 0 0 0.5rem 0.5rem rgba(255, 215, 230, 0.9);
+    padding: 0rem 0.75rem;
+    border-radius: 6.25rem;
     transition: all 0.2s;
 }
 
 .toolbarItem {
     display: inline-block;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     position: relative;
-    padding: 4px 10px;
+    padding: 0.25rem 0.625rem;
     margin: 0;
-    border-radius: 100px;
+    border-radius: 6.25rem;
     border: none;
     background: none;
     user-select: none;
@@ -1287,28 +1303,28 @@ body {
 
 .toolbarItem:hover {
     background-color: #c9f;
-    /*box-shadow: 0 0 8px 8px white;*/
+    /*box-shadow: 0 0 0.5rem 0.5rem white;*/
 }
 
 .toolbarItem ul {
     display: none;
     list-style: none;
     position: absolute;
-    top: 28px;
+    top: 1.75rem;
     right: 0;
     background-color: white;
     margin: 0;
-    padding: 4px;
-    border-radius: 10px;
+    padding: 0.25rem;
+    border-radius: 0.625rem;
     /*overflow: hidden;*/
-    box-shadow: 0px 6px 16px -2px rgba(0, 0, 0, 0.6);
+    box-shadow: 0rem 0.375rem 1rem -0.125rem rgba(0, 0, 0, 0.6);
     animation-name: showContextMenu;
     animation-duration: 0.2s;
 }
 
 @keyframes showContextMenu {
     from {
-        /*transform: translateY(-10px);*/
+        /*transform: translateY(-0.625rem);*/
         opacity: 0;
     }
 
@@ -1332,10 +1348,10 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0 8px;
-    border-radius: 7px;
+    padding: 0 0.5rem;
+    border-radius: 0.4375rem;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 0.875rem;
     animation-name: enableClickDelayed;
     animation-duration: 0.1s;
     animation-fill-mode: forwards;
@@ -1347,12 +1363,12 @@ body {
 
 .toolbarItem ul li>span {
     display: inline-block;
-    padding: 8px 0;
+    padding: 0.5rem 0;
 }
 
 .toolbarItem ul li>label {
     flex-grow: 1;
-    padding: 8px 0;
+    padding: 0.5rem 0;
 }
 
 .toolbarItem ul li>label>input {
@@ -1368,12 +1384,12 @@ body {
     background-image: url('https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg');
     background-size: 100% 100%;
     display: block;
-    width: 10px;
-    height: 10px;
+    width: 0.625rem;
+    height: 0.625rem;
 }
 
 .toolbarItem ul li>ul {
-    top: -4px;
+    top: -0.25rem;
     left: 100%;
     right: auto;
 }
@@ -1383,7 +1399,7 @@ body {
 }
 
 .toolbarItem ul li>ul li {
-    padding: 0 10px;
+    padding: 0 0.625rem;
 }
 
 #imgViewerBox {
@@ -1463,8 +1479,8 @@ body {
     flex-flow: column;
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
+    backdrop-filter: blur(0.75rem);
+    border-radius: 1rem;
     box-sizing: border-box;
     max-width: 90%;
     max-height: 90%;
@@ -1477,7 +1493,7 @@ body {
 
 #popupContainer .popupItem>div:first-child {
     min-height: 0;
-    padding: 24px 32px;
+    padding: 1.5rem 2rem;
     overflow: auto;
 }
 
@@ -1488,31 +1504,31 @@ body {
 
 .popupItem input[type=text] {
     background-color: rgba(0, 0, 0, 0.08);
-    border: 1px solid #555;
-    font-size: 16px;
-    width: 190px;
+    border: 0.0625rem solid #555;
+    font-size: 1rem;
+    width: 11.875rem;
 }
 
 .popupItem textarea {
-    width: 360px;
-    height: 200px;
+    width: 22.5rem;
+    height: 12.5rem;
     max-width: 100%;
     max-height: 80vh;
     background-color: rgba(0, 0, 0, 0.08);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .popupItem .okBtn {
     float: right;
-    padding: 6px 12px;
-    border: 1px solid #555;
+    padding: 0.375rem 0.75rem;
+    border: 0.0625rem solid #555;
     background-color: #eee;
-    border-radius: 100px;
+    border-radius: 6.25rem;
 }
 
 .popupItem .okBtn:hover {
-    border: 1px solid black;
+    border: 0.0625rem solid black;
     background-color: #f8f8f8;
 }
 
@@ -1522,15 +1538,15 @@ body {
 
 .popupItem .closeBtn {
     position: absolute;
-    top: 24px;
-    right: 24px;
-    width: 16px;
-    height: 16px;
-    line-height: 18px;
-    font-size: 28px;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1.125rem;
+    font-size: 1.75rem;
     font-family: Arial;
     box-sizing: content-box;
-    padding: 8px;
+    padding: 0.5rem;
     border: none;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 100%;
@@ -1560,12 +1576,12 @@ body {
 */
 
 .popupItem p {
-    margin: 3px 0;
+    margin: 0.1875rem 0;
 }
 
 #msgPopupAvatar {
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;
+    height: 2.5rem;
     object-fit: cover;
     border-radius: 100%;
 }
@@ -1578,8 +1594,8 @@ body {
 
 #setNamePopup p {
     float: left;
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 0.3125rem 0;
+    font-size: 0.875rem;
     cursor: pointer;
     user-select: none;
     font-weight: bold;
@@ -1590,14 +1606,14 @@ body {
 }
 
 #setAvatarPopup input {
-    width: 290px;
+    width: 18.125rem;
 }
 
 #setAvatarImg {
-    width: 128px;
-    height: 128px;
-    margin-top: 8px;
-    margin-bottom: 24px;
+    width: 8rem;
+    height: 8rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
     object-fit: cover;
     border-radius: 100%;
 }
@@ -1610,26 +1626,26 @@ body {
 }
 
 #showUserCommentPopup {
-    width: 500px;
+    width: 31.25rem;
 }
 
 #showUserCommentPopup>div {
-    padding: 20px 24px 32px !important;
+    padding: 1.25rem 1.5rem 2rem !important;
 }
 
 #showUserCommentPopup>div>h2 {
     display: flex;
     align-items: center;
     text-align: left;
-    margin-bottom: 6px;
+    margin-bottom: 0.375rem;
 }
 
 #showUserCommentPopup>div>h2>img {
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
     object-fit: cover;
-    border-radius: 100px;
-    margin-right: 10px;
+    border-radius: 6.25rem;
+    margin-right: 0.625rem;
     flex-shrink: 0;
 }
 
@@ -1639,8 +1655,8 @@ body {
 
 #showUserCommentPopup>div>h2 .kamiuid {
     color: gray;
-    padding: 0px 4px;
-    font-size: 18px;
+    padding: 0rem 0.25rem;
+    font-size: 1.125rem;
 }
 
 #showUserCommentPopup>div>h2 .kamiuid::before {
@@ -1652,9 +1668,9 @@ body {
 }
 
 #showUserCommentPopup>div>div {
-    border-bottom: 1px solid gray;
-    padding: 20px 10px 22px 10px;
-    margin: 0 8px;
+    border-bottom: 0.0625rem solid gray;
+    padding: 1.25rem 0.625rem 1.375rem 0.625rem;
+    margin: 0 0.5rem;
 }
 
 
@@ -1670,7 +1686,7 @@ body {
 }
 
 #showUserCommentPopup>div>div>p:last-child {
-    margin: 16px 5px 0 5px;
+    margin: 1rem 0.3125rem 0 0.3125rem;
 }
 
 #showUserCommentPopup>div>div>p:last-child>span {
@@ -1686,14 +1702,14 @@ body {
 
 #showUserCommentPopup>div>div>p:last-child>i {
     display: block;
-    height: 8px;
+    height: 0.5rem;
 }
 
 #showUserCommentPopup>div>div>p:last-child>img {
-    width: 100px;
-    height: 100px;
+    width: 6.25rem;
+    height: 6.25rem;
     object-fit: cover;
-    margin: 0 8px 8px 0;
+    margin: 0 0.5rem 0.5rem 0;
     cursor: pointer;
     transition: transform 0.2s;
 }
@@ -1708,8 +1724,8 @@ body {
 }
 
 #showUserCommentPopup .closeBtn {
-    top: 30px;
-    right: 24px;
+    top: 1.875rem;
+    right: 1.5rem;
 }
 
 #themeSelectorPopup>div:first-child {
@@ -1723,24 +1739,29 @@ body {
     cursor: pointer;
     display: inline-flex !important;
     align-items: center;
-    border-bottom: 1.5px solid #333;
+    border-bottom: 0.09375rem solid #333;
     height: 1.2em;
+}
+
+.underlinedIconLink img {
+    width: 1.25em;
+    height: 1.25em;
 }
 
 #themeList {
     text-align: center;
-    max-width: 650px;
+    max-width: 40.625rem;
 }
 
 #themeList>div {
     display: inline-block;
-    margin: 8px;
+    margin: 0.5rem;
     cursor: pointer;
 }
 
 #themeList>div>img {
-    width: 180px;
-    height: 120px;
+    width: 11.25rem;
+    height: 7.5rem;
     box-sizing: border-box;
     object-fit: cover;
     transition: transform 0.2s;
@@ -1756,7 +1777,7 @@ body {
 
 #musicPlayer {
     background-color: rgba(0, 0, 0, 0.08);
-    padding: 8px;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     flex-shrink: 0;
@@ -1767,10 +1788,10 @@ body {
 }
 
 #musicImg {
-    width: 54px;
-    height: 54px;
+    width: 3.375rem;
+    height: 3.375rem;
     background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 6px;
+    border-radius: 0.375rem;
     object-fit: contain;
 }
 
@@ -1781,12 +1802,12 @@ body {
     display: flex;
     flex-flow: column;
     align-items: center;
-    gap: 8px;
-    font-size: 15px;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
 }
 
 #musicPlayer .currentSong {
-    padding: 0 8px;
+    padding: 0 0.5rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1796,7 +1817,7 @@ body {
 
 #nowPlayingProgress {
     width: 90%;
-    height: 6px;
+    height: 0.375rem;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -1815,23 +1836,23 @@ body {
     right: 0;
     top: 50%;
     transform: translate(50%, -50%);
-    width: 10px;
-    height: 10px;
+    width: 0.625rem;
+    height: 0.625rem;
     border-radius: 100%;
     background-color: inherit;
     filter: brightness(0.95);
 }
 
 #nowPlayingProgress:hover>div::after {
-    width: 12px;
-    height: 12px;
+    width: 0.75rem;
+    height: 0.75rem;
 }
 
 #musicPlayer>button,
 #musicPlayerList>button {
     display: block;
     border: none;
-    padding: 6px;
+    padding: 0.375rem;
     background: none;
     transition: background-color 0.1s;
 }
@@ -1844,8 +1865,8 @@ body {
 #musicPlayer button>img,
 #musicPlayer button::before {
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 #musicPlayBtn::before {
@@ -1867,16 +1888,16 @@ body {
     display: none;
     flex-flow: column;
     position: absolute;
-    bottom: 36px;
-    right: -4px;
+    bottom: 2.25rem;
+    right: -0.25rem;
     z-index: 10;
     background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-radius: 8px;
-    box-shadow: 0 0 8px -2px rgba(0, 0, 0, 0.6);
-    min-width: 200px;
+    backdrop-filter: blur(0.75rem);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem -0.125rem rgba(0, 0, 0, 0.6);
+    min-width: 12.5rem;
     max-height: 45vh;
-    max-height: min(45vh, 500px);
+    max-height: min(45vh, 31.25rem);
     overflow: hidden;
     animation: showContextMenu 0.2s;
 }
@@ -1886,16 +1907,16 @@ body {
 }
 
 #musicPlayerList>div>div:first-child {
-    padding: 12px 16px 10px;
+    padding: 0.75rem 1rem 0.625rem;
     flex-shrink: 0;
-    font-size: 15px;
+    font-size: 0.9375rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 #musicPlayerList>div>div:first-child>label {
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 #songList {
@@ -1907,8 +1928,8 @@ body {
 }
 
 #songList>li {
-    font-size: 14px;
-    padding: 9px 16px;
+    font-size: 0.875rem;
+    padding: 0.5625rem 1rem;
     user-select: none;
     white-space: nowrap;
     list-style-position: inside;
@@ -2007,11 +2028,11 @@ body {
 
 #displaySettings {
     width: 90%;
-    max-width: 340px !important;
+    max-width: 21.25rem !important;
 }
 
 #displaySettings>div:first-child {
-    padding: 24px 14px !important;
+    padding: 1.5rem 0.875rem !important;
 }
 
 #displaySettings ul {
@@ -2021,7 +2042,7 @@ body {
 }
 
 #displaySettings ul>li {
-    padding: 12px 14px;
+    padding: 0.75rem 0.875rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -2040,7 +2061,7 @@ body {
 }
 
 #game1 .setting-switch>input {
-    font-size: 80px;
+    font-size: 5rem;
 }
 
 #game1 .setting-switch>input::after {
@@ -2061,39 +2082,39 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    min-height: 64px;
+    gap: 0.5rem;
+    min-height: 4rem;
 }
 
 #game2-main img {
-    width: 120px;
-    width: min(30vw, 200px);
+    width: 7.5rem;
+    width: min(30vw, 12.5rem);
     animation-duration: 0.3s;
 }
 
 #game2-main input {
     flex-shrink: 0;
-    font-size: 20px;
-    font-size: min(4vw, 20px);
+    font-size: 1.25rem;
+    font-size: min(4vw, 1.25rem);
 }
 
 #game2>div>a {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    border-radius: 100px;
+    top: 0.625rem;
+    left: 0.625rem;
+    border-radius: 6.25rem;
     overflow: hidden;
 }
 
 #game2>div>a>img {
     display: block;
-    width: 36px;
+    width: 2.25rem;
     transform: scale(1.5);
 }
 
 @keyframes bounceLeft {
     0% {
-        transform: translateX(0px);
+        transform: translateX(0rem);
     }
 
     50% {
@@ -2101,13 +2122,13 @@ body {
     }
 
     100% {
-        transform: translateX(0px);
+        transform: translateX(0rem);
     }
 }
 
 @keyframes bounceRight {
     0% {
-        transform: translateX(0px);
+        transform: translateX(0rem);
     }
 
     50% {
@@ -2115,7 +2136,7 @@ body {
     }
 
     100% {
-        transform: translateX(0px);
+        transform: translateX(0rem);
     }
 }
 
@@ -2366,8 +2387,8 @@ body.fullscreen {
 }
 
 .touchKeyboardShowing.fullscreen #comments .commentBox {
-    width: 320px;
-    height: 380px;
+    width: 20rem;
+    height: 23.75rem;
     max-width: 80vw;
     max-height: 90vh;
 }
@@ -2387,11 +2408,11 @@ body.fullscreen {
 
 .fullscreen #timelineContainer {
     position: absolute;
-    top: 80px;
+    top: 5rem;
     right: 0.75vw;
-    bottom: 85px;
+    bottom: 5.3125rem;
     margin: 0;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     width: auto;
 }
 
@@ -2405,7 +2426,7 @@ body.fullscreen {
     display: block;
     margin: 0;
     padding: 0;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     overflow: hidden;
 }
 
@@ -2414,12 +2435,12 @@ body.fullscreen {
 }
 
 .fullscreen #timelineContainer #timeline p strong {
-    font-size: 14px;
-    padding: 10px 3px;
+    font-size: 0.875rem;
+    padding: 0.625rem 0.1875rem;
 }
 
 .fullscreen #timelineContainer #timeline p span {
-    padding: 5px 0;
+    padding: 0.3125rem 0;
 }
 
 .fullscreen #timelineContainer #timeline p span:hover,
@@ -2429,9 +2450,9 @@ body.fullscreen {
 
 .fullscreen #timelineContainer #hoverCalendar {
     bottom: auto;
-    right: 44px;
+    right: 2.75rem;
     margin: 0;
-    margin-top: -80px;
+    margin-top: -5rem;
     transform: translateY(-50%);
 
     animation: showHoverCalendarFullscreen 0.2s;
@@ -2451,17 +2472,17 @@ body.fullscreen {
 
 .fullscreen #lowerPanel .backTransparent {
     display: block;
-    padding: 16px;
+    padding: 1rem;
 }
 
 .fullscreen #lowerPanel #newMsgContainer {
     top: initial;
     left: initial;
-    right: 8px;
+    right: 0.5rem;
     bottom: 0;
 }
 
 .fullscreen #lowerPanel #toolbarContainer {
     top: 0;
-    right: 8px;
+    right: 0.5rem;
 }
