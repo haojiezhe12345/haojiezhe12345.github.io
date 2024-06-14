@@ -229,7 +229,7 @@ function insertComment(comment, isKami = false) {
         }
     } catch (error) { }
 
-    commentDiv.insertBefore(html2elmnt(`
+    commentDiv.insertBefore(html2elmnt(/*html*/`
         <div class="commentBox commentItem" ${isKami == true ? `data-kamiid="#${comment.id}` : `id="#${comment.id}`}" data-timestamp="${comment.time}">
             <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
@@ -367,7 +367,7 @@ function newComment() {
         return
     }
 
-    commentDiv.insertBefore(html2elmnt(`
+    commentDiv.insertBefore(html2elmnt(/*html*/`
         <div class="commentBox" id="newCommentBox">
             <div class="bgcover"></div>
             <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
@@ -450,7 +450,7 @@ function previewLocalImgs() {
 
                 var imgDataURL = canvas.toDataURL("image/jpeg")
 
-                document.getElementById('uploadImgList').appendChild(html2elmnt(`
+                document.getElementById('uploadImgList').appendChild(html2elmnt(/*html*/`
                     <div>
                         <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this.src)">
                         <button onclick="this.parentNode.remove()">❌</button>
@@ -556,23 +556,23 @@ const popup = {
                     var themeName = themes[key]
                     try {
                         for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
-                            document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
-                                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
-                                    <p>
-                                        ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
-                                        ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
-                                            <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
-                                        ` : ''}
-                                    </p>
-                                    <br>
-                                `))
+                            document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
+                                <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                                <p>
+                                    ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
+                                    ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
+                                        <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
+                                    ` : ''}
+                                </p>
+                                <br>
+                            `))
                         }
                     } catch (error) {
                         console.log(error)
                     }
                 }
                 for (let i = 0; i < msgBgCount; i++) {
-                    document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(`
+                    document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
                         <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
                         <p>
                             ${msgBgInfo[i].description != null
@@ -756,7 +756,7 @@ function showUserComment(user, useKamiAvatar = false) {
     userCommentEl.removeEventListener('scroll', userCommentScroll)
 
     if (user != null) {
-        userCommentEl.innerHTML = `
+        userCommentEl.innerHTML = /*html*/`
         <h2>
             <img src="${useKamiAvatar != false ? `https://kami.im/getavatar.php?uid=${useKamiAvatar}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${user}.jpg`}" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
             <span>${user == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : user}${useKamiAvatar != false ? `<span class='kamiuid'>${useKamiAvatar}</span>` : ''}</span>
@@ -792,12 +792,12 @@ function showUserComment(user, useKamiAvatar = false) {
                 try {
                     if (comment.image != '') {
                         for (var i of comment.image.split(',')) {
-                            imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
+                            imgsDOM += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
                         }
                     }
                 } catch (error) { }
 
-                userCommentEl.appendChild(html2elmnt(`
+                userCommentEl.appendChild(html2elmnt(/*html*/`
                     <div>
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
@@ -814,7 +814,7 @@ function showUserComment(user, useKamiAvatar = false) {
 
             if (userCommentIsKami == true && xhr.response.length < 10) {
                 userCommentUser = ''
-                userCommentEl.appendChild(html2elmnt(`
+                userCommentEl.appendChild(html2elmnt(/*html*/`
                     <h4>
                         <span class="ui zh">- 共 ${document.getElementById('userComment').getElementsByTagName("div").length} 条留言 -</span>
                         <span class="ui en">- Total ${document.getElementById('userComment').getElementsByTagName("div").length} messages -</span>
@@ -994,7 +994,7 @@ function changeLang(targetLang) {
         console.log(`invalid lang "${targetLang}"`)
         return
     }
-    document.getElementById('langCSS').innerHTML = `
+    document.getElementById('langCSS').innerHTML = /*css*/`
     .ui {
         display: none !important;
     }
@@ -1399,7 +1399,7 @@ const Theme = {
 
     theme: '',
 
-    change(theme) {
+    setTheme(theme) {
         console.log(`changing theme to "${theme}"`)
         location.hash = theme
         location.reload()
@@ -1408,7 +1408,7 @@ const Theme = {
     init() {
         Array.from(this.elements.selectors).forEach(e => {
             e.onclick = () => {
-                this.change(e.dataset.theme)
+                this.setTheme(e.dataset.theme)
             }
         })
     },
@@ -1666,6 +1666,8 @@ const comments = {
     },
 
     init() {
+        loadComments()
+        
         this.elements.container.onwheel = e => {
             if (isFullscreen) {
 
@@ -1674,8 +1676,6 @@ const comments = {
             }
         }
         this.elements.container.onscroll = () => this.scroll()
-
-        loadComments()
         setInterval(() => this.scroll(), 1000)
     },
 }
@@ -2233,7 +2233,7 @@ window.wallpaperPropertyListener = {
             Settings.pageScale = properties.ui_scale.value / 100
         }
         if (properties.ui_bottom) {
-            document.getElementById('wallpaperEngineCSS').innerHTML = `
+            document.getElementById('wallpaperEngineCSS').innerHTML = /*css*/`
                 #lowerPanel {
                     padding-bottom: 0rem;
                     transition: transform 0.5s, padding-bottom 0.5s;
