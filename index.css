@@ -28,8 +28,11 @@ body {
     font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#bgContainer {
+body>* {
     position: fixed;
+}
+
+#bgContainer {
     top: 0;
     left: 0;
     width: 100%;
@@ -315,7 +318,6 @@ body {
 }
 
 #header {
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -532,7 +534,6 @@ body {
 }
 
 #lowerPanel {
-    position: fixed;
     left: 0;
     width: 100%;
     bottom: 0;
@@ -1403,7 +1404,6 @@ body {
 }
 
 #imgViewerBox {
-    position: fixed;
     top: 0;
     left: 0;
     /*bottom: 0;*/
@@ -1440,7 +1440,6 @@ body {
 }
 
 #popupContainer {
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

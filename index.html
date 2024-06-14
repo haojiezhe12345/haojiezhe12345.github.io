@@ -12,7 +12,8 @@
 
     <link rel="stylesheet" href="index.css" type="text/css">
     <style id="langCSS"></style>
-    
+    <style id="wallpaperEngineCSS"></style>
+
     <link rel="manifest" href="index.manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -581,13 +582,6 @@
                             <option value="low">流畅 | Fast</option>
                         </select>
                     </li>
-                    <li id="nonIframeNotice" 
-                        style="padding: 6px 14px; font-size: 13px; color: #444; text-align: center; justify-content: center;">
-                        <span>
-                            <span class="ui zh">要修改屏幕缩放, 请使用</span><span class="ui en">To adjust screen scale, use</span>
-                            <a href="index.iframe.html"><span class="ui zh">Iframe版</span><span class="ui en">Iframe version</span></a>
-                        </span>
-                    </li>
                     <li>
                         <span>
                             <span class="ui zh">界面缩放</span><span class="ui en">UI scale</span>
@@ -595,29 +589,19 @@
                         <div style="white-space: nowrap;">
                             <button onclick="
                                 var el = this.nextElementSibling
-                                if (el.disabled) return
                                 if (parseInt(el.value) > 50) el.value = parseInt(el.value) - 10
                                 el.dispatchEvent(new Event('change'))
                                 ">-</button>
-                            <input id="pageZoomController" value="100" style="width: 3em;" disabled onchange="
+                            <input id="pageZoomController" value="100" style="width: 3em;" onchange="
                                 let x = parseInt(this.value)
-                                if (50 <= x && x <= 500) iframeCom.send('setPageZoom', x / 100)
+                                if (50 <= x && x <= 500) Settings.pageScale = x / 100
                                 ">
                             <button onclick="
                                 var el = this.previousElementSibling
-                                if (el.disabled) return
                                 if (parseInt(el.value) < 500) el.value = parseInt(el.value) + 10
                                 el.dispatchEvent(new Event('change'))
                                 ">+</button>
                         </div>
-                    </li>
-                    <li>
-                        <span>
-                            <span class="ui zh">屏幕安全区域</span><span class="ui en">Screen safe area</span>
-                        </span>
-                        <button id="safeZoneSetting" onclick="iframeCom.send('setSafezone')" disabled>
-                            <span class="ui zh">调整</span><span class="ui en">Adjust</span>
-                        </button>
                     </li>
                 </ul>
             </div>

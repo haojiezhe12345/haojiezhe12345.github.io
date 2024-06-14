@@ -587,7 +587,7 @@ const popup = {
             case 'displaySettings':
                 let mode = getConfig('graphicsMode')
                 document.getElementById('graphicsMode').value = mode ? mode : 'high'
-                iframeCom.send('getPageZoom')
+                document.getElementById('pageZoomController').value = Math.round(Settings.pageScale * 100)
                 break
 
             default:
@@ -1587,7 +1587,7 @@ const comments = {
     seek(delta) {
         if (document.querySelector('.commentItem') == null) return
 
-        const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20
+        const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20 * Settings.pageScale
         if (this.seekDone) {
             this.seekLeft = (Math.round((this.elements.container.scrollLeft) / commentWidth) + delta) * commentWidth
             window.requestAnimationFrame(t1 => this.seekAnimate(t1, this.elements.container.scrollWidth))
@@ -1634,23 +1634,25 @@ const comments = {
         if (!isFullscreen) {
             var toStart = commentDiv.scrollLeft
             var toEnd = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
+            var threshold = document.getElementById('loadingIndicator').offsetWidth
         } else {
             var toStart = commentDiv.scrollTop
             var toEnd = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
+            var threshold = document.getElementById('loadingIndicator').offsetHeight
         }
         //console.log(toStart, toEnd)
 
-        if (toStart < 40 && commentsUpToDate == false) {
+        if (toStart < threshold && commentsUpToDate == false) {
             loadNewerComments()
             this.pauseScroll(500)
         }
-        if (toEnd < 40) {
+        if (toEnd < threshold) {
             loadOlderComments()
             this.pauseScroll(500)
         }
 
         if (!isFullscreen) {
-            toStart < 40
+            toStart < threshold
                 ? this.elements.seekArrows[0].style.display = 'none'
                 : this.elements.seekArrows[0].style.removeProperty('display')
         }
@@ -1732,6 +1734,23 @@ const msgBgInfo = [
 ]
 const msgBgCount = msgBgInfo.length
 var lastBgImgs = []
+
+
+// display
+//
+const Settings = {
+    elements: {
+
+    },
+
+    get pageScale() {
+        let x = parseFloat(document.documentElement.style.fontSize) / 16
+        return x ? x : 1
+    },
+    set pageScale(scale) {
+        document.documentElement.style.fontSize = `${16 * scale}px`
+    },
+}
 
 
 // timeline
@@ -2130,57 +2149,6 @@ try {
 }
 
 
-// iframe communication
-//
-const iframeCom = {
-    elements: {
-        nonIframeNotice: document.getElementById('nonIframeNotice'),
-        pageZoomController: document.getElementById('pageZoomController'),
-        safeZoneSetting: document.getElementById('safeZoneSetting'),
-    },
-
-    send(type, data) {
-        window.parent.postMessage({ type, data }, '*')
-    },
-
-    init() {
-        if (window.parent == window) return
-        window.addEventListener('message', e => {
-            switch (e.data.type) {
-                case 'iframeCaps':
-                    let caps = e.data.data
-                    if (caps.includes('setPageZoom')) {
-                        this.elements.pageZoomController.removeAttribute('disabled')
-                    }
-                    if (caps.includes('setSafezone')) {
-                        this.elements.safeZoneSetting.removeAttribute('disabled')
-                    }
-                    this.elements.nonIframeNotice.remove()
-                    break;
-
-                case 'pageZoom':
-                    this.elements.pageZoomController.value = e.data.data
-                    break;
-
-                case 'setVolume':
-                    MusicPlayer.setVolume(e.data.data)
-                    break;
-
-                default:
-                    break;
-            }
-        })
-        this.send('checkIframeCaps')
-    },
-}
-
-try {
-    iframeCom.init()
-} catch (error) {
-    logErr(error, 'failed to check init iframe communication')
-}
-
-
 // global Esc key handler
 //
 document.onkeydown = function (e) {
@@ -2255,6 +2223,32 @@ window.addEventListener("beforeinstallprompt", (event) => {
 
 var isInStandaloneMode = false
 isInStandaloneMode = (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
+
+
+// wallpaper engine
+//
+window.wallpaperPropertyListener = {
+    applyUserProperties(properties) {
+        if (properties.ui_scale) {
+            Settings.pageScale = properties.ui_scale.value / 100
+        }
+        if (properties.ui_bottom) {
+            document.getElementById('wallpaperEngineCSS').innerHTML = `
+                #lowerPanel {
+                    padding-bottom: 0rem;
+                    transition: transform 0.5s, padding-bottom 0.5s;
+                }
+
+                #lowerPanel:hover, #lowerPanel.lowerPanelUp {
+                    padding-bottom: ${properties.ui_bottom.value / 48 * 3}rem;
+                }
+            `
+        }
+        if (properties.ui_volume) {
+            MusicPlayer.setVolume(properties.ui_volume.value / 100)
+        }
+    },
+};
 
 
 // everything is now initiated
