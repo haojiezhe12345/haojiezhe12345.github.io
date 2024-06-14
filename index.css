@@ -52,6 +52,14 @@ body>* {
     transition: opacity 2s;
 }
 
+.mainbg.ready {
+    display: block;
+}
+
+.mainbg.ready.visible {
+    opacity: 1;
+}
+
 .mainbg div {
     position: absolute;
     top: 0;
@@ -62,9 +70,19 @@ body>* {
     /*background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg.jpg);*/
     background-size: cover;
     background-position: center;
+}
+
+.mainbg.animating div {
     animation-name: bgzoomNoOpacity;
     animation-duration: 10s;
     animation-timing-function: ease;
+}
+
+.mainbg.bgzoom.animating div {
+    animation-name: bgzoom, bgzoomNoOpacity;
+    animation-duration: 2s, 8s;
+    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1), linear;
+    animation-delay: 0s, 1.8s;
 }
 
 .mainbg>span {
@@ -79,13 +97,6 @@ body>* {
     border-radius: 6.25rem;
     animation-name: fadein;
     animation-duration: 2s;
-}
-
-.bgzoom div {
-    animation-name: bgzoom, bgzoomNoOpacity;
-    animation-duration: 2s, 8s;
-    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1), linear;
-    animation-delay: 0s, 1.8s;
 }
 
 .walpurgisbg div {
@@ -154,6 +165,10 @@ body>* {
 
 #mainCaptions>* {
     display: none;
+}
+
+#mainCaptions>*.visible {
+    display: block;
 }
 
 #mainCaptions p {
@@ -432,6 +447,9 @@ body>* {
     display: none;
 }
 
+#currentTheme>*.visible {
+    display: inline;
+}
 
 #userInfo {
     position: absolute;

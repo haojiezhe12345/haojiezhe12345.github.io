@@ -552,8 +552,8 @@ const popup = {
 
             case 'getImgPopup':
                 document.getElementById('getImgPopup').firstElementChild.lastElementChild.innerHTML = ''
-                for (var key in themes) {
-                    var themeName = themes[key]
+                for (var key in Theme.themes) {
+                    var themeName = Theme.themes[key]
                     try {
                         for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
                             document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
@@ -848,81 +848,213 @@ function userCommentScroll() {
 
 // themes
 //
-function nextImg() {
-    if (bgPaused) return
+const Theme = {
+    elements: {
+        bgs: document.getElementsByClassName('mainbg'),
+        captionContainer: document.getElementById('mainCaptions'),
+        captions: document.getElementById('mainCaptions').children,
+        themeIndicators: document.getElementById('currentTheme').children,
+        listSelectors: document.querySelectorAll('#themeList>div[data-theme]'),
+    },
 
-    var prevBG = currentBG
-    if (currentBG + 1 < bgCount) {
-        currentBG += 1
-    } else {
-        currentBG = 0
-    }
-    var nextBG
-    if (currentBG + 1 < bgCount) {
-        nextBG = currentBG + 1
-    } else {
-        nextBG = 0
-    }
+    timers: {
+        timeouts: [],
+        intervals: [],
 
-    //if (isBirthday) {
-    if (theme != 'default') {
-        var bgs = document.getElementsByClassName(`${theme}bg`)
-        var bgurl = `https://haojiezhe12345.top:82/madohomu/bg/${theme}/`
-    } else {
-        var bgs = document.getElementsByClassName('defaultbg')
-        var bgurl = 'https://haojiezhe12345.top:82/madohomu/bg/'
-    }
+        setTimeout(f, timeout) {
+            while (this.timeouts.length >= 100) this.timeouts.shift()  // limit max length to 100
+            this.timeouts.push(setTimeout(() => f(), timeout))
+        },
+        setInterval(f, timeout) {
+            this.intervals.push(setInterval(() => f(), timeout))
+        },
 
-    try {
-        //bgs[prevBG].style.opacity = 0
-        bgs[prevBG].style.removeProperty('opacity')
-        bgs[currentBG].style.display = 'block'
-        bgs[currentBG].style.opacity = 1
-        bgs[currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${currentBG + 1}.jpg?2")`
-        bgs[currentBG].firstElementChild.style.removeProperty('animation-name')
-        setTimeout(() => {
-            //bgs[prevBG].firstElementChild.style.animationName = 'none'
-            bgs[prevBG].style.removeProperty('display')
-            bgs[nextBG].style.display = 'block'
-            bgs[nextBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${nextBG + 1}.jpg?2")`
-            bgs[nextBG].firstElementChild.style.animationName = 'none'
-        }, 2500);
-    } catch (error) {
-        console.log(error)
-    }
+        reset() {
+            this.timeouts.forEach(i => {
+                clearTimeout(i)
+            })
+            this.intervals.forEach(i => {
+                clearInterval(i)
+            })
+            this.timeouts = []
+            this.intervals = []
+        },
+    },
+
+    themes: {
+        '#default-theme': 'default',
+        '#birthday': 'birthday',
+        '#christmas': 'christmas',
+        '#lunarNewYear': 'lunarNewYear',
+        '#night': 'night',
+        '#kami': 'kami',
+    },
+
+    theme: '',
+    bgPaused: false,
+    currentBG: -1,
+    currentCaption: -1,
+
+    init() {
+        var theme = ''
+        if (location.hash in this.themes) {
+            theme = this.themes[location.hash]
+        }
+        this.setTheme(theme)
+
+        Array.from(this.elements.listSelectors).forEach(e => {
+            e.onclick = () => {
+                this.setTheme(e.dataset.theme)
+                popup.close()
+            }
+        })
+    },
+
+    setTheme(theme) {
+        let d = new Date()
+        if (!theme) {
+            if (d.getMonth() + 1 == 10 && d.getDate() == 3) {
+                theme = 'birthday'
+            }
+            else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6)) {
+                theme = 'christmas'
+            }
+            else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
+                theme = 'lunarNewYear'
+            }
+            else if (d.getHours() >= 23 || d.getHours() <= 5) {
+                theme = 'night'
+            }
+            else {
+                theme = 'default'
+            }
+        }
+        console.log(`setting theme to "${theme}"`)
+
+        Array.from(this.elements.bgs).forEach(el => {
+            el.classList.remove('ready', 'animating', 'visible')
+        })
+        Array.from(this.elements.captions).forEach(el => {
+            el.classList.remove('visible')
+        })
+        Array.from(this.elements.themeIndicators).forEach(el => {
+            el.classList.remove('visible')
+        })
+
+        try {
+            document.getElementById(`themeTxt-${theme}`).classList.add('visible')
+        } catch (error) {
+            console.log('theme indicator text not defined')
+        }
+
+        // theme-specific options
+        if (theme == 'birthday') {
+            var yearsOld = d.getFullYear() - 2011
+            document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
+        } else if (theme == 'lunarNewYear') {
+            document.getElementsByClassName('fireworks')[0].style.display = 'block'
+        } else if (theme == 'kami') {
+            try {
+                printParaCharOneByOne(document.getElementsByClassName('kamiCaption')[0], 750)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        this.timers.reset()
+
+        this.theme = theme
+        this.bgPaused = false
+        this.currentBG = this.getCurrentBgCount() - 1
+        this.currentCaption = -1
+
+        this.getCurrentBgs()[0].classList.add('bgzoom')
+        this.timers.setTimeout(() => this.getCurrentBgs()[0].classList.remove('bgzoom'), 10000)
+
+        this.nextImg()
+        this.nextCaption()
+        this.timers.setInterval(() => this.nextImg(), 8000)
+        this.timers.setInterval(() => this.nextCaption(), 8000)
+    },
+
+    getCurrentBgs() {
+        return document.querySelectorAll(`.mainbg.${this.theme}bg`)
+    },
+
+    getCurrentBgCount() {
+        return document.getElementsByClassName(`${this.theme}bg`).length
+    },
+
+    nextImg() {
+        if (this.bgPaused) return
+
+        let prev = this.currentBG
+        this.currentBG = prev + 1 < this.getCurrentBgCount() ? prev + 1 : 0
+        let next = this.currentBG + 1 < this.getCurrentBgCount() ? this.currentBG + 1 : 0
+
+        let bgs = document.getElementsByClassName(`${this.theme}bg`)
+        let bgurl = this.theme == 'default' ? 'https://haojiezhe12345.top:82/madohomu/bg/' : `https://haojiezhe12345.top:82/madohomu/bg/${this.theme}/`
+
+        try {
+            bgs[prev].classList.remove('visible')
+            bgs[this.currentBG].classList.add('ready', 'animating', 'visible')
+            bgs[this.currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${this.currentBG + 1}.jpg?2")`
+            // for single-image theme, show only the first image and disable slideshow
+            if (prev == this.currentBG) {
+                this.timers.setTimeout(() => {
+                    this.bgPaused = true
+                }, 1000);
+                return
+            }
+            this.timers.setTimeout(() => {
+                bgs[prev].classList.remove('ready', 'animating')
+                bgs[next].classList.add('ready')
+                bgs[next].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${next + 1}.jpg?2")`
+            }, 2500);
+        } catch (error) {
+            logErr(error, 'failed to show next image')
+        }
+    },
+
+    nextCaption() {
+        if (this.bgPaused) return
+
+        try {
+            var themeCaptions = document.getElementsByClassName(`${this.theme}Caption`);
+        } catch (error) {
+            console.log(error)
+            return
+        }
+
+        if (themeCaptions.length == 1) {
+            themeCaptions[0].classList.add('visible');
+            this.timers.setTimeout(() => {
+                this.elements.captionContainer.style.opacity = 1
+            }, 500);
+            return
+        }
+
+        this.elements.captionContainer.style.opacity = 0
+        this.timers.setTimeout(() => {
+            for (var i = 0; i < themeCaptions.length; i++) {
+                themeCaptions[i].classList.remove('visible');
+            }
+            if (this.currentCaption < themeCaptions.length - 1) {
+                this.currentCaption++
+            } else {
+                this.currentCaption = 0
+            }
+            themeCaptions[this.currentCaption].classList.add('visible');
+            this.elements.captionContainer.style.opacity = 1
+        }, 1500);
+    },
 }
 
-function nextCaption() {
-    if (bgPaused) return
-
-    try {
-        var themeCaptions = document.getElementsByClassName(`${theme}Caption`);
-    } catch (error) {
-        console.log(error)
-        return
-    }
-
-    if (themeCaptions.length == 1) {
-        themeCaptions[0].style.display = 'block';
-        setTimeout(() => {
-            captionDiv.style.opacity = 1
-        }, 500);
-        return
-    }
-
-    captionDiv.style.opacity = 0
-    setTimeout(() => {
-        for (var i = 0; i < themeCaptions.length; i++) {
-            themeCaptions[i].style.display = 'none';
-        }
-        if (currentCaption < themeCaptions.length - 1) {
-            currentCaption++
-        } else {
-            currentCaption = 0
-        }
-        themeCaptions[currentCaption].style.display = 'block';
-        captionDiv.style.opacity = 1
-    }, 1500);
+try {
+    Theme.init()
+    var theme = Theme.theme
+} catch (error) {
+    logErr(error, 'failed to init theme')
 }
 
 function printParaCharOneByOne(divEl, delay = 0) {
@@ -1340,7 +1472,6 @@ var userCommentIsKami = false
 
 // document elmnts
 var commentDiv = document.getElementById('comments')
-var captionDiv = document.getElementById('mainCaptions')
 var userCommentEl = document.getElementById('userComment')
 
 var setAvatarImg = document.getElementById('setAvatarImg')
@@ -1360,7 +1491,6 @@ var loadingIndicatorBefore = document.getElementById('loadingIndicatorBefore').o
 document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
 // ui states
-var bgPaused = false
 var isFullscreen = false
 var newCommentDisabled = false
 var isLoadCommentErrorShowed = false
@@ -1386,88 +1516,6 @@ if (location.hash.slice(0, 7) == '#popup-') {
     } catch (error) {
         closePopup()
         location.hash = ''
-    }
-}
-
-
-// theme
-//
-const Theme = {
-    elements: {
-        selectors: document.querySelectorAll('#themeList>div[data-theme]'),
-    },
-
-    theme: '',
-
-    setTheme(theme) {
-        console.log(`changing theme to "${theme}"`)
-        location.hash = theme
-        location.reload()
-    },
-
-    init() {
-        Array.from(this.elements.selectors).forEach(e => {
-            e.onclick = () => {
-                this.setTheme(e.dataset.theme)
-            }
-        })
-    },
-}
-
-try {
-    Theme.init()
-} catch (error) {
-    logErr(error, 'failed to init theme')
-}
-
-var theme = 'default'
-
-var d = new Date()
-if (d.getMonth() + 1 == 10 && d.getDate() == 3) {
-    theme = 'birthday'
-}
-else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6)) {
-    theme = 'christmas'
-}
-else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
-    theme = 'lunarNewYear'
-}
-else if (d.getHours() >= 23 || d.getHours() <= 5) {
-    theme = 'night'
-}
-
-var themes = {
-    '#default-theme': 'default',
-    '#birthday': 'birthday',
-    '#christmas': 'christmas',
-    '#lunarNewYear': 'lunarNewYear',
-    '#night': 'night',
-    '#kami': 'kami',
-}
-
-for (var key in themes) {
-    if (location.hash == key) {
-        theme = themes[key]
-    }
-}
-
-try {
-    document.getElementById(`themeTxt-${theme}`).style.display = 'inline'
-} catch (error) {
-    console.log('theme indicator text not defined')
-}
-
-// theme-specific options
-if (theme == 'birthday') {
-    var yearsOld = d.getFullYear() - 2011
-    document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
-} else if (theme == 'lunarNewYear') {
-    document.getElementsByClassName('fireworks')[0].style.display = 'block'
-} else if (theme == 'kami') {
-    try {
-        printParaCharOneByOne(document.getElementsByClassName('kamiCaption')[0], 750)
-    } catch (error) {
-        console.log(error)
     }
 }
 
@@ -1502,36 +1550,7 @@ if (getConfig('showKami') == 'true' || theme == 'kami') {
 
 // background images
 //
-var bgCount
-bgCount = document.getElementsByClassName(`${theme}bg`).length
-
-// for single-image theme, show only the first image and disable slideshow
-if (bgCount == 1) {
-    document.getElementsByClassName(`${theme}bg`)[0].style.opacity = 1
-    document.getElementsByClassName(`${theme}bg`)[0].style.display = 'block'
-    document.getElementsByClassName(`${theme}bg`)[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/${theme}/mainbg1.jpg")`
-
-    document.getElementsByClassName(`${theme}Caption`)[0].style.display = 'block'
-    setTimeout(() => {
-        captionDiv.style.opacity = 1
-    }, 500);
-
-    bgPaused = true
-}
-
-var currentBG = bgCount - 1
-var currentCaption = -1
-
 function playBG() {
-    document.getElementsByClassName(`${theme}bg`)[0].classList.add('bgzoom')
-    nextImg()
-    setInterval(nextImg, 8000)
-    setTimeout(() => {
-        document.getElementsByClassName(`${theme}bg`)[0].classList.remove('bgzoom')
-    }, 10000);
-
-    nextCaption()
-    setInterval(nextCaption, 8000)
 }
 if (location.hash == '#video') {
     time_ms = 5000
@@ -1667,7 +1686,7 @@ const comments = {
 
     init() {
         loadComments()
-        
+
         this.elements.container.onwheel = e => {
             if (isFullscreen) {
 
