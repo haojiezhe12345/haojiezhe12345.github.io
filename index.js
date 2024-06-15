@@ -943,11 +943,7 @@ const Theme = {
     currentCaption: -1,
 
     init() {
-        var theme = ''
-        if (location.hash in this.themes) {
-            theme = this.themes[location.hash]
-        }
-        this.setTheme(theme)
+        this.setTheme(this.themes[location.hash])
 
         Array.from(this.elements.listSelectors).forEach(e => {
             e.onclick = () => {
@@ -957,25 +953,27 @@ const Theme = {
         })
     },
 
-    setTheme(theme) {
+    getAutoTheme() {
         let d = new Date()
-        if (!theme) {
-            if (d.getMonth() + 1 == 10 && d.getDate() == 3) {
-                theme = 'birthday'
-            }
-            else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6)) {
-                theme = 'christmas'
-            }
-            else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
-                theme = 'lunarNewYear'
-            }
-            else if (d.getHours() >= 23 || d.getHours() <= 5) {
-                theme = 'night'
-            }
-            else {
-                theme = 'default'
-            }
+        if (d.getMonth() + 1 == 10 && d.getDate() == 3) {
+            return 'birthday'
         }
+        else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6)) {
+            return 'christmas'
+        }
+        else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
+            return 'lunarNewYear'
+        }
+        else if (d.getHours() >= 23 || d.getHours() <= 5) {
+            return 'night'
+        }
+        else {
+            return 'default'
+        }
+    },
+
+    setTheme(theme) {
+        if (!theme) theme = this.getAutoTheme()
         console.log(`setting theme to "${theme}"`)
 
         Array.from(this.elements.bgs).forEach(el => {
@@ -997,7 +995,8 @@ const Theme = {
         // theme-specific options
         try {
             if (theme == 'birthday') {
-                var yearsOld = d.getFullYear() - 2011
+                let d = new Date()
+                let yearsOld = d.getFullYear() - 2011
                 document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
             }
             if (theme == 'lunarNewYear') {
@@ -1035,6 +1034,13 @@ const Theme = {
         this.nextCaption()
         this.timers.setInterval(() => this.nextImg(), 8000)
         this.timers.setInterval(() => this.nextCaption(), 8000)
+        this.timers.setInterval(() => {
+            if (!this.lastAutoTheme) this.lastAutoTheme = this.getAutoTheme()
+            let newAutoTheme = this.getAutoTheme()
+            //console.log(this.lastAutoTheme, newAutoTheme)
+            if (this.lastAutoTheme != newAutoTheme) this.setTheme()
+            this.lastAutoTheme = newAutoTheme
+        }, 1000)
     },
 
     getCurrentBgs() {
