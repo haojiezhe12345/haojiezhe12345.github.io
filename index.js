@@ -9,6 +9,16 @@ const Settings = {
         showKami: document.getElementById('showKami'),
     },
 
+    init() {
+        this.load()
+
+        this.elements.showKami.onchange = e => this.showKami = e.target.checked
+    },
+
+    load() {
+        if (getConfig('showKami') == 'true') this.showKami = true
+    },
+
     get pageScale() {
         let x = parseFloat(document.documentElement.style.fontSize) / 16
         return x ? x : 1
@@ -20,6 +30,22 @@ const Settings = {
     get showKami() {
         return this.elements.showKami.checked
     },
+    set showKami(value) {
+        this.elements.showKami.checked = value
+        setConfig('showKami', value)
+        setTimeout(() => {
+            if (Comments.hasItem()) {
+                clearComments()
+                loadComments()
+            }
+        }, 0);
+    },
+}
+
+try {
+    Settings.init()
+} catch (error) {
+    logErr(error, 'failed to init settings')
 }
 
 
@@ -124,7 +150,7 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
             }
 
             // load kami SxS
-            if (showKamiElmnt.checked == true && queryObj.db == null && noKami == false) {
+            if (Settings.showKami && queryObj.db == null && noKami == false) {
                 if (isCommentsOlder) {
                     loadComments({
                         'timeMin': xhr.response[xhr.response.length - 1].time,
@@ -161,7 +187,7 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
         }
     };
     xhr.onerror = () => {
-        if (isLoadCommentErrorShowed == false && kami == false) {
+        if (isLoadCommentErrorShowed == false && false) {
             window.alert([
                 '加载留言失败',
                 '请尝试刷新页面, 清除DNS缓存, 切换网络, 或者10分钟后重试',
@@ -965,21 +991,34 @@ const Theme = {
         try {
             document.getElementById(`themeTxt-${theme}`).classList.add('visible')
         } catch (error) {
-            console.log('theme indicator text not defined')
+            logErr(error, 'theme indicator text not defined')
         }
 
         // theme-specific options
-        if (theme == 'birthday') {
-            var yearsOld = d.getFullYear() - 2011
-            document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
-        } else if (theme == 'lunarNewYear') {
-            document.getElementsByClassName('fireworks')[0].style.display = 'block'
-        } else if (theme == 'kami') {
-            try {
-                printParaCharOneByOne(document.getElementsByClassName('kamiCaption')[0], 750)
-            } catch (error) {
-                console.log(error)
+        try {
+            if (theme == 'birthday') {
+                var yearsOld = d.getFullYear() - 2011
+                document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
             }
+            if (theme == 'lunarNewYear') {
+                document.getElementsByClassName('fireworks')[0].classList.add('visible')
+            } else {
+                document.getElementsByClassName('fireworks')[0].classList.remove('visible')
+            }
+            if (theme == 'kami') {
+                printParaCharOneByOne(document.getElementsByClassName('kamiCaption')[0], 750)
+                if (!Settings.showKami) {
+                    Settings.elements.showKami.checked = true
+                    setTimeout(() => {
+                        if (Comments.hasItem()) {
+                            clearComments()
+                            loadComments()
+                        }
+                    }, 0);
+                }
+            }
+        } catch (error) {
+            logErr(error, 'failed to init theme-specific options')
         }
 
         this.timers.reset()
@@ -990,7 +1029,7 @@ const Theme = {
         this.currentCaption = -1
 
         this.getCurrentBgs()[0].classList.add('bgzoom')
-        this.timers.setTimeout(() => this.getCurrentBgs()[0].classList.remove('bgzoom'), 10000)
+        this.timers.setTimeout(() => this.getCurrentBgs()[0].classList.remove('bgzoom'), 10500)
 
         this.nextImg()
         this.nextCaption()
@@ -1340,10 +1379,6 @@ function toggleTimeline() {
     }
 }
 
-function toggleKami() {
-    setConfig('showKami', showKamiElmnt.checked)
-}
-
 // utilities
 //
 function getRandomIntInclusive(min, max) {
@@ -1503,7 +1538,6 @@ var hoverCalendarEl = document.getElementById('hoverCalendar')
 // toggle checkboxes
 var hideTopCommentElmnt = document.getElementById('hideTopComment')
 var showTimelineElmnt = document.getElementById('showTimeline')
-var showKamiElmnt = document.getElementById('showKami')
 
 // raw htmls
 var topComment = document.getElementById('topComment').outerHTML
@@ -1562,12 +1596,6 @@ if (getConfig('showTimeline') == 'false') {
     toggleTimeline()
 }
 
-if (getConfig('showKami') == 'true' || theme == 'kami') {
-    showKamiElmnt.checked = true
-} else if (getConfig('showKami') == 'false') {
-    showKamiElmnt.checked = false
-}
-
 
 // background images
 //
@@ -1624,8 +1652,12 @@ const Comments = {
     seekDone: true,
     scrollPaused: false,
 
+    hasItem() {
+        return Boolean(document.querySelector('.commentItem'))
+    },
+
     seek(delta) {
-        if (document.querySelector('.commentItem') == null) return
+        if (!this.hasItem()) return
 
         const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20 * Settings.pageScale
         if (this.seekDone) {
@@ -1667,7 +1699,7 @@ const Comments = {
     },
 
     scroll() {
-        if (this.scrollPaused || document.querySelector('.commentItem') == null) return
+        if (this.scrollPaused || !this.hasItem()) return
 
         setTimelineActiveMonth()
 
