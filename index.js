@@ -2,6 +2,27 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
+// settings
+//
+const Settings = {
+    elements: {
+        showKami: document.getElementById('showKami'),
+    },
+
+    get pageScale() {
+        let x = parseFloat(document.documentElement.style.fontSize) / 16
+        return x ? x : 1
+    },
+    set pageScale(scale) {
+        document.documentElement.style.fontSize = `${16 * scale}px`
+    },
+
+    get showKami() {
+        return this.elements.showKami.checked
+    },
+}
+
+
 function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
     //if (from == null && time == null) setTodayCommentCount()
 
@@ -224,7 +245,7 @@ function insertComment(comment, isKami = false) {
     try {
         if (comment.image != '') {
             for (var i of comment.image.split(',')) {
-                imgsDOM += `<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
+                imgsDOM += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
             }
         }
     } catch (error) { }
@@ -264,7 +285,7 @@ function clearComments(clearTop) {
         document.getElementById('loadingIndicatorBefore').style.display = 'none'
     }
 
-    comments.scrollPaused = false
+    Comments.scrollPaused = false
     commentsUpToDate = false
     clearTimeout(window.clearCommentsUpToDateTimeout)
 
@@ -518,7 +539,7 @@ function sendMessage() {
 
 // popup
 //
-const popup = {
+const Popup = {
     elements: {
         popupContainer: document.getElementById('popupContainer'),
         popupItems: document.getElementsByClassName('popupItem'),
@@ -618,10 +639,10 @@ const popup = {
     },
 }
 
-const showPopup = id => popup.show(id)
-const closePopup = () => popup.close()
+const showPopup = id => Popup.show(id)
+const closePopup = () => Popup.close()
 try {
-    popup.init()
+    Popup.init()
 } catch (error) {
     logErr(error, 'failed to init popup')
 }
@@ -841,7 +862,7 @@ function showUserComment(user, useKamiAvatar = false) {
 
 function userCommentScroll() {
     var toBottom = userCommentEl.scrollHeight - userCommentEl.clientHeight - userCommentEl.scrollTop
-    if (toBottom < 100 && popup.isOpen()) {
+    if (toBottom < 100 && Popup.isOpen()) {
         showUserComment()
     }
 }
@@ -905,7 +926,7 @@ const Theme = {
         Array.from(this.elements.listSelectors).forEach(e => {
             e.onclick = () => {
                 this.setTheme(e.dataset.theme)
-                popup.close()
+                Popup.close()
             }
         })
     },
@@ -1294,7 +1315,7 @@ function toggleFullscreen() {
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
         isFullscreen = false
     }
-    comments.pauseScroll(500)
+    Comments.pauseScroll(500)
 }
 
 function toggleTopComment() {
@@ -1593,7 +1614,7 @@ loadUserInfo()
 
 // comments
 //
-const comments = {
+const Comments = {
     elements: {
         container: document.getElementById('comments'),
         seekArrows: document.getElementsByClassName('commentSeekArrow'),
@@ -1699,9 +1720,9 @@ const comments = {
     },
 }
 
-const seekComment = delta => comments.seek(delta)
+const seekComment = delta => Comments.seek(delta)
 try {
-    comments.init()
+    Comments.init()
 } catch (error) {
     logErr(error, 'failed to init comments')
 }
@@ -1753,23 +1774,6 @@ const msgBgInfo = [
 ]
 const msgBgCount = msgBgInfo.length
 var lastBgImgs = []
-
-
-// display
-//
-const Settings = {
-    elements: {
-
-    },
-
-    get pageScale() {
-        let x = parseFloat(document.documentElement.style.fontSize) / 16
-        return x ? x : 1
-    },
-    set pageScale(scale) {
-        document.documentElement.style.fontSize = `${16 * scale}px`
-    },
-}
 
 
 // timeline
@@ -1852,7 +1856,7 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
 
 // image viewer
 //
-const imgViewer = {
+const ImgViewer = {
     elements: {
         container: document.getElementById('imgViewerBox'),
         viewer: document.getElementById('imgViewer'),
@@ -1956,10 +1960,10 @@ const imgViewer = {
     },
 }
 
-const viewImg = src => imgViewer.view(src)
-const closeImgViewer = () => imgViewer.close()
+const viewImg = src => ImgViewer.view(src)
+const closeImgViewer = () => ImgViewer.close()
 try {
-    imgViewer.init()
+    ImgViewer.init()
 } catch (error) {
     logErr(error, 'Failed to init image viewer')
 }
@@ -2173,9 +2177,9 @@ try {
 document.onkeydown = function (e) {
     //console.log(e.key)
     if (e.key == 'Escape' || e.keyCode == 27) {
-        if (imgViewer.isOpen()) {
+        if (ImgViewer.isOpen()) {
             closeImgViewer()
-        } else if (popup.isOpen()) {
+        } else if (Popup.isOpen()) {
             closePopup()
         } else if (isFullscreen) {
             toggleFullscreen()
