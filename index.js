@@ -902,6 +902,7 @@ const Theme = {
         captions: document.getElementById('mainCaptions').children,
         themeIndicators: document.getElementById('currentTheme').children,
         listSelectors: document.querySelectorAll('#themeList>div[data-theme]'),
+        lowerPanel: document.getElementById('lowerPanel'),
     },
 
     timers: {
@@ -944,6 +945,14 @@ const Theme = {
 
     init() {
         this.setTheme(this.themes[location.hash])
+
+        setInterval(() => {
+            if (!this.lastAutoTheme) this.lastAutoTheme = this.getAutoTheme()
+            let newAutoTheme = this.getAutoTheme()
+            //console.log(this.lastAutoTheme, newAutoTheme)
+            if (this.lastAutoTheme != newAutoTheme) this.setTheme()
+            this.lastAutoTheme = newAutoTheme
+        }, 1000)
 
         Array.from(this.elements.listSelectors).forEach(e => {
             e.onclick = () => {
@@ -1034,13 +1043,25 @@ const Theme = {
         this.nextCaption()
         this.timers.setInterval(() => this.nextImg(), 8000)
         this.timers.setInterval(() => this.nextCaption(), 8000)
-        this.timers.setInterval(() => {
-            if (!this.lastAutoTheme) this.lastAutoTheme = this.getAutoTheme()
-            let newAutoTheme = this.getAutoTheme()
-            //console.log(this.lastAutoTheme, newAutoTheme)
-            if (this.lastAutoTheme != newAutoTheme) this.setTheme()
-            this.lastAutoTheme = newAutoTheme
-        }, 1000)
+
+        this.elements.lowerPanel.classList.add('animating')
+        this.timers.setTimeout(() => this.elements.lowerPanel.classList.remove('animating'), 1700)
+        try {
+            MusicPlayer.setActiveSong(this.getThemeMusic())
+            if (!MusicPlayer.userPaused) MusicPlayer.play()
+        } catch (error) { }
+    },
+
+    getThemeMusic() {
+        let music = {
+            birthday: 'また あした - 悠木碧',
+            night: 'Scaena felix - オルゴール ミドリ',
+            kami: 'never leave you alone - 梶浦由記',
+        }
+        return music[this.theme] ||
+            (Math.random() > 0.5
+                ? 'Sagitta luminis - オルゴール ミドリ'
+                : '君の銀の庭 - オルゴール ミドリ')
     },
 
     getCurrentBgs() {
@@ -1093,8 +1114,10 @@ const Theme = {
         }
 
         if (themeCaptions.length == 1) {
-            themeCaptions[0].classList.add('visible');
+            setOneTimeCSS(this.elements.captionContainer, { transition: 'none' })
+            this.elements.captionContainer.style.opacity = 0
             this.timers.setTimeout(() => {
+                themeCaptions[0].classList.add('visible');
                 this.elements.captionContainer.style.opacity = 1
             }, 500);
             return
@@ -1520,6 +1543,17 @@ function getArrayPrevItem(arr, item) {
 function logErr(err, msg) {
     console.warn(err)
     console.error(msg)
+}
+
+function setOneTimeCSS(el, styles) {
+    for (let style in styles) {
+        el.style[style] = styles[style]
+    }
+    setTimeout(() => {
+        for (let style in styles) {
+            el.style.removeProperty(style)
+        }
+    }, 0);
 }
 
 
@@ -2023,27 +2057,19 @@ const MusicPlayer = {
 
     playList: [],
     playOrder: [],
-    preferredSongs: [/.*/],
     userPaused: true,
 
     loadPlayList(dir) {
         this.elements.list.innerHTML = ''
         getFileListAsync(dir).then(list => {
-            list = list.filter(item => !(item.endsWith('.jpg') || item.endsWith('.disabled')))
-            let preferred = []
-            for (let i = 0; i < list.length; i++) {
-                for (let song of this.preferredSongs) {
-                    if (song.test(decodeURIComponent(list[i]))) {
-                        preferred.push(list.splice(i, 1)[0])
-                        break
-                    }
-                }
-            }
-            shuffleArray(preferred)
-            this.playList = [...preferred, ...list]
+            this.playList = list.filter(item => !(item.endsWith('.jpg') || item.endsWith('.disabled')))
             this.playOrder = []
             this.showPlayList(this.playList)
-            if (this.playList[0]) this.setActiveSong(0)
+            try {
+                this.setActiveSong(Theme.getThemeMusic())
+            } catch (error) {
+                this.setActiveSong(0)
+            }
         })
     },
 
@@ -2056,6 +2082,16 @@ const MusicPlayer = {
     },
 
     setActiveSong(index) {
+        if (typeof index != typeof 0) {
+            for (let i = 0; i < this.playList.length; i++) {
+                if (decodeURIComponent(this.playList[i]).includes(index)) {
+                    index = i
+                    break
+                }
+            }
+        }
+        if (this.playList[index] == null) return
+
         this.elements.player.src = this.playList[index]
         this.elements.playerImg.src = this.playList[index] + '.jpg'
         this.elements.playerImg.onclick = function () { viewImg(this.src) }
@@ -2100,8 +2136,8 @@ const MusicPlayer = {
     },
 
     play(index = null) {
-        if (index == null && !this.elements.player.src && this.playList.length > 0) index = 0
-        if (index != null) this.setActiveSong(index)
+        if (index == null && !this.elements.player.src) index = 0
+        this.setActiveSong(index)
         this.elements.player.play()
         this.userPaused = false
         setConfig('mutebgm', false)
@@ -2132,15 +2168,14 @@ const MusicPlayer = {
         if (getConfig('mutebgm') == 'true') {
             this.userPaused = true
         } else {
-            this.userPaused = false
             this.play()
         }
 
         this.elements.playBtn.onclick = () => {
-            if (this.elements.playBtn.classList.contains('playing')) {
-                this.pause()
-            } else {
+            if (this.elements.player.paused) {
                 this.play()
+            } else {
+                this.pause()
             }
         }
         this.elements.list.onclick = e => {
@@ -2174,7 +2209,7 @@ const MusicPlayer = {
             this.playNext()
         }
         document.body.addEventListener('click', () => {
-            if (!this.userPaused) this.play()
+            if (!this.userPaused && this.elements.player.paused) this.play()
         })
 
         setInterval(() => {
@@ -2191,19 +2226,6 @@ const MusicPlayer = {
 }
 
 try {
-    // play theme-specific BGMs
-    if (theme == 'birthday') {
-        MusicPlayer.preferredSongs = [/また あした - 悠木碧/]
-    } else if (theme == 'night') {
-        MusicPlayer.preferredSongs = [/Scaena felix - オルゴール ミドリ/]
-    } else if (theme == 'kami') {
-        MusicPlayer.preferredSongs = [/never leave you alone - 梶浦由記/]
-    } else {
-        MusicPlayer.preferredSongs = [
-            /Sagitta luminis - オルゴール ミドリ/,
-            /君の銀の庭 - オルゴール ミドリ/,
-        ]
-    }
     MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm/')
 } catch (error) {
     logErr(error, 'failed to init music player')

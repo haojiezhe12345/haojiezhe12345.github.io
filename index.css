@@ -558,6 +558,9 @@ body>* {
     transform: translateY(33vh);
     padding-top: 1.5rem;
     transition: transform 0.5s;
+}
+
+#lowerPanel.animating:not(.lowerPanelUp) {
     animation-name: commentsup;
     animation-duration: 1.7s;
 }
