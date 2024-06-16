@@ -1038,6 +1038,8 @@ const Theme = {
 
         this.getCurrentBgs()[0].classList.add('bgzoom')
         this.timers.setTimeout(() => this.getCurrentBgs()[0].classList.remove('bgzoom'), 10500)
+        setOneTimeCSS(this.elements.captionContainer, { transition: 'none' })
+        this.elements.captionContainer.style.opacity = 0
 
         this.nextImg()
         this.nextCaption()
@@ -1114,8 +1116,6 @@ const Theme = {
         }
 
         if (themeCaptions.length == 1) {
-            setOneTimeCSS(this.elements.captionContainer, { transition: 'none' })
-            this.elements.captionContainer.style.opacity = 0
             this.timers.setTimeout(() => {
                 themeCaptions[0].classList.add('visible');
                 this.elements.captionContainer.style.opacity = 1
@@ -1553,7 +1553,7 @@ function setOneTimeCSS(el, styles) {
         for (let style in styles) {
             el.style.removeProperty(style)
         }
-    }, 0);
+    }, 35);
 }
 
 
