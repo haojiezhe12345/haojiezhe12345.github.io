@@ -73,16 +73,15 @@ body>* {
 }
 
 .mainbg.animating:not(.bgzoom) div {
-    animation-name: bgzoomNoOpacity;
+    animation-name: bgzoom12;
     animation-duration: 10s;
     animation-timing-function: ease;
 }
 
 .mainbg.animating.bgzoom div {
-    animation-name: bgzoom, bgzoomNoOpacity;
-    animation-duration: 2s, 8s;
-    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1), linear;
-    animation-delay: 0s, 1.8s;
+    animation-name: bgzoom16;
+    animation-duration: 10s;
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0, 0.9);
 }
 
 .mainbg>span {
@@ -95,7 +94,7 @@ body>* {
     font-size: 0.75rem;
     padding: 0.25rem 0.625rem;
     border-radius: 6.25rem;
-    animation-name: fadein;
+    animation-name: fadeinDelayed;
     animation-duration: 2s;
 }
 
@@ -105,19 +104,24 @@ body>* {
     animation-fill-mode: forwards;
 }
 
-@keyframes bgzoom {
-    from {
+@keyframes bgzoom16 {
+    0% {
         opacity: 0;
         transform: scale(1.6);
     }
 
-    to {
+    17% {
         opacity: 1;
-        transform: scale(1.2);
+        transform: scale(1.15);
+        animation-timing-function: linear;
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 
-@keyframes bgzoomNoOpacity {
+@keyframes bgzoom12 {
     from {
         transform: scale(1.2);
     }
@@ -127,7 +131,18 @@ body>* {
     }
 }
 
+
 @keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinDelayed {
     0% {
         opacity: 0;
     }
@@ -256,7 +271,7 @@ body>* {
     background-color: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(1vw);
     transition: opacity 1s;
-    animation-name: fadein;
+    animation-name: fadeinDelayed;
     animation-duration: 2s;
 }
 
@@ -307,7 +322,7 @@ body>* {
     background-color: wheat;
     color: black;
     border: 0.125rem solid orange;
-    animation: fadein 1s;
+    animation: fadeinDelayed 1s;
 }
 
 #banner.banner-info {
@@ -1218,8 +1233,7 @@ body>* {
     padding: 0.5rem 1rem;
     border-radius: 6.25rem;
     font-weight: bold;
-    animation: fadein 0.4s;
-    animation-delay: -0.2s;
+    animation: fadein 0.2s;
 }
 
 .commentSeekArrow>.tooltip::after {

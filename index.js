@@ -805,7 +805,9 @@ function showUserComment(user, useKamiAvatar = false) {
     if (user != null) {
         userCommentEl.innerHTML = /*html*/`
         <h2>
-            <img src="${useKamiAvatar != false ? `https://kami.im/getavatar.php?uid=${useKamiAvatar}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${user}.jpg`}" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+            <img src="${useKamiAvatar != false ? `https://kami.im/getavatar.php?uid=${useKamiAvatar}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${user}.jpg`}"
+                onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
+                onclick="viewImg(this.src)">
             <span>${user == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : user}${useKamiAvatar != false ? `<span class='kamiuid'>${useKamiAvatar}</span>` : ''}</span>
         </h2>
         `
