@@ -1039,9 +1039,8 @@ const Theme = {
         this.currentCaption = -1
 
         this.getCurrentBgs()[0].classList.add('bgzoom')
-        this.timers.setTimeout(() => this.getCurrentBgs()[0].classList.remove('bgzoom'), 10500)
-        setOneTimeCSS(this.elements.captionContainer, { transition: 'none' })
         this.elements.captionContainer.style.opacity = 0
+        setOneTimeCSS(this.elements.captionContainer, { transition: 'none' })
 
         this.nextImg()
         this.nextCaption()
@@ -1100,6 +1099,7 @@ const Theme = {
             this.timers.setTimeout(() => {
                 bgs[prev].classList.remove('ready', 'animating')
                 bgs[next].classList.add('ready')
+                bgs[next].classList.remove('bgzoom')
                 bgs[next].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${next + 1}.jpg?2")`
             }, 2500);
         } catch (error) {

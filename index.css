@@ -113,7 +113,7 @@ body>* {
     17% {
         opacity: 1;
         transform: scale(1.15);
-        animation-timing-function: linear;
+        animation-timing-function: ease-out;
     }
 
     100% {
