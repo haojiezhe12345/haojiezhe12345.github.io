@@ -932,7 +932,6 @@ const Theme = {
     },
 
     theme: '',
-    bgPaused: false,
     currentBG: -1,
     currentCaption: -1,
 
@@ -1025,7 +1024,6 @@ const Theme = {
         this.timers.reset()
 
         this.theme = theme
-        this.bgPaused = false
         this.currentBG = this.getCurrentBgCount() - 1
         this.currentCaption = -1
 
@@ -1035,8 +1033,10 @@ const Theme = {
 
         this.nextImg()
         this.nextCaption()
-        this.timers.setInterval(() => this.nextImg(), 8000)
-        this.timers.setInterval(() => this.nextCaption(), 8000)
+        if (this.getCurrentBgCount() > 1) {
+            this.timers.setInterval(() => this.nextImg(), 8000)
+            this.timers.setInterval(() => this.nextCaption(), 8000)
+        }
 
         this.elements.lowerPanel.classList.add('animating')
         this.timers.setTimeout(() => this.elements.lowerPanel.classList.remove('animating'), 1700)
@@ -1067,8 +1067,6 @@ const Theme = {
     },
 
     nextImg() {
-        if (this.bgPaused) return
-
         let prev = this.currentBG
         this.currentBG = prev + 1 < this.getCurrentBgCount() ? prev + 1 : 0
         let next = this.currentBG + 1 < this.getCurrentBgCount() ? this.currentBG + 1 : 0
@@ -1081,12 +1079,7 @@ const Theme = {
             bgs[this.currentBG].classList.add('ready', 'animating', 'visible')
             bgs[this.currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${this.currentBG + 1}.jpg?2")`
             // for single-image theme, show only the first image and disable slideshow
-            if (prev == this.currentBG) {
-                this.timers.setTimeout(() => {
-                    this.bgPaused = true
-                }, 1000);
-                return
-            }
+            if (prev == this.currentBG) return
             this.timers.setTimeout(() => {
                 bgs[prev].classList.remove('ready', 'animating')
                 bgs[next].classList.add('ready')
@@ -1099,8 +1092,6 @@ const Theme = {
     },
 
     nextCaption() {
-        if (this.bgPaused) return
-
         try {
             var themeCaptions = document.getElementsByClassName(`${this.theme}Caption`);
         } catch (error) {
