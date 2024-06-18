@@ -315,7 +315,6 @@ function clearComments(clearTop) {
     commentsUpToDate = false
     clearTimeout(window.clearCommentsUpToDateTimeout)
 
-    newCommentDisabled = false
     document.body.classList.remove('touchKeyboardShowing')
 }
 
@@ -405,11 +404,7 @@ function newComment() {
     commentDiv.scrollLeft = 0
     commentDiv.scrollTop = 0
 
-    prevWindowWidth = window.innerWidth
-    prevWindowHeight = window.innerHeight
-    if (debug) console.log(`${prevWindowWidth}x${prevWindowHeight}`)
-
-    if (newCommentDisabled) {
+    if (document.getElementById('newCommentBox')) {
         document.getElementById('msgText').focus({ preventScroll: true })
         return
     }
@@ -421,8 +416,8 @@ function newComment() {
             <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getConfig('username')}</div>
             <div class="id" onclick="showPopup('setNamePopup')"><span class="ui zh">设置昵称/头像</span><span class="ui en">Change profile</span></div>
             <div class="comment">
-                <textarea id="msgText" placeholder="圆神保佑~" style="height: 100%"></textarea>
-                <div id="uploadImgList" style="display: none"></div>
+                <textarea id="msgText" placeholder="圆神保佑~" onfocus="TouchKeyboardDetector.detect()" onblur="TouchKeyboardDetector.detect()"></textarea>
+                <div id="uploadImgList"></div>
             </div>
             <label>
                 <input id="uploadImgPicker" type="file" accept="image/*" onchange="previewLocalImgs()" multiple style="display: none;" />
@@ -442,8 +437,6 @@ function newComment() {
     })
 
     document.getElementById('msgText').focus({ preventScroll: true })
-
-    newCommentDisabled = true
 
     /*
     if (location.hostname != 'haojiezhe12345.top') {
@@ -503,8 +496,6 @@ function previewLocalImgs() {
                         <button onclick="this.parentNode.remove()">❌</button>
                     </div>
                 `))
-                document.getElementById('msgText').style = ''
-                document.getElementById('uploadImgList').style = ''
             }
         };
     }
@@ -1589,7 +1580,6 @@ document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
 // ui states
 var isFullscreen = false
-var newCommentDisabled = false
 var isLoadCommentErrorShowed = false
 
 
@@ -2273,26 +2263,31 @@ window.onhashchange = function (e) {
 // NEED IMPROVEMENT: MI Browser changes viewport dynamically, and when keyboard is closing, 
 //                   the viewport goes: 500x700 -> 500x1100 -> 500x1000, which may accidentally trigger this layout.
 //
-var prevWindowWidth = null
-var prevWindowHeight = null
+const TouchKeyboardDetector = {
+    init() {
+        window.addEventListener('resize', this.detect)
+    },
 
-window.onresize = () => {
-    var newWindowWidth = window.innerWidth
-    var newWindowHeight = window.innerHeight
-    //if (debug) console.log(`${prevWindowWidth}x${prevWindowHeight} -> ${newWindowWidth}x${newWindowHeight}`)
-
-    var newCommentBoxEl = document.getElementById('newCommentBox')
-    if (newCommentBoxEl != null && document.activeElement == document.getElementById('msgText') && newWindowHeight < prevWindowHeight) {
-        if (!document.body.classList.contains('touchKeyboardShowing') && (newCommentBoxEl.offsetHeight < 380)) {
-            console.log('detected editing newComment with touch keyboard')
-            document.body.classList.add('touchKeyboardShowing')
+    detect() {
+        let input = document.getElementById('msgText')
+        if (input && document.activeElement == input) {
+            if (!document.body.classList.contains('touchKeyboardShowing')
+                && document.getElementById('newCommentBox').offsetHeight < 370 * Settings.pageScale) {
+                console.log('detected editing newComment with touch keyboard')
+                document.body.classList.add('touchKeyboardShowing')
+            }
         }
-    } else {
-        //if (debug) console.log('leaving editing newComment with touch keyboard')
-        document.body.classList.remove('touchKeyboardShowing')
-    }
-    prevWindowWidth = newWindowWidth
-    prevWindowHeight = newWindowHeight
+        else {
+            //if (debug) console.log('leaving editing newComment with touch keyboard')
+            document.body.classList.remove('touchKeyboardShowing')
+        }
+    },
+}
+
+try {
+    TouchKeyboardDetector.init()
+} catch (error) {
+    logErr(error, 'failed to init TouchKeyboardDetector')
 }
 
 
