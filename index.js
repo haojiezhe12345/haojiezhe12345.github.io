@@ -293,7 +293,7 @@ function insertComment(comment, isKami = false) {
                 ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
             </div>
             <div class="id">#${comment.id}${isKami == true ? ' (kami.im)' : ''}</div>
-            <div class="comment" onwheel="if (!isFullscreen) event.preventDefault()">
+            <div class="comment">
                 ${htmlEscape(comment.comment)}
                 ${imgsDOM}
             </div>
@@ -1764,9 +1764,15 @@ const Comments = {
         loadComments()
 
         this.elements.container.onwheel = e => {
-            if (isFullscreen) {
-
-            } else {
+            if (!isFullscreen) {
+                let target = e.target
+                while (this.elements.container.contains(target)) {
+                    if (target.classList.contains('comment')) {
+                        // console.log(target.scrollHeight, target.clientHeight)
+                        if (target.scrollHeight > target.clientHeight) return
+                    }
+                    target = target.parentNode
+                }
                 e.deltaY > 0 ? this.seek(1) : this.seek(-1)
             }
         }
