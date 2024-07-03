@@ -1480,18 +1480,6 @@ body>* {
     justify-content: center;
 }
 
-@keyframes showPopup {
-    from {
-        transform: scale(1.15);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 #popupContainer #popupBG {
     position: absolute;
     top: 0;
@@ -1499,8 +1487,8 @@ body>* {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.2);
-    animation-name: showPopup;
-    animation-duration: 0.65s;
+    animation-name: fadein;
+    animation-duration: 0.5s;
     animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
 }
 
@@ -1516,9 +1504,21 @@ body>* {
     max-height: 90%;
     max-height: min(90%, 150vw);
     overflow: hidden;
-    animation-name: showPopup;
-    animation-duration: 0.65s;
-    animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
+    animation-name: showPopupFromPosition;
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.1, 1, 0.35, 1);
+}
+
+@keyframes showPopupFromPosition {
+    from {
+        transform: translate(var(--popupFromTranslateX), var(--popupFromTranslateY)) scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
 }
 
 #popupContainer .popupItem>div:first-child {
@@ -1677,6 +1677,7 @@ body>* {
     border-radius: 6.25rem;
     margin-right: 0.625rem;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 #showUserCommentPopup>div>h2>span {

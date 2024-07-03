@@ -575,7 +575,11 @@ const Popup = {
 
         this.hideAllPopupItems()
         this.elements.popupContainer.style.removeProperty('display');
-        document.getElementById(popupID).style.removeProperty('display');
+        setTimeout(() => {
+            this.elements.popupContainer.style.setProperty('--popupFromTranslateX', `${lastClickEvent ? lastClickEvent.pageX - window.innerWidth / 2 : 0}px`);
+            this.elements.popupContainer.style.setProperty('--popupFromTranslateY', `${lastClickEvent ? lastClickEvent.pageY - window.innerHeight / 2 : 0}px`);
+            document.getElementById(popupID).style.removeProperty('display');
+        }, 35);
 
         switch (popupID) {
             case 'setNamePopup':
@@ -2219,6 +2223,12 @@ try {
 } catch (error) {
     logErr(error, 'failed to init music player')
 }
+
+
+// global click handler
+//
+var lastClickEvent
+document.addEventListener('click', e => lastClickEvent = e)
 
 
 // global Esc key handler
