@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,9 +24,54 @@
             height: 100%;
             border: none;
         }
+
+        #fullscreenBtn {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: 10%;
+            transform: translateX(-50%);
+        }
+
+        @media (max-aspect-ratio: 1/1) {
+            #fullscreenBtn {
+                display: block;
+            }
+        }
     </style>
 </head>
+
 <body>
     <iframe src="https://haojiezhe12345.top:82/yumeniwa/"></iframe>
+    
+    <button id="fullscreenBtn" onclick="goFullscreen()">进入全屏 ⛶</button>
+
+    <script>
+        const iframe = document.querySelector('iframe')
+        const fullscreenBtn = document.querySelector('#fullscreenBtn')
+
+        function goFullscreen() {
+            document.documentElement.requestFullscreen()
+        }
+
+        function setIframeSize() {
+            const winWidth = window.innerWidth
+            const winHeight = window.innerHeight
+            if (document.fullscreenElement && winHeight > winWidth) {
+                iframe.style.width = `${winHeight}px`
+                iframe.style.height = `${winWidth}px`
+                iframe.style.transform = 'rotate(90deg)'
+                iframe.style.transformOrigin = `${winWidth / 2}px ${winWidth / 2}px`
+                fullscreenBtn.style.display = 'none'
+            } else {
+                iframe.removeAttribute('style')
+                fullscreenBtn.removeAttribute('style')
+            }
+        }
+
+        window.onresize = setIframeSize
+        document.onfullscreenchange = setIframeSize
+    </script>
 </body>
+
 </html>
