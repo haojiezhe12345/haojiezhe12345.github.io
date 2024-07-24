@@ -271,7 +271,7 @@ function insertComment(comment, isKami = false) {
     try {
         if (comment.image != '') {
             for (var i of comment.image.split(',')) {
-                imgsDOM += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); document.getElementById('lowerPanel').classList.add('lowerPanelUp')">`
+                imgsDOM += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); Comments.forceLowerPanelUp()">`
             }
         }
     } catch (error) { }
@@ -284,11 +284,11 @@ function insertComment(comment, isKami = false) {
                 onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
                 onclick="
                     showUserComment('${comment.sender.replace(/\'/g, "\\'")}'${isKami == true ? `, ${comment.uid}` : ''});
-                    document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+                    Comments.forceLowerPanelUp()
                 ">
             <div class="sender" onclick="
                 showUserComment('${comment.sender.replace(/\'/g, "\\'")}'${isKami == true ? `, ${comment.uid}` : ''});
-                document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+                Comments.forceLowerPanelUp()
                 ">
                 ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
             </div>
@@ -429,13 +429,8 @@ function newComment() {
 
     document.getElementById('msgText').addEventListener('focusin', () => {
         //console.log('msgText focused')
-        document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+        Comments.forceLowerPanelUp()
     })
-    document.getElementById('msgText').addEventListener('focusout', () => {
-        //console.log('msgText lost focus')
-        //document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
-    })
-
     document.getElementById('msgText').focus({ preventScroll: true })
 
     /*
@@ -1555,6 +1550,9 @@ var userCommentOffset = 0
 var userCommentIsKami = false
 
 // document elmnts
+const bgContainer = document.getElementById('bgContainer')
+const lowerPanel = document.getElementById('lowerPanel')
+
 var commentDiv = document.getElementById('comments')
 var userCommentEl = document.getElementById('userComment')
 
@@ -1587,7 +1585,9 @@ changeLang(getConfig('lang'))
 var debug = false
 if (location.hash == '#debug') {
     debug = true
-    document.getElementById('lowerPanel').classList.add('lowerPanelUp')
+    setTimeout(() => {
+        Comments.forceLowerPanelUp()
+    }, 0);
 }
 
 
@@ -1764,24 +1764,109 @@ const Comments = {
         }, time);
     },
 
+    GetTargetCommentScrollability(target) {
+        while (this.elements.container.contains(target)) {
+            if (target.classList.contains('comment') || target.id == 'msgText') {
+                // console.log(target.scrollHeight, target.clientHeight)
+                return {
+                    inputable: target.id == 'msgText',
+                    scrollable: target.scrollHeight > target.clientHeight,
+                    top: target.scrollTop < 1,
+                    bottom: target.scrollHeight - target.clientHeight - target.scrollTop < 1
+                }
+            }
+            target = target.parentNode
+        }
+        return {
+            inputable: false,
+            scrollable: false,
+            top: true,
+            bottom: true
+        }
+    },
+
+    forceLowerPanelUp() {
+        lowerPanel.classList.add('lowerPanelUp');
+        lowerPanel.classList.remove('lowerPanelDown')
+        document.documentElement.style.overscrollBehavior = 'contain'
+        document.body.style.overscrollBehavior = 'contain'
+    },
+
+    forceLowerPanelDown() {
+        lowerPanel.classList.remove('lowerPanelUp')
+        lowerPanel.classList.add('lowerPanelDown')
+        setTimeout(() => {
+            document.documentElement.style.removeProperty('overscroll-behavior')
+            document.body.style.removeProperty('overscroll-behavior')
+        }, 300);
+        try {
+            document.getElementById('msgText').blur()
+        } catch (error) { }
+    },
+
     init() {
         loadComments()
 
         this.elements.container.onwheel = e => {
             if (!isFullscreen) {
-                let target = e.target
-                while (this.elements.container.contains(target)) {
-                    if (target.classList.contains('comment')) {
-                        // console.log(target.scrollHeight, target.clientHeight)
-                        if (target.scrollHeight > target.clientHeight) return
-                    }
-                    target = target.parentNode
-                }
-                e.deltaY > 0 ? this.seek(1) : this.seek(-1)
+                let scroll = this.GetTargetCommentScrollability(e.target)
+                if (!scroll.inputable && !scroll.scrollable)
+                    e.deltaY > 0 ? this.seek(1) : this.seek(-1)
             }
         }
         this.elements.container.onscroll = () => this.scroll()
         setInterval(() => this.scroll(), 1000)
+
+        // lowerPanel Up/Down touch handlers
+        //
+        bgContainer.addEventListener('click', this.forceLowerPanelDown)
+        bgContainer.addEventListener('touchstart', this.forceLowerPanelDown)
+        document.addEventListener('mouseover', () => lowerPanel.classList.remove('lowerPanelDown'))
+
+        lowerPanel.addEventListener('touchstart', function (e) {
+            this.lastTouchStart = e.touches[0]
+            this.lastTouchMove = null
+            this.timeTouchStart = e.timeStamp
+
+            Comments.forceLowerPanelUp()
+            document.getElementById('mouseScrollTooltip').style.display = 'none';
+        })
+
+        lowerPanel.addEventListener('touchmove', function (e) {
+            const currentTouch = e.touches[0]
+            const deltaX = currentTouch.clientX - this.lastTouchStart.clientX
+            const deltaY = currentTouch.clientY - this.lastTouchStart.clientY
+
+            if (!this.lastTouchMove && deltaY > Math.abs(deltaX) && !isFullscreen) {
+                let scroll = Comments.GetTargetCommentScrollability(e.target)
+                this.touchMoveLowerPanel = scroll.inputable ? !scroll.scrollable : scroll.top
+            }
+
+            if (this.touchMoveLowerPanel && deltaY > 0 && !isFullscreen) {
+                lowerPanel.style.transform = `translateY(${deltaY}px)`
+                lowerPanel.style.transition = 'none'
+            }
+
+            this.lastTouchMove = currentTouch
+            this.timeLastMove = e.timeStamp
+        })
+
+        lowerPanel.addEventListener('touchend', function (e) {
+            if (this.touchMoveLowerPanel) {
+                lowerPanel.style.removeProperty('transform')
+                lowerPanel.style.removeProperty('transition')
+            }
+
+            try {
+                const deltaY = this.lastTouchMove.clientY - this.lastTouchStart.clientY
+                const deltaTime = this.timeLastMove - this.timeTouchStart
+                if (this.touchMoveLowerPanel && (deltaY / window.innerHeight > 0.15 || deltaY / window.innerHeight / deltaTime > 0.0007)) {
+                    Comments.forceLowerPanelDown()
+                }
+            } catch (error) { }
+
+            this.touchMoveLowerPanel = false
+        })
     },
 }
 
@@ -2243,7 +2328,7 @@ document.onkeydown = function (e) {
         } else if (isFullscreen) {
             toggleFullscreen()
         } else {
-            document.getElementById('lowerPanel').classList.remove('lowerPanelUp')
+            Comments.forceLowerPanelDown()
         }
     }
 }

@@ -598,7 +598,7 @@ body>* {
     }
 }
 
-#lowerPanel:hover,
+#lowerPanel:hover:not(.lowerPanelDown),
 #lowerPanel.lowerPanelUp {
     transform: translateY(0vh);
 }
@@ -625,7 +625,7 @@ body>* {
     border-right: 0.5rem solid transparent;
 }
 
-#lowerPanel:hover>.tooltip,
+#lowerPanel:hover:not(.lowerPanelDown)>.tooltip,
 #lowerPanel.lowerPanelUp>.tooltip {
     display: none;
 }
@@ -674,7 +674,7 @@ body>* {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
-#lowerPanel:hover #comments,
+#lowerPanel:hover:not(.lowerPanelDown) #comments,
 #lowerPanel.lowerPanelUp #comments {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.5);
@@ -729,9 +729,9 @@ body>* {
     pointer-events: initial;
 }
 
-#lowerPanel:hover .enableClickDelayed,
+#lowerPanel:hover:not(.lowerPanelDown) .enableClickDelayed,
 #lowerPanel.lowerPanelUp .enableClickDelayed,
-#lowerPanel:hover #comments .commentBox>*:not(.loadingCircle),
+#lowerPanel:hover:not(.lowerPanelDown) #comments .commentBox>*:not(.loadingCircle),
 #lowerPanel.lowerPanelUp #comments .commentBox>*:not(.loadingCircle) {
     animation-name: enableClickDelayed;
     animation-duration: 0.2s;
@@ -999,7 +999,7 @@ body>* {
     transition: line-height 0.5s;
 }
 
-#lowerPanel:hover #comments .loadingIndicator,
+#lowerPanel:hover:not(.lowerPanelDown) #comments .loadingIndicator,
 #lowerPanel.lowerPanelUp #comments .loadingIndicator {
     line-height: 55vh;
 }
@@ -1189,7 +1189,7 @@ body>* {
     transition: background-color 0.2s;
 }
 
-#lowerPanel:hover .commentSeekArrow,
+#lowerPanel:hover:not(.lowerPanelDown) .commentSeekArrow,
 #lowerPanel.lowerPanelUp .commentSeekArrow {
     display: flex;
 }
@@ -1268,7 +1268,7 @@ body>* {
     }
 }
 
-#lowerPanel:hover .backTransparent,
+#lowerPanel:hover:not(.lowerPanelDown) .backTransparent,
 #lowerPanel.lowerPanelUp .backTransparent {
     display: block;
 }
@@ -1954,6 +1954,7 @@ body>* {
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: contain;
     margin: 0;
     padding: 0;
 }
@@ -2340,9 +2341,9 @@ body>* {
     animation: none !important;
 }
 
-.lowend #lowerPanel:hover .enableClickDelayed,
+.lowend #lowerPanel:hover:not(.lowerPanelDown) .enableClickDelayed,
 .lowend #lowerPanel.lowerPanelUp .enableClickDelayed,
-.lowend #lowerPanel:hover #comments .commentBox>*:not(.loadingCircle),
+.lowend #lowerPanel:hover:not(.lowerPanelDown) #comments .commentBox>*:not(.loadingCircle),
 .lowend #lowerPanel.lowerPanelUp #comments .commentBox>*:not(.loadingCircle) {
     animation-name: enableClickDelayed !important;
     animation-duration: 0.2s !important;
@@ -2366,6 +2367,7 @@ body>* {
 
 body.fullscreen {
     overflow: hidden;
+    overscroll-behavior: contain;
 }
 
 .fullscreen #lowerPanel {
