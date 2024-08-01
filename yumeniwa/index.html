@@ -43,21 +43,27 @@
 
 <body>
     <iframe src="https://haojiezhe12345.top:82/yumeniwa/"></iframe>
-    
+
     <button id="fullscreenBtn" onclick="goFullscreen()">进入全屏 ⛶</button>
 
     <script>
         const iframe = document.querySelector('iframe')
         const fullscreenBtn = document.querySelector('#fullscreenBtn')
+        var forceLandscape = false
 
-        function goFullscreen() {
-            document.documentElement.requestFullscreen()
+        async function goFullscreen() {
+            try {
+                await document.documentElement.requestFullscreen()
+            } catch (error) {
+                forceLandscape = true
+                setIframeSize()
+            }
         }
 
         function setIframeSize() {
             const winWidth = window.innerWidth
             const winHeight = window.innerHeight
-            if (document.fullscreenElement && winHeight > winWidth) {
+            if ((document.fullscreenElement || forceLandscape) && winHeight > winWidth) {
                 iframe.style.width = `${winHeight}px`
                 iframe.style.height = `${winWidth}px`
                 iframe.style.transform = 'rotate(90deg)'
@@ -70,7 +76,15 @@
         }
 
         window.onresize = setIframeSize
-        document.onfullscreenchange = setIframeSize
+        document.onfullscreenchange = () => {
+            if (document.fullscreenElement) {
+                screen.orientation.lock('landscape').catch(() => {
+                    console.log('Your device does not support locking screen orientation')
+                })
+            } else {
+                screen.orientation.unlock()
+            }
+        }
     </script>
 </body>
 
