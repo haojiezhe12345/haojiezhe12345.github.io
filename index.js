@@ -737,10 +737,12 @@ const User = {
                             setConfig('token', r.data)
                             setConfig('username', '')
                             loadUserInfo()
-                            FloatMsgs.show({ type: 'info', persist: true, msg: /*html*/`
+                            FloatMsgs.show({
+                                type: 'info', persist: true,
+                                msg: /*html*/`
                                 <span class="ui zh">账号系统已升级, 您现在可以设置邮箱了</span>
                                 <span class="ui en">Account system has been upgraded, you can bind an email now.</span>
-                            ` })
+                            `})
                         }
                     })
                 }, 0);
@@ -870,6 +872,86 @@ const User = {
                 User.getMe().then(r => this.$refs.preview.src = User.convertAvatarPath(r.avatar))
             },
         })
+
+        Vue.component('userHome', {
+            template: '#userHome',
+
+            props: ['id', 'name', 'avatar'],
+
+            data: () => ({
+                user: {},
+                comments: [],
+                scrollPaused: false,
+                toEnd: false,
+            }),
+
+            methods: {
+                convertAvatarPath: User.convertAvatarPath,
+
+                getComments() {
+                    this.scrollPaused = true
+
+                    XHR.get('comments', {
+                        uid: this.user.id,
+                        from: this.comments.length,
+                        count: 50,
+                    }).then(r => {
+
+                        r.forEach(comment => {
+                            let time = new Date(comment.time * 1000)
+                            comment.timeStr = time.toLocaleDateString() + ' ' + time.toLocaleTimeString()
+                            if (typeof comment.image == typeof '' && comment.image) {
+                                comment.image = comment.image.split(',')
+                            } else {
+                                comment.image = []
+                            }
+                            this.comments.push(comment)
+                        })
+
+                        if (r.length < 10) {
+                            this.toEnd = true
+                        } else {
+                            this.scrollPaused = false
+                        }
+                    }).catch(() => {
+                        this.scrollPaused = false
+                    })
+                },
+
+                scroll(e) {
+                    if (!this.scrollPaused) {
+                        let toBottom = e.target.scrollHeight - e.target.clientHeight - e.target.scrollTop
+                        if (toBottom < 100) this.getComments()
+                    }
+                },
+
+                gotoComment(i) {
+                    clearComments(1);
+                    loadComments({ from: this.comments[i].id });
+                    closePopup()
+                },
+            },
+
+            mounted() {
+                this.user = {
+                    id: this.id,
+                    name: this.name,
+                    avatar: this.avatar,
+                }
+
+                XHR.get(this.id ? 'user/find' : 'user/me', {
+                    id: this.id
+                }).then(r => {
+                    let user = Array.isArray(r) ? r[0] : r
+                    if (user) {
+                        this.user = user
+                        this.getComments()
+                    } else {
+                        FloatMsgs.show({ type: 'warn', msg: `<span class="ui zh">找不到用户</span><span class="ui en">User not found</span> (ID: ${this.id})` })
+                    }
+                })
+            },
+        })
     },
 
     changeName() {
@@ -929,11 +1011,11 @@ const User = {
     },
 
     showMe() {
-        this.getMe().then(r => showUserComment(r.name, User.convertAvatarPath(r.avatar)))
+        Popup.show('userHome')
     },
 
     convertAvatarPath(avatar) {
-        return 'https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/' + encodeURIComponent(avatar)
+        return avatar ? 'https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/' + encodeURIComponent(avatar) : ''
     },
 
     loadUserInfo() {
@@ -1018,8 +1100,8 @@ function showUserComment(user, avatar, uid) {
             for (var comment of xhr.response) {
 
                 var time = new Date(comment.time * 1000)
-                date = time.toLocaleDateString()
-                hour = time.toLocaleTimeString()
+                var date = time.toLocaleDateString()
+                var hour = time.toLocaleTimeString()
 
                 var imgsDOM = '<i></i>'
                 try {
@@ -1031,7 +1113,7 @@ function showUserComment(user, avatar, uid) {
                 } catch (error) { }
 
                 userCommentEl.appendChild(html2elmnt(/*html*/`
-                    <div>
+                    <div class="userCommentItem">
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
                             <span onclick='clearComments(1); loadComments({ from: ${comment.id}${userCommentIsKami == true ? `, db: "kami"` : ``} }); closePopup()'

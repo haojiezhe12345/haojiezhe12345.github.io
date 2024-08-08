@@ -427,7 +427,7 @@
                     <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/.jpg">
                     <span>User</span>
                 </h2>
-                <div>
+                <div class="userCommentItem">
                     <p>2023/1/1<span>#1000</span></p>
                     <p>
                         <span onclick="clearComments(1); loadComments({ 'from': this.parentNode.parentNode.querySelector('span').innerText.replace('#', '') }); closePopup()">
@@ -786,6 +786,27 @@
                 <input ref="input" type="file" accept="image/*" @change="previewAvatar()"/>
                 <br>
                 <button class="okBtn" @click="uploadAvatar()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            </div>
+        </template>
+
+        <template id="userHome">
+            <div class="userHome" @scroll="scroll">
+                <h2>
+                    <img :src="convertAvatarPath(user.avatar)" onclick="viewImg(this.src)">
+                    <span>{{ user.name }}</span>
+                </h2>
+                <div v-for="(item, index) in comments" :key="item.source + item.id" class="userCommentItem">
+                    <p>{{ item.timeStr }}<span>#{{ item.id }}</span></p>
+                    <p>
+                        <span @click="gotoComment(index)">{{ item.comment }}</span>
+                        <i></i>
+                        <img v-for="img in item.image" :src="`https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${img}.jpg`" loading="lazy" onclick="viewImg(this.src)">
+                    </p>
+                </div>
+                <h4 v-if="toEnd">
+                    <span class="ui zh">- 共 {{ comments.length }} 条留言 -</span>
+                    <span class="ui en">- Total {{ comments.length }} messages -</span>
+                </h4>
             </div>
         </template>
     </div>
