@@ -2,6 +2,72 @@
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
+
+// requests
+//
+const XHR = {
+    baseUrl: 'https://haojiezhe12345.top:82/madohomu/api/',
+    token: '',
+
+    send(method, url, payload) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.open(method, this.baseUrl + url)
+
+            if (this.token) xhr.setRequestHeader('token', this.token)
+
+            if (typeof payload == typeof {}) {
+                xhr.setRequestHeader("Content-Type", "application/json")
+                xhr.send(JSON.stringify(payload))
+            } else {
+                xhr.send(payload)
+            }
+
+            xhr.onload = () => {
+                if (xhr.status == 200) {
+                    try {
+                        let r = JSON.parse(xhr.responseText)
+                        r.code && r.code != 1 && FloatMsgs.show({ type: 'warn', msg: `${r.message} (${r.code})` })
+                        resolve(r)
+                    } catch (error) {
+                        resolve(xhr.responseText)
+                    }
+                } else {
+                    if (xhr.status == 401) this.token = ''
+                    FloatMsgs.show({ type: 'error', msg: `${xhr.responseText} (${xhr.status})` })
+                    try {
+                        reject(JSON.parse(xhr.responseText))
+                    } catch (error) {
+                        reject(xhr.responseText)
+                    }
+                }
+            }
+
+            xhr.onerror = () => {
+                FloatMsgs.show({ type: 'error', msg: 'Network error' })
+                reject()
+            }
+            xhr.ontimeout = () => {
+                FloatMsgs.show({ type: 'error', msg: 'Request timed out' })
+                reject()
+            }
+        });
+    },
+
+    get(url, payload) {
+        return this.send('GET', url + obj2queryString(payload))
+    },
+
+    post(url, payload) {
+        return this.send('POST', url, payload)
+    },
+
+    put(url, payload) {
+        return this.send('PUT', url, payload)
+    },
+}
+
+
 // settings
 //
 const Settings = {
@@ -248,8 +314,8 @@ function insertComment(comment, isKami = false) {
     //if (debug) console.log('Insert before:', insertBeforeEl)
 
     var time = new Date(comment.time * 1000)
-    date = time.toLocaleDateString()
-    hour = time.toLocaleTimeString()
+    var date = time.toLocaleDateString()
+    var hour = time.toLocaleTimeString()
 
     var randBG
     while (true) {
@@ -267,7 +333,7 @@ function insertComment(comment, isKami = false) {
         comment.comment = comment.comment.replace('This message is sent using a proxy. If it is dirty, please click here to delete it.', '')
     }
 
-    var imgsDOM = '<br><br>'
+    var imgsDOM = ''
     try {
         if (comment.image != '') {
             for (var i of comment.image.split(',')) {
@@ -275,28 +341,22 @@ function insertComment(comment, isKami = false) {
             }
         }
     } catch (error) { }
+    if (imgsDOM) imgsDOM = '<br><br>' + imgsDOM
 
     commentDiv.insertBefore(html2elmnt(/*html*/`
-        <div class="commentBox commentItem" ${isKami == true ? `data-kamiid="#${comment.id}` : `id="#${comment.id}`}" data-timestamp="${comment.time}">
+        <div class="commentBox commentItem" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
             <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
-            <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${comment.sender}.jpg`}"
-                onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
+            <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : User.convertAvatarPath(comment.avatar)}"
                 onclick="
-                    showUserComment('${comment.sender.replace(/\'/g, "\\'")}'${isKami == true ? `, ${comment.uid}` : ''});
+                    showUserComment(&quot;${comment.sender.replace(/\\/g, '\\\\').replace(/\x22/g, '\\&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}&quot;, this.src, ${isKami == true ? comment.uid : undefined});
                     Comments.forceLowerPanelUp()
                 ">
-            <div class="sender" onclick="
-                showUserComment('${comment.sender.replace(/\'/g, "\\'")}'${isKami == true ? `, ${comment.uid}` : ''});
-                Comments.forceLowerPanelUp()
-                ">
+            <div class="sender" onclick="this.previousElementSibling.click()">
                 ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
             </div>
             <div class="id">#${comment.id}${isKami == true ? ' (kami.im)' : ''}</div>
-            <div class="comment">
-                ${htmlEscape(comment.comment)}
-                ${imgsDOM}
-            </div>
+            <div class="comment">${htmlEscape(comment.comment)}${imgsDOM}</div>
             <div class="time">${date + ' ' + hour}${(comment.hidden == 1) ? ' (hidden)' : ''}</div>
         </div>
     `), insertBeforeEl)
@@ -412,11 +472,11 @@ function newComment() {
     commentDiv.insertBefore(html2elmnt(/*html*/`
         <div class="commentBox" id="newCommentBox">
             <div class="bgcover"></div>
-            <img class="avatar" id="msgPopupAvatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'" onclick="showPopup('setNamePopup')">
-            <div class="sender" id="senderText" onclick="showPopup('setNamePopup')">${getConfig('username')}</div>
-            <div class="id" onclick="showPopup('setNamePopup')"><span class="ui zh">设置昵称/头像</span><span class="ui en">Change profile</span></div>
+            <img class="avatar" id="msgPopupAvatar" onclick="XHR.token && User.changeAvatar()">
+            <div class="sender" id="senderText" onclick="XHR.token && User.changeName()"></div>
+            <div class="id" onclick="Popup.show('loginPopup')"><span class="ui zh">注册/登录</span><span class="ui en">Login / Register</span></div>
             <div class="comment">
-                <textarea id="msgText" placeholder="圆神保佑~" onfocus="TouchKeyboardDetector.detect()" onblur="TouchKeyboardDetector.detect()"></textarea>
+                <textarea id="msgText" placeholder="圆神保佑~" onfocus="Comments.forceLowerPanelUp(); TouchKeyboardDetector.detect()" onblur="TouchKeyboardDetector.detect()"></textarea>
                 <div id="uploadImgList"></div>
             </div>
             <label>
@@ -427,10 +487,8 @@ function newComment() {
         </div>
     `), commentDiv.firstElementChild)
 
-    document.getElementById('msgText').addEventListener('focusin', () => {
-        //console.log('msgText focused')
-        Comments.forceLowerPanelUp()
-    })
+    loadUserInfo()
+
     document.getElementById('msgText').focus({ preventScroll: true })
 
     /*
@@ -449,57 +507,20 @@ function previewLocalImgs() {
     }
 
     for (let i = 0; i < imgUploadInput.files.length; i++) {
-        const imgfile = imgUploadInput.files[i]
-
-        //console.log(imgfile)
-        if (!imgfile.type.match(/image.*/)) {
-            console.log(`Invalid image file ${imgfile.name}`)
-            continue;
-        }
-
-        let fileReader = new FileReader();
-        fileReader.readAsDataURL(imgfile);
-        fileReader.onload = () => {
-
-            //console.log(fileReader.result)
-            let image = new Image();
-            image.src = fileReader.result;
-            image.onload = () => {
-
-                //console.log(image)
-                var width = image.width;
-                var height = image.height;
-
-                const max_pixels = 2.1 * 1000 * 1000;
-                if (width * height > max_pixels) {
-                    let zoom = Math.sqrt(max_pixels / (width * height))
-                    width = Math.round(width * zoom)
-                    height = Math.round(height * zoom)
-                }
-
-                var canvas = document.createElement("canvas");
-                canvas.width = width;
-                canvas.height = height;
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(image, 0, 0, width, height);
-
-                var imgDataURL = canvas.toDataURL("image/jpeg")
-
-                document.getElementById('uploadImgList').appendChild(html2elmnt(/*html*/`
-                    <div>
-                        <img src="${imgDataURL}" class="uploadImg" onclick="viewImg(this.src)">
-                        <button onclick="this.parentNode.remove()">❌</button>
-                    </div>
-                `))
-            }
-        };
+        resizeImg(imgUploadInput.files[i], null, 2.1 * 1000 * 1000).then(i => {
+            document.getElementById('uploadImgList').appendChild(html2elmnt(/*html*/`
+                <div>
+                    <img src="${i}" class="uploadImg" onclick="viewImg(this.src)">
+                    <button onclick="this.parentNode.remove()">❌</button>
+                </div>
+            `))
+        })
     }
 
     imgUploadInput.value = ''
 }
 
 function sendMessage() {
-    var sender = getConfig('username')
     var msg = document.getElementById('msgText').value
 
     var imgList = []
@@ -515,38 +536,26 @@ function sendMessage() {
         window.alert('请输入留言内容!\nDo not leave the message empty!')
         return
     }
-    if (sender.replace(/\s/g, '') == '') {
-        sender = '匿名用户'
-    }
 
     document.getElementById('sendBtn').disabled = true;
     document.getElementById('sendBtn').innerHTML = '<span class="ui zh">正在发送…</span><span class="ui en">Sending…</span>'
 
-    var xhr = new XMLHttpRequest();
-    var url = "https://haojiezhe12345.top:82/madohomu/api/post";
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            console.log(xhr.responseText);
-            document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送成功!</span><span class="ui en">Sent!</span>'
-            setTimeout(() => {
-                clearComments()
-                loadComments()
-            }, 1000);
-        }
-    };
-    xhr.onerror = () => {
+    XHR.post('comments/post', {
+        "sender": XHR.token ? undefined : '匿名用户',
+        "comment": msg,
+        'images': imgList
+    }).then(r => {
+        console.log(r);
+        document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送成功!</span><span class="ui en">Sent!</span>'
+        setTimeout(() => {
+            clearComments()
+            loadComments()
+        }, 1000);
+    }).catch(r => {
         window.alert('发送留言失败\n如果问题持续, 请发邮件到 3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
         document.getElementById('sendBtn').disabled = false;
         document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
-    }
-    var data = JSON.stringify({
-        "sender": sender,
-        "comment": msg,
-        'images': imgList
-    });
-    xhr.send(data);
+    })
 }
 
 // popup
@@ -554,82 +563,82 @@ function sendMessage() {
 const Popup = {
     elements: {
         popupContainer: document.getElementById('popupContainer'),
-        popupItems: document.getElementsByClassName('popupItem'),
+        popupItems: Array.from(document.querySelectorAll('#popupContainer .popupItem')),
     },
+
+    VuePopups: null,
 
     hideAllPopupItems() {
-        for (let i = 0; i < this.elements.popupItems.length; i++) {
-            this.elements.popupItems[i].style.display = 'none';
-        }
+        this.elements.popupItems.forEach(el => {
+            el.style.display = 'none'
+        })
     },
 
-    show(popupID) {
-        if (location.hash.slice(0, 7) != '#popup-') {
-            location.hash = 'popup'
-        }
-
-        this.hideAllPopupItems()
-        this.elements.popupContainer.style.removeProperty('display');
+    show(popupID, props) {
         setTimeout(() => {
-            this.elements.popupContainer.style.setProperty('--popupFromTranslateX', `${lastClickEvent ? lastClickEvent.pageX - window.innerWidth / 2 : 0}px`);
-            this.elements.popupContainer.style.setProperty('--popupFromTranslateY', `${lastClickEvent ? lastClickEvent.pageY - window.innerHeight / 2 : 0}px`);
-            document.getElementById(popupID).style.removeProperty('display');
-        }, 35);
+            if (location.hash.slice(0, 7) != '#popup-') {
+                location.hash = 'popup'
+            }
 
-        switch (popupID) {
-            case 'setNamePopup':
-                document.getElementById('setNameInput').value = getConfig('username')
-                break;
+            document.documentElement.style.setProperty('--popupFromTranslateX', `${lastClickEvent ? lastClickEvent.pageX - window.innerWidth / 2 : 0}px`);
+            document.documentElement.style.setProperty('--popupFromTranslateY', `${lastClickEvent ? lastClickEvent.pageY - window.innerHeight / 2 : 0}px`);
 
-            case 'setAvatarPopup':
-                avatarInput.value = ''
-                setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
-                setAvatarImg.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-                break
+            let popup = document.getElementById(popupID)
 
-            case 'getImgPopup':
-                document.getElementById('getImgPopup').firstElementChild.lastElementChild.innerHTML = ''
-                for (var key in Theme.themes) {
-                    var themeName = Theme.themes[key]
-                    try {
-                        for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
-                            document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
-                                <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
-                                <p>
-                                    ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
-                                    ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
-                                        <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
-                                    ` : ''}
-                                </p>
-                                <br>
-                            `))
+            if (popup.nodeName == 'TEMPLATE') {
+                this.VuePopups.show(popupID, props)
+                return
+            }
+
+            this.hideAllPopupItems()
+            this.elements.popupContainer.style.removeProperty('display');
+            popup.style.removeProperty('display')
+
+            switch (popupID) {
+                case 'getImgPopup':
+                    document.getElementById('getImgPopup').firstElementChild.lastElementChild.innerHTML = ''
+                    for (var key in Theme.themes) {
+                        var themeName = Theme.themes[key]
+                        try {
+                            for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
+                                document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
+                                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                                    <p>
+                                        ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
+                                        ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
+                                            <a href="https://www.pixiv.net/artworks/${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid}" target="_blank">Pixiv↗</a>
+                                        ` : ''}
+                                    </p>
+                                    <br>
+                                `))
+                            }
+                        } catch (error) {
+                            console.log(error)
                         }
-                    } catch (error) {
-                        console.log(error)
                     }
-                }
-                for (let i = 0; i < msgBgCount; i++) {
-                    document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
-                        <p>
-                            ${msgBgInfo[i].description != null
-                            ? msgBgInfo[i].description
-                            : `Artwork by ${msgBgInfo[i].illustrator} <a href="https://www.pixiv.net/artworks/${msgBgInfo[i].pixivid}" target="_blank">Pixiv↗</a>`}
-                        </p>
-                        <br>
-                    `))
-                }
-                break
+                    for (let i = 0; i < msgBgCount; i++) {
+                        document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
+                            <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                            <p>
+                                ${msgBgInfo[i].description != null
+                                ? msgBgInfo[i].description
+                                : `Artwork by ${msgBgInfo[i].illustrator} <a href="https://www.pixiv.net/artworks/${msgBgInfo[i].pixivid}" target="_blank">Pixiv↗</a>`}
+                            </p>
+                            <br>
+                        `))
+                    }
+                    break
 
-            case 'displaySettings':
-                let mode = getConfig('graphicsMode')
-                document.getElementById('graphicsMode').value = mode ? mode : 'high'
-                document.getElementById('pageZoomController').value = Math.round(Settings.pageScale * 100)
-                break
+                case 'displaySettings':
+                    let mode = getConfig('graphicsMode')
+                    document.getElementById('graphicsMode').value = mode ? mode : 'high'
+                    document.getElementById('pageZoomController').value = Math.round(Settings.pageScale * 100)
+                    break
 
-            default:
-                break;
-        }
+                default:
+                    break;
+            }
+        }, 35);
     },
 
     close() {
@@ -640,10 +649,12 @@ const Popup = {
 
         this.elements.popupContainer.style.display = 'none';
         this.hideAllPopupItems()
+
+        this.VuePopups.close()
     },
 
     isOpen() {
-        return this.elements.popupContainer.style.display != 'none' ? true : false
+        return this.elements.popupContainer.style.display != 'none' || this.VuePopups.popups.length > 0
     },
 
     init() {
@@ -652,10 +663,54 @@ const Popup = {
                 this.close()
             }
         }
+
+        this.VuePopups = new Vue({
+            el: '#popups',
+
+            data: () => ({
+                popups: [],
+            }),
+
+            methods: {
+                show(component, props) {
+                    this.popups.push({ component, props })
+                },
+
+                close(index) {
+                    index != null ? this.popups.splice(index, 1) : this.popups = []
+                },
+            },
+        })
+
+        Vue.component('promptInputPopup', {
+            template: '#promptInputPopup',
+
+            props: ['title', 'subtitle', 'text', 'action'],
+
+            data: () => ({
+                value: '',
+            }),
+
+            methods: {
+                submit() {
+                    this.submitAction(this.value)
+                },
+
+                submitAction(value) {
+                    console.log(value)
+                    this.$emit('close')
+                },
+            },
+
+            mounted() {
+                if (this.text) this.value = this.text
+                if (this.action) this.submitAction = this.action
+            },
+        })
     },
 }
 
-const showPopup = id => Popup.show(id)
+const showPopup = (id, props) => Popup.show(id, props)
 const closePopup = () => Popup.close()
 try {
     Popup.init()
@@ -665,125 +720,266 @@ try {
 
 // user related
 //
-function setUserName() {
-    var inputName = document.getElementById('setNameInput').value;
+const User = {
+    init() {
+        XHR.token = getConfig('token')
 
-    try {
-        var invalidFileChars = "\\/:*?\"<>|;";
-        var validFileChars = "＼／：＊？＂＜＞｜；";
-        for (i = 0; i < invalidFileChars.length; i++) {
-            //var re = new RegExp(invalidFileChars[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-            //inputName = inputName.replace(re, validFileChars[i]);
-            inputName = inputName.split(invalidFileChars[i]).join(validFileChars[i])
-        }
-    } catch (error) {
-        console.log(error)
-    }
-
-    if (['', '匿名用户'].includes(inputName)) {
-        closePopup()
-        return
-    }
-
-    setConfig('username', inputName)
-
-    if (getConfig('username') == '10.3') {
-        //location.reload()
-        closePopup()
-    } else {
-        showPopup('setAvatarPopup')
-    }
-
-    loadUserInfo()
-}
-
-function uploadAvatar() {
-
-    if (avatarInput.files.length === 0) {
-        console.log('No file chosen')
-        return;
-    }
-    if (!avatarInput.files[0].type.match(/image.*/)) {
-        window.alert("图片无效\nInvalid image");
-        return;
-    }
-
-    var fileReader = new FileReader();
-    fileReader.onload = () => {
-        var image = new Image();
-        image.onload = () => {
-
-            var MIN_WIDTH = 200;
-            var MIN_HEIGHT = 200;
-            var width = image.width;
-            var height = image.height;
-            if (width > height) {
-                if (height > MIN_HEIGHT) {
-                    width *= MIN_HEIGHT / height;
-                    height = MIN_HEIGHT;
-                }
+        if (getConfig('username')) {
+            if (XHR.token) {
+                setConfig('username', '')
             } else {
-                if (width > MIN_WIDTH) {
-                    height *= MIN_WIDTH / width;
-                    width = MIN_WIDTH;
+                setTimeout(() => {
+                    XHR.post('user/login', {
+                        name: getConfig('username')
+                    }).then(r => {
+                        if (r.code == 1) {
+                            XHR.token = r.data
+                            setConfig('token', r.data)
+                            setConfig('username', '')
+                            loadUserInfo()
+                            FloatMsgs.show({ type: 'info', persist: true, msg: /*html*/`
+                                <span class="ui zh">账号系统已升级, 您现在可以设置邮箱了</span>
+                                <span class="ui en">Account system has been upgraded, you can bind an email now.</span>
+                            ` })
+                        }
+                    })
+                }, 0);
+            }
+        }
+
+        Vue.component('loginPopup', {
+            template: '#loginPopup',
+
+            data: () => ({
+                screen: 'usernameLogin',
+
+                loginUsername: '',
+                loginEmail: '',
+
+                userFindResult: [],
+                loginUser: null,
+
+                regName: '',
+                regEmail: '',
+                regUseEmail: false,
+                regRequireEmail: false,
+            }),
+
+            methods: {
+                convertAvatarPath: User.convertAvatarPath,
+
+                searchUser() {
+                    XHR.get('user/find', {
+                        name: this.loginUsername
+                    }).then(r => {
+                        this.userFindResult = r
+                        if (r.length > 0) {
+                            this.screen = 'userFind'
+                        } else {
+                            this.gotoRegister()
+                        }
+                    })
+                },
+
+                gotoRegister() {
+                    this.screen = 'register'
+                    this.regName = this.loginUsername
+
+                    this.regUseEmail = false
+                    this.regRequireEmail = false
+                    this.userFindResult.forEach(user => {
+                        if (user.hasEmail == false) {
+                            this.regUseEmail = true
+                            this.regRequireEmail = true
+                        }
+                    })
+                },
+
+                previewAvatar() {
+                    resizeImg(this.$refs.avatarInput.files[0], 1, 200 * 200).then(i => this.$refs.avatarPreview.src = i)
+                },
+
+                register() {
+                    XHR.post('user/register', {
+                        avatar: this.$refs.avatarPreview.src.split(';base64,')[1],
+                        name: this.regName,
+                        email: this.regUseEmail ? this.regEmail || undefined : undefined
+                    }).then(r => {
+                        if (r.code == 1) {
+                            XHR.token = r.data
+                            setConfig('token', r.data)
+                            this.$emit('close')
+                            loadUserInfo()
+                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">注册成功!</span><span class="ui en">Registration successful!</span>' })
+                        }
+                    })
+                },
+
+                userFindLogin(index) {
+                    this.loginUser = this.userFindResult.length == 1 ? this.userFindResult[0] : this.userFindResult[index]
+                    if (this.loginUser.hasEmail) {
+                        this.screen = 'emailLogin'
+                    } else {
+                        this.login({ name: this.loginUser.name })
+                    }
+                },
+
+                emailLogin() {
+                    this.login({ email: this.loginEmail })
+                },
+
+                login(payload) {
+                    XHR.post('user/login', payload).then(r => {
+                        if (r.code == 1) {
+                            XHR.token = r.data
+                            setConfig('token', r.data)
+                            this.$emit('close')
+                            loadUserInfo()
+                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">登录成功!</span><span class="ui en">Login successful!</span>' })
+                        }
+                    })
+                },
+            },
+        })
+
+        Vue.component('setAvatarPopup', {
+            template: '#setAvatarPopup',
+
+            methods: {
+                previewAvatar() {
+                    resizeImg(this.$refs.input.files[0], 1, 200 * 200).then(i => this.$refs.preview.src = i)
+                },
+
+                uploadAvatar() {
+                    let avatar = this.$refs.preview.src.split(';base64,')[1]
+                    if (avatar) {
+                        XHR.put('user/update', { avatar }).then(r => {
+                            if (r.code == 1) {
+                                this.$emit('close')
+                                FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">上传成功</span><span class="ui en">Uploaded successfully</span>' })
+                                loadUserInfo()
+                            }
+                        })
+                    } else {
+                        this.$emit('close')
+                    }
+                },
+            },
+
+            mounted() {
+                User.getMe().then(r => this.$refs.preview.src = User.convertAvatarPath(r.avatar))
+            },
+        })
+    },
+
+    changeName() {
+        this.getMe().then(r => Popup.show("promptInputPopup",
+            {
+                title: '<span class="ui zh">修改昵称</span><span class="ui en">Change nickname</span>',
+                subtitle: /*html*/`
+                    <span class="ui zh">${r.hasEmail ? '' : '更改后, <b>将无法使用旧昵称登录</b><br>请确保这是您的账号, 再进行修改, 否则, 请先创建一个自己的账号<br><br>'}输入新昵称</span>
+                    <span class="ui en">${r.hasEmail ? '' : 'After changing, <b>you won&rsquo;t be able to log in with the old name.</b><br>Make sure this is your account, if not, create a new one.<br><br>'}Enter your new nickname</span>
+                    `,
+                text: r.name,
+                action(name) {
+                    XHR.put('user/update', { name }).then(r => {
+                        if (r.code == 1) {
+                            this.$emit('close')
+                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">修改成功</span><span class="ui en">Successfully changed</span>' })
+                            loadUserInfo()
+                        }
+                    })
                 }
             }
+        ))
+    },
 
-            var canvas = document.createElement("canvas");
-            canvas.width = width;
-            canvas.height = height;
+    changeEmail() {
+        this.getMe().then(r => Popup.show("promptInputPopup",
+            {
+                title: '<span class="ui zh">修改邮箱</span><span class="ui en">Change email</span>',
+                subtitle: /*html*/`
+                    <span class="ui zh">设置邮箱后, <b>该账号仅能通过邮箱登录</b><br>如果这不是你的账号, 请不要修改, 请先创建一个自己的账号<br><br>输入新邮箱</span>
+                    <span class="ui en">
+                        <b>You can only log in with your email after setting it, </b>people who don't know your email won't be able to log in.<br>
+                        If this is not your account, please do not change anything. Log out and register your own one.<br><br>
+                        Enter your email
+                    </span>
+                    `,
+                text: r.email,
+                action(email) {
+                    XHR.put('user/update', { email }).then(r => {
+                        if (r.code == 1) {
+                            this.$emit('close')
+                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">修改成功</span><span class="ui en">Successfully changed</span>' })
+                            loadUserInfo()
+                        }
+                    })
+                }
+            }
+        ))
+    },
 
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(image, 0, 0, width, height);
+    changeAvatar() {
+        Popup.show('setAvatarPopup')
+    },
 
-            fetch(canvas.toDataURL("image/jpeg")).then(res => res.blob()).then((blob) => {
+    getMe() {
+        return XHR.get('user/me')
+    },
 
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "https://haojiezhe12345.top:82/madohomu/api/upload");
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        console.log(xhr.responseText);
-                        setAvatarImg.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
-                        loadUserInfo()
-                    }
-                };
-                var formData = new FormData();
-                formData.append(`${getConfig('username')}.jpg`, blob)
-                xhr.send(formData);
+    showMe() {
+        this.getMe().then(r => showUserComment(r.name, User.convertAvatarPath(r.avatar)))
+    },
 
+    convertAvatarPath(avatar) {
+        return 'https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/' + encodeURIComponent(avatar)
+    },
+
+    loadUserInfo() {
+        var userInfo = document.getElementById('userInfo')
+        var avatar = document.getElementById('userInfoAvatar')
+        var name = document.getElementById('userInfoName')
+
+        if (XHR.token) {
+            User.getMe().then(r => {
+                avatar.src = User.convertAvatarPath(r.avatar)
+                name.textContent = r.name
+                try {
+                    document.getElementById('msgPopupAvatar').src = User.convertAvatarPath(r.avatar)
+                    document.getElementById('senderText').textContent = r.name
+                } catch (error) { }
             })
+            userInfo.onclick = undefined
+            userInfo.classList.remove('nologin')
+
+        } else {
+            avatar.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'
+            name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
+            try {
+                document.getElementById('msgPopupAvatar').src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'
+                document.getElementById('senderText').innerHTML = '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>'
+            } catch (error) { }
+            userInfo.onclick = () => Popup.show('loginPopup')
+            userInfo.classList.add('nologin')
         }
-        image.src = fileReader.result;
-    };
-    fileReader.readAsDataURL(avatarInput.files[0]);
+    },
+
+    logout() {
+        setConfig('token', '')
+        XHR.token = ''
+        setTimeout(loadUserInfo, 0)
+    },
 }
 
-function loadUserInfo() {
-    var userInfo = document.getElementById('userInfo')
-    var avatar = document.getElementById('userInfoAvatar')
-    var name = document.getElementById('userInfoName')
-
-    avatar.onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-    avatar.src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
-
-    if (getConfig('username') == '') {
-        name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
-        userInfo.onclick = () => { showPopup('setNamePopup') }
-        userInfo.classList.add('nologin')
-    } else {
-        name.innerText = getConfig('username')
-        userInfo.onclick = undefined
-        userInfo.classList.remove('nologin')
-    }
-
-    try {
-        document.getElementById('senderText').innerHTML = getConfig('username')
-        document.getElementById('msgPopupAvatar').src = `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${getConfig('username')}.jpg?${new Date().getTime()}`
-        document.getElementById('msgPopupAvatar').onerror = function () { this.onerror = null; this.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png' }
-    } catch (error) { }
+const loadUserInfo = () => User.loadUserInfo()
+try {
+    User.init()
+} catch (error) {
+    logErr(error, 'failed to init user')
 }
 
-function showUserComment(user, useKamiAvatar = false) {
+function showUserComment(user, avatar, uid) {
     if (debug) console.log(user)
     if ((user == null && userCommentUser == '') || user == '') {
         if (debug) console.log('empty user!')
@@ -795,10 +991,8 @@ function showUserComment(user, useKamiAvatar = false) {
     if (user != null) {
         userCommentEl.innerHTML = /*html*/`
         <h2>
-            <img src="${useKamiAvatar != false ? `https://kami.im/getavatar.php?uid=${useKamiAvatar}` : `https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/${user}.jpg`}"
-                onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'"
-                onclick="viewImg(this.src)">
-            <span>${user == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : user}${useKamiAvatar != false ? `<span class='kamiuid'>${useKamiAvatar}</span>` : ''}</span>
+            <img src="${avatar}" onclick="viewImg(this.src)">
+            <span>${user == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : user}${uid ? `<span class='kamiuid'>${uid}</span>` : ''}</span>
         </h2>
         `
         showPopup('showUserCommentPopup')
@@ -811,9 +1005,9 @@ function showUserComment(user, useKamiAvatar = false) {
     const xhr = new XMLHttpRequest();
 
     if (user != null) {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${user}&count=50`);
+        xhr.open("GET", 'https://haojiezhe12345.top:82/madohomu/api/comments' + obj2queryString({ user, count: 50 }));
     } else {
-        xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments?user=${userCommentUser}&from=${userCommentOffset}&count=50${userCommentIsKami == true ? '&db=kami' : ''}`);
+        xhr.open("GET", 'https://haojiezhe12345.top:82/madohomu/api/comments' + obj2queryString({ user: userCommentUser, from: userCommentOffset, count: 50, db: userCommentIsKami == true ? 'kami' : null }));
         if (debug) console.log(userCommentUser, userCommentOffset)
     }
 
@@ -840,9 +1034,8 @@ function showUserComment(user, useKamiAvatar = false) {
                     <div>
                         <p>${date + ' ' + hour}<span>#${comment.id}</span></p>
                         <p>
-                            <span onclick="clearComments(1); loadComments({ 'from': ${comment.id}${userCommentIsKami == true ? ", 'db': 'kami'" : ""} }); closePopup()">
-                                ${htmlEscape(comment.comment)}
-                            </span>
+                            <span onclick='clearComments(1); loadComments({ from: ${comment.id}${userCommentIsKami == true ? `, db: "kami"` : ``} }); closePopup()'
+                                >${htmlEscape(comment.comment)}</span>
                             ${imgsDOM}
                         </p>
                     </div>
@@ -1454,7 +1647,7 @@ function htmlEscape(txt) {
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/\n/g, "<br>")
-        .replace(/\s/g, "&nbsp;")
+    //.replace(/\s/g, "&nbsp;")
 }
 
 function compareArr(a1, a2) {
@@ -1470,12 +1663,11 @@ function compareArr(a1, a2) {
 }
 
 function obj2queryString(obj) {
-    if (obj.length == 0) return ''
     var arr = []
-    for (key in obj) {
-        arr.push(`${key}=${obj[key]}`)
+    for (let key in obj) {
+        obj[key] != null && arr.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
     }
-    return '?' + arr.join('&')
+    return arr.length > 0 ? '?' + arr.join('&') : ''
 }
 
 function getFileListAsync(url) {
@@ -1539,6 +1731,74 @@ function setOneTimeCSS(el, styles) {
     }, 35);
 }
 
+function readFile(blob) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = () => {
+            resolve(reader.result)
+        };
+    })
+}
+
+function resizeImg(img, aspectRatio, maxPixels) {
+    return new Promise((resolve, reject) => {
+
+        if (typeof img != typeof '') {
+            if (img && img.type.match(/image.*/)) {
+                readFile(img).then(i => {
+                    resizeImg(i, aspectRatio, maxPixels).then(i => resolve(i))
+                })
+            } else {
+                FloatMsgs.show({ type: 'error', msg: '<span class="ui zh">图片无效</span><span class="ui en">Invalid image</span>' })
+            }
+            return
+        }
+
+        let image = new Image();
+        image.src = img;
+        image.onload = () => {
+            let width = image.width;
+            let height = image.height;
+
+            if (aspectRatio) {
+                if (width / height > aspectRatio) {
+                    width = height * aspectRatio
+                } else {
+                    height = width / aspectRatio
+                }
+            }
+
+            if (maxPixels && width * height > maxPixels) {
+                let zoom = Math.sqrt(maxPixels / (width * height))
+                width *= zoom
+                height *= zoom
+            }
+
+            width = Math.round(width)
+            height = Math.round(height)
+
+            var canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+
+            if (aspectRatio) {
+                if (image.width / image.height > aspectRatio) {
+                    ctx.drawImage(image, (image.width - image.height * aspectRatio) / 2, 0, image.height * aspectRatio, image.height, 0, 0, width, height)
+                } else {
+                    ctx.drawImage(image, 0, (image.height - image.width / aspectRatio) / 2, image.width, image.width / aspectRatio, 0, 0, width, height)
+                }
+            }
+            else {
+                ctx.drawImage(image, 0, 0, width, height)
+            }
+
+            resolve(canvas.toDataURL("image/jpeg"))
+        }
+    })
+}
+
 
 // common vars
 //
@@ -1555,9 +1815,6 @@ const lowerPanel = document.getElementById('lowerPanel')
 
 var commentDiv = document.getElementById('comments')
 var userCommentEl = document.getElementById('userComment')
-
-var setAvatarImg = document.getElementById('setAvatarImg')
-var avatarInput = document.getElementById('setAvatarInput')
 
 var hoverCalendarEl = document.getElementById('hoverCalendar')
 
@@ -2086,8 +2343,8 @@ const ImgViewer = {
             }
             this.imgViewerScale *= scaleMultiplier
 
-            var mouseOffsetX = e.clientX - (document.documentElement.clientWidth / 2)
-            var mouseOffsetY = e.clientY - (document.documentElement.clientHeight / 2)
+            var mouseOffsetX = e.clientX - (window.innerWidth / 2)
+            var mouseOffsetY = e.clientY - (window.innerHeight / 2)
             if (debug) console.log(mouseOffsetX, mouseOffsetY)
 
             this.imgViewerOffsetX += (scaleMultiplier - 1) * (this.imgViewerOffsetX - mouseOffsetX)
@@ -2286,7 +2543,7 @@ const MusicPlayer = {
         this.elements.player.onended = () => {
             this.playNext()
         }
-        document.body.addEventListener('click', () => {
+        document.addEventListener('click', () => {
             if (!this.userPaused && this.elements.player.paused) this.play()
         })
 
@@ -2308,6 +2565,40 @@ try {
 } catch (error) {
     logErr(error, 'failed to init music player')
 }
+
+
+// floating messages
+//
+const FloatMsgs = new Vue({
+    el: '#floatMsgs',
+
+    data: () => ({
+        count: 0,
+        msgs: [],
+    }),
+
+    methods: {
+        show(msg) {
+            msg.id = this.count
+            this.count++
+            this.msgs.push(msg)
+            if (!msg.persist) {
+                setTimeout(() => {
+                    this.close(msg.id)
+                }, msg.timeout || 4000);
+            }
+        },
+
+        close(id) {
+            this.msgs.forEach((item, i) => {
+                if (item.id == id) {
+                    this.msgs.splice(i, 1)
+                    return
+                }
+            })
+        },
+    }
+})
 
 
 // global click handler
@@ -2425,4 +2716,4 @@ window.wallpaperPropertyListener = {
 
 // everything is now initiated
 //
-jsLoaded = true
+window.jsLoaded = true

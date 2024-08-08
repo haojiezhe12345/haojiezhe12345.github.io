@@ -13,3 +13,5 @@ https://haojiezhe12345.top:82/madohomu/res/
 "/madohomu"
 "/?no-redirect"
 
+vue2.js"
+vue2.min.js"

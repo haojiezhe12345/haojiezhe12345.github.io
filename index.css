@@ -9,7 +9,6 @@
 }
 
 html {
-    font-size: 16px;
     width: 100%;
     height: 100%;
 }
@@ -826,6 +825,10 @@ body>* {
     overflow-wrap: break-word;
 }
 
+#comments .commentBox.commentItem .comment {
+    white-space: pre-wrap;
+}
+
 #comments .commentBox .comment a {
     color: lightblue;
 }
@@ -1470,7 +1473,8 @@ body>* {
     transition: transform 0.2s;
 }
 
-#popupContainer {
+.popupContainer {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -1480,7 +1484,7 @@ body>* {
     justify-content: center;
 }
 
-#popupContainer #popupBG {
+.popupContainer .popupBG {
     position: absolute;
     top: 0;
     left: 0;
@@ -1492,7 +1496,7 @@ body>* {
     animation-timing-function: cubic-bezier(0.25, 0.25, 0, 1);
 }
 
-#popupContainer .popupItem {
+.popupContainer .popupItem {
     display: flex;
     flex-flow: column;
     position: relative;
@@ -1521,7 +1525,7 @@ body>* {
     }
 }
 
-#popupContainer .popupItem>div:first-child {
+.popupContainer .popupItem>div:first-child {
     min-height: 0;
     padding: 1.5rem 2rem;
     overflow: auto;
@@ -1529,14 +1533,40 @@ body>* {
 
 .popupItem h2 {
     margin-top: 0;
+    padding: 0 1.5rem;
     text-align: center;
 }
 
+.popupItem .inputHelperText {
+    font-size: 0.875rem;
+    color: #444;
+    max-width: 20rem;
+}
+
 .popupItem input[type=text] {
+    display: block;
+    box-sizing: border-box;
     background-color: rgba(0, 0, 0, 0.08);
-    border: 0.0625rem solid #555;
+    border: none;
+    border-bottom: 0.125rem solid;
+    border-color: rgba(0, 0, 0, 0.3);
     font-size: 1rem;
-    width: 11.875rem;
+    padding: 0.375rem 0.4375rem 0.25rem;
+    margin: 0.0625rem 0 1.125rem;
+    width: 15rem;
+    min-width: 100%;
+    max-width: 70vw;
+}
+
+.popupItem input[type=text]:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.4);
+}
+
+.popupItem input[type=text]:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.7);
 }
 
 .popupItem textarea {
@@ -1549,24 +1579,35 @@ body>* {
     font-size: 1rem;
 }
 
-.popupItem .okBtn {
+.popupItem .okBtn,
+.popupItem .actionBtnContainer button {
     float: right;
     padding: 0.375rem 0.75rem;
-    border: 0.0625rem solid #555;
-    background-color: #eee;
+    border: 0.0625rem solid;
+    border-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 6.25rem;
 }
 
-.popupItem .okBtn:hover {
-    border: 0.0625rem solid black;
-    background-color: #f8f8f8;
+.popupItem .okBtn:hover,
+.popupItem .actionBtnContainer button:hover {
+    border-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
-.popupItem .okBtn:active {
-    background-color: #ccc;
+.popupItem .okBtn:active,
+.popupItem .actionBtnContainer button:active {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.popupItem .closeBtn {
+.popupItem .okBtn:disabled,
+.popupItem .actionBtnContainer button:disabled {
+    border-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.popupItem .closeBtn,
+.popupItem .backBtn {
     position: absolute;
     top: 1.5rem;
     right: 1.5rem;
@@ -1582,21 +1623,46 @@ body>* {
     border-radius: 100%;
 }
 
-.popupItem .closeBtn::after {
-    content: "×";
+.popupItem .backBtn {
+    left: 1.5rem;
+    right: initial;
 }
 
-.popupItem .closeBtn:hover {
+.popupItem .closeBtn::after {
+    content: "\00D7";
+}
+
+.popupItem .backBtn::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 90%;
+    background-image: url('https://haojiezhe12345.top:82/madohomu/res/arrow_left.svg');
+    background-size: 100% 100%;
+}
+
+.popupItem .closeBtn:hover,
+.popupItem .backBtn:hover {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-.popupItem .closeBtn:active {
+.popupItem .closeBtn:active,
+.popupItem .backBtn:active {
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popupItem .actionBtnContainer {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
 }
 
 .popupItem span {
     display: inline-block;
-    text-decoration: inherit;
+    /* text-decoration: inherit; */
 }
 
 /*
@@ -1609,43 +1675,103 @@ body>* {
     margin: 0.1875rem 0;
 }
 
-#msgPopupAvatar {
-    width: 2.5rem;
-    height: 2.5rem;
-    object-fit: cover;
-    border-radius: 100%;
-}
-
-#setNamePopup,
-#setAvatarPopup,
+.setAvatarPopup,
 #getImgPopup {
     text-align: center;
 }
 
-#setNamePopup p {
+p.altLoginOption {
     float: left;
-    margin: 0.3125rem 0;
+}
+
+p.altLoginOption,
+.popupItem .actionBtnContainer p {
+    margin: 0;
+    padding: 0.3125rem 0;
     font-size: 0.875rem;
     cursor: pointer;
     user-select: none;
     font-weight: bold;
-}
-
-#setNamePopup p span {
     text-decoration: underline;
 }
 
-#setAvatarPopup input {
-    width: 18.125rem;
+.loginPopup .userFindItem {
+    border-radius: 0.5rem;
+    user-select: none;
 }
 
-#setAvatarImg {
+.loginPopup .userFindItem:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.loginPopup .userFindItem:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.loginPopup .userFindItem:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.loginPopup .userFindItem>.userinfo {
+    display: flex;
+    align-items: center;
+    flex-flow: row;
+    padding: 0.5rem;
+    gap: 0.5rem;
+}
+
+.loginPopup .userFindItem>.userinfo>img {
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 6.25rem;
+    object-fit: cover;
+}
+
+.loginPopup .userFindItem>.userinfo>div {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.loginPopup .userFindItem>.userinfo .username {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.loginPopup .userFindItem>.userinfo .userdetail {
+    font-size: 0.875rem;
+    color: #444;
+}
+
+.loginPopup .emailLoginInfo {
+    text-align: center;
+}
+
+.loginPopup .emailLoginInfo>div {
+    margin-bottom: 0.5rem;
+}
+
+.setAvatarPopup input {
+    width: 16rem;
+    display: block;
+}
+
+.setAvatarImg,
+.loginPopup .emailLoginInfo>img {
     width: 8rem;
     height: 8rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
+    display: block;
+    margin: 0.5rem auto;
     object-fit: cover;
     border-radius: 100%;
+}
+
+.userRegister input[type=file] {
+    display: none;
+}
+
+.userRegister .setting-switch {
+    margin: 0.25rem 0;
 }
 
 #getImgPopup img {
@@ -1668,6 +1794,7 @@ body>* {
     align-items: center;
     text-align: left;
     margin-bottom: 0.375rem;
+    padding: 0;
 }
 
 #showUserCommentPopup>div>h2>img {
@@ -1725,6 +1852,7 @@ body>* {
     max-width: 100%;
     overflow-x: hidden;
     overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 #showUserCommentPopup>div>div:hover>p:last-child>span {
@@ -2170,6 +2298,100 @@ body>* {
     100% {
         transform: translateX(0rem);
     }
+}
+
+#floatMsgs {
+    top: 15%;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    pointer-events: none;
+}
+
+#floatMsgs>div {
+    margin: 0 0 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(0.5rem);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    max-width: 80vw;
+    display: flex;
+    flex-flow: row;
+    gap: 0.5rem;
+    align-items: center;
+    box-shadow: 0 0.125rem 0.5rem 0 rgba(0, 0, 0, 0.5);
+    animation: floatMsgFlyin 0.3s;
+}
+
+#floatMsgs>div.success {
+    background-color: rgba(200, 255, 200, 0.75);
+}
+
+#floatMsgs>div.warn {
+    background-color: rgba(255, 255, 200, 0.75);
+}
+
+#floatMsgs>div.error {
+    background-color: rgba(255, 200, 200, 0.75);
+}
+
+#floatMsgs>div.persist {
+    pointer-events: all;
+}
+
+#floatMsgs>div>i {
+    user-select: none;
+    font-style: normal;
+    flex-shrink: 0;
+}
+
+#floatMsgs>div>span {
+    min-width: 0;
+}
+
+#floatMsgs .closeBtn {
+    display: block;
+    width: 0.825em;
+    height: 0.825em;
+    line-height: 0.625em;
+    font-size: 1.6rem;
+    font-family: Arial;
+    box-sizing: border-box;
+    padding: 0.125em;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 100%;
+}
+
+#floatMsgs .closeBtn::after {
+    content: "\00D7";
+}
+
+#floatMsgs .closeBtn:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+#floatMsgs .closeBtn:active {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+@keyframes floatMsgFlyin {
+    from {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#vue-templates {
+    display: none;
 }
 
 

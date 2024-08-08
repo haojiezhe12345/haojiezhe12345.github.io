@@ -4,12 +4,13 @@ import os
 
 def loadReplaceTxt(txtfile):
     txtdict = {}
-    lines = '\n'
+    prev_line = ''
     with open(txtfile, encoding='utf-8') as f:
-        lines = f.read().splitlines()
-    for i in range(len(lines)):
-        if lines[i] != '\n' and lines[i] != '' and lines[i + 1] != '\n' and lines[i + 1] != '':
-            txtdict[lines[i]] = lines[i + 1]
+        for line in f.readlines():
+            line = line.strip()
+            if line and prev_line:
+                txtdict[prev_line] = line
+            prev_line = line
     return txtdict
 
 
@@ -31,6 +32,7 @@ replaceDict = loadReplaceTxt('replace.txt')
 print(json.dumps(replaceDict, indent=4))
 
 remoteDir = R'Z:\Web\Dashboard0\madohomu'
+# remoteDir = R'Z:\Web\apitest'
 
 for file in os.listdir(remoteDir):
     if (file.startswith('index')):

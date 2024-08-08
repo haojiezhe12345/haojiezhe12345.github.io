@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" style="font-size: 16px;">
 
 <head>
     <meta charset="UTF-8">
     <meta id="viewport1" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>圆焰圆 MadoHomu.love</title>
+    <title>圆焰圆CP站 | MadoHomu.love</title>
     <meta name="author" content="浩劫者12345">
     <meta name="description" content="圆焰圆CP站 | 魔法少女小圆 | Madoka & Homura - Puella Magi Madoka Magica">
     <meta name="keywords" content="魔法少女小圆, 圆焰, 焰圆, 圆焰圆, puella magi madoka magica, madoka magica, madohomu, homumado, 魔法少女まどか☆マギカ, まどマギ, まどほむ, ほむまど">
     <meta name="theme-color" content="#ffaacc">
+
+    <script src="https://haojiezhe12345.top:82/madohomu/res/vue2.min.js" defer></script>
+    <script src="index.js" defer></script>
 
     <link rel="stylesheet" href="index.css" type="text/css">
     <style id="langCSS"></style>
@@ -26,6 +29,7 @@
     <link rel="canonical" href="https://madohomu.love/" />
     <link rel="alternate" href="https://homumado.love/" />
     <link rel="alternate" href="https://haojiezhe12345.top:82/madohomu" />
+
     <meta name="baidu-site-verification" content="codeva-V0EIVkSEQr" />
     <meta name="baidu-site-verification" content="codeva-IFVIZ5XacW" />
     <meta name="sogou_site_verification" content="DipYziapu2" />
@@ -205,10 +209,11 @@
             
             <div id="my-dropdown">
                 <div>
-                    <div onclick="showPopup('setNamePopup')"><span class="ui zh">切换用户</span><span class="ui en">Change account</span></div>
-                    <div onclick="showPopup('setAvatarPopup')"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></div>
-                    <div onclick="showUserComment(getConfig('username'))"><span class="ui zh">我的留言</span><span class="ui en">My sent messages</span></div>
-                    <div onclick="setConfig('username', ''); setTimeout(loadUserInfo, 0)"><span class="ui zh">退出</span><span class="ui en">Logout</span></div>
+                    <div onclick="User.changeName()"><span class="ui zh">修改昵称</span><span class="ui en">Change nickname</span></div>
+                    <div onclick="User.changeAvatar()"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></div>
+                    <div onclick="User.changeEmail()"><span class="ui zh">修改邮箱</span><span class="ui en">Change email</span></div>
+                    <div onclick="User.showMe()"><span class="ui zh">我的留言</span><span class="ui en">My sent messages</span></div>
+                    <div onclick="User.logout()"><span class="ui zh">退出</span><span class="ui en">Logout</span></div>
                 </div>
             </div>
         </div>
@@ -233,17 +238,22 @@
                 <div class="comment">
                     <div class="ui zh">
                         欢迎来到 <strong style="text-decoration: underline;">MadoHomu.love</strong> !<br>
-                        这是一个以<strong><span style="color: #ffbbdd;">圆</span><span style="color: #d5a2ff;">焰</span><span style="color: #ffbbdd;">圆</span></strong>为主题的留言网站<br>
+                        这里是<strong><span style="color: #ffbbdd;">圆</span><span style="color: #d5a2ff;">焰</span><span style="color: #ffbbdd;">圆</span></strong>的主题网站<br>
                         友情链接: <a href="http://kami.im" target="_blank">kami.im (圆神站)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (焰魔站)</a>
                         <br><br>
                         <b>下面这一块是留言板~ 想说些什么都可以!</b><br>
-                        比如发早安/晚安打卡, 许愿, 祷告, 参拜圆神/焰魔, 或者记录日常, 分享同人作品等等…
+                        比如发早安/晚安打卡, 许愿, 祷告, 拜圆神/焰魔; 或者记录日常, 分享作品, 碎碎念都可以…
                         <br><br>
                         <b>※ 请友善发言, 共同维护网站的圣洁 ※</b><br>
-                        <b>不要发送烂梗</b> (如<span style="text-decoration: line-through;">圆神启动</span>,<span style="text-decoration: line-through;">掉头梗</span>), 
-                        也不要发送令人不适的留言(如发电,拆CP等), 否则会被隐藏
+                        请尊重角色, <b>不要发送烂梗</b><br>
+                        禁止拆CP、对角色发电等不雅言论
                         <br><br>
-                        登录系统暂时没有做, 请直接输入昵称即可, 设置昵称后即可设置头像 (如果你输入昵称之后发现已经有头像了, 那很可能是跟别人重复了)
+                        账号系统已经做好, 支持用户名注册和邮箱注册<br>
+                        仅使用用户名注册时, 任何人都可以使用你的用户名直接登录<br>
+                        绑定邮箱后, 仅能使用邮箱登录, 这更安全<br>
+                        (暂不支持发送邮件恢复账号, 之后计划支持)
+                        <br><br>
+                        对于没有账号系统 (2024年8月之前) 注册的账号, 我们根据头像上传和发留言时间分配了UID, 可以直接用原昵称登录, 也可以绑定邮箱
                         <br><br>
                         本站支持查看<a href="http://kami.im" target="_blank">kami.im (圆神站)</a>的留言, 可在"工具"手动启用 (切换主题为kami.im会自动启用)
                         <!--感谢<a href="https://discord.gg/AFqn4yQcM9" target="_blank">Discord kami.im</a>频友Yuudachi_Kai2备份的数据!-->
@@ -251,12 +261,7 @@
                         本站还使用了以下图片, 非常感谢这些画师!<br>
                         <a href="javascript:;" onclick="showPopup('getImgPopup')">→ 点击查看全部图源 ←</a>
                         <br><br>
-                        网站使用的八音盒BGM: (作曲: オルゴール ミドリ)<br>
-                        <a href="https://music.163.com/song?id=1311466561&userid=310755433" target="_blank">01. 君の銀の庭 (Originally Performed by Kalafina 「劇場版 魔法少女まどか☆マギカ[新編]叛逆の物語」より)</a>
-                        <br>
-                        <a href="https://music.163.com/song?id=1311433797&userid=310755433" target="_blank">02. Sagitta luminis 「女神まどかのテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
-                        <br>
-                        <a href="https://music.163.com/song?id=1311434463&userid=310755433" target="_blank">03. Scaena felix 「日常のテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
+                        网站默认随机播放魔圆及同人音乐, 可以点开左上角主题切歌
                         <br><br>
                         本站已在GitHub开源<br>
                         前端: <a href="https://github.com/haojiezhe12345/haojiezhe12345.github.io" target="_blank">haojiezhe12345.github.io</a><br>
@@ -270,26 +275,20 @@
                     <div class="ui en">
                         Welcome to <strong style="text-decoration: underline;">MadoHomu.love</strong> , a website made for <strong><span style="color: #ffbbdd;">Madoka</span> & <span style="color: #d5a2ff;">Homura</span></strong> !
                         <br>
-                        Also try: <a href="http://kami.im" target="_blank">kami.im (for Madokami)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (for Devil Homura)</a>
+                        Also try: <a href="http://kami.im" target="_blank">kami.im (for Madokami)</a> <a href="https://bbs.ihomura.com" target="_blank">bbs.ihomura.com (for Akuma Homura)</a>
                         <br><br>
-                        <strong>What you can do here:</strong> Make wishes, pray, say morning to Madokami / Homura, share feelings, and so on. Contents are not limited to Madoka / Homura.
+                        <strong>You can:</strong> Make wishes, pray, say morning to Madokami / Homura, share artworks, your feelings about Madoka Magica, and of course your everyday life.
                         <br><br>
-                        No spams, harassing, or NSFW content.
+                        <strong>You cannot:</strong> Post spams, Ads, harassing, or NSFW content.
                         <br><br>
-                        No login needed. Just enter your nickname and set an avatar.<br>
-                        Note that the avatar is linked to the nickname, so users using a same nickname share the same avatar.
+                        You can log in with username or email. Linking an email prevents others from logging in using your nickname.
                         <br><br>
                         We support viewing messages from <a href="http://kami.im" target="_blank">kami.im</a> which can be enabled in "Tools" menu (this will be automatically enabled if you switch theme to kami.im)
                         <br><br>
                         Below are the sources of background images. Great thanks to these illustrators!<br>
                         <a href="javascript:;" onclick="showPopup('getImgPopup')">→ CLICK HERE to view all of them ←</a>
                         <br><br>
-                        BGM used: (composer: オルゴール ミドリ)<br>
-                        <a href="https://music.163.com/song?id=1311466561&userid=310755433" target="_blank">01. 君の銀の庭 (Originally Performed by Kalafina 「劇場版 魔法少女まどか☆マギカ[新編]叛逆の物語」より)</a>
-                        <br>
-                        <a href="https://music.163.com/song?id=1311433797&userid=310755433" target="_blank">02. Sagitta luminis 「女神まどかのテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
-                        <br>
-                        <a href="https://music.163.com/song?id=1311434463&userid=310755433" target="_blank">03. Scaena felix 「日常のテーマ」 (Originally Performed by 梶浦由記 「魔法少女まどか☆マギカ」より)</a>
+                        You can view the BGM playlist via the top-left "Themes" button.
                         <br><br>
                         MadoHomu.love is open source on GitHub<br>
                         Frontend: <a href="https://github.com/haojiezhe12345/haojiezhe12345.github.io" target="_blank">haojiezhe12345.github.io</a><br>
@@ -302,13 +301,19 @@
                     </div>
                 </div>
 
-                <div class="time" onclick="hideTopCommentElmnt.click()" style="
+                <div class="time" onclick="
+                    hideTopCommentElmnt.click();
+                    FloatMsgs.show({ type: 'success', persist: true, msg: `
+                        <span class='ui zh'>隐藏成功。可在【工具】→【显示设置】中重新打开</span>
+                        <span class='ui en'>Hidden. Can be displayed again via [Tools] → [Display settings]</span>
+                    ` })
+                " style="
                     text-decoration: underline;
                     font-size: 1rem;
                     right: 0;
                     left: initial;
                     cursor: pointer;
-                "><span class="ui zh">不再显示 ×</span><span class="ui en">Hide ×</span></div>
+                "><span class="ui zh">隐藏 ×</span><span class="ui en">Hide ×</span></div>
 
                 <div class="time" style="font-size: 0.75rem;">
                     <a href="https://icp.gov.moe/?keyword=20230631" target="_blank" style="color: white;">萌ICP备20230631号</a>
@@ -403,38 +408,9 @@
 
     </div>
 
-    <div id="popupContainer" style="display: none;">
+    <div id="popupContainer" class="popupContainer" style="display: none;">
 
-        <div id="popupBG"></div>
-
-        <div id="setNamePopup" class="popupItem">
-            <div>
-                <h2><span class="ui zh">设置昵称</span><span class="ui en">Set nickname</span></h2>
-                <label for="setNameInput"><span class="ui zh">昵称:</span><span class="ui en">Nickname:</span></label>
-                <input type="text" id="setNameInput" value="" onkeypress="((event) => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        setUserName()
-                    }})(event)">
-                <br><br>
-                <p onclick="showUserComment(document.getElementById('setNameInput').value)"><span class="ui zh">我的留言记录 ↗</span><span class="ui en">My sent messages →</span></p>
-                <button class="okBtn" onclick="setUserName()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
-            </div>
-            <button class="closeBtn"></button>
-        </div>
-
-        <div id="setAvatarPopup" class="popupItem">
-            <div>
-                <h2><span class="ui zh">设置头像</span><span class="ui en">Set avatar</span></h2>
-                <img id="setAvatarImg" src="" onerror="">
-                <form id="avatarForm" enctype="multipart/form-data">
-                    <input id="setAvatarInput" type="file" accept="image/*" onchange="uploadAvatar()"/>
-                </form>
-                <br>
-                <button class="okBtn" onclick="closePopup();"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
-            </div>
-            <button class="closeBtn"></button>
-        </div>
+        <div id="popupBG" class="popupBG"></div>
 
         <div id="getImgPopup" class="popupItem">
             <div>
@@ -661,25 +637,159 @@
 
     </div>
 
+    <div id="popups">
+        <div v-for="(item, index) in popups" class="popupContainer">
+            <div class="popupBG" @click="close(index)"></div>
+            <div class="popupItem">
+                <component :is="item.component" v-bind="item.props" @close="close(index)"></component>
+                <button class="closeBtn" @click="close(index)"></button>
+            </div>
+        </div>
+    </div>
+
     <div id="imgViewerBox" style="display: none">
         <img id="imgViewer" draggable="false" style="transform: translateX(0px) translateY(0px) scale(1)">
     </div>
 
-    <script>
-        var jsLoaded = false
-    </script>
-    <script src="index.js"></script>
-    <script>
-        if (jsLoaded == false) {
-            window.alert([
-                'JavaScript 加载失败。可能是你的浏览器版本过低 (最低支持 Chrome 49)',
-                '请尝试清除浏览器缓存, 或使用隐身模式。如果问题持续, 请发邮件到 3112611479@qq.com (或加此QQ)。',
-                '',
-                'Failed to load JavaScript, is your browser outdated? (minimum Chrome 49)',
-                'Try flushing browser cache, use incognito mode, or contact 3112611479@qq.com if problem persists.',
-            ].join('\n'))
-        }
-    </script>
+    <div id="floatMsgs">
+        <div v-for="item in msgs" :key="item.id" :class="[item.type, item.persist ? 'persist' : '']">
+            <i v-if="item.type == 'info'">💡</i>
+            <i v-if="item.type == 'success'">✅</i>
+            <i v-if="item.type == 'warn'">⚠️</i>
+            <i v-if="item.type == 'error'">❌</i>
+            <span v-html="item.msg"></span>
+            <i v-if="item.persist" class="closeBtn" @click="close(item.id)"></i>
+        </div>
+    </div>
+    
+    <div id="vue-templates">
+        <template id="loginPopup">
+            <div class="loginPopup">
+                <div v-if="screen == 'usernameLogin'">
+                    <h2><span class="ui zh">注册/登录</span><span class="ui en">Log in / Register</span></h2>
+
+                    <div class="inputHelperText"><span class="ui zh">用户名 (昵称)</span><span class="ui en">Username (nickname)</span></div>
+                    <input type="text" v-model="loginUsername"
+                        @keypress="e => e.key == 'Enter' && loginUsername.length > 0 && searchUser()">
+
+                    <p class="altLoginOption" @click="screen = 'emailLogin'; loginUser = null">
+                        <span class="ui zh">邮箱登录</span><span class="ui en">Email login</span>
+                    </p>
+
+                    <button class="okBtn" :disabled="loginUsername.length == 0" @click="searchUser()">
+                        <span class="ui zh">下一步 →</span><span class="ui en">Continue →</span>
+                    </button>
+                </div>
+
+                <div v-if="screen == 'emailLogin'">
+                    <h2><span class="ui zh">邮箱登录</span><span class="ui en">Log in with email</span></h2>
+
+                    <div v-if="loginUser" class="emailLoginInfo">
+                        <img :src="convertAvatarPath(loginUser.avatar)">
+                        <div>{{ loginUser.name }}</div>
+                    </div>
+
+                    <div v-if="loginUser" class="inputHelperText">
+                        <span class="ui zh">该账号已绑定邮箱<br>在下方输入绑定的邮箱以登录:</span><span class="ui en">This account is linked to an email<br>Enter your email to log in:</span>
+                    </div>
+                    <div v-else class="inputHelperText"><span class="ui zh">邮箱</span><span class="ui en">Email</span></div>
+
+                    <input type="text" v-model="loginEmail"
+                        @keypress="e => e.key == 'Enter' && loginEmail.length > 0 && emailLogin()">
+
+                    <p v-if="!loginUser" class="altLoginOption" @click="screen = 'usernameLogin'">
+                        <span class="ui zh">用户名登录</span><span class="ui en">Username login</span>
+                    </p>
+
+                    <button class="okBtn" :disabled="loginEmail.length == 0" @click="emailLogin()">
+                        <span class="ui zh">下一步 →</span><span class="ui en">Continue →</span>
+                    </button>
+
+                    <button v-if="loginUser" class="backBtn" @click="screen = 'userFind'"></button>
+                </div>
+
+                <div v-if="screen == 'userFind'">
+                    <h2 v-if="userFindResult.length == 1"><span class="ui zh">这是您的账号吗?</span><span class="ui en">Is this your account?</span></h2>
+                    <h2 v-else><span class="ui zh">哪个是您的账号?</span><span class="ui en">Which account is yours?</span></h2>
+
+                    <div v-for="(item, index) in userFindResult" class="userFindItem" @click="userFindResult.length > 1 && userFindLogin(index)">
+                        <div class="userinfo">
+                            <img :src="convertAvatarPath(item.avatar)">
+                            <div>
+                                <div class="username">{{ item.name }}</div>
+                                <div class="userdetail">
+                                    <span>UID: {{ item.id }}&nbsp;&nbsp;</span>
+                                    <span>
+                                        <span class="ui zh">注册时间: </span><span class="ui en">Joined </span>
+                                        {{ new Date(item.create_time * 1000).toLocaleDateString() }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actionBtnContainer">
+                        <button v-if="userFindResult.length == 1" @click="gotoRegister()"><span class="ui zh">不, 注册新账号</span><span class="ui en">No, register new account</span></button>
+                        <button v-if="userFindResult.length == 1" @click="userFindLogin()"><span class="ui zh">是, 立即登录</span><span class="ui en">Yes, log in now</span></button>
+                        <p v-else @click="gotoRegister()"><span class="ui zh">都不是, 注册新账号</span><span class="ui en">None is mine, register new account</span></p>
+                    </div>
+
+                    <button class="backBtn" @click="screen = 'usernameLogin'"></button>
+                </div>
+
+                <div v-if="screen == 'register'" class="userRegister">
+                    <h2><span class="ui zh">注册账号</span><span class="ui en">Registration</span></h2>
+                    
+                    <img ref="avatarPreview" class="setAvatarImg" src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png" @click="$refs.avatarInput.click()">
+                    <input ref="avatarInput" type="file" accept="image/*" @change="previewAvatar()"/>
+
+                    <div class="inputHelperText"><span class="ui zh">昵称</span><span class="ui en">Enter a nickname</span></div>
+                    <input type="text" v-model="regName">
+
+                    <label class="setting-switch">
+                        <span class="ui zh">绑定邮箱</span><span class="ui en">Link email</span>
+                        <input type="checkbox" id="hideTopComment" v-model="regUseEmail" :disabled="regRequireEmail">
+                    </label>
+
+                    <div v-if="regUseEmail">
+                        <div v-if="regRequireEmail" class="inputHelperText">
+                            <span class="ui zh">该昵称已被使用<br>要使用重复的昵称，必须绑定邮箱</span>
+                            <span class="ui en">This nickname is already taken<br>To use a same name, you must provide an email</span>
+                        </div>
+                        <div v-else class="inputHelperText"><span class="ui zh">邮箱</span><span class="ui en">Enter your email</span></div>
+                        <input type="text" v-model="regEmail">
+                        <div class="inputHelperText"><span class="ui zh">暂不支持找回邮箱、设置密码</span><span class="ui en">Email recovery and password setting are not supported at this moment.</span></div>
+                    </div>
+
+                    <button class="okBtn" :disabled="regName.length == 0 || (regUseEmail && regEmail.length == 0)" @click="register()">
+                        <span class="ui zh">注册 →</span><span class="ui en">Register →</span>
+                    </button>
+
+                    <button class="backBtn" @click="screen = userFindResult.length == 0 ? 'usernameLogin' : 'userFind'"></button>
+                </div>
+            </div>
+        </template>
+
+        <template id="promptInputPopup">
+            <div>
+                <h2 v-html="title"></h2>
+                <div v-html="subtitle" class="inputHelperText"></div>
+                <input type="text" v-model="value" @keypress="e => e.key == 'Enter' && value.length > 0 && submit()">
+                <button class="okBtn" :disabled="value.length == 0" @click="submit()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            </div>
+        </template>
+
+        <template id="setAvatarPopup">
+            <div class="setAvatarPopup">
+                <h2><span class="ui zh">设置头像</span><span class="ui en">Set avatar</span></h2>
+                <img ref="preview" class="setAvatarImg" onclick="viewImg(this.src)">
+                <input ref="input" type="file" accept="image/*" @change="previewAvatar()"/>
+                <br>
+                <button class="okBtn" @click="uploadAvatar()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+            </div>
+        </template>
+    </div>
+
 </body>
 
 </html>
