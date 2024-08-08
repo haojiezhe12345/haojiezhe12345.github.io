@@ -1646,6 +1646,7 @@ function htmlEscape(txt) {
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
+        .replace(/\r\n/g, "<br>")
         .replace(/\n/g, "<br>")
     //.replace(/\s/g, "&nbsp;")
 }
