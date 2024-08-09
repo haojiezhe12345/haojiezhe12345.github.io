@@ -106,6 +106,24 @@ const Settings = {
             }
         }, 0);
     },
+
+    get showHidden() {
+        let el = document.getElementById('showHiddenCSS')
+        return el ? Boolean(el.innerHTML) : false
+    },
+
+    set showHidden(value) {
+        let el = document.getElementById('showHiddenCSS')
+        if (!el) {
+            document.head.appendChild(html2elmnt('<style id="showHiddenCSS"></style>'))
+            el = document.getElementById('showHiddenCSS')
+        }
+        el.innerHTML = value ? `
+            #comments .commentBox.hidden {
+                display: block;
+            }
+        ` : ''
+    },
 }
 
 try {
@@ -189,11 +207,6 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
             // insert comments
             for (let comment of xhr.response) {
 
-                // skip hidden
-                if (comment.hidden == 1 && !document.getElementById('showHidden').checked) {
-                    console.log('skipping hidden comment #' + comment.id + ' ' + comment.comment)
-                    continue
-                }
                 // skip 2024 kami msgs when loading 2023.05
                 if (queryObj.db == 'kami' && comment.id >= 35668 && getMaxCommentTime() <= 1684651800) {
                     continue
@@ -344,7 +357,7 @@ function insertComment(comment, isKami = false) {
     if (imgsDOM) imgsDOM = '<br><br>' + imgsDOM
 
     commentDiv.insertBefore(html2elmnt(/*html*/`
-        <div class="commentBox commentItem" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
+        <div class="commentBox commentItem${comment.hidden ? ' hidden' : ''}" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
             <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
             <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : User.convertAvatarPath(comment.avatar)}"

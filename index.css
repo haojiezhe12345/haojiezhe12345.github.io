@@ -715,6 +715,10 @@ body>* {
     }
 }
 
+#comments .commentBox.hidden {
+    display: none;
+}
+
 .touchKeyboardShowing #comments .commentBox {
     width: 20rem;
     height: 23.75rem;
