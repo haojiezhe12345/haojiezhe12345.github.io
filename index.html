@@ -207,7 +207,7 @@
             <img id="userInfoAvatar">
             <span id="userInfoName"></span>
             
-            <div id="my-dropdown">
+            <div id="my-dropdown" style="display: none;">
                 <div>
                     <div onclick="User.changeName()"><span class="ui zh">修改昵称</span><span class="ui en">Change nickname</span></div>
                     <div onclick="User.changeAvatar()"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></div>
@@ -791,10 +791,30 @@
 
         <template id="userHome">
             <div class="userHome" @scroll="scroll">
-                <h2>
+                <div class="userinfo">
                     <img :src="convertAvatarPath(user.avatar)" onclick="viewImg(this.src)">
-                    <span>{{ user.name }}</span>
-                </h2>
+                    <div>
+                        <div>{{ user.name }}</div>
+                        <div>
+                            <span>UID: {{ user.id }}&nbsp;&nbsp;</span>
+                            <span>
+                                <span class="ui zh">注册时间: </span><span class="ui en">Joined </span>
+                                {{ new Date(user.create_time * 1000).toLocaleDateString() }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="useraction">
+                    <div>
+                        <img src="https://haojiezhe12345.top:82/madohomu/res/edit.svg"><span class="ui zh">编辑资料</span><span class="ui en">Edit profile</span>
+                        <ul>
+                            <li onclick="User.changeName()"><span class="ui zh">修改昵称</span><span class="ui en">Change nickname</span></li>
+                            <li onclick="User.changeAvatar()"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></li>
+                            <li onclick="User.changeEmail()"><span class="ui zh">修改邮箱</span><span class="ui en">Change email</span></li>
+                        </ul>
+                    </div>
+                    <div onclick="User.logout()"><img src="https://haojiezhe12345.top:82/madohomu/res/logout.svg"><span class="ui zh">退出登录</span><span class="ui en">Log out</span></div>
+                </div>
                 <div v-for="(item, index) in comments" :key="item.source + item.id" class="userCommentItem">
                     <p>{{ item.timeStr }}<span>#{{ item.id }}</span></p>
                     <p>

@@ -1032,7 +1032,7 @@ const User = {
                     document.getElementById('senderText').textContent = r.name
                 } catch (error) { }
             })
-            userInfo.onclick = undefined
+            userInfo.onclick = () => this.showMe()
             userInfo.classList.remove('nologin')
 
         } else {
@@ -1050,6 +1050,7 @@ const User = {
     logout() {
         setConfig('token', '')
         XHR.token = ''
+        closePopup()
         setTimeout(loadUserInfo, 0)
     },
 }

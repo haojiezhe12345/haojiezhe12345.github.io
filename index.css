@@ -1878,7 +1878,7 @@ p.altLoginOption,
 }
 
 #showUserCommentPopup>div>h4,
-.userHome>h4 {
+.userHome h4 {
     text-align: center;
     margin-bottom: 0;
 }
@@ -1891,30 +1891,101 @@ p.altLoginOption,
 .userHome {
     width: 31.25rem;
     max-width: 100%;
+    min-height: 16.5rem !important;
     box-sizing: border-box;
     padding: 1.25rem 1.5rem 2rem !important;
 }
 
-.userHome>h2 {
+.userHome .userinfo {
     display: flex;
     align-items: center;
-    text-align: left;
-    margin-bottom: 0.375rem;
-    padding: 0;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.userHome>h2>img {
-    width: 3.125rem;
-    height: 3.125rem;
+.userHome .userinfo>img {
+    width: 3.375rem;
+    height: 3.375rem;
     object-fit: cover;
-    border-radius: 6.25rem;
-    margin-right: 0.625rem;
+    border-radius: 100%;
     flex-shrink: 0;
     cursor: pointer;
 }
 
-.userHome>h2>span {
-    line-height: 1em;
+.userHome .userinfo>div {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.userHome .userinfo>div>div:first-child {
+    font-size: 1.125rem;
+    font-weight: bold;
+    padding-right: 2rem;
+    margin-bottom: 0.125rem;
+}
+
+.userHome .userinfo>div>div:last-child {
+    font-size: 0.875rem;
+    color: #444;
+}
+
+.userHome .useraction {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 5%;
+}
+
+.userHome .useraction img {
+    width: 1.375rem;
+    height: 1.375rem;
+    vertical-align: top;
+    margin-right: 0.1875rem;
+}
+
+.userHome .useraction>div {
+    text-align: center;
+    position: relative;
+    padding: 0.375rem 0.625rem;
+    border-radius: 100rem;
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.userHome .useraction>div:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.userHome .useraction ul {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    margin: 0;
+    padding: 0.375rem 0;
+    list-style-type: none;
+    background-color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0.9375rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+    box-shadow: 0rem 0.1875rem 0.5rem -0.0625rem rgba(0, 0, 0, 0.5);
+    user-select: none;
+    animation: fadein 0.2s;
+}
+
+.userHome .useraction>div:hover ul {
+    display: block;
+}
+
+.userHome .useraction ul>li {
+    padding: 0.625rem 1.5rem;
+}
+
+.userHome .useraction ul>li:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 #themeSelectorPopup>div:first-child {
