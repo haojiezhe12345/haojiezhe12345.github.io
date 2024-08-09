@@ -195,7 +195,7 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
             var keepPos = (xhr.response[0].time > getMaxCommentTime() || keepPosEl != undefined)
             if (debug) console.log('KeepPos:', keepPos)
             if (keepPosEl == undefined) {
-                keepPosEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
+                keepPosEl = getFirstVisibleComment()
             }
             var prevCommentTop = keepPosEl.getBoundingClientRect().top
             var prevCommentLeft = keepPosEl.getBoundingClientRect().left
@@ -428,9 +428,9 @@ function loadNewerComments() {
         if (getMaxCommentID() == null) {
             // jumped to a kami msg >2023.05 and need to load madohomu
             // load newer madohomu by maxKamiTime (can be omitted, it will load on next commentScroll)
-            if (getMaxKamiID() == 35662) loadComments({ 'time': getMaxCommentTime() }, document.getElementById('loadingIndicatorBefore').nextElementSibling)
+            if (getMaxKamiID() == 35662) loadComments({ 'time': getMaxCommentTime() }, getFirstVisibleComment())
             // load madohomu between minKamiTime and maxKamiTime, no need if kami <2023.05
-            if (getMaxKamiID() != 35662) loadComments({ 'timeMin': getMinCommentTime(), 'timeMax': getMaxCommentTime() }, document.getElementById('loadingIndicatorBefore').nextElementSibling, true)
+            if (getMaxKamiID() != 35662) loadComments({ 'timeMin': getMinCommentTime(), 'timeMax': getMaxCommentTime() }, getFirstVisibleComment(), true)
         } else {
             // load newer madohomu
             loadComments({ 'from': getMaxCommentID() + count, 'count': count })
@@ -469,6 +469,10 @@ function getMaxCommentTime() {
 function getMinCommentTime() {
     var commentList = document.querySelectorAll('.commentItem')
     if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].dataset.timestamp)
+}
+
+function getFirstVisibleComment() {
+    return document.querySelector('.commentItem:not(.hidden)') || document.getElementById('loadingIndicatorBefore').nextElementSibling
 }
 
 // new message box
@@ -2048,7 +2052,7 @@ const Comments = {
     seek(delta) {
         if (!this.hasItem()) return
 
-        const commentWidth = document.querySelector('.commentItem').getBoundingClientRect().width + 20 * Settings.pageScale
+        const commentWidth = getFirstVisibleComment().getBoundingClientRect().width + 20 * Settings.pageScale
         if (this.seekDone) {
             this.seekLeft = (Math.round((this.elements.container.scrollLeft) / commentWidth) + delta) * commentWidth
             window.requestAnimationFrame(t1 => this.seekAnimate(t1, this.elements.container.scrollWidth))
