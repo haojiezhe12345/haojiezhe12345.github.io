@@ -888,6 +888,20 @@ const User = {
             methods: {
                 convertAvatarPath: User.convertAvatarPath,
 
+                getUser() {
+                    XHR.get(this.id ? 'user/find' : 'user/me', {
+                        id: this.id
+                    }).then(r => {
+                        let user = Array.isArray(r) ? r[0] : r
+                        if (user) {
+                            this.user = user
+                            this.getComments()
+                        } else {
+                            FloatMsgs.show({ type: 'warn', msg: `<span class="ui zh">找不到用户</span><span class="ui en">User not found</span> (ID: ${this.id})` })
+                        }
+                    })
+                },
+
                 getComments() {
                     this.scrollPaused = true
 
@@ -938,18 +952,7 @@ const User = {
                     name: this.name,
                     avatar: this.avatar,
                 }
-
-                XHR.get(this.id ? 'user/find' : 'user/me', {
-                    id: this.id
-                }).then(r => {
-                    let user = Array.isArray(r) ? r[0] : r
-                    if (user) {
-                        this.user = user
-                        this.getComments()
-                    } else {
-                        FloatMsgs.show({ type: 'warn', msg: `<span class="ui zh">找不到用户</span><span class="ui en">User not found</span> (ID: ${this.id})` })
-                    }
-                })
+                this.getUser()
             },
         })
     },
@@ -1031,6 +1034,11 @@ const User = {
                     document.getElementById('msgPopupAvatar').src = User.convertAvatarPath(r.avatar)
                     document.getElementById('senderText').textContent = r.name
                 } catch (error) { }
+                Popup.VuePopups.$children.forEach(v => {
+                    if (v.$options.name == 'userHome') {
+                        v.getUser()
+                    }
+                })
             })
             userInfo.onclick = () => this.showMe()
             userInfo.classList.remove('nologin')
