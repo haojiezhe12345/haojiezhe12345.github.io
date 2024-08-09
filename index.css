@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'AaWoyoudianfangLite';
-    src: url('https://haojiezhe12345.top:82/madohomu/res/AaWoyoudianfangLite.ttf') format('truetype');
+    src: url('https://haojiezhe12345.top:82/madohomu/res/AaWoyoudianfangLite.ttf?1') format('truetype');
 }
 
 .ui.en {
@@ -210,7 +210,8 @@ body>* {
 
 #mainCaptions .birthdayCaption p,
 #mainCaptions .christmasCaption p,
-#mainCaptions .lunarNewYearCaption p {
+#mainCaptions .lunarNewYearCaption p,
+#mainCaptions .qixiCaption p {
     color: #ff729c;
     font-family: 'comic sans ms';
     font-weight: bold;
@@ -232,12 +233,25 @@ body>* {
     text-shadow: 0 0 0.25em black, 0 0 0.25em black;
 }
 
-#mainCaptions .lunarNewYearCaption p {
+#mainCaptions .lunarNewYearCaption p,
+#mainCaptions .qixiCaption p {
     font-family: AaWoyoudianfangLite;
     color: #f33;
     font-size: min(16vw, 8vh);
     font-weight: normal;
     font-style: normal;
+    text-shadow: -0.03em -0.03em white, -0.03em 0.03em white, 0.03em -0.03em white, 0.03em 0.03em white,
+        0 0 0.25em white, 0 0 0.25em white;
+}
+
+#mainCaptions .qixiCaption p {
+    color: #ff9cba;
+    margin-top: 5vh;
+}
+
+#mainCaptions .qixiCaption p span.ui.en {
+    font-family: AaWoyoudianfangLite;
+    font-size: min(10vw, 6vh);
     text-shadow: -0.03em -0.03em white, -0.03em 0.03em white, 0.03em -0.03em white, 0.03em 0.03em white,
         0 0 0.25em white, 0 0 0.25em white;
 }

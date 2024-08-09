@@ -1210,7 +1210,7 @@ const Theme = {
             this.intervals.push(setInterval(() => f(), timeout))
         },
 
-        reset() {
+        clear() {
             this.timeouts.forEach(i => {
                 clearTimeout(i)
             })
@@ -1227,6 +1227,7 @@ const Theme = {
         '#birthday': 'birthday',
         '#christmas': 'christmas',
         '#lunarNewYear': 'lunarNewYear',
+        '#qixi': 'qixi',
         '#night': 'night',
         '#kami': 'kami',
     },
@@ -1264,6 +1265,9 @@ const Theme = {
         }
         else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
             return 'lunarNewYear'
+        }
+        else if (new Date('2024-08-10T00:00') < d && d < new Date('2024-08-11T06:00')) {
+            return 'qixi'
         }
         else if (d.getHours() >= 23 || d.getHours() <= 5) {
             return 'night'
@@ -1321,7 +1325,7 @@ const Theme = {
             logErr(error, 'failed to init theme-specific options')
         }
 
-        this.timers.reset()
+        this.timers.clear()
 
         this.theme = theme
         this.currentBG = this.getCurrentBgCount() - 1
@@ -1377,14 +1381,14 @@ const Theme = {
         try {
             bgs[prev].classList.remove('visible')
             bgs[this.currentBG].classList.add('ready', 'animating', 'visible')
-            bgs[this.currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${this.currentBG + 1}.jpg?2")`
+            bgs[this.currentBG].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${this.currentBG + 1}.jpg")`
             // for single-image theme, show only the first image and disable slideshow
             if (prev == this.currentBG) return
             this.timers.setTimeout(() => {
                 bgs[prev].classList.remove('ready', 'animating')
                 bgs[next].classList.add('ready')
                 bgs[next].classList.remove('bgzoom')
-                bgs[next].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${next + 1}.jpg?2")`
+                bgs[next].firstElementChild.style.backgroundImage = `url("${bgurl}mainbg${next + 1}.jpg")`
             }, 2500);
         } catch (error) {
             logErr(error, 'failed to show next image')
