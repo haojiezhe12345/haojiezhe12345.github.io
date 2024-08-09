@@ -1240,33 +1240,33 @@ const Theme = {
         this.setTheme(this.themes[location.hash])
 
         setInterval(() => {
-            if (!this.lastAutoTheme) this.lastAutoTheme = this.getAutoTheme()
             let newAutoTheme = this.getAutoTheme()
             //console.log(this.lastAutoTheme, newAutoTheme)
-            if (this.lastAutoTheme != newAutoTheme) this.setTheme()
+            if (this.lastAutoTheme && this.lastAutoTheme != newAutoTheme) this.setTheme()
             this.lastAutoTheme = newAutoTheme
         }, 1000)
 
         Array.from(this.elements.listSelectors).forEach(e => {
             e.onclick = () => {
                 this.setTheme(e.dataset.theme)
-                Popup.close()
+                closePopup()
             }
         })
     },
 
     getAutoTheme() {
         let d = new Date()
-        if (d.getMonth() + 1 == 10 && d.getDate() == 3) {
+        let y = d.getFullYear()
+        if (new Date(`Oct 3 ${y} 00:00`) < d && d < new Date(`Oct 4 ${y} 06:00`)) {
             return 'birthday'
         }
-        else if ((d.getMonth() + 1 == 12 && d.getDate() == 25) || (d.getMonth() + 1 == 12 && d.getDate() == 26 && d.getHours() < 6)) {
+        else if (new Date(`Dec 25 ${y} 00:00`) < d && d < new Date(`Dec 26 ${y} 06:00`)) {
             return 'christmas'
         }
-        else if ((d.getMonth() + 1 == 2 && 10 <= d.getDate() && d.getDate() <= 15) || (d.getMonth() + 1 == 2 && d.getDate() == 9 && d.getHours() >= 6)) {
+        else if (new Date(`Jan 29 2025 00:00`) < d && d < new Date(`Feb 3 2025 06:00`)) {
             return 'lunarNewYear'
         }
-        else if (new Date('2024-08-10T00:00') < d && d < new Date('2024-08-11T06:00')) {
+        else if (new Date(`Aug 10 2024 00:00`) < d && d < new Date(`Aug 11 2024 06:00`)) {
             return 'qixi'
         }
         else if (d.getHours() >= 23 || d.getHours() <= 5) {
@@ -1429,7 +1429,6 @@ const Theme = {
 
 try {
     Theme.init()
-    var theme = Theme.theme
 } catch (error) {
     logErr(error, 'failed to init theme')
 }
