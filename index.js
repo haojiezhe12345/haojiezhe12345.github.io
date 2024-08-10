@@ -265,20 +265,6 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
             console.log(`Error: ${xhr.status}`);
         }
     };
-    xhr.onerror = () => {
-        if (isLoadCommentErrorShowed == false && false) {
-            window.alert([
-                '加载留言失败',
-                '请尝试刷新页面, 清除DNS缓存, 切换网络, 或者10分钟后重试',
-                '如数小时内仍未解决, 请发邮件到 3112611479@qq.com (或加此QQ)',
-                '',
-                'Failed to load messages',
-                'Try refreshing this page, flush DNS cache, switch to mobile data, or try again in 10 minutes',
-                'Please contact 3112611479@qq.com if it\'s not fixed for hours',
-            ].join('\n'))
-            isLoadCommentErrorShowed = true
-        }
-    }
     xhr.send();
 }
 
@@ -550,7 +536,7 @@ function sendMessage() {
     }
 
     if (msg.replace(/\s/g, '') == '') {
-        window.alert('请输入留言内容!\nDo not leave the message empty!')
+        FloatMsgs.show({ type: 'warn', msg: '<span class="ui zh">留言不能为空!</span><span class="ui en">Do not leave the message empty!</span>' })
         return
     }
 

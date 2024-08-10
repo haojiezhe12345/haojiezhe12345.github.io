@@ -490,6 +490,7 @@ body>* {
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 0.75rem 0.75rem rgba(255, 255, 255, 0.9);
     border-radius: 6.25rem;
+    cursor: pointer;
     transition: all 0.2s;
 }
 

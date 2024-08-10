@@ -385,7 +385,7 @@
                         <li onclick="showPopup('getImgPopup')"><span class="ui zh">💾 保存背景图片</span><span class="ui en">💾 Download backgrounds</span></li>
                         <li onclick="
                             if (installPrompt != null) installPrompt.prompt()
-                            else if (isInStandaloneMode) window.alert('你已安装过App\nApp already installed')
+                            else if (isInStandaloneMode) FloatMsgs.show({ type: 'info', msg: `<span class='ui zh'>你已安装过App</span><span class='ui en'>App already installed</span>` })
                             else window.alert('你的浏览器不支持安装PWA App\n\n建议使用谷歌Chrome/微软Edge浏览器\n\n你也可以从浏览器菜单手动添加到桌面\n\nYour browser doesn\'t seem to support PWA Apps.\nWe recommend using Google Chrome or Microsoft Edge to do this.')
                             "><span class="ui zh">📲 安装App到桌面</span><span class="ui en">📲 Install as App</span></li>
                         <!--<li onclick="playWalpurgis()">📺 播放回天PV(缩剪版)</li>-->
