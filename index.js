@@ -2102,19 +2102,19 @@ const Comments = {
         if (!isFullscreen) {
             var toStart = commentDiv.scrollLeft
             var toEnd = commentDiv.scrollWidth - commentDiv.clientWidth - commentDiv.scrollLeft
-            var threshold = document.getElementById('loadingIndicator').offsetWidth
+            var threshold = getFirstVisibleComment().offsetWidth / 8
         } else {
             var toStart = commentDiv.scrollTop
             var toEnd = commentDiv.scrollHeight - commentDiv.clientHeight - commentDiv.scrollTop
-            var threshold = document.getElementById('loadingIndicator').offsetHeight
+            var threshold = getFirstVisibleComment().offsetHeight / 8
         }
         //console.log(toStart, toEnd)
 
-        if (toStart < threshold && commentsUpToDate == false) {
+        if (toStart <= threshold && commentsUpToDate == false) {
             loadNewerComments()
             this.pauseScroll(500)
         }
-        if (toEnd < threshold) {
+        if (toEnd <= threshold) {
             loadOlderComments()
             this.pauseScroll(500)
         }
