@@ -1971,6 +1971,7 @@ p.altLoginOption,
     border-radius: 100rem;
     user-select: none;
     background-color: rgba(0, 0, 0, 0.05);
+    z-index: 10;
 }
 
 .userHome .useraction>div:hover {
