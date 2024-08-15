@@ -790,7 +790,7 @@
                 <h2 v-html="title"></h2>
                 <div v-html="subtitle" class="inputHelperText"></div>
                 <input type="text" v-model="value" @keypress="e => e.key == 'Enter' && value.length > 0 && submit()">
-                <button class="okBtn" :disabled="value.length == 0" @click="submit()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
+                <button class="okBtn" :disabled="value.length == 0 || disabled" @click="submit()"><span class="ui zh">确定 ✔</span><span class="ui en">OK ✔</span></button>
             </div>
         </template>
 

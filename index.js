@@ -692,6 +692,7 @@ const Popup = {
 
             data: () => ({
                 value: '',
+                disabled: false,
             }),
 
             methods: {
@@ -996,12 +997,20 @@ const User = {
                     `,
                 text: r.email,
                 action(email) {
+                    this.disabled = true
                     XHR.put('user/update', { email }).then(r => {
                         if (r.code == 1) {
                             this.$emit('close')
-                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">修改成功</span><span class="ui en">Successfully changed</span>' })
+                            FloatMsgs.show({
+                                type: 'success', persist: true, msg: /*html*/`
+                                <span class="ui zh">邮件发送成功! 请打开邮件中的链接, 以确认修改</span>
+                                <span class="ui en">Confirmation email sent, please check your inbox</span>`
+                            })
                             loadUserInfo()
                         }
+                        this.disabled = false
+                    }).catch(() => {
+                        this.disabled = false
                     })
                 }
             }
@@ -2727,6 +2736,16 @@ document.onkeydown = function (e) {
 //
 if (window.location.hash == '#view-img' || window.location.hash == '#popup') {
     window.location.hash = ''
+}
+
+if (location.hash.startsWith('#confirmemail=')) {
+    let id = location.hash.replace('#confirmemail=', '')
+    XHR.post('action', { id }).then(r => {
+        if (r.code == 1) {
+            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">邮箱确认成功!</span><span class="ui en">Email confirmed successfully!</span>' })
+            location.hash = ''
+        }
+    })
 }
 
 window.onhashchange = function (e) {
