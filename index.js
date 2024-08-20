@@ -744,8 +744,8 @@ const User = {
                             FloatMsgs.show({
                                 type: 'info', persist: true,
                                 msg: /*html*/`
-                                <span class="ui zh">账号系统已升级, 您现在可以设置邮箱了</span>
-                                <span class="ui en">Account system has been upgraded, you can bind an email now.</span>
+                                <span class="ui zh">账号系统已升级, 您现在可以设置邮箱/密码了</span>
+                                <span class="ui en">Account system has been upgraded, you can set email/password now.</span>
                             `})
                         }
                     })
@@ -761,12 +761,15 @@ const User = {
 
                 loginUsername: '',
                 loginEmail: '',
+                loginPassword: '',
 
                 userFindResult: [],
                 loginUser: null,
 
                 regName: '',
                 regEmail: '',
+                regPassword: '',
+                regPasswordConfirm: '',
                 regUseEmail: false,
                 regRequireEmail: false,
             }),
@@ -809,7 +812,8 @@ const User = {
                     XHR.post('user/register', {
                         avatar: this.$refs.avatarPreview.src.split(';base64,')[1],
                         name: this.regName,
-                        email: this.regUseEmail ? this.regEmail || undefined : undefined
+                        email: this.regUseEmail ? this.regEmail || undefined : undefined,
+                        password: this.regUseEmail ? this.regPassword || undefined : undefined,
                     }).then(r => {
                         if (r.code == 1) {
                             XHR.token = r.data
@@ -823,15 +827,21 @@ const User = {
 
                 userFindLogin(index) {
                     this.loginUser = this.userFindResult.length == 1 ? this.userFindResult[0] : this.userFindResult[index]
-                    if (this.loginUser.hasEmail) {
+                    if (this.loginUser.hasEmail || this.loginUser.hasPassword) {
                         this.screen = 'emailLogin'
+                        this.loginEmail = ''
+                        this.loginPassword = ''
                     } else {
                         this.login({ name: this.loginUser.name })
                     }
                 },
 
                 emailLogin() {
-                    this.login({ email: this.loginEmail })
+                    this.login({
+                        name: this.loginUser && !this.loginUser.hasEmail ? this.loginUser.name : undefined,
+                        email: this.loginEmail || undefined,
+                        password: this.loginPassword || undefined,
+                    })
                 },
 
                 login(payload) {
@@ -842,6 +852,41 @@ const User = {
                             this.$emit('close')
                             loadUserInfo()
                             FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">登录成功!</span><span class="ui en">Login successful!</span>' })
+                        }
+                    })
+                },
+
+                gotoForgotPassword() {
+                    if (this.loginUser && !this.loginUser.hasEmail) {
+                        FloatMsgs.show({
+                            type: 'warn', persist: true, msg: /*html*/`
+                            <span class="ui zh">该账号未绑定邮箱, 无法重置密码<br>请联系站长: 3112611479@qq.com</span>
+                            <span class="ui en">This account doesn't have an email, for password resets, you must contact: 3112611479@qq.com</span>`
+                        })
+                        return
+                    }
+                    Popup.show("promptInputPopup", {
+                        title: '<span class="ui zh">忘记密码</span><span class="ui en">Forgot password</span>',
+                        subtitle: /*html*/`
+                            <span class="ui zh">输入你想要找回密码的邮箱<br>我们将发送一份重置密码的邮件, 然后您可以设置新密码</span>
+                            <span class="ui en">Enter the email you wish to recover password.<br>We will then send you a password reset link via email.</span>
+                            `,
+                        text: this.loginEmail,
+                        action(email) {
+                            this.disabled = true
+                            XHR.post('user/resetpassword' + obj2queryString({ email })).then(r => {
+                                if (r.code == 1) {
+                                    this.$emit('close')
+                                    FloatMsgs.show({
+                                        type: 'success', persist: true, msg: /*html*/`
+                                        <span class="ui zh">密码重置邮件已发送! 请检查收件箱</span>
+                                        <span class="ui en">A password reset link was sent to your email, check your inbox</span>`
+                                    })
+                                }
+                                this.disabled = false
+                            }).catch(() => {
+                                this.disabled = false
+                            })
                         }
                     })
                 },
@@ -874,6 +919,48 @@ const User = {
 
             mounted() {
                 User.getMe().then(r => this.$refs.preview.src = User.convertAvatarPath(r.avatar))
+            },
+        })
+
+        Vue.component('setPasswordPopup', {
+            template: '#setPasswordPopup',
+
+            props: ['passwordResetToken'],
+
+            data: () => ({
+                password: '',
+                passwordConfirm: '',
+                userHasEmail: true,
+            }),
+
+            methods: {
+                submit() {
+                    if (this.passwordResetToken) {
+                        XHR.post('action', {
+                            id: this.passwordResetToken,
+                            data: this.password
+                        }).then(r => {
+                            if (r.code == 1) {
+                                this.$emit('close')
+                                FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">密码重置成功! 请重新登录</span><span class="ui en">Password reset successfully! Try log in again</span>' })
+                                location.hash = ''
+                            }
+                        })
+                    } else {
+                        XHR.put('user/update', { password: this.password }).then(r => {
+                            if (r.code == 1) {
+                                this.$emit('close')
+                                FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">密码修改成功</span><span class="ui en">Password updated successfully</span>' })
+                            }
+                        })
+                    }
+                },
+            },
+
+            mounted() {
+                if (!this.passwordResetToken) {
+                    User.getMe().then(r => this.userHasEmail = r.hasEmail)
+                }
             },
         })
 
@@ -1006,7 +1093,6 @@ const User = {
                                 <span class="ui zh">邮件发送成功! 请打开邮件中的链接, 以确认修改</span>
                                 <span class="ui en">Confirmation email sent, please check your inbox</span>`
                             })
-                            loadUserInfo()
                         }
                         this.disabled = false
                     }).catch(() => {
@@ -1015,6 +1101,10 @@ const User = {
                 }
             }
         ))
+    },
+
+    changePassword() {
+        Popup.show('setPasswordPopup')
     },
 
     changeAvatar() {
@@ -2746,6 +2836,11 @@ if (location.hash.startsWith('#confirmemail=')) {
             location.hash = ''
         }
     })
+}
+
+if (location.hash.startsWith('#resetpassword=')) {
+    let passwordResetToken = location.hash.replace('#resetpassword=', '')
+    Popup.show('setPasswordPopup', { passwordResetToken })
 }
 
 window.onhashchange = function (e) {
