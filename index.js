@@ -779,7 +779,8 @@ const User = {
 
                 searchUser() {
                     XHR.get('user/find', {
-                        name: this.loginUsername
+                        name: this.loginUsername,
+                        email: isEmail(this.loginUsername) ? this.loginUsername : undefined,
                     }).then(r => {
                         this.userFindResult = r
                         if (r.length > 0) {
@@ -792,9 +793,15 @@ const User = {
 
                 gotoRegister() {
                     this.screen = 'register'
-                    this.regName = this.loginUsername
 
-                    this.regUseEmail = false
+                    if (isEmail(this.loginUsername)) {
+                        this.regEmail = this.loginUsername
+                        this.regUseEmail = true
+                    } else {
+                        this.regName = this.loginUsername
+                        this.regUseEmail = false
+                    }
+
                     this.regRequireEmail = false
                     this.userFindResult.forEach(user => {
                         if (user.hasEmail == false) {
@@ -829,7 +836,7 @@ const User = {
                     this.loginUser = this.userFindResult.length == 1 ? this.userFindResult[0] : this.userFindResult[index]
                     if (this.loginUser.hasEmail || this.loginUser.hasPassword) {
                         this.screen = 'emailLogin'
-                        this.loginEmail = ''
+                        this.loginEmail = isEmail(this.loginUsername) && this.loginUsername != this.loginUser.name ? this.loginUsername : ''
                         this.loginPassword = ''
                     } else {
                         this.login({ name: this.loginUser.name })
@@ -1994,6 +2001,10 @@ function resizeImg(img, aspectRatio, maxPixels) {
             resolve(canvas.toDataURL("image/jpeg"))
         }
     })
+}
+
+function isEmail(s) {
+    return /^\S+@\S+\.\S+$/.test(s)
 }
 
 

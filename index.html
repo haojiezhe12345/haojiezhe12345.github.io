@@ -684,7 +684,7 @@
                     <h2><span class="ui zh">注册/登录</span><span class="ui en">Log in / Register</span></h2>
 
                     <div class="inputHelperText"><span class="ui zh">用户名 (昵称)</span><span class="ui en">Username (nickname)</span></div>
-                    <input type="text" v-model="loginUsername" style="margin-bottom: 0;"
+                    <input type="text" v-model="loginUsername" autocomplete="username" style="margin-bottom: 0;"
                         @keypress="e => e.key == 'Enter' && loginUsername.length > 0 && searchUser()">
 
                     <div class="inputHelperText" style="margin: 0.375rem 0 1rem;">
@@ -794,7 +794,7 @@
                         <div v-else class="inputHelperText"><span class="ui zh">邮箱</span><span class="ui en">Enter your email</span></div>
                         <input type="text" v-model="regEmail" autocomplete="email">
 
-                        <div class="inputHelperText"><span class="ui zh">密码 (选填)</span><span class="ui en">Password (optional)</span></div>
+                        <div class="inputHelperText"><span class="ui zh">设置密码 (可选)</span><span class="ui en">Password (optional)</span></div>
                         <input type="password" v-model="regPassword" autocomplete="current-password">
 
                         <template v-if="regPassword.length > 0">
