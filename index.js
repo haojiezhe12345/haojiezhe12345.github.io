@@ -937,6 +937,7 @@ const User = {
             data: () => ({
                 password: '',
                 passwordConfirm: '',
+                showPassword: false,
                 userHasEmail: true,
             }),
 
