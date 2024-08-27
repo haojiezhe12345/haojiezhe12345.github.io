@@ -419,11 +419,11 @@ function loadNewerComments() {
             if (getMaxKamiID() != 35662) loadComments({ 'timeMin': getMinCommentTime(), 'timeMax': getMaxCommentTime() }, getFirstVisibleComment(), true)
         } else {
             // load newer madohomu
-            loadComments({ 'from': getMaxCommentID() + count, 'count': count })
+            loadComments({ 'from': getMaxCommentID() + 1, 'count': 0 - count })
         }
     } else {
         // load kami <2023.05
-        loadComments({ 'from': getMaxKamiID() + count, 'count': count, 'db': 'kami' })
+        loadComments({ 'from': getMaxKamiID() + 1, 'count': 0 - count, 'db': 'kami' })
     }
 }
 
