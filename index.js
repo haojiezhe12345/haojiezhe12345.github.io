@@ -714,8 +714,8 @@ const Popup = {
     },
 }
 
-const showPopup = (id, props) => Popup.show(id, props)
-const closePopup = () => Popup.close()
+window.showPopup = (id, props) => Popup.show(id, props)
+window.closePopup = () => Popup.close()
 try {
     Popup.init()
 } catch (error) {
@@ -1173,7 +1173,7 @@ const User = {
     },
 }
 
-const loadUserInfo = () => User.loadUserInfo()
+window.loadUserInfo = () => User.loadUserInfo()
 try {
     User.init()
 } catch (error) {
@@ -2336,7 +2336,7 @@ const Comments = {
     },
 }
 
-const seekComment = delta => Comments.seek(delta)
+window.seekComment = delta => Comments.seek(delta)
 try {
     Comments.init()
 } catch (error) {
@@ -2576,8 +2576,8 @@ const ImgViewer = {
     },
 }
 
-const viewImg = src => ImgViewer.view(src)
-const closeImgViewer = () => ImgViewer.close()
+window.viewImg = src => ImgViewer.view(src)
+window.closeImgViewer = () => ImgViewer.close()
 try {
     ImgViewer.init()
 } catch (error) {
