@@ -714,8 +714,8 @@ const Popup = {
     },
 }
 
-window.showPopup = (id, props) => Popup.show(id, props)
-window.closePopup = () => Popup.close()
+var showPopup = (id, props) => Popup.show(id, props)
+var closePopup = () => Popup.close()
 try {
     Popup.init()
 } catch (error) {
@@ -1173,7 +1173,7 @@ const User = {
     },
 }
 
-window.loadUserInfo = () => User.loadUserInfo()
+var loadUserInfo = () => User.loadUserInfo()
 try {
     User.init()
 } catch (error) {
@@ -1749,7 +1749,7 @@ function toggleFullscreen() {
         setTimeout(() => {
             commentDiv.scrollTop = (commentDiv.scrollHeight - commentDiv.clientHeight) * scrollPercent
             setTimelineActiveMonth(true)
-        }, 50);
+        }, 35);
         document.body.classList.add('fullscreen')
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">退出全屏 ↙</span><span class="ui en">Collapse ↙</span>'
         isFullscreen = true
@@ -1758,7 +1758,7 @@ function toggleFullscreen() {
         setTimeout(() => {
             commentDiv.scrollLeft = (commentDiv.scrollWidth - commentDiv.clientWidth) * scrollPercent
             setTimelineActiveMonth(true)
-        }, 50);
+        }, 35);
         document.body.classList.remove('fullscreen')
         document.getElementById('fullscreenBtn').innerHTML = '<span class="ui zh">全屏 ↗</span><span class="ui en">Expand ↗</span>'
         isFullscreen = false
@@ -2336,7 +2336,7 @@ const Comments = {
     },
 }
 
-window.seekComment = delta => Comments.seek(delta)
+var seekComment = delta => Comments.seek(delta)
 try {
     Comments.init()
 } catch (error) {
@@ -2576,8 +2576,8 @@ const ImgViewer = {
     },
 }
 
-window.viewImg = src => ImgViewer.view(src)
-window.closeImgViewer = () => ImgViewer.close()
+var viewImg = src => ImgViewer.view(src)
+var closeImgViewer = () => ImgViewer.close()
 try {
     ImgViewer.init()
 } catch (error) {
