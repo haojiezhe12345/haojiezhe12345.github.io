@@ -781,16 +781,17 @@
                     <button class="backBtn" @click="screen = 'usernameLogin'"></button>
                 </div>
 
-                <div v-if="screen == 'register'" class="userRegister">
+                <div v-if="screen == 'register'">
                     <h2><span class="ui zh">注册账号</span><span class="ui en">Registration</span></h2>
                     
-                    <img ref="avatarPreview" class="setAvatarImg" src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png" @click="$refs.avatarInput.click()">
-                    <input ref="avatarInput" type="file" accept="image/*" @change="previewAvatar()"/>
+                    <img ref="avatarPreview" class="setAvatarImg" src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png" @click="$refs.avatarInput.click()" style="margin-bottom: 0;">
+                    <input ref="avatarInput" type="file" accept="image/*" @change="previewAvatar()" style="display: none;"/>
+                    <div class="inputHelperText" style="text-align: center; margin: 0.25rem 0;"><span class="ui zh">点击设置头像</span><span class="ui en">Tap to set avatar</span></div>
 
                     <div class="inputHelperText"><span class="ui zh">昵称</span><span class="ui en">Enter a nickname</span></div>
                     <input type="text" v-model="regName">
 
-                    <label class="setting-switch">
+                    <label class="setting-switch" style="margin: 0.25rem 0;">
                         <span class="ui zh">绑定邮箱</span><span class="ui en">Link email</span>
                         <input type="checkbox" v-model="regUseEmail" :disabled="regRequireEmail">
                     </label>

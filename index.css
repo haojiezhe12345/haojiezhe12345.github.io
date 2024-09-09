@@ -1812,14 +1812,6 @@ p.altLoginOption,
     border-radius: 100%;
 }
 
-.userRegister input[type=file] {
-    display: none;
-}
-
-.userRegister .setting-switch {
-    margin: 0.25rem 0;
-}
-
 #getImgPopup img {
     max-width: 100%;
     max-height: 60vh;
