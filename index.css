@@ -73,6 +73,12 @@ body>* {
     background-position: center;
 }
 
+.mainbg div video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .mainbg.animating:not(.bgzoom) div {
     animation-name: bgzoom12;
     animation-duration: 10s;
@@ -461,6 +467,7 @@ body>* {
 
 #themeIndicator {
     max-width: 7.5rem;
+    white-space: nowrap;
 }
 
 #themeIndicator .currentSong {
