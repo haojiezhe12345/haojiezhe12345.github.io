@@ -67,16 +67,6 @@ const XHR = {
     },
 }
 
-function getBlob(url) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-        xhr.open('GET', url)
-        xhr.responseType = 'blob'
-        xhr.onload = () => xhr.status == 200 && resolve(xhr.response)
-        xhr.send()
-    });
-}
-
 
 // settings
 //
@@ -1294,7 +1284,6 @@ function userCommentScroll() {
 const Theme = {
     elements: {
         bgs: document.getElementsByClassName('mainbg'),
-        videobgs: document.querySelectorAll('.mainbg video'),
         captionContainer: document.getElementById('mainCaptions'),
         captions: document.getElementById('mainCaptions').children,
         themeIndicators: document.getElementById('currentTheme').children,
@@ -1350,10 +1339,6 @@ const Theme = {
             this.lastAutoTheme = newAutoTheme
         }, 1000)
 
-        Array.from(this.elements.videobgs).forEach(e => {
-            e.onclick = function () { this.play() }
-        })
-
         Array.from(this.elements.listSelectors).forEach(e => {
             e.onclick = () => {
                 this.setTheme(e.dataset.theme)
@@ -1378,10 +1363,9 @@ const Theme = {
             return 'qixi'
         }
         if (new Date(`Sep 17 2024 00:00`) < d && d < new Date(`Sep 20 2024 06:00`)) {
-            let video = document.querySelector('.walpurgispvbg video')
+            let video = document.querySelector('.walpurgispvbg iframe').contentWindow.video
             // console.log(video.currentTime, video.duration)
-            if (!video.duration || video.currentTime < video.duration)
-                return 'walpurgispv'
+            if (!video || !video.duration || video.currentTime < video.duration) return 'walpurgispv'
         }
         if (d.getHours() >= 23 || d.getHours() <= 5) {
             return 'night'
@@ -1416,22 +1400,28 @@ const Theme = {
                 let yearsOld = d.getFullYear() - 2011
                 document.getElementById('birthdayDate').innerHTML = `10/3/${d.getFullYear()} - Madoka's ${yearsOld}th birthday`
             }
+
             if (theme == 'lunarNewYear') {
                 document.getElementsByClassName('fireworks')[0].classList.add('visible')
             } else {
                 document.getElementsByClassName('fireworks')[0].classList.remove('visible')
             }
+
             if (theme == 'walpurgispv') {
-                getBlob('https://haojiezhe12345.top:82/madohomu/media/walpurgis2.mp4').then(blob => {
-                    let video = document.querySelector('.walpurgispvbg video')
-                    video.src = window.URL.createObjectURL(blob)
-                    video.currentTime = 0.5;
-                    video.play();
-                    setTimeout(() => {
-                        MusicPlayer.elements.player.currentTime = 59
-                    }, 0);
-                })
+                let iframe = document.querySelector('.walpurgispvbg iframe')
+                if (iframe.contentWindow.video) iframe.contentWindow.location.reload()
+                else iframe.src = 'index.hlsvideo.html#https://haojiezhe12345.top:82/madohomu/media/walpurgis2_full.m3u'
+                setTimeout(() => {
+                    MusicPlayer.elements.player.muted = true
+                }, 0);
+            } else {
+                let video = document.querySelector('.walpurgispvbg iframe').contentWindow.video
+                if (video) video.pause()
+                setTimeout(() => {
+                    MusicPlayer.elements.player.muted = false
+                }, 0);
             }
+
             if (theme == 'kami') {
                 printParaCharOneByOne(document.getElementsByClassName('kamiCaption')[0], 750)
                 if (!Settings.showKami) {
@@ -1478,7 +1468,7 @@ const Theme = {
             birthday: 'また あした - 悠木碧',
             night: 'Scaena felix - オルゴール ミドリ',
             kami: 'never leave you alone - 梶浦由記',
-            walpurgispv: 'Nux Walpurgis',
+            walpurgispv: 'Nux Walpurgis - 梶浦由記',
         }
         return music[this.theme] ||
             (Math.random() > 0.5

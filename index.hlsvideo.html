@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video</title>
+
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <video></video>
+
+    <script src="https://haojiezhe12345.top:82/madohomu/res/hls.light.min.js"></script>
+
+    <script>
+        var video = document.getElementsByTagName('video')[0]
+
+        video.onclick = function () {
+            this.play()
+            this.muted = false
+        }
+
+        const hls = new Hls();
+        hls.loadSource(location.hash.slice(1));
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play().catch(() => {
+                video.muted = true
+                video.play()
+            });
+        });
+    </script>
+</body>
+
+</html>
