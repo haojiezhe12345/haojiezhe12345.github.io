@@ -1408,9 +1408,11 @@ const Theme = {
             }
 
             if (theme == 'walpurgispv') {
+                let bg = document.querySelector('.walpurgispvbg')
                 let iframe = document.querySelector('.walpurgispvbg iframe')
                 if (iframe.contentWindow.video) iframe.contentWindow.location.reload()
                 else iframe.src = 'index.hlsvideo.html#https://haojiezhe12345.top:82/madohomu/media/walpurgis2_full.m3u'
+                bg.onclick = () => iframe.contentWindow.video && iframe.contentWindow.video.click()
                 setTimeout(() => {
                     MusicPlayer.elements.player.muted = true
                 }, 0);

@@ -71,12 +71,14 @@ body>* {
     /*background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg.jpg);*/
     background-size: cover;
     background-position: center;
+    user-select: none;
 }
 
 .mainbg div iframe {
     width: 100%;
     height: 100%;
     border: none;
+    pointer-events: none;
 }
 
 .mainbg.animating:not(.bgzoom) div {
