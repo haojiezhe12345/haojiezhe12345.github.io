@@ -579,7 +579,10 @@ const Popup = {
 
     show(popupID, props) {
         setTimeout(() => {
-            if (location.hash.slice(0, 7) != '#popup-') {
+            if (!(
+                location.hash.startsWith('#popup-')
+                || location.hash.startsWith('#resetpassword=')
+            )) {
                 location.hash = 'popup'
             }
 
@@ -1171,6 +1174,10 @@ const User = {
         closePopup()
         setTimeout(loadUserInfo, 0)
     },
+
+    resetToken() {
+        XHR.post('user/resettoken').then(r => r && this.logout())
+    }
 }
 
 var loadUserInfo = () => User.loadUserInfo()

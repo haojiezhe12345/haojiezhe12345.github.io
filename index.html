@@ -907,7 +907,13 @@
                             <li onclick="User.changePassword()"><span class="ui zh">修改密码</span><span class="ui en">Change password</span></li>
                         </ul>
                     </div>
-                    <div onclick="User.logout()"><img src="https://haojiezhe12345.top:82/madohomu/res/logout.svg"><span class="ui zh">退出登录</span><span class="ui en">Log out</span></div>
+                    <div>
+                        <img src="https://haojiezhe12345.top:82/madohomu/res/logout.svg"><span class="ui zh">退出登录</span><span class="ui en">Log out</span>
+                        <ul>
+                            <li onclick="User.logout()"><span class="ui zh">退出登录 (当前设备)</span><span class="ui en">Log out (from this device)</span></li>
+                            <li onclick="User.resetToken()" style="color: red;"><span class="ui zh">退出登录 (所有设备)</span><span class="ui en">Log out (from all devices)</span></li>
+                        </ul>
+                    </div>
                 </div>
                 <div v-for="(item, index) in comments" :key="item.source + item.id" class="userCommentItem">
                     <p>{{ item.timeStr }}<span>#{{ item.id }}</span></p>
