@@ -875,6 +875,10 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
     transition: transform 0.2s;
 }
 
+#comments .commentBox .comment .reply-quote {
+    margin: 0.375rem 0.5rem 0 0.1875rem;
+}
+
 #comments .commentBox .comment>img:hover {
     transform: scale(1.05);
 }
@@ -906,7 +910,6 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
 
 #comments .commentBox .action .btn {
     display: flex;
-    justify-content: center;
     gap: 0.25em;
     height: 1.5em;
     padding: 0.25em 0.375em;
@@ -997,7 +1000,7 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
     bottom: 3.375rem;
 }
 
-#comments #newCommentBox textarea {
+#comments #newCommentBox #msgText {
     flex-grow: 1;
     flex-shrink: 1;
     box-sizing: border-box;
@@ -1009,10 +1012,16 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1rem;
     resize: none;
+    color: black;
+    overflow: auto;
 }
 
-#comments #newCommentBox textarea:focus {
+#comments #newCommentBox #msgText:focus {
     outline: 0.125rem solid #f9b;
+}
+
+#comments #newCommentBox #msgText img {
+    max-width: 50%;
 }
 
 #comments #newCommentBox #uploadImgList {
@@ -1075,6 +1084,63 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
 #comments #newCommentBox #sendBtn:hover {
     background-color: #c074ff;
     transform: scale(1.05);
+    text-decoration: underline;
+}
+
+#comments .comment-reply-quote {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0.375rem;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 0.75rem;
+}
+
+#comments .comment-reply-quote.dark {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#comments .comment-reply-quote.clickable {
+    cursor: pointer;
+}
+
+#comments .comment-reply-quote .reply-icon {
+    width: 1.5rem;
+    margin-top: 0.0625rem;
+}
+
+#comments .comment-reply-quote .quote-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+#comments .comment-reply-quote .quote-head {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+#comments .comment-reply-quote .quote-head .quote-avatar {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 100rem;
+}
+
+#comments .comment-reply-quote .quote-head .quote-sender {
+    flex-grow: 1;
+}
+
+#comments .comment-reply-quote .quote-head .quote-id {
+    font-size: 0.875em;
+}
+
+#comments .comment-reply-quote .quote-body {
+    white-space: pre-wrap;
+}
+
+#comments .comment-reply-quote.clickable:hover .quote-body {
     text-decoration: underline;
 }
 

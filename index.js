@@ -328,15 +328,19 @@ function insertComment(comment, isKami = false) {
         comment.comment = comment.comment.replace('This message is sent using a proxy. If it is dirty, please click here to delete it.', '')
     }
 
-    var imgsDOM = ''
+    let commentExtra = ''
     try {
         if (comment.image != '') {
-            for (var i of comment.image.split(',')) {
-                imgsDOM += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); Comments.forceLowerPanelUp()">`
+            for (let i of comment.image.split(',')) {
+                commentExtra += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); Comments.forceLowerPanelUp()">`
             }
         }
     } catch (error) { }
-    if (imgsDOM) imgsDOM = '<br><br>' + imgsDOM
+    if (commentExtra) commentExtra = '<br><br>' + commentExtra
+
+    if (comment.replyid) {
+        commentExtra = '<br><div class="reply-quote"></div>' + commentExtra
+    }
 
     let commentEl = html2elmnt(/*html*/`
         <div class="commentBox commentItem${comment.hidden ? ' hidden' : ''}" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
@@ -351,13 +355,13 @@ function insertComment(comment, isKami = false) {
                 ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
             </div>
             <div class="id">#${comment.id}${isKami == true ? ' (kami.im)' : ''}</div>
-            <div class="comment">${htmlEscape(comment.comment)}${imgsDOM}</div>
+            <div class="comment">${htmlEscape(comment.comment)}${commentExtra}</div>
             <div class="time">${date + ' ' + hour}${(comment.hidden == 1) ? ' (hidden)' : ''}</div>
             <div class="action" ${isKami ? 'style="display: none"' : ''}>
                 <span class="btn like">
                     <span class="like-count"></span>
                 </span>
-                <img class="btn reply" src="https://haojiezhe12345.top:82/madohomu/res/reply.svg" style="display: none">
+                <img class="btn reply" src="https://haojiezhe12345.top:82/madohomu/res/reply.svg">
             </div>
         </div>
     `)
@@ -369,6 +373,8 @@ function insertComment(comment, isKami = false) {
         likeCount: commentEl.querySelector('.like-count'),
         /** @type {HTMLImageElement} */
         replyBtn: commentEl.querySelector('.btn.reply'),
+        /** @type {HTMLDivElement} */
+        replyQuote: commentEl.querySelector('.reply-quote'),
 
         get liked() { return this.likeBtn.classList.contains('liked') },
         set liked(value) {
@@ -387,26 +393,73 @@ function insertComment(comment, isKami = false) {
             this.liked = comment.liked
             this.likes = comment.likes
 
-            this.likeBtn.onclick = async () => {
+            this.likeBtn.onclick = () => {
+                let promise
                 if (this.liked) {
-                    await XHR.delete(`comments/like?commentId=${comment.id}`)
+                    promise = XHR.delete(`comments/like?commentId=${comment.id}`)
                 } else {
-                    await XHR.post(`comments/like?commentId=${comment.id}`)
+                    promise = XHR.post(`comments/like?commentId=${comment.id}`)
                 }
-                XHR.get('comments', { from: comment.id, count: 1 }).then(r => {
-                    this.liked = r[0].liked
-                    this.likes = r[0].likes
+                promise.then(() => {
+                    XHR.get('comments', { from: comment.id, count: 1 }).then(r => {
+                        this.liked = r[0].liked
+                        this.likes = r[0].likes
+                    })
                 })
             }
 
             this.replyBtn.onclick = () => {
+                NewMessage.reply(comment.id)
+            }
 
+            if (comment.replyid) {
+                initCommentReplyQuote(this.replyQuote, comment.replyid, { clickable: true })
             }
         }
     }
     newComment.init()
 
     commentDiv.insertBefore(commentEl, insertBeforeEl)
+}
+
+/**
+ * 
+ * @param {HTMLDivElement} el
+ * @param {number} id
+ * @param {object} params
+ * @param {boolean} params.closeable
+ * @param {boolean} params.clickable
+ * @param {boolean} params.dark
+ */
+function initCommentReplyQuote(el, id, params) {
+    XHR.get('comments', { from: id, count: 1 }).then(r => {
+        let comment = r[0]
+        el.$comment = comment
+
+        el.innerHTML = /*html*/`
+            <img class="reply-icon" src="https://haojiezhe12345.top:82/madohomu/res/reply.svg">
+            <div class="quote-content">
+                <div class="quote-head">
+                    <img class="quote-avatar" src="${User.convertAvatarPath(comment.avatar)}">
+                    <div class="quote-sender">${comment.sender}</div>
+                    <div class="quote-id">#${comment.id}</div>
+                </div>
+                <div class="quote-body">${comment.comment}</div>
+            </div>
+        `
+        el.classList.add('comment-reply-quote')
+        el.contentEditable = false
+
+        if (params.clickable) {
+            el.classList.add('clickable')
+            el.onclick = () => {
+                clearComments(1)
+                loadComments({ from: comment.id })
+            }
+        }
+
+        if (params.dark) el.classList.add('dark')
+    })
 }
 
 function clearComments(clearTop) {
@@ -511,103 +564,158 @@ function getFirstVisibleComment() {
 
 // new message box
 //
-function newComment() {
-    commentDiv.scrollLeft = 0
-    commentDiv.scrollTop = 0
+const NewMessage = {
+    show() {
+        commentDiv.scrollLeft = 0
+        commentDiv.scrollTop = 0
 
-    if (document.getElementById('newCommentBox')) {
-        document.getElementById('msgText').focus({ preventScroll: true })
-        return
-    }
-
-    commentDiv.insertBefore(html2elmnt(/*html*/`
-        <div class="commentBox" id="newCommentBox">
-            <div class="bgcover"></div>
-            <img class="avatar" id="msgPopupAvatar" onclick="XHR.token && User.changeAvatar()">
-            <div class="sender" id="senderText" onclick="XHR.token && User.changeName()"></div>
-            <div class="id" onclick="Popup.show('loginPopup')"><span class="ui zh">注册/登录</span><span class="ui en">Login / Register</span></div>
-            <div class="comment">
-                <textarea id="msgText" placeholder="圆神保佑~" onfocus="Comments.forceLowerPanelUp(); TouchKeyboardDetector.detect()" onblur="TouchKeyboardDetector.detect()"></textarea>
-                <div id="uploadImgList"></div>
-            </div>
-            <label>
-                <input id="uploadImgPicker" type="file" accept="image/*" onchange="previewLocalImgs()" multiple style="display: none;" />
-                <span><span class="ui zh">+ 添加图片</span><span class="ui en">+ Add images</span></span>
-            </label>
-            <button id="sendBtn" onclick="sendMessage()"><span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span></button>
-        </div>
-    `), commentDiv.firstElementChild)
-
-    loadUserInfo()
-
-    document.getElementById('msgText').focus({ preventScroll: true })
-
-    /*
-    if (location.hostname != 'haojiezhe12345.top') {
-        document.getElementById('banner').style.display = 'block'
-    }
-    */
-}
-
-function previewLocalImgs() {
-    var imgUploadInput = document.getElementById('uploadImgPicker')
-
-    if (imgUploadInput.files.length === 0) {
-        console.log('No file chosen')
-        return;
-    }
-
-    for (let i = 0; i < imgUploadInput.files.length; i++) {
-        resizeImg(imgUploadInput.files[i], null, 2.1 * 1000 * 1000).then(i => {
-            document.getElementById('uploadImgList').appendChild(html2elmnt(/*html*/`
-                <div>
-                    <img src="${i}" class="uploadImg" onclick="viewImg(this.src)">
-                    <button onclick="this.parentNode.remove()">❌</button>
-                </div>
-            `))
-        })
-    }
-
-    imgUploadInput.value = ''
-}
-
-function sendMessage() {
-    var msg = document.getElementById('msgText').value
-
-    var imgList = []
-    var uploadImgClass = document.getElementsByClassName('uploadImg')
-    if (uploadImgClass.length > 0) {
-        for (let i = 0; i < uploadImgClass.length; i++) {
-            const imgElmnt = uploadImgClass[i]
-            imgList.push(imgElmnt.src.split(';base64,')[1])
+        if (document.getElementById('newCommentBox')) {
+            document.getElementById('msgText').focus({ preventScroll: true })
+            return
         }
-    }
 
-    if (msg.replace(/\s/g, '') == '') {
-        FloatMsgs.show({ type: 'warn', msg: '<span class="ui zh">留言不能为空!</span><span class="ui en">Do not leave the message empty!</span>' })
-        return
-    }
+        commentDiv.insertBefore(html2elmnt(/*html*/`
+            <div class="commentBox" id="newCommentBox">
+                <div class="bgcover"></div>
+                <img class="avatar" id="msgPopupAvatar" onclick="XHR.token && User.changeAvatar()">
+                <div class="sender" id="senderText" onclick="XHR.token && User.changeName()"></div>
+                <div class="id" onclick="Popup.show('loginPopup')"><span class="ui zh">注册/登录</span><span class="ui en">Login / Register</span></div>
+                <div class="comment">
+                    <div id="msgText" placeholder="圆神保佑~" contenteditable="true" onfocus="Comments.forceLowerPanelUp(); TouchKeyboardDetector.detect()" onblur="TouchKeyboardDetector.detect()"></div>
+                    <div id="uploadImgList"></div>
+                </div>
+                <label>
+                    <input id="uploadImgPicker" type="file" accept="image/*" onchange="previewLocalImgs()" multiple style="display: none;" />
+                    <span><span class="ui zh">+ 添加图片</span><span class="ui en">+ Add images</span></span>
+                </label>
+                <button id="sendBtn" onclick="sendMessage()"><span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span></button>
+            </div>
+        `), commentDiv.firstElementChild)
 
-    document.getElementById('sendBtn').disabled = true;
-    document.getElementById('sendBtn').innerHTML = '<span class="ui zh">正在发送…</span><span class="ui en">Sending…</span>'
+        loadUserInfo()
 
-    XHR.post('comments/post', {
-        "sender": XHR.token ? undefined : '匿名用户',
-        "comment": msg,
-        'images': imgList
-    }).then(r => {
-        console.log(r);
-        document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送成功!</span><span class="ui en">Sent!</span>'
-        setTimeout(() => {
-            clearComments()
-            loadComments()
-        }, 1000);
-    }).catch(r => {
-        window.alert('发送留言失败\n如果问题持续, 请发邮件到 3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
-        document.getElementById('sendBtn').disabled = false;
-        document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
-    })
+        document.getElementById('msgText').focus({ preventScroll: true })
+
+        /*
+        if (location.hostname != 'haojiezhe12345.top') {
+            document.getElementById('banner').style.display = 'block'
+        }
+        */
+    },
+
+    previewLocalImgs() {
+        var imgUploadInput = document.getElementById('uploadImgPicker')
+
+        if (imgUploadInput.files.length === 0) {
+            console.log('No file chosen')
+            return;
+        }
+
+        for (let i = 0; i < imgUploadInput.files.length; i++) {
+            resizeImg(imgUploadInput.files[i], null, 2.1 * 1000 * 1000).then(i => {
+                document.getElementById('uploadImgList').appendChild(html2elmnt(/*html*/`
+                    <div>
+                        <img src="${i}" class="uploadImg" onclick="viewImg(this.src)">
+                        <button onclick="this.parentNode.remove()">❌</button>
+                    </div>
+                `))
+            })
+        }
+
+        imgUploadInput.value = ''
+    },
+
+    reply(id) {
+        if (document.getElementById('newCommentBox')) {
+            /** @type {HTMLDivElement} */
+            let msgText = document.getElementById('msgText')
+
+            this.removeReply()
+
+            let quoteEl = html2elmnt(`<div id="newCommentReplyQuote"></div>`)
+
+            if (!this.getNewMessage()) {
+                msgText.appendChild(html2elmnt(`<div><br></div>`))
+            }
+            msgText.appendChild(quoteEl)
+
+            initCommentReplyQuote(this.getReplyQuote(), id, { dark: true })
+
+            this.show()
+
+        } else {
+            newComment()
+            this.reply(id)
+        }
+    },
+
+    removeReply() {
+        let el = this.getReplyQuote()
+        el && el.remove()
+    },
+
+    getReplyQuote() {
+        return document.getElementById('newCommentReplyQuote')
+    },
+
+    getReplyId() {
+        let quote = this.getReplyQuote()
+        return quote ? quote.$comment.id : undefined
+    },
+
+    getNewMessage() {
+        let replyQuote = this.getReplyQuote()
+        replyQuote && (replyQuote.style.display = 'none')
+        let message = document.getElementById('msgText').innerText
+        replyQuote && replyQuote.style.removeProperty('display')
+        return message
+    },
+
+    send() {
+        let replyid = this.getReplyId()
+        let msg = this.getNewMessage()
+
+        var imgList = []
+        var uploadImgClass = document.getElementsByClassName('uploadImg')
+        if (uploadImgClass.length > 0) {
+            for (let i = 0; i < uploadImgClass.length; i++) {
+                const imgElmnt = uploadImgClass[i]
+                imgList.push(imgElmnt.src.split(';base64,')[1])
+            }
+        }
+
+        if (msg.replace(/\s/g, '') == '') {
+            FloatMsgs.show({ type: 'warn', msg: '<span class="ui zh">留言不能为空!</span><span class="ui en">Do not leave the message empty!</span>' })
+            return
+        }
+
+        document.getElementById('sendBtn').disabled = true;
+        document.getElementById('sendBtn').innerHTML = '<span class="ui zh">正在发送…</span><span class="ui en">Sending…</span>'
+
+        XHR.post('comments/post', {
+            "sender": XHR.token ? undefined : '匿名用户',
+            "comment": msg,
+            'images': imgList,
+            replyid,
+        }).then(r => {
+            console.log(r);
+            document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送成功!</span><span class="ui en">Sent!</span>'
+            setTimeout(() => {
+                clearComments()
+                loadComments()
+            }, 1000);
+        }).catch(r => {
+            window.alert('发送留言失败\n如果问题持续, 请发邮件到 3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
+        })
+    },
 }
+
+var newComment = NewMessage.show.bind(NewMessage)
+var sendMessage = NewMessage.send.bind(NewMessage)
+var previewLocalImgs = NewMessage.previewLocalImgs.bind(NewMessage)
+
 
 // popup
 //
