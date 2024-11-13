@@ -389,20 +389,14 @@ function insertComment(comment, isKami = false) {
 
             this.likeBtn.onclick = async () => {
                 if (this.liked) {
-                    if (await XHR.delete('comments/like' + obj2queryString({
-                        commentId: comment.id
-                    }))) {
-                        this.liked = false
-                        this.likes--
-                    }
+                    await XHR.delete(`comments/like?commentId=${comment.id}`)
                 } else {
-                    if (await XHR.post('comments/like' + obj2queryString({
-                        commentId: comment.id
-                    }))) {
-                        this.liked = true
-                        this.likes++
-                    }
+                    await XHR.post(`comments/like?commentId=${comment.id}`)
                 }
+                XHR.get('comments', { from: comment.id, count: 1 }).then(r => {
+                    this.liked = r[0].liked
+                    this.likes = r[0].likes
+                })
             }
 
             this.replyBtn.onclick = () => {
