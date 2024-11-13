@@ -65,6 +65,10 @@ const XHR = {
     put(url, payload) {
         return this.send('PUT', url, payload)
     },
+
+    delete(url, payload) {
+        return this.send('DELETE', url, payload)
+    },
 }
 
 
@@ -143,129 +147,121 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
         ? (queryObj.from < getMinKamiID())
         : (queryObj.from < getMinCommentID())
 
-    const xhr = new XMLHttpRequest();
+    XHR.get("comments", queryObj).then(response => {
 
-    xhr.open("GET", "https://haojiezhe12345.top:82/madohomu/api/comments" + obj2queryString(queryObj));
+        if (debug) console.log(queryObj)
+        if (debug) console.log('isNewer:', isCommentsNewer, ' isOlder:', isCommentsOlder, ' length:', response.length)
 
-    xhr.responseType = "json";
-    xhr.onload = () => {
-        if (xhr.status == 200) {
-            //console.log(xhr.response);
-            isLoadCommentErrorShowed = false
-
-            if (debug) console.log(queryObj)
-            if (debug) console.log('isNewer:', isCommentsNewer, ' isOlder:', isCommentsOlder, ' length:', xhr.response.length)
-
-            // handle empty response
-            if (xhr.response.length == 0) {
-                if (isCommentsNewer) {
-                    console.log('comments are up to date')
-                    document.getElementById('loadingIndicatorBefore').style.display = 'none'
-                    commentsUpToDate = true
-                    window.clearCommentsUpToDateTimeout = setTimeout(() => {
-                        commentsUpToDate = false
-                    }, 10000);
-                    return
-                }
-                if (isCommentsOlder && queryObj.db == 'kami') {
-                    console.log('reached the oldest comment')
-                    document.getElementById('loadingIndicator').style.display = 'none'
-                    return
-                }
-
-                if (queryObj.from && document.getElementsByClassName('commentItem').length == 0) {
-                    document.getElementById('loadingIndicatorBefore').style.display = 'none'
-                    //document.getElementById('loadingIndicator').style.display = 'none'
-                    //pauseCommentScroll = true
-
-                    // NEED MORE ...
-                    //
-                }
+        // handle empty response
+        if (response.length == 0) {
+            if (isCommentsNewer) {
+                console.log('comments are up to date')
+                document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                commentsUpToDate = true
+                window.clearCommentsUpToDateTimeout = setTimeout(() => {
+                    commentsUpToDate = false
+                }, 10000);
+                return
+            }
+            if (isCommentsOlder && queryObj.db == 'kami') {
+                console.log('reached the oldest comment')
+                document.getElementById('loadingIndicator').style.display = 'none'
                 return
             }
 
-            // update timeline & today comment count
-            if (xhr.response[0].time > maxTimelineTime) {
-                maxTimelineTime = xhr.response[0].time
-                loadTimeline(maxTimelineTime)
-                setTodayCommentCount()
+            if (queryObj.from && document.getElementsByClassName('commentItem').length == 0) {
+                document.getElementById('loadingIndicatorBefore').style.display = 'none'
+                //document.getElementById('loadingIndicator').style.display = 'none'
+                //pauseCommentScroll = true
+
+                // NEED MORE ...
+                //
             }
-
-            // save old comment position before inserting new comments
-            var keepPos = (xhr.response[0].time > getMaxCommentTime() || keepPosEl != undefined)
-            if (debug) console.log('KeepPos:', keepPos)
-            if (keepPosEl == undefined) {
-                keepPosEl = getFirstVisibleComment()
-            }
-            var prevCommentTop = keepPosEl.getBoundingClientRect().top
-            var prevCommentLeft = keepPosEl.getBoundingClientRect().left
-
-            // save prev Max/MinCommentTime for loading kami SxS
-            var prevMaxCommentTime = getMaxCommentTime()
-            var prevMinCommentTime = getMinCommentTime()
-
-            // insert comments
-            for (let comment of xhr.response) {
-
-                // skip 2024 kami msgs when loading 2023.05
-                if (queryObj.db == 'kami' && comment.id >= 35668 && getMaxCommentTime() <= 1684651800) {
-                    continue
-                }
-
-                insertComment(comment, queryObj.db == 'kami' ? true : false)
-
-            }
-
-            // restore the postition after inserting comments
-            if (keepPos && document.getElementById('topComment') == null) {
-                if (debug) console.log(keepPosEl)
-                if (isFullscreen) {
-                    var newCommentTop = keepPosEl.getBoundingClientRect().top
-                    commentDiv.scrollTop += newCommentTop - prevCommentTop
-                } else {
-                    var newCommentLeft = keepPosEl.getBoundingClientRect().left
-                    commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
-                }
-            }
-
-            // load kami SxS
-            if (Settings.showKami && queryObj.db == null && noKami == false) {
-                if (isCommentsOlder) {
-                    loadComments({
-                        'timeMin': xhr.response[xhr.response.length - 1].time,
-                        'timeMax': prevMinCommentTime,
-                        'db': 'kami'
-                    })
-                } else if (isCommentsNewer) {
-                    loadComments({
-                        'timeMin': prevMaxCommentTime,
-                        'timeMax': xhr.response[0].time,
-                        'db': 'kami'
-                    }, keepPosEl)
-                } else if (queryObj.time != null || queryObj.from != null) {
-                    loadComments({
-                        'timeMin': xhr.response[xhr.response.length - 1].time,
-                        'timeMax': xhr.response[0].time,
-                        'db': 'kami'
-                    })
-                } else if (queryObj.timeMin == null && queryObj.timeMax == null) {
-                    loadComments({
-                        'timeMin': xhr.response[xhr.response.length - 1].time,
-                        'timeMax': parseInt(Date.now() / 1000),
-                        'db': 'kami'
-                    })
-                }
-            }
-
-            setTimelineActiveMonth(true)
-
-            if (debug) console.log('maxID:', getMaxCommentID(), ' minID:', getMinCommentID())
-
-        } else {
-            console.log(`Error: ${xhr.status}`);
+            return
         }
-    };
-    xhr.send();
+
+        // update timeline & today comment count
+        if (response[0].time > maxTimelineTime) {
+            maxTimelineTime = response[0].time
+            loadTimeline(maxTimelineTime)
+            setTodayCommentCount()
+        }
+
+        // save old comment position before inserting new comments
+        var keepPos = (response[0].time > getMaxCommentTime() || keepPosEl != undefined)
+        if (debug) console.log('KeepPos:', keepPos)
+        if (keepPosEl == undefined) {
+            keepPosEl = getFirstVisibleComment()
+        }
+        var prevCommentTop = keepPosEl.getBoundingClientRect().top
+        var prevCommentLeft = keepPosEl.getBoundingClientRect().left
+
+        // save prev Max/MinCommentTime for loading kami SxS
+        var prevMaxCommentTime = getMaxCommentTime()
+        var prevMinCommentTime = getMinCommentTime()
+
+        // insert comments
+        for (let comment of response) {
+
+            // skip 2024 kami msgs when loading 2023.05
+            if (queryObj.db == 'kami' && comment.id >= 35668 && getMaxCommentTime() <= 1684651800) {
+                continue
+            }
+
+            insertComment(comment, queryObj.db == 'kami' ? true : false)
+
+        }
+
+        // restore the postition after inserting comments
+        if (keepPos && document.getElementById('topComment') == null) {
+            if (debug) console.log(keepPosEl)
+            if (isFullscreen) {
+                var newCommentTop = keepPosEl.getBoundingClientRect().top
+                commentDiv.scrollTop += newCommentTop - prevCommentTop
+            } else {
+                var newCommentLeft = keepPosEl.getBoundingClientRect().left
+                commentDiv.scrollLeft += newCommentLeft - prevCommentLeft
+            }
+        }
+
+        // load kami SxS
+        if (Settings.showKami && queryObj.db == null && noKami == false) {
+            if (isCommentsOlder) {
+                loadComments({
+                    'timeMin': response[response.length - 1].time,
+                    'timeMax': prevMinCommentTime,
+                    'db': 'kami'
+                })
+            } else if (isCommentsNewer) {
+                loadComments({
+                    'timeMin': prevMaxCommentTime,
+                    'timeMax': response[0].time,
+                    'db': 'kami'
+                }, keepPosEl)
+            } else if (queryObj.time != null || queryObj.from != null) {
+                loadComments({
+                    'timeMin': response[response.length - 1].time,
+                    'timeMax': response[0].time,
+                    'db': 'kami'
+                })
+            } else if (queryObj.timeMin == null && queryObj.timeMax == null) {
+                loadComments({
+                    'timeMin': response[response.length - 1].time,
+                    'timeMax': parseInt(Date.now() / 1000),
+                    'db': 'kami'
+                })
+            }
+        }
+
+        setTimelineActiveMonth(true)
+
+        if (debug) console.log('maxID:', getMaxCommentID(), ' minID:', getMinCommentID())
+
+    }).catch(e => {
+        //console.log(xhr.response);
+        isLoadCommentErrorShowed = false
+        console.log(`Error: ${e}`);
+    })
 }
 
 function insertComment(comment, isKami = false) {
@@ -342,7 +338,7 @@ function insertComment(comment, isKami = false) {
     } catch (error) { }
     if (imgsDOM) imgsDOM = '<br><br>' + imgsDOM
 
-    commentDiv.insertBefore(html2elmnt(/*html*/`
+    let commentEl = html2elmnt(/*html*/`
         <div class="commentBox commentItem${comment.hidden ? ' hidden' : ''}" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
             <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
@@ -357,8 +353,66 @@ function insertComment(comment, isKami = false) {
             <div class="id">#${comment.id}${isKami == true ? ' (kami.im)' : ''}</div>
             <div class="comment">${htmlEscape(comment.comment)}${imgsDOM}</div>
             <div class="time">${date + ' ' + hour}${(comment.hidden == 1) ? ' (hidden)' : ''}</div>
+            <div class="action" ${isKami ? 'style="display: none"' : ''}>
+                <span class="btn like">
+                    <span class="like-count"></span>
+                </span>
+                <img class="btn reply" src="https://haojiezhe12345.top:82/madohomu/res/reply.svg" style="display: none">
+            </div>
         </div>
-    `), insertBeforeEl)
+    `)
+
+    let newComment = {
+        /** @type {HTMLSpanElement} */
+        likeBtn: commentEl.querySelector('.btn.like'),
+        /** @type {HTMLSpanElement} */
+        likeCount: commentEl.querySelector('.like-count'),
+        /** @type {HTMLImageElement} */
+        replyBtn: commentEl.querySelector('.btn.reply'),
+
+        get liked() { return this.likeBtn.classList.contains('liked') },
+        set liked(value) {
+            value
+                ? this.likeBtn.classList.add('liked')
+                : this.likeBtn.classList.remove('liked')
+        },
+
+        get likes() { return parseInt(this.likeCount.textContent) || 0 },
+        set likes(value) {
+            this.likeCount.textContent = value
+            this.likeCount.style.display = value ? 'block' : 'none'
+        },
+
+        init() {
+            this.liked = comment.liked
+            this.likes = comment.likes
+
+            this.likeBtn.onclick = async () => {
+                if (this.liked) {
+                    if (await XHR.delete('comments/like' + obj2queryString({
+                        commentId: comment.id
+                    }))) {
+                        this.liked = false
+                        this.likes--
+                    }
+                } else {
+                    if (await XHR.post('comments/like' + obj2queryString({
+                        commentId: comment.id
+                    }))) {
+                        this.liked = true
+                        this.likes++
+                    }
+                }
+            }
+
+            this.replyBtn.onclick = () => {
+
+            }
+        }
+    }
+    newComment.init()
+
+    commentDiv.insertBefore(commentEl, insertBeforeEl)
 }
 
 function clearComments(clearTop) {
