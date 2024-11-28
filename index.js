@@ -346,11 +346,7 @@ function insertComment(comment, isKami = false) {
         <div class="commentBox commentItem${comment.hidden ? ' hidden' : ''}" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
             <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
-            <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : User.convertAvatarPath(comment.avatar)}"
-                onclick="
-                    showUserComment(&quot;${comment.sender.replace(/\\/g, '\\\\').replace(/\x22/g, '\\&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}&quot;, this.src, ${isKami == true ? comment.uid : undefined});
-                    Comments.forceLowerPanelUp()
-                ">
+            <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : User.convertAvatarPath(comment.avatar)}">
             <div class="sender" onclick="this.previousElementSibling.click()">
                 ${comment.sender == '匿名用户' ? '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>' : comment.sender}
             </div>
@@ -365,6 +361,19 @@ function insertComment(comment, isKami = false) {
             </div>
         </div>
     `)
+
+    commentEl.querySelector('.avatar').onclick = function () {
+        if (comment.uid != null && !isKami) {
+            Popup.show('userHome', {
+                id: comment.uid,
+                name: comment.sender,
+                avatar: comment.avatar
+            })
+        } else {
+            showUserComment(comment.sender, this.src, comment.uid)
+        }
+        Comments.forceLowerPanelUp()
+    }
 
     let newComment = {
         /** @type {HTMLSpanElement} */
@@ -873,8 +882,8 @@ const Popup = {
     },
 }
 
-var showPopup = (id, props) => Popup.show(id, props)
-var closePopup = () => Popup.close()
+var showPopup = Popup.show.bind(Popup)
+var closePopup = Popup.close.bind(Popup)
 try {
     Popup.init()
 } catch (error) {
@@ -884,8 +893,12 @@ try {
 // user related
 //
 const User = {
+    LoggedOnUserId: null,
+
     init() {
         XHR.token = getConfig('token')
+
+        this.loadUserInfo()
 
         if (getConfig('username')) {
             if (XHR.token) {
@@ -1138,6 +1151,7 @@ const User = {
 
             data: () => ({
                 user: {},
+                showAction: true,
                 comments: [],
                 scrollPaused: false,
                 toEnd: false,
@@ -1153,6 +1167,7 @@ const User = {
                         let user = Array.isArray(r) ? r[0] : r
                         if (user) {
                             this.user = user
+                            this.showAction = this.user.id == User.LoggedOnUserId
                             this.getComments()
                         } else {
                             FloatMsgs.show({ type: 'warn', msg: `<span class="ui zh">找不到用户</span><span class="ui en">User not found</span> (ID: ${this.id})` })
@@ -1297,28 +1312,35 @@ const User = {
 
         if (XHR.token) {
             User.getMe().then(r => {
+                this.LoggedOnUserId = r.id
+
                 avatar.src = User.convertAvatarPath(r.avatar)
                 name.textContent = r.name
                 try {
                     document.getElementById('msgPopupAvatar').src = User.convertAvatarPath(r.avatar)
                     document.getElementById('senderText').textContent = r.name
                 } catch (error) { }
+
                 Popup.VuePopups.$children.forEach(v => {
                     if (v.$options.name == 'userHome') {
                         v.getUser()
                     }
                 })
             })
+
             userInfo.onclick = () => this.showMe()
             userInfo.classList.remove('nologin')
 
         } else {
+            this.LoggedOnUserId = null
+
             avatar.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'
             name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
             try {
                 document.getElementById('msgPopupAvatar').src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'
                 document.getElementById('senderText').innerHTML = '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>'
             } catch (error) { }
+
             userInfo.onclick = () => Popup.show('loginPopup')
             userInfo.classList.add('nologin')
         }
@@ -1336,7 +1358,7 @@ const User = {
     }
 }
 
-var loadUserInfo = () => User.loadUserInfo()
+var loadUserInfo = User.loadUserInfo.bind(User)
 try {
     User.init()
 } catch (error) {
@@ -2314,11 +2336,6 @@ if (location.hash == '#video') {
 }
 
 
-// user (login not implemented)
-//
-loadUserInfo()
-
-
 // comments
 //
 const Comments = {
@@ -2522,7 +2539,7 @@ const Comments = {
     },
 }
 
-var seekComment = delta => Comments.seek(delta)
+var seekComment = Comments.seek.bind(Comments)
 try {
     Comments.init()
 } catch (error) {
@@ -2762,8 +2779,8 @@ const ImgViewer = {
     },
 }
 
-var viewImg = src => ImgViewer.view(src)
-var closeImgViewer = () => ImgViewer.close()
+var viewImg = ImgViewer.view.bind(ImgViewer)
+var closeImgViewer = ImgViewer.close.bind(ImgViewer)
 try {
     ImgViewer.init()
 } catch (error) {
