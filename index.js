@@ -15,9 +15,13 @@ const XHR = {
      * 
      * @param {XHRSettings} settings
      */
-    send(method, url, payload, settings = {
-        includeToken: true
-    }) {
+    send(method, url, payload, _s) {
+        /** @type {XHRSettings} */
+        let settings = {
+            includeToken: true
+        }
+        if (_s) Object.assign(settings, _s)
+
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
             xhr.open(method, this.baseUrl + url)
