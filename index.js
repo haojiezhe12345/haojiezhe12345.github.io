@@ -9,12 +9,20 @@ const XHR = {
     baseUrl: 'https://haojiezhe12345.top:82/madohomu/api/',
     token: '',
 
-    send(method, url, payload) {
+    /**
+     * @typedef {Object} XHRSettings
+     * @property {boolean} includeToken 
+     * 
+     * @param {XHRSettings} settings
+     */
+    send(method, url, payload, settings = {
+        includeToken: true
+    }) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
             xhr.open(method, this.baseUrl + url)
 
-            if (this.token) xhr.setRequestHeader('token', this.token)
+            if (this.token && settings.includeToken) xhr.setRequestHeader('token', this.token)
 
             if (typeof payload == typeof {}) {
                 xhr.setRequestHeader("Content-Type", "application/json")
@@ -54,20 +62,24 @@ const XHR = {
         });
     },
 
-    get(url, payload) {
-        return this.send('GET', url + obj2queryString(payload))
+    /** @param {XHRSettings} settings */
+    get(url, payload, settings) {
+        return this.send('GET', url + obj2queryString(payload), undefined, settings)
     },
 
-    post(url, payload) {
-        return this.send('POST', url, payload)
+    /** @param {XHRSettings} settings */
+    post(url, payload, settings) {
+        return this.send('POST', url, payload, settings)
     },
 
-    put(url, payload) {
-        return this.send('PUT', url, payload)
+    /** @param {XHRSettings} settings */
+    put(url, payload, settings) {
+        return this.send('PUT', url, payload, settings)
     },
 
-    delete(url, payload) {
-        return this.send('DELETE', url, payload)
+    /** @param {XHRSettings} settings */
+    delete(url, payload, settings) {
+        return this.send('DELETE', url, payload, settings)
     },
 }
 
@@ -147,7 +159,7 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
         ? (queryObj.from < getMinKamiID())
         : (queryObj.from < getMinCommentID())
 
-    XHR.get("comments", queryObj).then(response => {
+    XHR.get("comments", queryObj, { includeToken: false }).then(response => {
 
         if (debug) console.log(queryObj)
         if (debug) console.log('isNewer:', isCommentsNewer, ' isOlder:', isCommentsOlder, ' length:', response.length)
@@ -1326,6 +1338,8 @@ const User = {
                         v.getUser()
                     }
                 })
+            }).catch(() => {
+                if (!XHR.token) this.loadUserInfo()
             })
 
             userInfo.onclick = () => this.showMe()
