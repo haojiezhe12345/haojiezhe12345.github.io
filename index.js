@@ -15,12 +15,17 @@ const XHR = {
      * 
      * @param {XHRSettings} settings
      */
-    send(method, url, payload, _s) {
-        /** @type {XHRSettings} */
-        let settings = {
-            includeToken: true
-        }
-        if (_s) Object.assign(settings, _s)
+    send(method, url, payload, settings) {
+        settings = (() => {
+            /** @type {XHRSettings} */
+            let s = {
+                includeToken: true
+            }
+            if (settings) {
+                Object.assign(s, settings)
+            }
+            return s
+        })()
 
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest()
@@ -36,7 +41,7 @@ const XHR = {
             }
 
             xhr.onload = () => {
-                if (xhr.status == 200) {
+                if (xhr.status < 400) {
                     try {
                         let r = JSON.parse(xhr.responseText)
                         r.code && r.code != 1 && FloatMsgs.show({ type: 'warn', msg: `${r.message} (${r.code})` })
@@ -50,18 +55,18 @@ const XHR = {
                     try {
                         reject(JSON.parse(xhr.responseText))
                     } catch (error) {
-                        reject(xhr.responseText)
+                        reject(xhr)
                     }
                 }
             }
 
             xhr.onerror = () => {
                 FloatMsgs.show({ type: 'error', msg: 'Network error' })
-                reject()
+                reject(xhr)
             }
             xhr.ontimeout = () => {
                 FloatMsgs.show({ type: 'error', msg: 'Request timed out' })
-                reject()
+                reject(xhr)
             }
         });
     },
@@ -163,7 +168,7 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
         ? (queryObj.from < getMinKamiID())
         : (queryObj.from < getMinCommentID())
 
-    XHR.get("comments", queryObj, { includeToken: false }).then(response => {
+    XHR.get("comments", queryObj).then(response => {
 
         if (debug) console.log(queryObj)
         if (debug) console.log('isNewer:', isCommentsNewer, ' isOlder:', isCommentsOlder, ' length:', response.length)
@@ -273,10 +278,8 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
 
         if (debug) console.log('maxID:', getMaxCommentID(), ' minID:', getMinCommentID())
 
-    }).catch(e => {
-        //console.log(xhr.response);
-        isLoadCommentErrorShowed = false
-        console.log(`Error: ${e}`);
+    }).catch(xhr => {
+        if (xhr.status == 401) loadComments()
     })
 }
 
@@ -419,13 +422,10 @@ function insertComment(comment, isKami = false) {
             this.likes = comment.likes
 
             this.likeBtn.onclick = () => {
-                let promise
-                if (this.liked) {
-                    promise = XHR.delete(`comments/like?commentId=${comment.id}`)
-                } else {
-                    promise = XHR.post(`comments/like?commentId=${comment.id}`)
-                }
-                promise.then(() => {
+                (this.liked
+                    ? XHR.delete(`comments/like?commentId=${comment.id}`)
+                    : XHR.post(`comments/like?commentId=${comment.id}`)
+                ).then(() => {
                     XHR.get('comments', { from: comment.id, count: 1 }).then(r => {
                         this.liked = r[0].liked
                         this.likes = r[0].likes
@@ -729,7 +729,7 @@ const NewMessage = {
                 clearComments()
                 loadComments()
             }, 1000);
-        }).catch(r => {
+        }).catch(() => {
             window.alert('发送留言失败\n如果问题持续, 请发邮件到 3112611479@qq.com (或加此QQ)\n\nFailed to send message, if problem persists, please contact 3112611479@qq.com')
             document.getElementById('sendBtn').disabled = false;
             document.getElementById('sendBtn').innerHTML = '<span class="ui zh">发送 ✔</span><span class="ui en">Send ✔</span>'
@@ -1342,8 +1342,8 @@ const User = {
                         v.getUser()
                     }
                 })
-            }).catch(() => {
-                if (!XHR.token) this.loadUserInfo()
+            }).catch(xhr => {
+                if (xhr.status == 401) this.loadUserInfo()
             })
 
             userInfo.onclick = () => this.showMe()
@@ -2265,7 +2265,6 @@ document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
 // ui states
 var isFullscreen = false
-var isLoadCommentErrorShowed = false
 
 
 // set title link href
