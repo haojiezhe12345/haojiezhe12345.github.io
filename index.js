@@ -2695,7 +2695,7 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
 const ImgViewer = {
     elements: {
         container: document.getElementById('imgViewerBox'),
-        viewer: document.getElementById('imgViewer'),
+        viewer: /** @type {HTMLImageElement} */(document.getElementById('imgViewer')),
         viewport: document.getElementById('viewport1'),
     },
 
@@ -2732,6 +2732,49 @@ const ImgViewer = {
         return this.elements.container.style.display != 'none' ? true : false
     },
 
+    normalizePosition() {
+        const displayWidth = this.elements.viewer.width * this.imgViewerScale
+        const displayHeight = this.elements.viewer.height * this.imgViewerScale
+
+        if (displayWidth && displayHeight) { // make sure non-zero
+            const top = (window.innerHeight - displayHeight) / 2 + this.imgViewerOffsetY
+            const bottom = (window.innerHeight - displayHeight) / 2 - this.imgViewerOffsetY
+            const left = (window.innerWidth - displayWidth) / 2 + this.imgViewerOffsetX
+            const right = (window.innerWidth - displayWidth) / 2 - this.imgViewerOffsetX
+            // console.log(top, left, bottom, right)
+
+            if (displayHeight <= window.innerHeight) this.imgViewerOffsetY = 0
+            else {
+                if (top > 0 && bottom < 0) this.imgViewerOffsetY = 0 - (window.innerHeight - displayHeight) / 2
+                else if (top < 0 && bottom > 0) this.imgViewerOffsetY = (window.innerHeight - displayHeight) / 2
+                else if (top > 0 && bottom > 0) this.imgViewerOffsetY = 0
+            }
+
+            if (displayWidth <= window.innerWidth) this.imgViewerOffsetX = 0
+            else {
+                if (left > 0 && right < 0) this.imgViewerOffsetX = 0 - (window.innerWidth - displayWidth) / 2
+                else if (left < 0 && right > 0) this.imgViewerOffsetX = (window.innerWidth - displayWidth) / 2
+                else if (left > 0 && right > 0) this.imgViewerOffsetX = 0
+            }
+        }
+    },
+
+    applyPosition() {
+        this.elements.viewer.style.transform = `translateX(${this.imgViewerOffsetX}px) translateY(${this.imgViewerOffsetY}px) scale(${this.imgViewerScale})`
+    },
+
+    getPixelRatio() {
+        try {
+            const actualWidth = this.elements.viewer.width * this.imgViewerScale //* window.devicePixelRatio
+            const naturalWidth = this.elements.viewer.naturalWidth
+            // check for zeros
+            return (actualWidth && naturalWidth) ? (actualWidth / naturalWidth) : 1
+        } catch (error) {
+            console.log('Failed to get image display pixel ratio')
+            return 1
+        }
+    },
+
     init() {
         this.viewportContent = this.elements.viewport.getAttribute('content')
 
@@ -2747,6 +2790,8 @@ const ImgViewer = {
                     this.close()
                 }
                 this.elements.viewer.style.removeProperty('transition')
+                this.normalizePosition()
+                this.applyPosition()
             }
         }
         this.elements.container.onmousemove = e => {
@@ -2757,7 +2802,7 @@ const ImgViewer = {
                     this.imgViewerMouseMoved = true
                 }
                 //console.log(this.imgViewerOffsetX, this.imgViewerOffsetY)
-                this.elements.viewer.style.transform = `translateX(${this.imgViewerOffsetX}px) translateY(${this.imgViewerOffsetY}px) scale(${this.imgViewerScale})`
+                this.applyPosition()
             }
         }
         this.elements.container.onwheel = e => {
@@ -2781,13 +2826,13 @@ const ImgViewer = {
 
             if (this.imgViewerScale < 1) {
                 this.imgViewerScale = 1
-                this.imgViewerOffsetX = 0
-                this.imgViewerOffsetY = 0
             }
             if (debug) console.log(this.imgViewerScale)
 
-            this.elements.viewer.style.transform = `translateX(${this.imgViewerOffsetX}px) translateY(${this.imgViewerOffsetY}px) scale(${this.imgViewerScale})`
-            if (this.imgViewerScale > 3) {
+            this.normalizePosition()
+            this.applyPosition()
+
+            if (this.getPixelRatio() > 2) {
                 this.elements.viewer.style.imageRendering = 'pixelated'
             } else {
                 this.elements.viewer.style.removeProperty('image-rendering')
