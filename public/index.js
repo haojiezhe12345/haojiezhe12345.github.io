@@ -6,7 +6,7 @@
 // requests
 //
 const XHR = {
-    baseUrl: 'https://haojiezhe12345.top:82/madohomu/api/',
+    baseUrl: 'api/',
     token: '',
 
     /**
@@ -351,7 +351,7 @@ function insertComment(comment, isKami = false) {
     try {
         if (comment.image != '') {
             for (let i of comment.image.split(',')) {
-                commentExtra += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); Comments.forceLowerPanelUp()">`
+                commentExtra += /*html*/`<img loading="lazy" src="api/data/images/posts/${i}.jpg" onclick="viewImg(this.src); Comments.forceLowerPanelUp()">`
             }
         }
     } catch (error) { }
@@ -363,7 +363,7 @@ function insertComment(comment, isKami = false) {
 
     let commentEl = html2elmnt(/*html*/`
         <div class="commentBox commentItem${comment.hidden ? ' hidden' : ''}" ${isKami == true ? `data-kamiid="#${comment.id}"` : `id="#${comment.id}"`} data-timestamp="${comment.time}">
-            <img class="bg" loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
+            <img class="bg" loading="lazy" src="bg/msgbg${randBG}.jpg" ${(comment.hidden == 1) ? 'style="display: none;"' : ''}>
             <div class="bgcover"></div>
             <img class="avatar" loading="lazy" src="${isKami == true ? `https://kami.im/getavatar.php?uid=${comment.uid}` : User.convertAvatarPath(comment.avatar)}">
             <div class="sender" onclick="this.previousElementSibling.click()">
@@ -376,7 +376,7 @@ function insertComment(comment, isKami = false) {
                 <span class="btn like">
                     <span class="like-count"></span>
                 </span>
-                <img class="btn reply" src="https://haojiezhe12345.top:82/madohomu/res/reply.svg">
+                <img class="btn reply" src="res/reply.svg">
             </div>
         </div>
     `)
@@ -462,7 +462,7 @@ function initCommentReplyQuote(el, id, params) {
         el.$comment = comment
 
         el.innerHTML = /*html*/`
-            <img class="reply-icon" src="https://haojiezhe12345.top:82/madohomu/res/reply.svg">
+            <img class="reply-icon" src="res/reply.svg">
             <div class="quote-content">
                 <div class="quote-head">
                     <img class="quote-avatar" src="${User.convertAvatarPath(comment.avatar)}">
@@ -789,7 +789,7 @@ const Popup = {
                         try {
                             for (let j = 0; j < document.getElementsByClassName(`${themeName}bg`).length; j++) {
                                 document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
-                                    <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                                    <img loading="lazy" src="bg/${themeName != 'default' ? themeName : ''}/mainbg${j + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
                                     <p>
                                         ${document.getElementsByClassName(`${themeName}bg`)[j].children[1].innerHTML}
                                         ${document.getElementsByClassName(`${themeName}bg`)[j].dataset.pixivid != null ? `
@@ -805,7 +805,7 @@ const Popup = {
                     }
                     for (let i = 0; i < msgBgCount; i++) {
                         document.getElementById('getImgPopup').firstElementChild.lastElementChild.appendChild(html2elmnt(/*html*/`
-                            <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
+                            <img loading="lazy" src="bg/msgbg${i + 1}.jpg" style="min-height: 40vh;" onload="this.style.removeProperty('min-height')">
                             <p>
                                 ${msgBgInfo[i].description != null
                                 ? msgBgInfo[i].description
@@ -1318,7 +1318,7 @@ const User = {
     },
 
     convertAvatarPath(avatar) {
-        return avatar ? 'https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/' + encodeURIComponent(avatar) : ''
+        return avatar ? 'api/data/images/avatars/' + encodeURIComponent(avatar) : ''
     },
 
     loadUserInfo() {
@@ -1352,10 +1352,10 @@ const User = {
         } else {
             this.LoggedOnUserId = null
 
-            avatar.src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'
+            avatar.src = 'api/data/images/defaultAvatar.png'
             name.innerHTML = '<span class="ui zh">访客</span><span class="ui en">Anonymous</span>'
             try {
-                document.getElementById('msgPopupAvatar').src = 'https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'
+                document.getElementById('msgPopupAvatar').src = 'api/data/images/defaultAvatar.png'
                 document.getElementById('senderText').innerHTML = '<span class="ui zh">匿名用户</span><span class="ui en">Anonymous</span>'
             } catch (error) { }
 
@@ -1409,9 +1409,9 @@ function showUserComment(user, avatar, uid) {
     const xhr = new XMLHttpRequest();
 
     if (user != null) {
-        xhr.open("GET", 'https://haojiezhe12345.top:82/madohomu/api/comments' + obj2queryString({ user, count: 50 }));
+        xhr.open("GET", 'api/comments' + obj2queryString({ user, count: 50 }));
     } else {
-        xhr.open("GET", 'https://haojiezhe12345.top:82/madohomu/api/comments' + obj2queryString({ user: userCommentUser, from: userCommentOffset, count: 50, db: userCommentIsKami == true ? 'kami' : null }));
+        xhr.open("GET", 'api/comments' + obj2queryString({ user: userCommentUser, from: userCommentOffset, count: 50, db: userCommentIsKami == true ? 'kami' : null }));
         if (debug) console.log(userCommentUser, userCommentOffset)
     }
 
@@ -1429,7 +1429,7 @@ function showUserComment(user, avatar, uid) {
                 try {
                     if (comment.image != '') {
                         for (var i of comment.image.split(',')) {
-                            imgsDOM += /*html*/`<img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
+                            imgsDOM += /*html*/`<img loading="lazy" src="api/data/images/posts/${i}.jpg" onclick="viewImg(this.src)">`
                         }
                     }
                 } catch (error) { }
@@ -1614,7 +1614,7 @@ const Theme = {
                 let bg = document.querySelector('.walpurgispvbg')
                 let iframe = document.querySelector('.walpurgispvbg iframe')
                 if (iframe.contentWindow.video) iframe.contentWindow.location.reload()
-                else iframe.src = 'index.hlsvideo.html#https://haojiezhe12345.top:82/madohomu/media/walpurgis2_full.m3u'
+                else iframe.src = 'index.hlsvideo.html#media/walpurgis2_full.m3u'
                 bg.onclick = () => iframe.contentWindow.video && iframe.contentWindow.video.click()
                 setTimeout(() => {
                     MusicPlayer.elements.player.muted = true
@@ -1695,7 +1695,7 @@ const Theme = {
         let next = this.currentBG + 1 < this.getCurrentBgCount() ? this.currentBG + 1 : 0
 
         let bgs = document.getElementsByClassName(`${this.theme}bg`)
-        let bgurl = this.theme == 'default' ? 'https://haojiezhe12345.top:82/madohomu/bg/' : `https://haojiezhe12345.top:82/madohomu/bg/${this.theme}/`
+        let bgurl = this.theme == 'default' ? 'bg/' : `bg/${this.theme}/`
 
         try {
             bgs[prev].classList.remove('visible')
@@ -1797,9 +1797,9 @@ function printParaCharOneByOne(divEl, delay = 0) {
 function playWalpurgis(time_ms) {
     document.getElementById('videoBgBox').style.opacity = 1
     document.getElementById('videoBgBox').style.display = 'block'
-    document.getElementById('mainVideo').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis1.1.mp4'
+    document.getElementById('mainVideo').src = 'media/walpurgis1.1.mp4'
     document.getElementById('mainVideo').play()
-    //document.getElementById('mainVideoBg').src = 'https://haojiezhe12345.top:82/madohomu/media/walpurgis1.1.mp4'
+    //document.getElementById('mainVideoBg').src = 'media/walpurgis1.1.mp4'
     //document.getElementById('mainVideoBg').play()
     setTimeout(() => {
         document.getElementById('videoBgBox').style.opacity = 0
@@ -1957,7 +1957,7 @@ function setHoverCalendarActiveDay() {
 function setTodayCommentCount() {
     var utc = parseInt(0 - new Date().getTimezoneOffset() / 60)
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://haojiezhe12345.top:82/madohomu/api/comments/count?utc=${utc}`);
+    xhr.open("GET", `api/comments/count?utc=${utc}`);
     xhr.onload = () => {
         if (xhr.status == 200) {
             document.getElementById('todayCommentCount').innerHTML = xhr.responseText
@@ -2325,7 +2325,7 @@ if (location.hash == '#video') {
 
     document.getElementsByClassName('walpurgisbg')[0].style.opacity = 1
     document.getElementsByClassName('walpurgisbg')[0].style.display = 'block'
-    document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.backgroundImage = `url("https://haojiezhe12345.top:82/madohomu/bg/walpurgis/mainbg1.jpg")`
+    document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.backgroundImage = `url("bg/walpurgis/mainbg1.jpg")`
     document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.animationName = 'bgzoom'
     document.getElementsByClassName('walpurgisbg')[0].firstElementChild.style.animationDuration = '1.5s'
 
@@ -2911,7 +2911,7 @@ const MusicPlayer = {
         this.elements.playerImg.onerror = function () {
             this.onerror = null
             this.onclick = null
-            this.src = 'https://haojiezhe12345.top:82/madohomu/res/music_note.svg'
+            this.src = 'res/music_note.svg'
         }
         for (let i = 0; i < this.elements.titles.length; i++) {
             this.elements.titles[i].textContent = getFileNameWithoutExt(this.playList[index], true)
@@ -3039,7 +3039,7 @@ const MusicPlayer = {
 }
 
 try {
-    MusicPlayer.initPlayer('https://haojiezhe12345.top:82/madohomu/media/bgm/')
+    MusicPlayer.initPlayer('media/bgm/')
 } catch (error) {
     logErr(error, 'failed to init music player')
 }

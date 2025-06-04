@@ -15,7 +15,7 @@
 
         }
     </script>
-    <script src="https://haojiezhe12345.top:82/madohomu/res/vue2.min.js" defer></script>
+    <script src="res/vue2.js" defer></script>
     <script src="index.js" defer></script>
 
     <link rel="stylesheet" href="index.css" type="text/css">
@@ -28,8 +28,8 @@
     <meta name="application-name" content="MadoHomu.love">
     <meta name="apple-mobile-web-app-title" content="MadoHomu.love">
 
-    <link rel="icon" type="image/png" sizes="320x320" href="https://haojiezhe12345.top:82/madohomu/res/favicon-320.png">
-    <link rel="apple-touch-icon" type="image/png" sizes="320x320" href="https://haojiezhe12345.top:82/madohomu/res/favicon-320.png">
+    <link rel="icon" type="image/png" sizes="320x320" href="res/favicon-320.png">
+    <link rel="apple-touch-icon" type="image/png" sizes="320x320" href="res/favicon-320.png">
 
     <link rel="canonical" href="https://madohomu.love/" />
     <link rel="alternate" href="https://homumado.love/" />
@@ -46,8 +46,8 @@
 
     <div id="bgContainer">
         <!--
-        <div id="mainbg1" class="mainbg bgzoom" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg); opacity: 1; /*display: none*/"></div>
-        <div id="mainbg2" class="mainbg" style="background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg2.jpg); opacity: 0; animation-name: none; /*display: none*/"></div>
+        <div id="mainbg1" class="mainbg bgzoom" style="background-image: url(bg/mainbg1.jpg); opacity: 1; /*display: none*/"></div>
+        <div id="mainbg2" class="mainbg" style="background-image: url(bg/mainbg2.jpg); opacity: 0; animation-name: none; /*display: none*/"></div>
         -->
 
         <div class="mainbg defaultbg" data-pixivid="61717580" ><div style="background-position: 45% 50%;"></div><span><span class="ui zh">画师:&nbsp;</span><span class="ui en">Illustrator:&nbsp;</span>HISA</span></div>
@@ -208,7 +208,7 @@
         <br>
 
         <div class="mainTitleUnder" onclick="showPopup('themeSelectorPopup')">
-            <img class="musicPlayingIndicator" src="https://haojiezhe12345.top:82/madohomu/res/music_note.svg">
+            <img class="musicPlayingIndicator" src="res/music_note.svg">
             <div id="themeIndicator">
                 <div class="currentSong"></div>
                 <span><span class="ui zh">主题:</span><span class="ui en">Theme:</span></span>
@@ -223,15 +223,15 @@
                     <span id="themeTxt-kami">kami.im</span>
                 </span>
             </div>
-            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
+            <img src="res/arrow_right.svg">
         </div>
 
         <br>
 
         <div class="mainTitleUnder" onclick="showPopup('game2')">
-            <img src="https://haojiezhe12345.top:82/madohomu/res/sports_esports.svg">
+            <img src="res/sports_esports.svg">
             <span><span class="ui zh">小情侣(?)</span><span class="ui en">Minigame</span></span>
-            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
+            <img src="res/arrow_right.svg">
         </div>
 
         <div id="userInfo">
@@ -261,9 +261,9 @@
         <div id="comments" class="noscrollbar">
 
             <div class="commentBox" id="topComment">
-                <img class="bg" src="https://haojiezhe12345.top:82/madohomu/bg/msgbg1.jpg">
+                <img class="bg" src="bg/msgbg1.jpg">
                 <div class="bgcover"></div>
-                <img class="avatar" src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/浩劫者12345.jpg" onerror="this.onerror=null;this.src='https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png'">
+                <img class="avatar" src="api/data/images/avatars/浩劫者12345.jpg" onerror="this.onerror=null;this.src='api/data/images/defaultAvatar.png'">
                 <div class="sender"><span class="ui zh">浩劫者12345 (站长)</span><span class="ui en">haojiezhe12345</span></div>
                 <div class="id"><span class="ui zh">#置顶</span><span class="ui en">#Pinned</span></div>
                 <div class="comment">
@@ -390,10 +390,10 @@
         </div>
 
         <div class="commentSeekArrow" onclick="seekComment(-1)" style="left: 2vw; display: none;">
-            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_left.svg">
+            <img src="res/arrow_left.svg">
         </div>
         <div class="commentSeekArrow" onclick="seekComment(1)" style="right: 2vw;">
-            <img src="https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg">
+            <img src="res/arrow_right.svg">
             <div id="mouseScrollTooltip" class="tooltip">
                 <span class="ui zh">用鼠标滚轮也可滚动</span><span class="ui en">Scrollable with wheel</span>
             </div>
@@ -464,7 +464,7 @@
         <div id="showUserCommentPopup" class="popupItem">
             <div id="userComment">
                 <h2>
-                    <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/avatars/.jpg">
+                    <img src="api/data/images/avatars/.jpg">
                     <span>User</span>
                 </h2>
                 <div class="userCommentItem">
@@ -474,8 +474,8 @@
                             Hello, world!
                         </span>
                         <i></i>
-                        <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png">
-                        <img src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png">
+                        <img src="api/data/images/defaultAvatar.png">
+                        <img src="api/data/images/defaultAvatar.png">
                     </p>
                 </div>
                 <h4>
@@ -495,44 +495,44 @@
                     </span>
                     <span onclick="showPopup('getImgPopup')" class="underlinedIconLink" style="float: right; padding-left: 4px;">
                         <span class="ui zh">下载背景图片</span><span class="ui en">Download backgrounds</span>
-                        <img src="https://haojiezhe12345.top:82/madohomu/res/download.svg">
+                        <img src="res/download.svg">
                     </span>
                 </p>
                 <div id="themeList">
                     <div data-theme="">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/res/auto_theme.jpg" style="border: 0.5rem solid white;">
+                        <img loading="lazy" src="res/auto_theme.jpg" style="border: 0.5rem solid white;">
                         <span><span class="ui zh">自动</span><span class="ui en">Auto</span></span>
                     </div>
                     <div data-theme="default">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/mainbg1.jpg">
+                        <img loading="lazy" src="bg/mainbg1.jpg">
                         <span><span class="ui zh">圆焰</span><span class="ui en">MadoHomu</span></span>
                     </div>
                     <div data-theme="night">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/night/mainbg1.jpg">
+                        <img loading="lazy" src="bg/night/mainbg1.jpg">
                         <span><span class="ui zh">晚安 (11:00-6:00)</span><span class="ui en">Night (11PM-6AM)</span></span>
                     </div>
                     <div data-theme="birthday">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/birthday/mainbg1.jpg">
+                        <img loading="lazy" src="bg/birthday/mainbg1.jpg">
                         <span><span class="ui zh">圆诞 (10.3)</span><span class="ui en">MadoBirthday (Oct 3)</span></span>
                     </div>
                     <div data-theme="christmas">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/christmas/mainbg1.jpg">
+                        <img loading="lazy" src="bg/christmas/mainbg1.jpg">
                         <span><span class="ui zh">圣诞 (12.25)</span><span class="ui en">Christmas</span></span>
                     </div>
                     <div data-theme="lunarNewYear">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/lunarNewYear/mainbg1.jpg">
+                        <img loading="lazy" src="bg/lunarNewYear/mainbg1.jpg">
                         <span><span class="ui zh">新年 (农历)</span><span class="ui en">Lunar New Year</span></span>
                     </div>
                     <div data-theme="qixi">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/qixi/mainbg1.jpg">
+                        <img loading="lazy" src="bg/qixi/mainbg1.jpg">
                         <span><span class="ui zh">七夕</span><span class="ui en">Chinese Valentine's Day</span></span>
                     </div>
                     <div data-theme="walpurgispv">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/walpurgispv/mainbg1.jpg">
+                        <img loading="lazy" src="bg/walpurgispv/mainbg1.jpg">
                         <span><span class="ui zh">魔女之夜的回天</span><span class="ui en">Walpurgisnacht Rising</span></span>
                     </div>
                     <div data-theme="kami">
-                        <img loading="lazy" src="https://haojiezhe12345.top:82/madohomu/bg/kami/mainbg1.jpg">
+                        <img loading="lazy" src="bg/kami/mainbg1.jpg">
                         <span>kami.im</span>
                     </div>
                 </div>
@@ -548,7 +548,7 @@
                 </div>
                 <button id="musicPlayBtn" class="musicPlayingIndicator"></button>
                 <div id="musicPlayerList">
-                    <button><img src="https://haojiezhe12345.top:82/madohomu/res/playlist_play.svg"></button>
+                    <button><img src="res/playlist_play.svg"></button>
                     <div>
                         <div>
                             <b><span class="ui zh">播放列表</span><span class="ui en">Playlist</span></b>
@@ -656,7 +656,7 @@
                         if (!this.picList) {
                             this.picList = {}
                             for (let name of ['hmr', 'mdk']) {
-                                promises.push(getFileListAsync(`https://haojiezhe12345.top:82/madohomu/res/mello/${name}/`).then(l => this.picList[name] = l))
+                                promises.push(getFileListAsync(`res/mello/${name}/`).then(l => this.picList[name] = l))
                             }
                         }
                         Promise.all(promises).then(() => {
@@ -678,7 +678,7 @@
                 <p><span class="ui zh">点上面的按钮看小情侣互动！</span><span class="ui en">Click the button above to start!</span></p>
                 <p><span class="ui zh">(是随机抽图的呢)</span><span class="ui en">(Images are randomly displayed :D)</span></p>
                 <p><span class="ui zh">图源 (X/推特): </span><span class="ui en">Image source (X/Twitter): </span><a href="https://twitter.com/swan0517/media" target="_blank">@swan0517 (Mello)</a></p>
-                <a onclick="showPopup('game1')"><img src="https://haojiezhe12345.top:82/madohomu/res/xh_mdk1.png"></a>
+                <a onclick="showPopup('game1')"><img src="res/xh_mdk1.png"></a>
             </div>
             <button class="closeBtn"></button>
         </div>
@@ -808,7 +808,7 @@
                 <div v-if="screen == 'register'">
                     <h2><span class="ui zh">注册账号</span><span class="ui en">Registration</span></h2>
                     
-                    <img ref="avatarPreview" class="setAvatarImg" src="https://haojiezhe12345.top:82/madohomu/api/data/images/defaultAvatar.png" @click="$refs.avatarInput.click()" style="margin-bottom: 0;">
+                    <img ref="avatarPreview" class="setAvatarImg" src="api/data/images/defaultAvatar.png" @click="$refs.avatarInput.click()" style="margin-bottom: 0;">
                     <input ref="avatarInput" type="file" accept="image/*" @change="previewAvatar()" style="display: none;"/>
                     <div class="inputHelperText" style="text-align: center; margin: 0.25rem 0;"><span class="ui zh">点击设置头像</span><span class="ui en">Tap to set avatar</span></div>
 
@@ -907,7 +907,7 @@
                 </div>
                 <div class="useraction" v-if="showAction">
                     <div>
-                        <img src="https://haojiezhe12345.top:82/madohomu/res/edit.svg"><span class="ui zh">编辑资料</span><span class="ui en">Edit profile</span>
+                        <img src="res/edit.svg"><span class="ui zh">编辑资料</span><span class="ui en">Edit profile</span>
                         <ul>
                             <li onclick="User.changeName()"><span class="ui zh">修改昵称</span><span class="ui en">Change nickname</span></li>
                             <li onclick="User.changeAvatar()"><span class="ui zh">修改头像</span><span class="ui en">Change avatar</span></li>
@@ -916,7 +916,7 @@
                         </ul>
                     </div>
                     <div>
-                        <img src="https://haojiezhe12345.top:82/madohomu/res/logout.svg"><span class="ui zh">退出登录</span><span class="ui en">Log out</span>
+                        <img src="res/logout.svg"><span class="ui zh">退出登录</span><span class="ui en">Log out</span>
                         <ul>
                             <li onclick="User.logout()"><span class="ui zh">退出登录 (当前设备)</span><span class="ui en">Log out (from this device)</span></li>
                             <li onclick="User.resetToken()" style="color: red;"><span class="ui zh">退出登录 (所有设备)</span><span class="ui en">Log out (from all devices)</span></li>
@@ -928,7 +928,7 @@
                     <p>
                         <span @click="gotoComment(index)">{{ item.comment }}</span>
                         <i></i>
-                        <img v-for="img in item.image" :src="`https://haojiezhe12345.top:82/madohomu/api/data/images/posts/${img}.jpg`" loading="lazy" onclick="viewImg(this.src)">
+                        <img v-for="img in item.image" :src="`api/data/images/posts/${img}.jpg`" loading="lazy" onclick="viewImg(this.src)">
                     </p>
                 </div>
                 <h4 v-if="toEnd">
