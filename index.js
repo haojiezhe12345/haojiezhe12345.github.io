@@ -2745,18 +2745,18 @@ const ImgViewer = {
 
             if (displayHeight <= window.innerHeight) this.imgViewerOffsetY = 0
             else {
-                if (top > 0 && bottom < 0) this.imgViewerOffsetY = 0 - (window.innerHeight - displayHeight) / 2
-                else if (top < 0 && bottom > 0) this.imgViewerOffsetY = (window.innerHeight - displayHeight) / 2
-                else if (top > 0 && bottom > 0) this.imgViewerOffsetY = 0
+                if (top > 0) this.imgViewerOffsetY = 0 - (window.innerHeight - displayHeight) / 2
+                else if (bottom > 0) this.imgViewerOffsetY = (window.innerHeight - displayHeight) / 2
             }
 
             if (displayWidth <= window.innerWidth) this.imgViewerOffsetX = 0
             else {
-                if (left > 0 && right < 0) this.imgViewerOffsetX = 0 - (window.innerWidth - displayWidth) / 2
-                else if (left < 0 && right > 0) this.imgViewerOffsetX = (window.innerWidth - displayWidth) / 2
-                else if (left > 0 && right > 0) this.imgViewerOffsetX = 0
+                if (left > 0) this.imgViewerOffsetX = 0 - (window.innerWidth - displayWidth) / 2
+                else if (right > 0) this.imgViewerOffsetX = (window.innerWidth - displayWidth) / 2
             }
         }
+
+        this.applyPosition()
     },
 
     applyPosition() {
@@ -2791,11 +2791,16 @@ const ImgViewer = {
                 }
                 this.elements.viewer.style.removeProperty('transition')
                 this.normalizePosition()
-                this.applyPosition()
             }
+        }
+        this.elements.container.onmouseleave = e => {
+            this.elements.viewer.style.removeProperty('transition')
+            this.normalizePosition()
         }
         this.elements.container.onmousemove = e => {
             if (e.buttons == 1) {
+                this.elements.viewer.style.transition = 'none'
+
                 this.imgViewerOffsetX += e.movementX
                 this.imgViewerOffsetY += e.movementY
                 if (e.movementX != 0 || e.movementY != 0) {
@@ -2830,7 +2835,6 @@ const ImgViewer = {
             if (debug) console.log(this.imgViewerScale)
 
             this.normalizePosition()
-            this.applyPosition()
 
             if (this.getPixelRatio() > 2) {
                 this.elements.viewer.style.imageRendering = 'pixelated'
