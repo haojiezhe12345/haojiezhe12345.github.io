@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "build:transform-api-endpoint": "npm run build && cd scripts && python transform_dist_api_endpoint.py",
     "preview": "vite preview"
   },
   "dependencies": {

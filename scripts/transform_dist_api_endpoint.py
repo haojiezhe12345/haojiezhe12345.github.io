@@ -24,14 +24,14 @@ def copyAndReplace(file, remoteDir, replaceDict):
     for txt in replaceDict:
         filetxt = filetxt.replace(txt, replaceDict[txt])
 
-    with open(file, encoding='utf-8', mode='w') as f:
+    with open(remoteFile, encoding='utf-8', mode='w') as f:
         f.write(filetxt)
 
 
 replaceDict = loadReplaceTxt('replace.txt')
 print(json.dumps(replaceDict, indent=4))
 
-remoteDir = R'Z:\Web\Dashboard0\madohomu'
+remoteDir = R'../dist'
 # remoteDir = R'Z:\Web\apitest'
 
 for file in os.listdir(remoteDir):
