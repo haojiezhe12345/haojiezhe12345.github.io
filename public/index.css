@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'AaWoyoudianfangLite';
-    src: url('https://haojiezhe12345.top:82/madohomu/res/AaWoyoudianfangLite.ttf?1') format('truetype');
+    src: url('res/AaWoyoudianfangLite.ttf?1') format('truetype');
 }
 
 .ui.en {
@@ -68,7 +68,7 @@ body>* {
     width: 100%;
     height: 100%;
     image-rendering: auto;
-    /*background-image: url(https://haojiezhe12345.top:82/madohomu/bg/mainbg.jpg);*/
+    /*background-image: url(bg/mainbg.jpg);*/
     background-size: cover;
     background-position: center;
     user-select: none;
@@ -926,11 +926,11 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
     width: 1.5em;
     height: 1.5em;
     background-size: 100% 100%;
-    background-image: url('https://haojiezhe12345.top:82/madohomu/res/favorite_white.svg');
+    background-image: url('res/favorite_white.svg');
 }
 
 #comments .commentBox .action .btn.like.liked::before {
-    background-image: url('https://haojiezhe12345.top:82/madohomu/res/favorite_red_filled.svg');
+    background-image: url('res/favorite_red_filled.svg');
     animation: showFavoriteHeart 0.3s;
 }
 
@@ -1567,7 +1567,7 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
 
 .toolbarItem ul li>i::after {
     content: "";
-    background-image: url('https://haojiezhe12345.top:82/madohomu/res/arrow_right.svg');
+    background-image: url('res/arrow_right.svg');
     background-size: 100% 100%;
     display: block;
     width: 0.625rem;
@@ -1816,7 +1816,7 @@ body:not(.fullscreen) #lowerPanel.animating:not(.lowerPanelUp) {
     display: block;
     width: 100%;
     height: 90%;
-    background-image: url('https://haojiezhe12345.top:82/madohomu/res/arrow_left.svg');
+    background-image: url('res/arrow_left.svg');
     background-size: 100% 100%;
 }
 
@@ -2307,12 +2307,12 @@ p.altLoginOption,
 
 #musicPlayBtn::before {
     content: "";
-    background-image: url('https://haojiezhe12345.top:82/madohomu/res/play_arrow.svg');
+    background-image: url('res/play_arrow.svg');
     background-size: 100% 100%;
 }
 
 #musicPlayBtn.playing::before {
-    background-image: url('https://haojiezhe12345.top:82/madohomu/res/pause.svg');
+    background-image: url('res/pause.svg');
 }
 
 #musicPlayerList {
@@ -2502,12 +2502,12 @@ p.altLoginOption,
 }
 
 #game1 .setting-switch>input::after {
-    background: url('https://haojiezhe12345.top:82/madohomu/res/xh_mdk0.png');
+    background: url('res/xh_mdk0.png');
     background-size: 100% 100%;
 }
 
 #game1 .setting-switch.active>input::after {
-    background: url('https://haojiezhe12345.top:82/madohomu/res/xh_mdk1.png');
+    background: url('res/xh_mdk1.png');
     background-size: 100% 100%;
 }
 
