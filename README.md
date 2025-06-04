@@ -1,4 +1,4 @@
-# MadoHomu.love | haojiezhe12345.github.io
+# MadoHomu.love | haojiezhe12345.github.io (Vue 3)
 
 Pure frontend code for http://madohomu.love
 
