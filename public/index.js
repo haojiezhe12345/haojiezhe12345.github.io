@@ -1,3 +1,16 @@
+window.ensureJsLoaded = () => {
+    if (window.jsLoaded) return
+    const e = document.getElementById('indexJs')
+    const e1 = document.createElement('script')
+    e1.src = e.src
+    document.body.appendChild(e1)
+}
+
+if (!window.esmLoaded) {
+    throw new Error('ES modules not loaded, delaying execution of index.js. This error can be ignored')
+}
+
+console.log('Loading index.js')
 
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
@@ -5,7 +18,7 @@
 
 // requests
 //
-const XHR = {
+var XHR = {
     baseUrl: 'api/',
     token: '',
 
@@ -95,7 +108,7 @@ const XHR = {
 
 // settings
 //
-const Settings = {
+var Settings = {
     elements: {
         showKami: document.getElementById('showKami'),
     },
@@ -589,7 +602,7 @@ function getFirstVisibleComment() {
 
 // new message box
 //
-const NewMessage = {
+var NewMessage = {
     show() {
         commentDiv.scrollLeft = 0
         commentDiv.scrollTop = 0
@@ -744,7 +757,7 @@ var previewLocalImgs = NewMessage.previewLocalImgs.bind(NewMessage)
 
 // popup
 //
-const Popup = {
+var Popup = {
     elements: {
         popupContainer: document.getElementById('popupContainer'),
         popupItems: Array.from(document.querySelectorAll('#popupContainer .popupItem')),
@@ -908,7 +921,7 @@ try {
 
 // user related
 //
-const User = {
+var User = {
     LoggedOnUserId: null,
 
     init() {
@@ -1484,7 +1497,7 @@ function userCommentScroll() {
 
 // themes
 //
-const Theme = {
+var Theme = {
     elements: {
         bgs: document.getElementsByClassName('mainbg'),
         captionContainer: document.getElementById('mainCaptions'),
@@ -2245,8 +2258,8 @@ var userCommentOffset = 0
 var userCommentIsKami = false
 
 // document elmnts
-const bgContainer = document.getElementById('bgContainer')
-const lowerPanel = document.getElementById('lowerPanel')
+var bgContainer = document.getElementById('bgContainer')
+var lowerPanel = document.getElementById('lowerPanel')
 
 var commentDiv = document.getElementById('comments')
 var userCommentEl = document.getElementById('userComment')
@@ -2355,7 +2368,7 @@ if (location.hash == '#video') {
 
 // comments
 //
-const Comments = {
+var Comments = {
     elements: {
         container: document.getElementById('comments'),
         seekArrows: document.getElementsByClassName('commentSeekArrow'),
@@ -2563,7 +2576,7 @@ try {
     logErr(error, 'failed to init comments')
 }
 
-const msgBgInfo = [
+var msgBgInfo = [
     {
         'description': 'Official Guidebook "You Are Not Alone"',
     },
@@ -2608,7 +2621,7 @@ const msgBgInfo = [
         'pixivid': '63582832',
     },
 ]
-const msgBgCount = msgBgInfo.length
+var msgBgCount = msgBgInfo.length
 var lastBgImgs = []
 
 
@@ -2692,7 +2705,7 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
 
 // image viewer
 //
-const ImgViewer = {
+var ImgViewer = {
     elements: {
         container: document.getElementById('imgViewerBox'),
         viewer: /** @type {HTMLImageElement} */(document.getElementById('imgViewer')),
@@ -2856,7 +2869,7 @@ try {
 
 // music player
 //
-const MusicPlayer = {
+var MusicPlayer = {
     elements: {
         player: document.getElementById('musicAudio'),
         playerImg: document.getElementById('musicImg'),
@@ -3047,7 +3060,7 @@ try {
 
 // floating messages
 //
-const FloatMsgs = new Vue({
+var FloatMsgs = new Vue({
     el: '#floatMsgs',
 
     data: () => ({
@@ -3139,7 +3152,7 @@ window.onhashchange = function (e) {
 // NEED IMPROVEMENT: MI Browser changes viewport dynamically, and when keyboard is closing, 
 //                   the viewport goes: 500x700 -> 500x1100 -> 500x1000, which may accidentally trigger this layout.
 //
-const TouchKeyboardDetector = {
+var TouchKeyboardDetector = {
     init() {
         window.addEventListener('resize', this.detect)
     },
@@ -3209,4 +3222,5 @@ window.wallpaperPropertyListener = {
 
 // everything is now initiated
 //
+console.log('index.js loaded')
 window.jsLoaded = true
