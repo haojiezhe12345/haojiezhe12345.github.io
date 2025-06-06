@@ -3058,38 +3058,38 @@ try {
 }
 
 
-// floating messages
+// floating messages (moved to vue 3)
 //
-var FloatMsgs = new Vue({
-    el: '#floatMsgs',
+// var FloatMsgs = new Vue({
+//     el: '#floatMsgs',
 
-    data: () => ({
-        count: 0,
-        msgs: [],
-    }),
+//     data: () => ({
+//         count: 0,
+//         msgs: [],
+//     }),
 
-    methods: {
-        show(msg) {
-            msg.id = this.count
-            this.count++
-            this.msgs.push(msg)
-            if (!msg.persist) {
-                setTimeout(() => {
-                    this.close(msg.id)
-                }, msg.timeout || 4000);
-            }
-        },
+//     methods: {
+//         show(msg) {
+//             msg.id = this.count
+//             this.count++
+//             this.msgs.push(msg)
+//             if (!msg.persist) {
+//                 setTimeout(() => {
+//                     this.close(msg.id)
+//                 }, msg.timeout || 4000);
+//             }
+//         },
 
-        close(id) {
-            this.msgs.forEach((item, i) => {
-                if (item.id == id) {
-                    this.msgs.splice(i, 1)
-                    return
-                }
-            })
-        },
-    }
-})
+//         close(id) {
+//             this.msgs.forEach((item, i) => {
+//                 if (item.id == id) {
+//                     this.msgs.splice(i, 1)
+//                     return
+//                 }
+//             })
+//         },
+//     }
+// })
 
 
 // global click handler

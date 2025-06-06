@@ -2577,6 +2577,9 @@ p.altLoginOption,
     }
 }
 
+/*
+moved to vue 3
+
 #floatMsgs {
     top: 15%;
     left: 0;
@@ -2666,6 +2669,7 @@ p.altLoginOption,
         transform: translateY(0);
     }
 }
+*/
 
 #vue-templates {
     display: none;

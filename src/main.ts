@@ -2,7 +2,13 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 
+import components from './components'
+import FloatMsgs from './components/FloatMsgs.vue'
+
 console.log('Loading ES modules')
+
+components.FloatMsgs = createApp(FloatMsgs).mount('#floatMsgs') as InstanceType<typeof FloatMsgs>
+Object.assign(window, components)
 
 createApp(App).mount('#app')
 

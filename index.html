@@ -700,6 +700,9 @@
     </div>
 
     <div id="floatMsgs">
+        <!--
+        moved to vue 3
+        
         <div v-for="item in msgs" :key="item.id" :class="[item.type, item.persist ? 'persist' : '']">
             <i v-if="item.type == 'info'">💡</i>
             <i v-if="item.type == 'success'">✅</i>
@@ -708,6 +711,7 @@
             <span v-html="item.msg"></span>
             <i v-if="item.persist" class="closeBtn" @click="close(item.id)"></i>
         </div>
+        -->
     </div>
     
     <div id="vue-templates">
