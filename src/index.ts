@@ -1,11 +1,11 @@
-
+// @ts-nocheck
 //var madohomu_root = ''
 //madohomu_root = 'https://ipv6.haojiezhe12345.top:82/madohomu/'
 
 
 // requests
 //
-const XHR = {
+export const XHR = {
     baseUrl: 'api/',
     token: '',
 
@@ -95,7 +95,7 @@ const XHR = {
 
 // settings
 //
-const Settings = {
+export const Settings = {
     elements: {
         showKami: document.getElementById('showKami'),
     },
@@ -158,7 +158,7 @@ try {
 }
 
 
-function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
+export function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
     //if (from == null && time == null) setTodayCommentCount()
 
     var isCommentsNewer = queryObj.db == 'kami'
@@ -283,7 +283,7 @@ function loadComments(queryObj = {}, keepPosEl = undefined, noKami = false) {
     })
 }
 
-function insertComment(comment, isKami = false) {
+export function insertComment(comment, isKami = false) {
     //if (debug) console.log('Inserting comment', comment.id)
     var insertBeforeEl = null
 
@@ -456,7 +456,7 @@ function insertComment(comment, isKami = false) {
  * @param {boolean} params.clickable
  * @param {boolean} params.dark
  */
-function initCommentReplyQuote(el, id, params) {
+export function initCommentReplyQuote(el, id, params) {
     XHR.get('comments', { from: id, count: 1 }).then(r => {
         let comment = r[0]
         el.$comment = comment
@@ -487,7 +487,7 @@ function initCommentReplyQuote(el, id, params) {
     })
 }
 
-function clearComments(clearTop) {
+export function clearComments(clearTop) {
     //commentDiv.removeEventListener("scroll", commentScroll)
     if (clearTop == 1) {
         commentDiv.innerHTML = loadingIndicatorBefore + loadingIndicator
@@ -503,7 +503,7 @@ function clearComments(clearTop) {
     document.body.classList.remove('touchKeyboardShowing')
 }
 
-function loadOlderComments() {
+export function loadOlderComments() {
     if (getMinCommentID() == null || getMinCommentID() <= 1) {
         // no madohomu, or reached end
         if (getMinKamiID() == null) {
@@ -519,7 +519,7 @@ function loadOlderComments() {
     }
 }
 
-function loadNewerComments() {
+export function loadNewerComments() {
     if (document.getElementById('newCommentBox') != null && document.getElementById('topComment') == null) {
         console.log('newCommentBox is active, and you are viewing older comments\nskipping upper comments')
         document.getElementById('loadingIndicatorBefore').style.display = 'none'
@@ -553,43 +553,43 @@ function loadNewerComments() {
     }
 }
 
-function getMaxCommentID() {
+export function getMaxCommentID() {
     var commentList = document.querySelectorAll('.commentItem[id^="#"]')
     if (commentList.length > 0) return parseInt(commentList[0].id.replace('#', ''))
 }
 
-function getMinCommentID() {
+export function getMinCommentID() {
     var commentList = document.querySelectorAll('.commentItem[id^="#"]')
     if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].id.replace('#', ''))
 }
 
-function getMaxKamiID() {
+export function getMaxKamiID() {
     var commentList = document.querySelectorAll('.commentItem[data-kamiid^="#"]')
     if (commentList.length > 0) return parseInt(commentList[0].dataset.kamiid.replace('#', ''))
 }
 
-function getMinKamiID() {
+export function getMinKamiID() {
     var commentList = document.querySelectorAll('.commentItem[data-kamiid^="#"]')
     if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].dataset.kamiid.replace('#', ''))
 }
 
-function getMaxCommentTime() {
+export function getMaxCommentTime() {
     var commentList = document.querySelectorAll('.commentItem')
     if (commentList.length > 0) return parseInt(commentList[0].dataset.timestamp)
 }
 
-function getMinCommentTime() {
+export function getMinCommentTime() {
     var commentList = document.querySelectorAll('.commentItem')
     if (commentList.length > 0) return parseInt(commentList[commentList.length - 1].dataset.timestamp)
 }
 
-function getFirstVisibleComment() {
+export function getFirstVisibleComment() {
     return document.querySelector('.commentItem:not(.hidden)') || document.getElementById('loadingIndicatorBefore').nextElementSibling
 }
 
 // new message box
 //
-const NewMessage = {
+export const NewMessage = {
     show() {
         commentDiv.scrollLeft = 0
         commentDiv.scrollTop = 0
@@ -737,14 +737,14 @@ const NewMessage = {
     },
 }
 
-var newComment = NewMessage.show.bind(NewMessage)
-var sendMessage = NewMessage.send.bind(NewMessage)
-var previewLocalImgs = NewMessage.previewLocalImgs.bind(NewMessage)
+export var newComment = NewMessage.show.bind(NewMessage)
+export var sendMessage = NewMessage.send.bind(NewMessage)
+export var previewLocalImgs = NewMessage.previewLocalImgs.bind(NewMessage)
 
 
 // popup
 //
-const Popup = {
+export const Popup = {
     elements: {
         popupContainer: document.getElementById('popupContainer'),
         popupItems: Array.from(document.querySelectorAll('#popupContainer .popupItem')),
@@ -898,8 +898,8 @@ const Popup = {
     },
 }
 
-var showPopup = Popup.show.bind(Popup)
-var closePopup = Popup.close.bind(Popup)
+export var showPopup = Popup.show.bind(Popup)
+export var closePopup = Popup.close.bind(Popup)
 try {
     Popup.init()
 } catch (error) {
@@ -908,7 +908,7 @@ try {
 
 // user related
 //
-const User = {
+export const User = {
     LoggedOnUserId: null,
 
     init() {
@@ -1376,14 +1376,14 @@ const User = {
     }
 }
 
-var loadUserInfo = User.loadUserInfo.bind(User)
+export var loadUserInfo = User.loadUserInfo.bind(User)
 try {
     User.init()
 } catch (error) {
     logErr(error, 'failed to init user')
 }
 
-function showUserComment(user, avatar, uid) {
+export function showUserComment(user, avatar, uid) {
     if (debug) console.log(user)
     if ((user == null && userCommentUser == '') || user == '') {
         if (debug) console.log('empty user!')
@@ -1475,7 +1475,7 @@ function showUserComment(user, avatar, uid) {
     xhr.send();
 }
 
-function userCommentScroll() {
+export function userCommentScroll() {
     var toBottom = userCommentEl.scrollHeight - userCommentEl.clientHeight - userCommentEl.scrollTop
     if (toBottom < 100 && Popup.isOpen()) {
         showUserComment()
@@ -1484,7 +1484,7 @@ function userCommentScroll() {
 
 // themes
 //
-const Theme = {
+export const Theme = {
     elements: {
         bgs: document.getElementsByClassName('mainbg'),
         captionContainer: document.getElementById('mainCaptions'),
@@ -1752,7 +1752,7 @@ try {
     logErr(error, 'failed to init theme')
 }
 
-function printParaCharOneByOne(divEl, delay = 0) {
+export function printParaCharOneByOne(divEl, delay = 0) {
     const paras = []
     for (let i = 0; i < divEl.children.length; i++) {
         const paraEl = divEl.children[i]
@@ -1794,7 +1794,7 @@ function printParaCharOneByOne(divEl, delay = 0) {
     }, delay);
 }
 
-function playWalpurgis(time_ms) {
+export function playWalpurgis(time_ms) {
     document.getElementById('videoBgBox').style.opacity = 1
     document.getElementById('videoBgBox').style.display = 'block'
     document.getElementById('mainVideo').src = 'media/walpurgis1.1.mp4'
@@ -1809,7 +1809,7 @@ function playWalpurgis(time_ms) {
     }, time_ms);
 }
 
-function changeLang(targetLang) {
+export function changeLang(targetLang) {
     if (!targetLang) {
         if (navigator.language.slice(0, 2) == 'zh' || navigator.language.slice(0, 3) == 'yue') {
             targetLang = 'zh'
@@ -1832,7 +1832,7 @@ function changeLang(targetLang) {
     console.log(`changed lang to ${targetLang}`)
 }
 
-function changeGraphicsMode(mode) {
+export function changeGraphicsMode(mode) {
     if (mode == 'high') {
         document.body.classList.remove('lowend')
         document.body.classList.remove('midend')
@@ -1846,7 +1846,7 @@ function changeGraphicsMode(mode) {
     setConfig('graphicsMode', mode)
 }
 
-function getFullscreenHorizonalCommentCount() {
+export function getFullscreenHorizonalCommentCount() {
     if (!isFullscreen) return null
     var latestCommentEl = document.getElementById('loadingIndicatorBefore').nextElementSibling
     var top = latestCommentEl.getBoundingClientRect().top
@@ -1859,7 +1859,7 @@ function getFullscreenHorizonalCommentCount() {
     return count
 }
 
-function loadTimeline(timeStamp) {
+export function loadTimeline(timeStamp) {
     console.log('loading timeline from', timeStamp)
 
     var timelineEl = document.getElementById('timeline')
@@ -1890,7 +1890,7 @@ function loadTimeline(timeStamp) {
     }
 }
 
-function getCurrentComment() {
+export function getCurrentComment() {
     var scrolled = 0
     if (!isFullscreen) {
         scrolled = commentDiv.scrollLeft / (commentDiv.scrollWidth)// - commentDiv.clientWidth)
@@ -1901,7 +1901,7 @@ function getCurrentComment() {
     return commentList[Math.round(commentList.length * scrolled)]
 }
 
-function setTimelineActiveMonth(scroll = false) {
+export function setTimelineActiveMonth(scroll = false) {
     try {
         var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
         var date = new Date(timeStamp)
@@ -1935,7 +1935,7 @@ function setTimelineActiveMonth(scroll = false) {
     }
 }
 
-function setHoverCalendarActiveDay() {
+export function setHoverCalendarActiveDay() {
     try {
         var timeStamp = parseInt(getCurrentComment().dataset.timestamp) * 1000
         var date = new Date(timeStamp)
@@ -1954,7 +1954,7 @@ function setHoverCalendarActiveDay() {
     }
 }
 
-function setTodayCommentCount() {
+export function setTodayCommentCount() {
     var utc = parseInt(0 - new Date().getTimezoneOffset() / 60)
     const xhr = new XMLHttpRequest();
     xhr.open("GET", `api/comments/count?utc=${utc}`);
@@ -1969,7 +1969,7 @@ function setTodayCommentCount() {
 
 // toggles
 //
-function toggleFullscreen() {
+export function toggleFullscreen() {
     if (!isFullscreen) {
         var scrollPercent = commentDiv.scrollLeft / (commentDiv.scrollWidth - commentDiv.clientWidth)
         setTimeout(() => {
@@ -1992,7 +1992,7 @@ function toggleFullscreen() {
     Comments.pauseScroll(500)
 }
 
-function toggleTopComment() {
+export function toggleTopComment() {
     setConfig('hideTopComment', hideTopCommentElmnt.checked)
     if (hideTopCommentElmnt.checked) {
         document.getElementById('topComment').style.display = 'none'
@@ -2003,7 +2003,7 @@ function toggleTopComment() {
     }
 }
 
-function toggleTimeline() {
+export function toggleTimeline() {
     setConfig('showTimeline', showTimelineElmnt.checked)
     if (showTimelineElmnt.checked) {
         document.getElementById('timelineContainer').style.display = 'block'
@@ -2016,20 +2016,20 @@ function toggleTimeline() {
 
 // utilities
 //
-function getRandomIntInclusive(min, max) {
+export function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
 }
 
-function setCookie(cname, cvalue, exdays = 999) {
+export function setCookie(cname, cvalue, exdays = 999) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-function getCookie(cname) {
+export function getCookie(cname) {
     let name = cname + "=";
     let ca = document.cookie.split(';');
     for (let i = 0; i < ca.length; i++) {
@@ -2044,7 +2044,7 @@ function getCookie(cname) {
     return "";
 }
 
-function getConfig(key) {
+export function getConfig(key) {
     if (localStorage.getItem(key) == null) {
         if (getCookie(key) != '') {
             setConfig(key, getCookie(key))
@@ -2056,7 +2056,7 @@ function getConfig(key) {
     return localStorage.getItem(key)
 }
 
-function setConfig(key, value) {
+export function setConfig(key, value) {
     if (value === '') {
         localStorage.removeItem(key)
     } else {
@@ -2064,14 +2064,14 @@ function setConfig(key, value) {
     }
 }
 
-function html2elmnt(html) {
+export function html2elmnt(html) {
     html = html.trim()
     var t = document.createElement('template');
     t.innerHTML = html;
     return t.content;
 }
 
-function htmlEscape(txt) {
+export function htmlEscape(txt) {
     return txt
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -2081,7 +2081,7 @@ function htmlEscape(txt) {
     //.replace(/\s/g, "&nbsp;")
 }
 
-function compareArr(a1, a2) {
+export function compareArr(a1, a2) {
     //if (debug) console.log(a1, a2)
     for (let i = 0; i < a1.length; i++) {
         if (a1[i] != a2[i]) {
@@ -2093,7 +2093,7 @@ function compareArr(a1, a2) {
     return 0
 }
 
-function obj2queryString(obj) {
+export function obj2queryString(obj) {
     var arr = []
     for (let key in obj) {
         obj[key] != null && arr.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
@@ -2101,7 +2101,7 @@ function obj2queryString(obj) {
     return arr.length > 0 ? '?' + arr.join('&') : ''
 }
 
-function getFileListAsync(url) {
+export function getFileListAsync(url) {
     return new Promise((resolve, reject) => {
         fetch(url).then(res => Promise.all([res.url, res.text()])).then(([url, text]) => {
             const doc = document.createElement('template')
@@ -2120,7 +2120,7 @@ function getFileListAsync(url) {
     })
 }
 
-function getFileNameWithoutExt(path, decodeuri = false) {
+export function getFileNameWithoutExt(path, decodeuri = false) {
     if (decodeuri) {
         return decodeURIComponent(path.match(/[^\\/]+(?=\.\w+$)/)[0])
     }
@@ -2129,29 +2129,29 @@ function getFileNameWithoutExt(path, decodeuri = false) {
     }
 }
 
-function shuffleArray(array) {
+export function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
-function getArrayNextItem(arr, item) {
+export function getArrayNextItem(arr, item) {
     let x = arr[arr.indexOf(item) + 1]
     return x != null ? x : arr[0]
 }
 
-function getArrayPrevItem(arr, item) {
+export function getArrayPrevItem(arr, item) {
     let x = arr[arr.indexOf(item) - 1]
     return x != null ? x : arr[arr.length - 1]
 }
 
-function logErr(err, msg) {
+export function logErr(err, msg) {
     console.warn(err)
     console.error(msg)
 }
 
-function setOneTimeCSS(el, styles) {
+export function setOneTimeCSS(el, styles) {
     for (let style in styles) {
         el.style[style] = styles[style]
     }
@@ -2162,7 +2162,7 @@ function setOneTimeCSS(el, styles) {
     }, 35);
 }
 
-function readFile(blob) {
+export function readFile(blob) {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
         reader.readAsDataURL(blob);
@@ -2172,7 +2172,7 @@ function readFile(blob) {
     })
 }
 
-function resizeImg(img, aspectRatio, maxPixels) {
+export function resizeImg(img, aspectRatio, maxPixels) {
     return new Promise((resolve, reject) => {
 
         if (typeof img != typeof '') {
@@ -2230,41 +2230,41 @@ function resizeImg(img, aspectRatio, maxPixels) {
     })
 }
 
-function isEmail(s) {
+export function isEmail(s) {
     return /^\S+@\S+\.\S+$/.test(s)
 }
 
 
 // common vars
 //
-var commentsUpToDate = false
-var maxTimelineTime = 0
+export var commentsUpToDate = false
+export var maxTimelineTime = 0
 
-var userCommentUser = ''
-var userCommentOffset = 0
-var userCommentIsKami = false
+export var userCommentUser = ''
+export var userCommentOffset = 0
+export var userCommentIsKami = false
 
 // document elmnts
-const bgContainer = document.getElementById('bgContainer')
-const lowerPanel = document.getElementById('lowerPanel')
+export const bgContainer = document.getElementById('bgContainer')
+export const lowerPanel = document.getElementById('lowerPanel')
 
-var commentDiv = document.getElementById('comments')
-var userCommentEl = document.getElementById('userComment')
+export var commentDiv = document.getElementById('comments')
+export var userCommentEl = document.getElementById('userComment')
 
-var hoverCalendarEl = document.getElementById('hoverCalendar')
+export var hoverCalendarEl = document.getElementById('hoverCalendar')
 
 // toggle checkboxes
-var hideTopCommentElmnt = document.getElementById('hideTopComment')
-var showTimelineElmnt = document.getElementById('showTimeline')
+export var hideTopCommentElmnt = document.getElementById('hideTopComment')
+export var showTimelineElmnt = document.getElementById('showTimeline')
 
 // raw htmls
-var topComment = document.getElementById('topComment').outerHTML
-var loadingIndicator = document.getElementById('loadingIndicator').outerHTML
-var loadingIndicatorBefore = document.getElementById('loadingIndicatorBefore').outerHTML
+export var topComment = document.getElementById('topComment').outerHTML
+export var loadingIndicator = document.getElementById('loadingIndicator').outerHTML
+export var loadingIndicatorBefore = document.getElementById('loadingIndicatorBefore').outerHTML
 document.getElementById('loadingIndicatorBefore').style.display = 'none'
 
 // ui states
-var isFullscreen = false
+export var isFullscreen = false
 
 
 // set title link href
@@ -2273,7 +2273,7 @@ document.querySelector('#mainTitle>a').href = location.origin + location.pathnam
 // set language
 changeLang(getConfig('lang'))
 
-var debug = false
+export var debug = false
 if (location.hash == '#debug') {
     debug = true
     setTimeout(() => {
@@ -2317,7 +2317,7 @@ if (getConfig('showTimeline') == 'false') {
 
 // background images
 //
-function playBG() {
+export function playBG() {
 }
 if (location.hash == '#video') {
     time_ms = 5000
@@ -2355,7 +2355,7 @@ if (location.hash == '#video') {
 
 // comments
 //
-const Comments = {
+export const Comments = {
     elements: {
         container: document.getElementById('comments'),
         seekArrows: document.getElementsByClassName('commentSeekArrow'),
@@ -2556,14 +2556,14 @@ const Comments = {
     },
 }
 
-var seekComment = Comments.seek.bind(Comments)
+export var seekComment = Comments.seek.bind(Comments)
 try {
     Comments.init()
 } catch (error) {
     logErr(error, 'failed to init comments')
 }
 
-const msgBgInfo = [
+export const msgBgInfo = [
     {
         'description': 'Official Guidebook "You Are Not Alone"',
     },
@@ -2608,8 +2608,8 @@ const msgBgInfo = [
         'pixivid': '63582832',
     },
 ]
-const msgBgCount = msgBgInfo.length
-var lastBgImgs = []
+export const msgBgCount = msgBgInfo.length
+export var lastBgImgs = []
 
 
 // timeline
@@ -2692,7 +2692,7 @@ document.getElementById('goto').addEventListener("keypress", function (event) {
 
 // image viewer
 //
-const ImgViewer = {
+export const ImgViewer = {
     elements: {
         container: document.getElementById('imgViewerBox'),
         viewer: /** @type {HTMLImageElement} */(document.getElementById('imgViewer')),
@@ -2845,8 +2845,8 @@ const ImgViewer = {
     },
 }
 
-var viewImg = ImgViewer.view.bind(ImgViewer)
-var closeImgViewer = ImgViewer.close.bind(ImgViewer)
+export var viewImg = ImgViewer.view.bind(ImgViewer)
+export var closeImgViewer = ImgViewer.close.bind(ImgViewer)
 try {
     ImgViewer.init()
 } catch (error) {
@@ -2856,7 +2856,7 @@ try {
 
 // music player
 //
-const MusicPlayer = {
+export const MusicPlayer = {
     elements: {
         player: document.getElementById('musicAudio'),
         playerImg: document.getElementById('musicImg'),
@@ -3047,7 +3047,7 @@ try {
 
 // floating messages
 //
-const FloatMsgs = new Vue({
+export const FloatMsgs = new Vue({
     el: '#floatMsgs',
 
     data: () => ({
@@ -3081,7 +3081,7 @@ const FloatMsgs = new Vue({
 
 // global click handler
 //
-var lastClickEvent
+export var lastClickEvent
 document.addEventListener('click', e => lastClickEvent = e)
 
 
@@ -3139,7 +3139,7 @@ window.onhashchange = function (e) {
 // NEED IMPROVEMENT: MI Browser changes viewport dynamically, and when keyboard is closing, 
 //                   the viewport goes: 500x700 -> 500x1100 -> 500x1000, which may accidentally trigger this layout.
 //
-const TouchKeyboardDetector = {
+export const TouchKeyboardDetector = {
     init() {
         window.addEventListener('resize', this.detect)
     },
@@ -3169,7 +3169,7 @@ try {
 
 // PWA init
 //
-var installPrompt = null;
+export var installPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
@@ -3177,7 +3177,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
     //console.log(`'beforeinstallprompt' event was fired.`);
 });
 
-var isInStandaloneMode = false
+export var isInStandaloneMode = false
 isInStandaloneMode = (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
 
 
