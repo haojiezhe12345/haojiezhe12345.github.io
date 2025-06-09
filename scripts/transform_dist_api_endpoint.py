@@ -29,6 +29,7 @@ replaceDict = {
     'api/': f'{base_url}api/',
     'media/': f'{base_url}media/',
     'res/': f'{base_url}res/',
+    '<!-- Insert base URL here -->': f'<script> window.baseUrl = "{base_url}" </script>',
     '"/madohomu"': '"/?no-redirect"',
     'vue2.js"': 'vue2.min.js"',
 }
