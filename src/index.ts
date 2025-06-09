@@ -1,4 +1,7 @@
 // @ts-nocheck
+import FloatMsgs from "./components/FloatMsgs"
+import Popups, { app as PopupsApp } from "./components/Popups"
+
 export const baseUrl = window.baseUrl
     ? (window.baseUrl.endsWith('/') ? window.baseUrl : (window.baseUrl + '/'))
     : ''
@@ -752,7 +755,7 @@ export const Popup = {
         popupItems: Array.from(document.querySelectorAll('#popupContainer .popupItem')),
     },
 
-    VuePopups: null,
+    VuePopups: Popups,
 
     hideAllPopupItems() {
         this.elements.popupItems.forEach(el => {
@@ -853,25 +856,27 @@ export const Popup = {
             }
         }
 
-        this.VuePopups = new Vue({
-            el: '#popups',
+        // moved to vue 3
+        //
+        // this.VuePopups = new Vue({
+        //     el: '#popups',
 
-            data: () => ({
-                popups: [],
-            }),
+        //     data: () => ({
+        //         popups: [],
+        //     }),
 
-            methods: {
-                show(component, props) {
-                    this.popups.push({ component, props })
-                },
+        //     methods: {
+        //         show(component, props) {
+        //             this.popups.push({ component, props })
+        //         },
 
-                close(index) {
-                    index != null ? this.popups.splice(index, 1) : this.popups = []
-                },
-            },
-        })
+        //         close(index) {
+        //             index != null ? this.popups.splice(index, 1) : this.popups = []
+        //         },
+        //     },
+        // })
 
-        Vue.component('promptInputPopup', {
+        PopupsApp.component('promptInputPopup', {
             template: '#promptInputPopup',
 
             props: ['title', 'subtitle', 'text', 'action'],
@@ -943,7 +948,7 @@ export const User = {
             }
         }
 
-        Vue.component('loginPopup', {
+        PopupsApp.component('loginPopup', {
             template: '#loginPopup',
 
             data: () => ({
@@ -1090,7 +1095,7 @@ export const User = {
             },
         })
 
-        Vue.component('setAvatarPopup', {
+        PopupsApp.component('setAvatarPopup', {
             template: '#setAvatarPopup',
 
             methods: {
@@ -1119,7 +1124,7 @@ export const User = {
             },
         })
 
-        Vue.component('setPasswordPopup', {
+        PopupsApp.component('setPasswordPopup', {
             template: '#setPasswordPopup',
 
             props: ['passwordResetToken'],
@@ -1162,7 +1167,7 @@ export const User = {
             },
         })
 
-        Vue.component('userHome', {
+        PopupsApp.component('userHome', {
             template: '#userHome',
 
             props: ['id', 'name', 'avatar'],
@@ -3047,38 +3052,38 @@ try {
 }
 
 
-// floating messages
+// floating messages (moved to vue 3)
 //
-export const FloatMsgs = new Vue({
-    el: '#floatMsgs',
+// const FloatMsgs = new Vue({
+//     el: '#floatMsgs',
 
-    data: () => ({
-        count: 0,
-        msgs: [],
-    }),
+//     data: () => ({
+//         count: 0,
+//         msgs: [],
+//     }),
 
-    methods: {
-        show(msg) {
-            msg.id = this.count
-            this.count++
-            this.msgs.push(msg)
-            if (!msg.persist) {
-                setTimeout(() => {
-                    this.close(msg.id)
-                }, msg.timeout || 4000);
-            }
-        },
+//     methods: {
+//         show(msg) {
+//             msg.id = this.count
+//             this.count++
+//             this.msgs.push(msg)
+//             if (!msg.persist) {
+//                 setTimeout(() => {
+//                     this.close(msg.id)
+//                 }, msg.timeout || 4000);
+//             }
+//         },
 
-        close(id) {
-            this.msgs.forEach((item, i) => {
-                if (item.id == id) {
-                    this.msgs.splice(i, 1)
-                    return
-                }
-            })
-        },
-    }
-})
+//         close(id) {
+//             this.msgs.forEach((item, i) => {
+//                 if (item.id == id) {
+//                     this.msgs.splice(i, 1)
+//                     return
+//                 }
+//             })
+//         },
+//     }
+// })
 
 
 // global click handler
