@@ -1,6 +1,6 @@
 // @ts-nocheck
 import FloatMsgs from "./components/FloatMsgs"
-import Popups, { app as PopupsApp } from "./components/Popups"
+import Popups from "./components/Popups"
 
 export const baseUrl = window.baseUrl
     ? (window.baseUrl.endsWith('/') ? window.baseUrl : (window.baseUrl + '/'))
@@ -777,7 +777,7 @@ export const Popup = {
 
             let popup = document.getElementById(popupID)
 
-            if (popup.nodeName == 'TEMPLATE') {
+            if (!popup) {
                 this.VuePopups.show(popupID, props)
                 return
             }
@@ -855,53 +855,6 @@ export const Popup = {
                 this.close()
             }
         }
-
-        // moved to vue 3
-        //
-        // this.VuePopups = new Vue({
-        //     el: '#popups',
-
-        //     data: () => ({
-        //         popups: [],
-        //     }),
-
-        //     methods: {
-        //         show(component, props) {
-        //             this.popups.push({ component, props })
-        //         },
-
-        //         close(index) {
-        //             index != null ? this.popups.splice(index, 1) : this.popups = []
-        //         },
-        //     },
-        // })
-
-        PopupsApp.component('promptInputPopup', {
-            template: '#promptInputPopup',
-
-            props: ['title', 'subtitle', 'text', 'action'],
-
-            data: () => ({
-                value: '',
-                disabled: false,
-            }),
-
-            methods: {
-                submit() {
-                    this.submitAction(this.value)
-                },
-
-                submitAction(value) {
-                    console.log(value)
-                    this.$emit('close')
-                },
-            },
-
-            mounted() {
-                if (this.text) this.value = this.text
-                if (this.action) this.submitAction = this.action
-            },
-        })
     },
 }
 
@@ -947,310 +900,6 @@ export const User = {
                 }, 0);
             }
         }
-
-        PopupsApp.component('loginPopup', {
-            template: '#loginPopup',
-
-            data: () => ({
-                screen: 'usernameLogin',
-
-                loginUsername: '',
-                loginEmail: '',
-                loginPassword: '',
-
-                userFindResult: [],
-                loginUser: null,
-
-                regName: '',
-                regEmail: '',
-                regPassword: '',
-                regPasswordConfirm: '',
-                regUseEmail: false,
-                regRequireEmail: false,
-            }),
-
-            methods: {
-                convertAvatarPath: User.convertAvatarPath,
-
-                searchUser() {
-                    XHR.get('user/find', {
-                        name: this.loginUsername,
-                        email: isEmail(this.loginUsername) ? this.loginUsername : undefined,
-                    }).then(r => {
-                        this.userFindResult = r
-                        if (r.length > 0) {
-                            this.screen = 'userFind'
-                        } else {
-                            this.gotoRegister()
-                        }
-                    })
-                },
-
-                gotoRegister() {
-                    this.screen = 'register'
-
-                    if (isEmail(this.loginUsername)) {
-                        this.regEmail = this.loginUsername
-                        this.regUseEmail = true
-                    } else {
-                        this.regName = this.loginUsername
-                        this.regUseEmail = false
-                    }
-
-                    this.regRequireEmail = false
-                    this.userFindResult.forEach(user => {
-                        if (user.hasEmail == false) {
-                            this.regUseEmail = true
-                            this.regRequireEmail = true
-                        }
-                    })
-                },
-
-                previewAvatar() {
-                    resizeImg(this.$refs.avatarInput.files[0], 1, 200 * 200).then(i => this.$refs.avatarPreview.src = i)
-                },
-
-                register() {
-                    XHR.post('user/register', {
-                        avatar: this.$refs.avatarPreview.src.split(';base64,')[1],
-                        name: this.regName,
-                        email: this.regUseEmail ? this.regEmail || undefined : undefined,
-                        password: this.regUseEmail ? this.regPassword || undefined : undefined,
-                    }).then(r => {
-                        if (r.code == 1) {
-                            XHR.token = r.data
-                            setConfig('token', r.data)
-                            this.$emit('close')
-                            loadUserInfo()
-                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">注册成功!</span><span class="ui en">Registration successful!</span>' })
-                        }
-                    })
-                },
-
-                userFindLogin(index) {
-                    this.loginUser = this.userFindResult.length == 1 ? this.userFindResult[0] : this.userFindResult[index]
-                    if (this.loginUser.hasEmail || this.loginUser.hasPassword) {
-                        this.screen = 'emailLogin'
-                        this.loginEmail = isEmail(this.loginUsername) && this.loginUsername != this.loginUser.name ? this.loginUsername : ''
-                        this.loginPassword = ''
-                    } else {
-                        this.login({ name: this.loginUser.name })
-                    }
-                },
-
-                emailLogin() {
-                    this.login({
-                        name: this.loginUser && !this.loginUser.hasEmail ? this.loginUser.name : undefined,
-                        email: this.loginEmail || undefined,
-                        password: this.loginPassword || undefined,
-                    })
-                },
-
-                login(payload) {
-                    XHR.post('user/login', payload).then(r => {
-                        if (r.code == 1) {
-                            XHR.token = r.data
-                            setConfig('token', r.data)
-                            this.$emit('close')
-                            loadUserInfo()
-                            FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">登录成功!</span><span class="ui en">Login successful!</span>' })
-                        }
-                    })
-                },
-
-                gotoForgotPassword() {
-                    if (this.loginUser && !this.loginUser.hasEmail) {
-                        FloatMsgs.show({
-                            type: 'warn', persist: true, msg: /*html*/`
-                            <span class="ui zh">该账号未绑定邮箱, 无法重置密码<br>请联系站长: 3112611479@qq.com</span>
-                            <span class="ui en">This account doesn't have an email, for password resets, you must contact: 3112611479@qq.com</span>`
-                        })
-                        return
-                    }
-                    Popup.show("promptInputPopup", {
-                        title: '<span class="ui zh">忘记密码</span><span class="ui en">Forgot password</span>',
-                        subtitle: /*html*/`
-                            <span class="ui zh">输入你想要找回密码的邮箱<br>我们将发送一份重置密码的邮件, 然后您可以设置新密码</span>
-                            <span class="ui en">Enter the email you wish to recover password.<br>We will then send you a password reset link via email.</span>
-                            `,
-                        text: this.loginEmail,
-                        action(email) {
-                            this.disabled = true
-                            XHR.post('user/resetpassword' + obj2queryString({ email })).then(r => {
-                                if (r.code == 1) {
-                                    this.$emit('close')
-                                    FloatMsgs.show({
-                                        type: 'success', persist: true, msg: /*html*/`
-                                        <span class="ui zh">密码重置邮件已发送! 请检查收件箱</span>
-                                        <span class="ui en">A password reset link was sent to your email, check your inbox</span>`
-                                    })
-                                }
-                                this.disabled = false
-                            }).catch(() => {
-                                this.disabled = false
-                            })
-                        }
-                    })
-                },
-            },
-        })
-
-        PopupsApp.component('setAvatarPopup', {
-            template: '#setAvatarPopup',
-
-            methods: {
-                previewAvatar() {
-                    resizeImg(this.$refs.input.files[0], 1, 200 * 200).then(i => this.$refs.preview.src = i)
-                },
-
-                uploadAvatar() {
-                    let avatar = this.$refs.preview.src.split(';base64,')[1]
-                    if (avatar) {
-                        XHR.put('user/update', { avatar }).then(r => {
-                            if (r.code == 1) {
-                                this.$emit('close')
-                                FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">上传成功</span><span class="ui en">Uploaded successfully</span>' })
-                                loadUserInfo()
-                            }
-                        })
-                    } else {
-                        this.$emit('close')
-                    }
-                },
-            },
-
-            mounted() {
-                User.getMe().then(r => this.$refs.preview.src = User.convertAvatarPath(r.avatar))
-            },
-        })
-
-        PopupsApp.component('setPasswordPopup', {
-            template: '#setPasswordPopup',
-
-            props: ['passwordResetToken'],
-
-            data: () => ({
-                password: '',
-                passwordConfirm: '',
-                showPassword: false,
-                userHasEmail: true,
-            }),
-
-            methods: {
-                submit() {
-                    if (this.passwordResetToken) {
-                        XHR.post('action', {
-                            id: this.passwordResetToken,
-                            data: this.password
-                        }).then(r => {
-                            if (r.code == 1) {
-                                this.$emit('close')
-                                FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">密码重置成功! 请重新登录</span><span class="ui en">Password reset successfully! Try log in again</span>' })
-                                location.hash = ''
-                            }
-                        })
-                    } else {
-                        XHR.put('user/update', { password: this.password }).then(r => {
-                            if (r.code == 1) {
-                                this.$emit('close')
-                                FloatMsgs.show({ type: 'success', msg: '<span class="ui zh">密码修改成功</span><span class="ui en">Password updated successfully</span>' })
-                            }
-                        })
-                    }
-                },
-            },
-
-            mounted() {
-                if (!this.passwordResetToken) {
-                    User.getMe().then(r => this.userHasEmail = r.hasEmail)
-                }
-            },
-        })
-
-        PopupsApp.component('userHome', {
-            template: '#userHome',
-
-            props: ['id', 'name', 'avatar'],
-
-            data: () => ({
-                user: {},
-                showAction: true,
-                comments: [],
-                scrollPaused: false,
-                toEnd: false,
-            }),
-
-            methods: {
-                convertAvatarPath: User.convertAvatarPath,
-
-                getUser() {
-                    XHR.get(this.id ? 'user/find' : 'user/me', {
-                        id: this.id
-                    }).then(r => {
-                        let user = Array.isArray(r) ? r[0] : r
-                        if (user) {
-                            this.user = user
-                            this.showAction = this.user.id == User.LoggedOnUserId
-                            this.getComments()
-                        } else {
-                            FloatMsgs.show({ type: 'warn', msg: `<span class="ui zh">找不到用户</span><span class="ui en">User not found</span> (ID: ${this.id})` })
-                        }
-                    })
-                },
-
-                getComments() {
-                    this.scrollPaused = true
-
-                    XHR.get('comments', {
-                        uid: this.user.id,
-                        from: this.comments.length,
-                        count: 50,
-                    }).then(r => {
-
-                        r.forEach(comment => {
-                            let time = new Date(comment.time * 1000)
-                            comment.timeStr = time.toLocaleDateString() + ' ' + time.toLocaleTimeString()
-                            if (typeof comment.image == typeof '' && comment.image) {
-                                comment.image = comment.image.split(',')
-                            } else {
-                                comment.image = []
-                            }
-                            this.comments.push(comment)
-                        })
-
-                        if (r.length < 10) {
-                            this.toEnd = true
-                        } else {
-                            this.scrollPaused = false
-                        }
-                    }).catch(() => {
-                        this.scrollPaused = false
-                    })
-                },
-
-                scroll(e) {
-                    if (!this.scrollPaused) {
-                        let toBottom = e.target.scrollHeight - e.target.clientHeight - e.target.scrollTop
-                        if (toBottom < 100) this.getComments()
-                    }
-                },
-
-                gotoComment(i) {
-                    clearComments(1);
-                    loadComments({ from: this.comments[i].id });
-                    closePopup()
-                },
-            },
-
-            mounted() {
-                this.user = {
-                    id: this.id,
-                    name: this.name,
-                    avatar: this.avatar,
-                }
-                this.getUser()
-            },
-        })
     },
 
     changeName() {
@@ -1344,11 +993,15 @@ export const User = {
                     document.getElementById('senderText').textContent = r.name
                 } catch (error) { }
 
-                Popup.VuePopups.$children.forEach(v => {
-                    if (v.$options.name == 'userHome') {
-                        v.getUser()
-                    }
-                })
+                try {
+                    Popup.VuePopups.getAllPopups().forEach(v => {
+                        if (v.$el.classList.contains('userHome')) {
+                            v.getUser()
+                        }
+                    })
+                } catch (error) {
+                    logErr(error, 'Failed to access popup instances')
+                }
             }).catch(xhr => {
                 if (xhr.status == 401) this.loadUserInfo()
             })
@@ -3050,40 +2703,6 @@ try {
 } catch (error) {
     logErr(error, 'failed to init music player')
 }
-
-
-// floating messages (moved to vue 3)
-//
-// const FloatMsgs = new Vue({
-//     el: '#floatMsgs',
-
-//     data: () => ({
-//         count: 0,
-//         msgs: [],
-//     }),
-
-//     methods: {
-//         show(msg) {
-//             msg.id = this.count
-//             this.count++
-//             this.msgs.push(msg)
-//             if (!msg.persist) {
-//                 setTimeout(() => {
-//                     this.close(msg.id)
-//                 }, msg.timeout || 4000);
-//             }
-//         },
-
-//         close(id) {
-//             this.msgs.forEach((item, i) => {
-//                 if (item.id == id) {
-//                     this.msgs.splice(i, 1)
-//                     return
-//                 }
-//             })
-//         },
-//     }
-// })
 
 
 // global click handler

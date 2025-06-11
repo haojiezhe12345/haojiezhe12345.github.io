@@ -11,11 +11,6 @@ export default defineConfig({
       targets: ['defaults', 'chrome 49'],
     }),
   ],
-  resolve: {
-    alias: {
-      'vue': 'vue/dist/vue.esm-bundler.js'
-    }
-  },
   server: {
     proxy: {
       '^/(api|bg|media|res)': {
