@@ -1,9 +1,11 @@
 # MadoHomu.love | haojiezhe12345.github.io
 
-Pure frontend code for http://madohomu.love
+This branch serves contents for http://madohomu.love  
+Only static HTML/CSS/JS assets is served, no media resources are included
 
-No media or images included. Resources are loaded from https://haojiezhe12345.top:82/madohomu/
+### Sites deployed:
 
-### Backend: [MadoHomuAPI](https://github.com/haojiezhe12345/MadoHomuAPI)
-
-### Full website backup: https://1drv.ms/f/s!AhBOA0l_B26M51sTobCapRxkqXoS
+| Site          | Source                                                                                | Deployed at               |
+| ---           | ---                                                                                   | ---                       |
+| MadoHomu.love | Branch [`vue`](https://github.com/haojiezhe12345/haojiezhe12345.github.io/tree/vue)   | [/index.html](index.html) |
+| Yumeniwa      | Repository [YumeniwaTranslate](https://github.com/haojiezhe12345/YumeniwaTranslate)   | [/yumeniwa](yumeniwa)     |
